@@ -3,15 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.osiam</groupId>
     <artifactId>osiam-parent-pom</artifactId>
-    <version>1.0.21-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>OSIAM Parent</name>
     <description>The parent POM for all OSIAM Projects</description>
 
     <scm>
-        <connection>scm:git:git+ssh://maven@osiam.org/scmrepos/git/commons/commons.git</connection>
+        <connection>scm:git+ssh://maven@github.com:osiam/osiam.git</connection>
     </scm>
-
 
     <distributionManagement>
         <repository>
@@ -19,124 +18,15 @@
             <name>public evolvis release repository</name>
             <url>sftp://repo.osiam.org:/var/www/maven_repo/releases</url>
         </repository>
-        <snapshotRepository>
-            <id>osiam-snapshot-repository</id>
-            <name>public evolvis snapshot repository</name>
-            <url>sftp://repo.osiam.org:/var/www/maven_repo/snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
 
-
     <properties>
-        <!-- Necessary for running tests from external sources -->
-        <testDirectory>src/test/java</testDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
-        <license.path>license_header.txt</license.path>
     </properties>
 
     <dependencyManagement>
-
         <dependencies>
-            <!--TODO why do we need this?
-                LICENSE JSON according to http://www.json.org/license.html
-                TODO This license is considered not free (for a nice reason)!
-                see http://www.gnu.org/licenses/license-list.html#JSON -->
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>20090211</version>
-            </dependency>
-
-            <!-- Used in bouncer for facebook connect. To get authCode and accessToken from FB
-                LICENSE: Apache 2.0 according to http://projects.apache.org/projects/commons_httpclient.html -->
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>3.1</version>
-            </dependency>
-
-            <!-- Used in bouncer to parse the error send by facebook
-                LICENSE: Apache 2.0 according to http://code.google.com/p/json-simple/ -->
-            <dependency>
-                <groupId>com.googlecode.json-simple</groupId>
-                <artifactId>json-simple</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-
-            <!-- Used in bouncer eg. We need it because of a crippled javaee api in maven repositories and some mocking problems according to that
-                LICENSE: Apache 2.0 according to source code -->
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- Used in bouncer eg. We need it because of a crippled javaee api in maven repositories and some mocking problems according to that
-                LICENSE: Apache 2.0 according to http://www.jarvana.com/jarvana/inspect-pom/org/apache/geronimo/specs/geronimo-jpa_2.0_spec/1.1/geronimo-jpa_2.0_spec-1.1.pom -->
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jpa_2.0_spec</artifactId>
-                <version>1.0</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- Infispan is the cache provider used in JBoss AS 6 and higher, it is used in bouner because we cache tokens and do not persist them in a database.
-                LICENSE: LGPL 2.1 according to https://www.jboss.org/infinispan/license/ -->
-            <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-core</artifactId>
-                <version>5.1.2.FINAL</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- TODO Why do we need this? (PE: it is used in bouncer
-                 for BASE64 encoding ...)
-                LICENSE: Apache 2.0 according to http://commons.apache.org/codec/license.html -->
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>20041127.091804</version>
-            </dependency>
-
-            <!-- TODO Why do we need this?
-                LICENSE: Apache 2.0 according to http://alchim.sourceforge.net/openid4java/openid4java-consumer/license.html -->
-            <dependency>
-                <groupId>org.openid4java</groupId>
-                <artifactId>openid4java-consumer</artifactId>
-                <version>0.9.6</version>
-                <type>pom</type>
-                <exclusions>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!-- TODO Why do we need this?
-                LICENSE: Apache 2.0 according to http://alchim.sourceforge.net/openid4java/openid4java-server-SampleServer/license.html -->
-            <dependency>
-                <groupId>org.openid4java</groupId>
-                <artifactId>openid4java-server</artifactId>
-                <version>0.9.6</version>
-                <type>pom</type>
-                <exclusions>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
             <!-- Groovy SDK
                 LICENSE: Apache 2.0 according to http://grepcode.com/snapshot/repo1.maven.org/maven2/org.codehaus.groovy/groovy-all/1.8.6 -->
@@ -165,74 +55,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <!-- We are using java ee 6 as a platform so we need the api to use it.
-                LICENSE: Apache 2.0 according to source code -->
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>6.0</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- TODO what ATS needs this for?
-                LICENSE: Apache 2.0 according to http://joda-time.sourceforge.net/license.html -->
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>1.6</version> <!-- TODO should we use newer version 2.0 ? -->
-            </dependency>
-
-            <!-- TODO Remove this after spock is used everywhere!
-                Mockito for legacy tests (use Spock for new tests!)
-                LICENSE: MIT according to http://code.google.com/p/mockito/ -->
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.8.5</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- TODO why do we need this?
-                LICENSE: MIT according to http://slf4j.org/license.html -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.5.2</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-nop</artifactId>
-                <version>1.5.2</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- TODO Remove this after spock is used everywhere!
-                JUnit for legacy tests (use Spock for new tests!)
-                LICENSE: CPL 1.0 according to http://junit.sourceforge.net/cpl-v10.html -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.10</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- TODO Remove this after spock is used everywhere! -->
-            <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>5.14</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- TODO Remove this after spock is used everywhere! -->
-            <dependency>
-                <groupId>nl.jqno.equalsverifier</groupId>
-                <artifactId>equalsverifier</artifactId>
-                <version>1.1.3</version>
-                <scope>test</scope>
-            </dependency>
-
             <!-- Support for mocking classes without constructor within Spock
                 LICENSE: Apache 2.0 according to http://objenesis.googlecode.com/svn/docs/license.html -->
             <dependency>
@@ -242,106 +64,14 @@
                 <scope>test</scope>
             </dependency>
 
-            <!-- Used to validate user input data in Manager
-                LICENSE: Apache 2.0 according to http://www.hibernate.org/subprojects/validator.html-->
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>4.2.0.Final</version>
-            </dependency>
-
-            <!-- LICENSE: Apache 2.0 according to http://mvnrepository.com/artifact/javax.validation/validation-api/1.0.0.GA -->
-            <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>1.0.0.GA</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- Geb for web tests
-                LICENSE: Apache 2.0 according to http://www.gebish.org/ -->
-            <dependency>
-                <groupId>org.codehaus.geb</groupId>
-                <artifactId>geb-spock</artifactId>
-                <version>0.7.1</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- Selenium used by Geb
-                LICENSE: Apache 2.0 according to http://seleniumhq.org/about/license.html -->
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-java</artifactId>
-                <version>2.23.1</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- Needed to check mails received by a test user
-                LICENSE: CDDL v1.0 according to http://mvnrepository.com/artifact/javax.mail/mail/1.4 -->
-            <dependency>
-                <groupId>javax.mail</groupId>
-                <artifactId>mail</artifactId>
-                <version>1.4</version>
-            </dependency>
-
-        </dependencies>
+          </dependencies>
     </dependencyManagement>
 
-    <dependencies>
 
-        <!-- TODO Move to module pom where it is needed-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-    </dependencies>
-
-    <repositories>
-        <repository>
-            <id>osiam-repository</id>
-            <name>evolvis Maven2 Repository</name>
-            <url>http://repo.osiam.org/releases</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>osiam-snapshot-repository</id>
-            <name>evolvis Maven2 Snapshot Repository</name>
-            <url>http://repo.osiam.org/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>evolvis-snapshot-repository</id>
-            <name>evolvis Maven2 Snapshot Repository</name>
-            <url>http://maven-repo.evolvis.org/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-			<id>atlassian repo</id>
-			<url>http://repository.atlassian.com/maven2/</url>
-		</repository>
-		<repository>
-			<id>osiam-3rdparty-repo</id>
-			<url>http://repo.osiam.org/3rdparty</url>
-		</repository>
-		<repository>
-			<id>java.net</id>
-			<name>java.net</name>
-			<url>http://download.java.net/maven/2</url>
-			<layout>default</layout>
-		</repository>
-    </repositories>
-    
     <build>
         <plugins>
 
-            <!-- TODO Why do we need this? Especially why not in dependency management-->
+            <!-- Attaching sources to the jar files -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -358,7 +88,7 @@
                 </executions>
             </plugin>
 
-            <!-- TODO Why do we need this? Especially why not in dependency management-->
+            <!-- Needed due to a problem with ssh -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -370,18 +100,6 @@
                         <version>1.0-beta-7</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-
-            <!-- TODO Why do we need this? Especially why not in dependency management-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.1</version>
-                <configuration>
-                    <preparationGoals>clean install</preparationGoals>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <tag>${project.version}</tag>
-                </configuration>
             </plugin>
 
         </plugins>
@@ -448,36 +166,14 @@
                             <additionalClasspathElement>src/test/groovy</additionalClasspathElement>
                         </additionalClasspathElements>
                     </configuration>
-                </plugin>
-
-                <!-- TODO Why do we need this? -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>1.5</version>
+                    <!--certain integration tests should only be executed in phase integration-test -->
                     <executions>
                         <execution>
-                            <id>add-source</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>add-source</goal>
-                            </goals>
+                            <phase>integration-test</phase>
                             <configuration>
-                                <sources>
-                                    <source>${basedir}/src/main/groovy</source>
-                                </sources>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>add-test-source</id>
-                            <phase>generate-test-sources</phase>
-                            <goals>
-                                <goal>add-test-source</goal>
-                            </goals>
-                            <configuration>
-                                <sources>
-                                    <source>${basedir}/src/test/groovy</source>
-                                </sources>
+                                <includes>
+                                    <include>**/*ST.java</include>
+                                </includes>
                             </configuration>
                         </execution>
                     </executions>
@@ -504,29 +200,7 @@
                     </configuration>
                 </plugin>
 
-                <!-- Used to deploy artifacts directly in a running Jboss instance (remotely or local) -->
-                <plugin>
-                    <groupId>org.jboss.as.plugins</groupId>
-                    <artifactId>jboss-as-maven-plugin</artifactId>
-                    <version>7.1.1.Final</version>
-                </plugin>
-
-                <!-- Used to configure ear deployments. Telling what is an EJB and where to put dependencies etc. -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-ear-plugin</artifactId>
-                    <version>2.7</version>
-                </plugin>
-
-                <!-- TODO Why do we need this? -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.3.1</version>
-                </plugin>
-
             </plugins>
         </pluginManagement>
     </build>
-
 </project>
