@@ -9,7 +9,7 @@
     <description>The parent POM for all OSIAM Projects</description>
 
     <scm>
-        <connection>scm:git+ssh://maven@github.com:osiam/osiam.git</connection>
+        <connection>scm:git://git@github.com:osiam-dev/osiam.git</connection>
     </scm>
 
     <distributionManagement>

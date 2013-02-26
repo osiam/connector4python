@@ -1,0 +1,21 @@
+# ignore target-folder everywhere
+**target/
+
+**.settings/
+**.project
+**.classpath
+.*
+**bin/
+**.ipr
+**.ips
+**.iws
+**.iml
+**.jar
+**.war
+**.ear
+**.zip
+**test-output/
+**.log
+**.*~
+**nbactions.xml
+**osiam-sts-config.properties
