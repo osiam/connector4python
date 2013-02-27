@@ -13,7 +13,7 @@
 
 <body>
 
-  <h1>Sparklr</h1>
+  <h1>Demo</h1>
 
   <div id="content">
 

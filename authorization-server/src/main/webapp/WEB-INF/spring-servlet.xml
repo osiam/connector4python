@@ -60,16 +60,13 @@
 	</authentication-manager>
 
     <!-- TODO override -->
-	<authentication-manager alias="authenticationManager" xmlns="http://www.springframework.org/schema/security">
-		<authentication-provider>
-			<user-service id="userDetailsService">
-				<user name="marissa" password="koala" authorities="ROLE_USER" />
-				<user name="paul" password="emu" authorities="ROLE_USER" />
-			</user-service>
-		</authentication-provider>
-	</authentication-manager>
+    <authentication-manager alias="authenticationManager" xmlns="http://www.springframework.org/schema/security">
+        <authentication-provider user-service-ref="userDetailsService" />
+    </authentication-manager>
 
-    <!-- TODO may override -->
+    <bean id="userDetailsService" class="org.osiam.oauth2.user.please.remove.me.asap.PseudoAuthenticationBean"/>
+
+
 	<bean id="clientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
 		<constructor-arg ref="clientDetails" />
 	</bean>
@@ -90,11 +87,7 @@
 
 	<oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
 
-    <!-- TODO override -->
-	<oauth:client-details-service id="clientDetails">
-		<oauth:client client-id="tonr" resource-ids="oauth2res" authorized-grant-types="authorization_code,implicit,refresh-token"
-			authorities="ROLE_CLIENT" scope="read,write" secret="secret" />
-	</oauth:client-details-service>
+    <bean id="clientDetails" class="org.osiam.oauth2.client.dao.ClientDetailsLoaderBean"/>
 
 	<mvc:annotation-driven />
 
