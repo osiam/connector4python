@@ -88,11 +88,11 @@
 		<oauth:refresh-token />
 	</oauth:authorization-server>
 
-	<oauth:resource-server id="resourceServerFilter" resource-id="sparklr" token-services-ref="tokenServices" />
+	<oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
 
     <!-- TODO override -->
 	<oauth:client-details-service id="clientDetails">
-		<oauth:client client-id="tonr" resource-ids="sparklr" authorized-grant-types="authorization_code,implicit,refresh-token"
+		<oauth:client client-id="tonr" resource-ids="oauth2res" authorized-grant-types="authorization_code,implicit,refresh-token"
 			authorities="ROLE_CLIENT" scope="read,write" secret="secret" />
 	</oauth:client-details-service>
 
@@ -111,11 +111,7 @@
 
 	<!--Basic application beans. -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="mediaTypes">
-			<map>
-				<entry key="json" value="application/json" />
-			</map>
-		</property>
+
 		<property name="viewResolvers">
 			<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 				<property name="prefix" value="/WEB-INF/jsp/"></property>
@@ -130,7 +126,7 @@
 	</bean>
 
 	<!-- Override the default mappings for approval and error pages -->
-	<bean id="accessConfirmationController" class="org.springframework.security.oauth.examples.sparklr.mvc.AccessConfirmationController">
+	<bean id="accessConfirmationController" class="org.osiam.oauth2.mvc.AccessConfirmationController">
 		<property name="clientDetailsService" ref="clientDetails" />
 	</bean>
 </beans>

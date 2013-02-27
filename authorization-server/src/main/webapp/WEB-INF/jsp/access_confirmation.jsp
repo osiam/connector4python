@@ -42,8 +42,5 @@
     </authz:authorize>
   </div>
 
-  <div id="footer">Sample application for <a href="http://github.com/SpringSource/spring-security-oauth" target="_blank">Spring Security OAuth</a></div>
-
-
 </body>
 </html>
