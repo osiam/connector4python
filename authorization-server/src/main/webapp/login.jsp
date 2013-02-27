@@ -4,14 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Sparklr</title>
+<title>Auth-Server</title>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/style.css"/>" />
 </head>
 
 <body>
 
-	<h1>Sparklr</h1>
+	<h1>Auth-Server</h1>
 
 	<div id="content">
 		<c:if test="${not empty param.authentication_error}">
@@ -46,13 +46,6 @@
 			</p>
 		</form>
 	</div>
-
-	<div id="footer">
-		Sample application for <a
-			href="http://github.com/SpringSource/spring-security-oauth"
-			target="_blank">Spring Security OAuth</a>
-	</div>
-
 
 </body>
 </html>

@@ -22,12 +22,10 @@
 		<intercept-url pattern="/oauth/**" access="ROLE_USER" />
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 
-
 		<!--<form-login authentication-failure-url="/login.jsp?authentication_error=true" default-target-url="/index.jsp"-->
 			<!--login-page="/login.jsp" login-processing-url="/login.do" />-->
         <form-login authentication-failure-url="/login.jsp?authentication_error=true" login-page="/login.jsp" login-processing-url="/login.do" />
 
-        <logout logout-success-url="/index.jsp" logout-url="/logout.do" />
 		<anonymous />
 	</http>
 
@@ -59,7 +57,6 @@
 		<authentication-provider user-service-ref="clientDetailsUserService" />
 	</authentication-manager>
 
-    <!-- TODO override -->
     <authentication-manager alias="authenticationManager" xmlns="http://www.springframework.org/schema/security">
         <authentication-provider user-service-ref="userDetailsService" />
     </authentication-manager>

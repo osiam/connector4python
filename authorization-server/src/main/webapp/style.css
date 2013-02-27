@@ -15,16 +15,6 @@ body {
   padding: 0 30px 25px 30px;
 }
 
-a {
-  color: lightblue;
-  text-decoration: none;
-}
-
-a:hover {
-  color: red;
-  text-decoration: none;
-}
-
 h1 {
   height: 36px;
   width: 721px;
@@ -63,21 +53,4 @@ label {
   text-indent: 20px;
   letter-spacing: .2px;
   padding: 5px 5px 5px 5px;
-}
-
-#footer {
-  font-size: .8em;
-  margin-top: 1em;
-}
-
-#footer a {
-  color: #333333;
-  font-weight: bold;
-  font-size: 1em
-}
-
-#footer a:hover {
-  color: red;
-  font-weight: bold;
-  font-size: 1em
 }
