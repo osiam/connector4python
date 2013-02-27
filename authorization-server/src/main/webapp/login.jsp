@@ -27,9 +27,7 @@
 
 		<h2>Login</h2>
 
-		<p>We've got a grand total of 2 users: marissa and paul. Go ahead
-			and log in. Marissa's password is "koala" and Paul's password is
-			"emu".</p>
+		<p>We've got 1 user: marissa. Go ahead and log in. Marissa's password is "koala".</p>
 		<form id="loginForm" name="loginForm"
 			action="<c:url value="/login.do"/>" method="post">
 			<p>
