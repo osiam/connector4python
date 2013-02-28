@@ -58,7 +58,7 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
             @Override
             public Set<String> getRegisteredRedirectUri() {
 
-                return new HashSet<>(Arrays.asList("http://localhost:8080/tonr2/demo.html"));
+                return new HashSet<>(Arrays.asList("http://localhost:8080/test/accessToken"));
             }
 
             @Override
