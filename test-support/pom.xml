@@ -10,12 +10,11 @@
     </parent>
 
     <artifactId>test-support</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>OSIAM Test Support</name>
 
     <dependencies>
-
         <!-- Groovy SDK LICENSE: Apache 2.0 according to http://grepcode.com/snapshot/repo1.maven.org/maven2/org.codehaus.groovy/groovy-all/1.8.6 -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
@@ -40,38 +39,43 @@
             <artifactId>objenesis</artifactId>
         </dependency>
 
-        <!-- needed for the REST test client -->
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-        </dependency>
 
-        <!-- needed for HTTP test client -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        
-        <!-- needed for HTTP test client's getHtmlBody feature -->
-        <dependency>
-            <groupId>org.ccil.cowan.tagsoup</groupId>
-            <artifactId>tagsoup</artifactId>
-        </dependency>
+        <!--&lt;!&ndash; needed for the REST test client &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.sun.jersey</groupId>-->
+            <!--<artifactId>jersey-client</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.sun.jersey</groupId>-->
+            <!--<artifactId>jersey-json</artifactId>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; needed for HTTP test client &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.httpcomponents</groupId>-->
+            <!--<artifactId>httpclient</artifactId>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; needed for HTTP test client's getHtmlBody feature &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.ccil.cowan.tagsoup</groupId>-->
+            <!--<artifactId>tagsoup</artifactId>-->
+        <!--</dependency>-->
 
     </dependencies>
+<<<<<<< HEAD
 
+    <!--    <build>
+        <sourceDirectory>/src/main/groovy</sourceDirectory>
+    </build> -->
+
+=======
+    
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <sourceDirectory>src/main/groovy</sourceDirectory>
     </build>
+    
+>>>>>>> origin/master
 </project>
 
 

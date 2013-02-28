@@ -217,30 +217,10 @@
         </dependency>
 
         <!-- Test -->
-        <!-- Groovy SDK LICENSE: Apache 2.0 according to http://grepcode.com/snapshot/repo1.maven.org/maven2/org.codehaus.groovy/groovy-all/1.8.6 -->
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
+            <groupId>org.osiam.ng</groupId>
+            <artifactId>test-support</artifactId>
         </dependency>
-
-        <!-- Spock testing framework for all kinds of tests LICENSE: Apache 2.0 according to http://code.google.com/p/spock/ -->
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-core</artifactId>
-        </dependency>
-
-        <!-- Support for mocking concrete classes within Spock LICENSE: Apache 2.0 according to source package -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-        </dependency>
-
-        <!-- Support for mocking classes without constructor within Spock LICENSE: Apache 2.0 according to http://objenesis.googlecode.com/svn/docs/license.html -->
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>

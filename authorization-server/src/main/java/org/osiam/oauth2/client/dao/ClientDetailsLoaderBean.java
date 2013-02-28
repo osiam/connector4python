@@ -38,12 +38,15 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
 
             @Override
             public boolean isScoped() {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+                return true;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public Set<String> getScope() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                Set<String> result = new HashSet<>();
+                result.add("ROLE_USER");
+                result.add("READ");
+                return result;
             }
 
             @Override
@@ -76,12 +79,12 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
 
             @Override
             public Integer getAccessTokenValiditySeconds() {
-                return 1337;  //To change body of implemented methods use File | Settings | File Templates.
+                return 13371337;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public Integer getRefreshTokenValiditySeconds() {
-                return 1337;  //To change body of implemented methods use File | Settings | File Templates.
+                return 13371337;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
