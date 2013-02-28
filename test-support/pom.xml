@@ -63,15 +63,11 @@
         </dependency>
 
     </dependencies>
-
+    
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <sourceDirectory>/src/main/groovy</sourceDirectory>
     </build>
+    
 </project>
 
 

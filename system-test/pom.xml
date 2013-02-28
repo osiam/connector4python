@@ -17,11 +17,18 @@
     <dependencies>
         
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.osiam.ng</groupId>
             <artifactId>test-support</artifactId>
         </dependency>
         
     </dependencies>
+    
+    <build>
+    
+        <sourceDirectory>src/main/groovy</sourceDirectory>
+        <testSourceDirectory>src/test/groovy</testSourceDirectory>
+        
+    </build>
     
 </project>
 
