@@ -63,11 +63,19 @@
         <!--</dependency>-->
 
     </dependencies>
+<<<<<<< HEAD
 
     <!--    <build>
         <sourceDirectory>/src/main/groovy</sourceDirectory>
     </build> -->
 
+=======
+    
+    <build>
+        <sourceDirectory>src/main/groovy</sourceDirectory>
+    </build>
+    
+>>>>>>> origin/master
 </project>
 
 
