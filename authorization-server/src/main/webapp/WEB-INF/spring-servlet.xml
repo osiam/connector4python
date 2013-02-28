@@ -14,25 +14,54 @@
 		<http-basic entry-point-ref="clientAuthenticationEntryPoint" />
 		<!-- include this only if you need to authenticate clients via request parameters -->
 		<custom-filter ref="clientCredentialsTokenEndpointFilter" after="BASIC_AUTH_FILTER" />
+        <!--<custom-filter ref="oauth2ProviderFilter" before="PRE_AUTH_FILTER"/>-->
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 	</http>
+<!-- oauth2 resources -->
+    <http pattern="/secured/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
+          access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
+        <anonymous enabled="false" />
+        <intercept-url pattern="/secured/get/resource"  access="SCOPE_READ" />
+        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+    </http>
 
-	<http access-denied-page="/login.jsp?authorization_error=true" disable-url-rewriting="true"
+    <bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="realmName" value="oauth2-authorization-server" />
+    </bean>
+
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased" xmlns="http://www.springframework.org/schema/beans">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
+                <bean class="org.springframework.security.access.vote.RoleVoter" />
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
+
+    <!-- end oauth2 resources -->
+
+
+    <http access-denied-page="/login.jsp?authorization_error=true" disable-url-rewriting="true"
 		xmlns="http://www.springframework.org/schema/security">
 		<intercept-url pattern="/oauth/**" access="ROLE_USER" />
-		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<!--<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
 
         <form-login authentication-failure-url="/login.jsp?authentication_error=true" login-page="/login.jsp" login-processing-url="/login.do" />
 		<anonymous />
 	</http>
 
-	<bean id="clientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
-		<property name="realmName" value="authorization-server/client" />
-	</bean>
+    <bean id="clientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+    <property name="realmName" value="authorization-server/client" />
+    </bean>
 
-	<bean id="oauthAccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
 
-	<bean id="clientCredentialsTokenEndpointFilter" class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
+    <bean id="oauthAccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
+
+    <bean id="clientCredentialsTokenEndpointFilter" class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
 		<property name="authenticationManager" ref="clientAuthenticationManager" />
 	</bean>
 
@@ -64,8 +93,8 @@
 		<oauth:refresh-token />
 	</oauth:authorization-server>
 
-	<oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
-
+	<!--<oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />-->
+    <oauth:resource-server id="oauth2ProviderFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
     <bean id="clientDetails" class="org.osiam.oauth2.client.dao.ClientDetailsLoaderBean"/>
 
 	<mvc:annotation-driven />
@@ -96,7 +125,7 @@
 			</bean>
 		</property>
 	</bean>
-
+    <bean id="resourceServer" class="org.osiam.oauth2.mvc.PseudoResourceService"/>
 	<!-- Override the default mappings for approval and error pages -->
 	<bean id="accessConfirmationController" class="org.osiam.oauth2.mvc.AccessConfirmationController">
 		<property name="clientDetailsService" ref="clientDetails" />
