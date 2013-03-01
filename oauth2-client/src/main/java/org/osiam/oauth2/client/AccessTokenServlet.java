@@ -1,5 +1,6 @@
 package org.osiam.oauth2.client;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
@@ -28,14 +29,21 @@ public class AccessTokenServlet extends HttpServlet{
 
         String clientId = "testClient";
         String clientSecret = "secret";
+        String combined = clientId+":"+clientSecret;
         String redirectUri = "http://localhost:8080/oauth2-client/accessToken";
 
         HttpClient httpclient = new HttpClient();
+
+
+
         PostMethod post = new PostMethod(tokenUrl);
+        String encoding = new String(Base64.encodeBase64(combined.getBytes()));
+
+        System.out.println("Encode: "+encoding);
+        post.addRequestHeader("Authorization", "Basic " + encoding);
+
         post.addParameter("code", code);
         post.addParameter("grant_type", "authorization_code");
-        post.addParameter("client_id", clientId);
-        post.addParameter("client_secret", clientSecret);
         post.addParameter("redirect_uri", redirectUri);
 
         httpclient.executeMethod(post);
@@ -45,7 +53,7 @@ public class AccessTokenServlet extends HttpServlet{
         try {
             JSONObject authResponse = new JSONObject(
             new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
-
+            System.out.println("response:"+authResponse.toString());
             accessToken = authResponse.getString("access_token");
             expiresIn = authResponse.getString("expires_in");
 
