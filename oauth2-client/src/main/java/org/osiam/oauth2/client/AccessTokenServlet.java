@@ -48,18 +48,12 @@ public class AccessTokenServlet extends HttpServlet{
 
         httpclient.executeMethod(post);
 
-        String accessToken;
-        String expiresIn;
         try {
             JSONObject authResponse = new JSONObject(
             new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
-            System.out.println("response:"+authResponse.toString());
-            accessToken = authResponse.getString("access_token");
-            expiresIn = authResponse.getString("expires_in");
-
+            req.setAttribute("response", authResponse.toString());
         } catch (JSONException e) {
-            e.printStackTrace();
-            throw new ServletException(e);
+            throw new IllegalStateException(e.getMessage(), e);
         } finally {
             post.releaseConnection();
         }
@@ -68,8 +62,7 @@ public class AccessTokenServlet extends HttpServlet{
         req.setAttribute("client_secret", clientSecret);
         req.setAttribute("redirect_uri", redirectUri);
         req.setAttribute("code", code);
-        req.setAttribute("access_token", accessToken);
-        req.setAttribute("expires_in", expiresIn);
+
 
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
     }

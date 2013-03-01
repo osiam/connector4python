@@ -8,7 +8,7 @@
     <p>Client secret: <%= request.getAttribute("client_secret") %></p>
     <p>Redirect Uri: <%= request.getAttribute("redirect_uri") %></p>
     <p>Auth code: <%= request.getAttribute("code") %></p>
-    <p>Access token: <%= request.getAttribute("access_token") %></p>
-    <p>Access token expires in: <%= request.getAttribute("expires_in") %>ms</p>
+    <p>Authorization-Server response:</p>
+    <p><%= request.getAttribute("response") %></p>
 </body>
 </html>
