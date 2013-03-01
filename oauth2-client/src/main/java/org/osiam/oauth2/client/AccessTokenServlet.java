@@ -6,7 +6,6 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,25 +14,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 @WebServlet(name = "authCode", urlPatterns = {"/accessToken"})
 public class AccessTokenServlet extends HttpServlet{
+
+    private HttpClient httpClient;
+
+    public void setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String code = req.getParameter("code");
 
-        String environment = "http://localhost:8080";
+        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String tokenUrl = environment + "/authorization-server/oauth/token";
 
         String clientId = "testClient";
         String clientSecret = "secret";
         String combined = clientId+":"+clientSecret;
-        String redirectUri = "http://localhost:8080/oauth2-client/accessToken";
-
-        HttpClient httpclient = new HttpClient();
-
+        String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
 
 
         PostMethod post = new PostMethod(tokenUrl);
@@ -42,11 +43,14 @@ public class AccessTokenServlet extends HttpServlet{
         System.out.println("Encode: "+encoding);
         post.addRequestHeader("Authorization", "Basic " + encoding);
 
-        post.addParameter("code", code);
+        if (code != null) {
+            post.addParameter("code", code);
+        }
         post.addParameter("grant_type", "authorization_code");
         post.addParameter("redirect_uri", redirectUri);
 
-        httpclient.executeMethod(post);
+        httpClient = new HttpClient();
+        httpClient.executeMethod(post);
 
         try {
             JSONObject authResponse = new JSONObject(
@@ -62,7 +66,6 @@ public class AccessTokenServlet extends HttpServlet{
         req.setAttribute("client_secret", clientSecret);
         req.setAttribute("redirect_uri", redirectUri);
         req.setAttribute("code", code);
-
 
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
     }
