@@ -38,7 +38,7 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
 
             @Override
             public boolean isScoped() {
-                return true;  //To change body of implemented methods use File | Settings | File Templates.
+                return true;
             }
 
             @Override
@@ -79,12 +79,12 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
 
             @Override
             public Integer getAccessTokenValiditySeconds() {
-                return 13371337;  //To change body of implemented methods use File | Settings | File Templates.
+                return 1337;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public Integer getRefreshTokenValiditySeconds() {
-                return 13371337;  //To change body of implemented methods use File | Settings | File Templates.
+                return 1337;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
