@@ -33,7 +33,8 @@
     </dependencies>
 
     <build>
-        <finalName>oauth2-client</finalName>
+        <testSourceDirectory>src/test/groovy</testSourceDirectory>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
 	    <plugin>
                 <groupId>org.jacoco</groupId>
