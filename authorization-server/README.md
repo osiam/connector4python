@@ -41,12 +41,12 @@ Usage
 ===
 
 To get an authorization code call:
-
- http://localhost:8080/authorization-server/oauth/authorize?client_id=tonr&response_type=code& \
-    redirect_uri=http://localhost:8080/oauth2-client/accessToken
+```html
+ http://localhost:8080/authorization-server/oauth/authorize?client_id=tonr&response_type=code&redirect_uri=http://localhost:8080/oauth2-client/accessToken
+```
 
 To get an access_token call:
-``` sh
+```sh
  curl --user tonr:secret -X POST -d "code=$CODE&grant_type=authorization_code&redirect_uri=http://localhost:8080/oauth2-client/accessToken" \
  http://localhost:8080/authorization-server/oauth/token
 ```
