@@ -3,6 +3,10 @@ package org.osiam.ng.hash
 import spock.lang.Specification
 
 class CalculateHashTest extends Specification {
+    def setup(){
+        CalculateHash.instance = new CalculateHash()
+    }
+
     def "should hash a given string"() {
         given:
         def input = "input"

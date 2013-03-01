@@ -25,7 +25,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService{
             @Override
             public Set<String> getResourceIds() {
                 Set<String> resources = new HashSet<>();
-                resources.add("oauth2res");
+//                resources.add("oauth2res");
                 return resources;
             }
 
