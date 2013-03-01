@@ -37,9 +37,9 @@ public class AccessTokenServlet extends HttpServlet{
 
 
         PostMethod post = new PostMethod(tokenUrl);
-        String encoding = String.valueOf(Base64.encodeBase64(combined.getBytes()));
+        String encoding = new String(Base64.encodeBase64(combined.getBytes()));
 
-        System.out.println(encoding);
+        System.out.println("Encode: "+encoding);
         post.addRequestHeader("Authorization", "Basic " + encoding);
 
         post.addParameter("code", code);
@@ -53,7 +53,7 @@ public class AccessTokenServlet extends HttpServlet{
         try {
             JSONObject authResponse = new JSONObject(
             new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
-
+            System.out.println("response:"+authResponse.toString());
             accessToken = authResponse.getString("access_token");
             expiresIn = authResponse.getString("expires_in");
 
