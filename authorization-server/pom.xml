@@ -206,9 +206,6 @@
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
-                <configuration>
-                    <contextReloadable>true</contextReloadable>
-                </configuration>
                 <version>2.0</version>
             </plugin>
             <plugin>

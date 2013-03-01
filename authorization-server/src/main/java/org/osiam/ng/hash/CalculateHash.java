@@ -37,27 +37,27 @@ public class CalculateHash {
         try {
             return instance.calculateHash(input);
         } catch (Exception e) {
-            throw new IllegalArgumentException(
-                    generateCheckForFurtherUnderstandmentMsg(input), e);
+            throw new IllegalArgumentException("An error occured while trying to calculate the hash value of " + input, e);
         }
     }
 
-    private static String generateCheckForFurtherUnderstandmentMsg(String input) {
-        return "An error occured while trying to calculate the hash value of "
-                + input + ", please check "
-                + CalculateHash.class.getSimpleName()
-                + " for further unterstandment.";
-    }
 
     private static final String CHARSET_NAME = "UTF-8";
     public static final int ALGOR_BIT_SIZE = 512;
     private static final String ALGORITHM = "SHA-" + ALGOR_BIT_SIZE;
 
-    private String calculateHash(String input) throws NoSuchAlgorithmException,
+    String calculateHash(String input) throws NoSuchAlgorithmException,
             UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance(ALGORITHM);
         md.update(input.getBytes(CHARSET_NAME), 0, input.length());
         return new String(Base64.encodeBase64(md.digest()));
+    }
+
+    String _calculateSalt(){
+        Random r = new SecureRandom();
+        byte[] salt = new byte[20];
+        r.nextBytes(salt);
+        return new String(Base64.encodeBase64(salt));
     }
 
     public static String calculateWithSalt(String salt, String passwordhash) {
@@ -66,9 +66,6 @@ public class CalculateHash {
     }
 
     public static String calculateSalt() {
-        Random r = new SecureRandom();
-        byte[] salt = new byte[20];
-        r.nextBytes(salt);
-        return new String(Base64.encodeBase64(salt));
+        return instance._calculateSalt();
     }
 }

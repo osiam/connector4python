@@ -3,19 +3,18 @@ package org.osiam.ng.hash
 import spock.lang.Specification
 
 class CalculateHashTest extends Specification {
-    def "should hash a given string"(){
+    def "should hash a given string"() {
         given:
         def input = "input"
         when:
-           def result = CalculateHash.calculate(input)
+        def result = CalculateHash.calculate(input)
 
         then:
         input != result
         result.size() == 88
-
     }
 
-    def "a generated hash should equal if input equals"(){
+    def "a generated hash should equal if input equals"() {
         given:
         def input = "input"
         when:
@@ -27,7 +26,7 @@ class CalculateHashTest extends Specification {
 
     }
 
-    def "should generate a salted hash"(){
+    def "should generate a salted hash"() {
         given:
         def input = "input"
         when:
@@ -39,7 +38,7 @@ class CalculateHashTest extends Specification {
 
     }
 
-    def "a generated salted hash should not equal if input equals but salt does not"(){
+    def "a generated salted hash should not equal if input equals but salt does not"() {
         given:
         def input = "input"
         when:
@@ -51,7 +50,7 @@ class CalculateHashTest extends Specification {
 
     }
 
-    def "a generated salted hash should equal if input and salt are equal"(){
+    def "a generated salted hash should equal if input and salt are equal"() {
         given:
         def input = "input"
         def salt = CalculateHash.calculateSalt()
@@ -61,6 +60,13 @@ class CalculateHashTest extends Specification {
 
         then:
         salted == salted2
+    }
 
+    def "should give a hint in exception if hashing goes wrong"() {
+        when:
+        CalculateHash.calculate(null)
+        then:
+        def e = thrown(IllegalArgumentException)
+        e.message == "An error occured while trying to calculate the hash value of null"
     }
 }
