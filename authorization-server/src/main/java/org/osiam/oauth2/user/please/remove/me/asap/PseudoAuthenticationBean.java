@@ -8,13 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Created with IntelliJ IDEA.
- * User: phil
- * Date: 27.02.13
- * Time: 15:28
- * To change this template use File | Settings | File Templates.
- */
 public class PseudoAuthenticationBean implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
