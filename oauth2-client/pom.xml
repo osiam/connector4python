@@ -36,7 +36,7 @@
         <testSourceDirectory>src/test/groovy</testSourceDirectory>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-	    <plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
@@ -44,6 +44,17 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.1</version>
+                <configuration>
+                    <webapps> 
+                      <webapp> 
+                        <groupId>org.osiam.ng</groupId>
+                        <artifactId>authorization-server</artifactId>
+                        <version>${project.version}</version>
+                        <type>war</type>
+                        <asWebapp>true</asWebapp>
+                      </webapp> 
+                    </webapps> 
+                </configuration>
             </plugin>
         </plugins>
     </build>
