@@ -95,7 +95,7 @@
 
     <!--<oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" /> -->
     <oauth:resource-server id="oauth2ProviderFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
-    <bean id="clientDetails" class="org.osiam.oauth2.client.dao.ClientDetailsLoaderBean" />
+    <bean id="clientDetails" class="org.osiam.oauth2.client.service.ClientDetailsLoadingBean" />
 
     <mvc:annotation-driven />
 

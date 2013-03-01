@@ -1,5 +1,6 @@
-package org.osiam.oauth2.client.dao;
+package org.osiam.oauth2.client.service;
 
+import org.osiam.oauth2.client.data.ClientEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -7,7 +8,9 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 
 import java.util.*;
 
-public class ClientDetailsLoaderBean implements ClientDetailsService{
+
+public class ClientDetailsLoadingBean implements ClientDetailsService{
+
 
 
     @Override
@@ -22,7 +25,7 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
             @Override
             public Set<String> getResourceIds() {
                 Set<String> resources = new HashSet<>();
-                resources.add("oauth2res");
+//                resources.add("oauth2res");
                 return resources;
             }
 
@@ -44,7 +47,6 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
             @Override
             public Set<String> getScope() {
                 Set<String> result = new HashSet<>();
-                result.add("ROLE_USER");
                 result.add("READ");
                 return result;
             }
@@ -70,7 +72,7 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
                 blubb.add(new GrantedAuthority() {
                     @Override
                     public String getAuthority() {
-                        return "CLIENT_ROLE";
+                        return "READ";
                     }
                 });
                 return blubb;
@@ -93,4 +95,6 @@ public class ClientDetailsLoaderBean implements ClientDetailsService{
             }
         };
     }
+
+
 }

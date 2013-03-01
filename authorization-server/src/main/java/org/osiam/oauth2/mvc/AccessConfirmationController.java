@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.inject.Inject;
+
 /**
  * Controller for retrieving the model for and displaying the confirmation page for access to a protected resource.
  * 
@@ -28,6 +30,7 @@ public class AccessConfirmationController {
         ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());
         model.put("auth_request", clientAuth);
         model.put("client", client);
+        //TODO save access_confirmation
         return new ModelAndView("access_confirmation", model);
     }
 
@@ -39,7 +42,7 @@ public class AccessConfirmationController {
         return "oauth_error";
     }
 
-    @Autowired
+    @Inject
     public void setClientDetailsService(ClientDetailsService clientDetailsService) {
         this.clientDetailsService = clientDetailsService;
     }
