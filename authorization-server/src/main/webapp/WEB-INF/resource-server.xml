@@ -6,17 +6,26 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
+    <!-- Resource Service interface secured via OAuth2 -->
     <http pattern="/secured/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
           access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
+
+        <!-- resources below /secured/get/resource/ are accessed via scope "READ" -->
         <intercept-url pattern="/secured/get/resource" access="SCOPE_READ" />
+
+        <!-- validates the delivered access token -->
         <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+
+        <!-- uses general oauthAccessDeniedHandler -->
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
 
+    <!-- entry point for OAuth2 secured resources -->
     <bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
         <property name="realmName" value="oauth2-authorization-server" />
     </bean>
 
+    <!-- general access decision manager for OAuth2 secured resources -->
     <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased" xmlns="http://www.springframework.org/schema/beans">
         <constructor-arg>
             <list>
@@ -25,7 +34,10 @@
         </constructor-arg>
     </bean>
 
+    <!-- filter to validate the delivered access token -->
     <oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
 
+    <!-- simple resource service -->
+    <bean id="resourceServer" class="org.osiam.oauth2.mvc.PseudoResourceService" />
 
 </beans>
