@@ -4,4 +4,6 @@
 
     <bean id="httpClient" class="org.apache.commons.httpclient.HttpClient"/>
 
+    <bean id="post" class="org.apache.commons.httpclient.methods.PostMethod"/>
+
 </beans>

@@ -2,6 +2,8 @@ package org.osiam.oauth2.client;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,10 +20,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-@WebServlet(name = "AccessTokenServlet", urlPatterns = {"/accessToken"})
+@WebServlet(name = "accessToken", urlPatterns = {"/accessToken"})
 public class AccessTokenServlet extends HttpServlet{
 
     private HttpClient httpClient;
+    private PostMethod post;
+
+    @Autowired
+    public void setPost(PostMethod post) {
+        this.post = post;
+    }
 
     @Autowired
     public void setHttpClient(HttpClient httpClient) {
@@ -50,21 +58,25 @@ public class AccessTokenServlet extends HttpServlet{
         String combined = clientId+":"+clientSecret;
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
 
-
-        PostMethod post = new PostMethod(tokenUrl);
-        String encoding = new String(Base64.encodeBase64(combined.getBytes()));
-
-        System.out.println("Encode: "+encoding);
-        post.addRequestHeader("Authorization", "Basic " + encoding);
-
-        if (code != null) {
-            post.addParameter("code", code);
-        }
-        post.addParameter("grant_type", "authorization_code");
-        post.addParameter("redirect_uri", redirectUri);
+        addPostMethodParameter(code, tokenUrl, combined, redirectUri);
 
         httpClient.executeMethod(post);
 
+        addJsonResponseToHttpRequest(req);
+
+        addAttributesToHttpRequest(req, code, clientId, clientSecret, redirectUri);
+
+        req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
+    }
+
+    private void addAttributesToHttpRequest(HttpServletRequest req, String code, String clientId, String clientSecret, String redirectUri) {
+        req.setAttribute("client_id", clientId);
+        req.setAttribute("client_secret", clientSecret);
+        req.setAttribute("redirect_uri", redirectUri);
+        req.setAttribute("code", code);
+    }
+
+    private void addJsonResponseToHttpRequest(HttpServletRequest req) throws IOException {
         try {
             JSONObject authResponse = new JSONObject(
             new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
@@ -74,12 +86,18 @@ public class AccessTokenServlet extends HttpServlet{
         } finally {
             post.releaseConnection();
         }
+    }
 
-        req.setAttribute("client_id", clientId);
-        req.setAttribute("client_secret", clientSecret);
-        req.setAttribute("redirect_uri", redirectUri);
-        req.setAttribute("code", code);
+    private void addPostMethodParameter(String code, String tokenUrl, String combined, String redirectUri) throws URIException {
+        post.setURI(new URI(tokenUrl));
+        String encoding = new String(Base64.encodeBase64(combined.getBytes()));
 
-        req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
+        post.addRequestHeader("Authorization", "Basic " + encoding);
+
+        if (code != null) {
+            post.addParameter("code", code);
+        }
+        post.addParameter("grant_type", "authorization_code");
+        post.addParameter("redirect_uri", redirectUri);
     }
 }
