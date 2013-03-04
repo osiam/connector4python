@@ -9,7 +9,7 @@
 
     <!-- needed for getting an authorization-code -->
     <import resource="user-authentication.xml"/>
-    <!-- needed for exchanging the authorization_code to an acess_token -->
+    <!-- needed for exchanging the authorization_code to an access_token -->
     <import resource="client-authentication.xml"/>
     <!-- needed to get oauth2 secured resources -->
     <import resource="resource-server.xml"/>
@@ -49,8 +49,8 @@
     <bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="viewResolvers">
             <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-                <property name="prefix" value="/WEB-INF/jsp/"></property>
-                <property name="suffix" value=".jsp"></property>
+                <property name="prefix" value="/WEB-INF/jsp/"/>
+                <property name="suffix" value=".jsp"/>
             </bean>
         </property>
         <property name="defaultViews">
