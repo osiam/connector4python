@@ -6,6 +6,10 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,13 +18,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-@WebServlet(name = "authCode", urlPatterns = {"/accessToken"})
+@WebServlet(name = "AccessTokenServlet", urlPatterns = {"/accessToken"})
 public class AccessTokenServlet extends HttpServlet{
 
     private HttpClient httpClient;
 
+    @Autowired
     public void setHttpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
+    }
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        /* Servlets cannot be instantiated with Spring container, they are instantiated by servlet container.
+           Therefore we cannot declare the servlet as a spring bean in our context.xml file and add a reference
+           to inject the desired bean. With the following we enable autowiring in the servlet context.*/
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
     }
 
     @Override
@@ -49,7 +63,6 @@ public class AccessTokenServlet extends HttpServlet{
         post.addParameter("grant_type", "authorization_code");
         post.addParameter("redirect_uri", redirectUri);
 
-        httpClient = new HttpClient();
         httpClient.executeMethod(post);
 
         try {
