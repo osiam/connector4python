@@ -1,113 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:oauth="http://www.springframework.org/schema/security/oauth2" xmlns:sec="http://www.springframework.org/schema/security"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <import resource="resource-server.xml"/>
+    <import resource="client-authentication.xml"/>
+    <import resource="user-authentication.xml"/>
 
-
-    <!-- oauth2 resources -->
-    <http pattern="/secured/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
-        access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
-        <!--<anonymous enabled="false" />-->
-        <intercept-url pattern="/secured/get/resource" access="SCOPE_READ" />
-        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
-        <access-denied-handler ref="oauthAccessDeniedHandler" />
-    </http>
-
-    <bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
-        <property name="realmName" value="oauth2-authorization-server" />
-    </bean>
-
-    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased" xmlns="http://www.springframework.org/schema/beans">
-        <constructor-arg>
-            <list>
-                <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
-            </list>
-        </constructor-arg>
-    </bean>
-
-    <oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
-
-    <!-- end oauth2 resources -->
-
-    <!-- Client Auhtentication Basic Access  Authentication -->
-    <http pattern="/oauth/token" create-session="stateless" authentication-manager-ref="clientAuthenticationManager"
-          xmlns="http://www.springframework.org/schema/security">
-        <intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
-        <anonymous enabled="false" />
-        <http-basic entry-point-ref="clientAuthenticationEntryPoint" />
-        <access-denied-handler ref="oauthAccessDeniedHandler" />
-    </http>
-
-    <http access-denied-page="/login.jsp?authorization_error=true" disable-url-rewriting="true"
-        xmlns="http://www.springframework.org/schema/security">
-        <intercept-url pattern="/oauth/**" access="ROLE_USER" />
-        <form-login authentication-failure-url="/login.jsp?authentication_error=true" login-page="/login.jsp"
-            login-processing-url="/login.do" />
-        <anonymous />
-    </http>
-
-    <bean id="clientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
-        <property name="realmName" value="authorization-server/client" />
-    </bean>
-
-
-    <bean id="oauthAccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
-
-    <bean id="clientCredentialsTokenEndpointFilter" class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
-        <property name="authenticationManager" ref="clientAuthenticationManager" />
-    </bean>
-
-    <authentication-manager id="clientAuthenticationManager" xmlns="http://www.springframework.org/schema/security">
-        <authentication-provider user-service-ref="clientDetailsUserService" />
-    </authentication-manager>
-
-    <authentication-manager alias="authenticationManager" xmlns="http://www.springframework.org/schema/security">
-        <authentication-provider user-service-ref="userDetailsService" />
-    </authentication-manager>
-
-    <bean id="userDetailsService" class="org.osiam.oauth2.user.please.remove.me.asap.PseudoAuthenticationBean" />
-
-
-    <bean id="clientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
-        <constructor-arg ref="clientDetails" />
-    </bean>
-
-    <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
-
+    <!-- tokenService is needed by client-authentication as well as resource-server -->
     <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
-        <property name="tokenStore" ref="tokenStore" />
-        <property name="supportRefreshToken" value="true" />
-        <property name="clientDetailsService" ref="clientDetails" />
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="supportRefreshToken" value="true"/>
+        <property name="clientDetailsService" ref="clientDetails"/>
     </bean>
 
-    <oauth:authorization-server client-details-service-ref="clientDetails"
-        token-services-ref="tokenServices">
-        <oauth:authorization-code />
-        <oauth:refresh-token />
-    </oauth:authorization-server>
+    <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore"/>
 
-    <!--<oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" /> -->
-    <oauth:resource-server id="oauth2ProviderFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
-    <bean id="clientDetails" class="org.osiam.oauth2.client.service.ClientDetailsLoadingBean" />
+    <mvc:annotation-driven/>
 
-    <mvc:annotation-driven />
-
-    <mvc:default-servlet-handler />
+    <mvc:default-servlet-handler/>
 
     <sec:global-method-security pre-post-annotations="enabled" proxy-target-class="true">
         <!--you could also wire in the expression handler up at the layer of the http filters. See https://jira.springsource.org/browse/SEC-1452 -->
-        <sec:expression-handler ref="oauthExpressionHandler" />
+        <sec:expression-handler ref="oauthExpressionHandler"/>
     </sec:global-method-security>
 
-    <oauth:expression-handler id="oauthExpressionHandler" />
+    <oauth:expression-handler id="oauthExpressionHandler"/>
 
-    <oauth:web-expression-handler id="oauthWebExpressionHandler" />
+    <oauth:web-expression-handler id="oauthWebExpressionHandler"/>
 
-    <!--Basic application beans. -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 
         <property name="viewResolvers">
@@ -118,13 +43,10 @@
         </property>
         <property name="defaultViews">
             <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
-                <property name="extractValueFromSingleKeyModel" value="true" />
+                <property name="extractValueFromSingleKeyModel" value="true"/>
             </bean>
         </property>
     </bean>
-    <bean id="resourceServer" class="org.osiam.oauth2.mvc.PseudoResourceService" />
-    <!-- Override the default mappings for approval and error pages -->
-    <bean id="accessConfirmationController" class="org.osiam.oauth2.mvc.AccessConfirmationController">
-        <property name="clientDetailsService" ref="clientDetails" />
-    </bean>
+    <bean id="resourceServer" class="org.osiam.oauth2.mvc.PseudoResourceService"/>
+
 </beans>

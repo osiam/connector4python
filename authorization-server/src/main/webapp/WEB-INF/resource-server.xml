@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <http pattern="/secured/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
+          access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
+        <intercept-url pattern="/secured/get/resource" access="SCOPE_READ" />
+        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+    </http>
+
+    <bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="realmName" value="oauth2-authorization-server" />
+    </bean>
+
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased" xmlns="http://www.springframework.org/schema/beans">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <oauth:resource-server id="resourceServerFilter" resource-id="oauth2res" token-services-ref="tokenServices" />
+
+
+</beans>
