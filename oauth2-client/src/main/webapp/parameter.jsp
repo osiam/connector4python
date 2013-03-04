@@ -10,5 +10,8 @@
     <p>Auth code: <%= request.getAttribute("code") %></p>
     <p>Authorization-Server response:</p>
     <p><%= request.getAttribute("response") %></p>
+    <p>Possible Errors:</p>
+    <p>Error: <%= request.getParameter("error") %></p>
+    <p>Error Description: <%= request.getParameter("error_description") %></p>
 </body>
 </html>

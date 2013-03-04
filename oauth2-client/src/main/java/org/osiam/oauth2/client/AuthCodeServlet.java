@@ -14,9 +14,10 @@ public class AuthCodeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String environment = "http://localhost:8080";
+        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String clientId = "testClient";
-        String redirectUri = "http://localhost:8080/oauth2-client/accessToken";
+        String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080/oauth2-client/accessToken";
+
         String url = environment + "/authorization-server/oauth/authorize?response_type=code&client_id=" +
                 clientId + "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8");
 
