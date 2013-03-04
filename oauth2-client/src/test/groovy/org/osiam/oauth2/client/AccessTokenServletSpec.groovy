@@ -5,13 +5,9 @@ import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.PostMethod
 import spock.lang.Specification
 
-import javax.servlet.GenericServlet
 import javax.servlet.RequestDispatcher
-import javax.servlet.ServletConfig
-import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import org.springframework.web.context.support.SpringBeanAutowiringSupport
 
 class AccessTokenServletSpec extends Specification {
 
@@ -20,10 +16,6 @@ class AccessTokenServletSpec extends Specification {
     def httpClient = Mock(HttpClient)
     def postMethod = Mock(PostMethod)
     def requestDispatcher = Mock(RequestDispatcher)
-    def servletConfig = Mock(ServletConfig)
-    def genericServlet = Mock(GenericServlet)
-    def springBeanAutowiringSupport = Mock(SpringBeanAutowiringSupport)
-    def servletContext = Mock(ServletContext)
 
     def accessTokenServlet = new AccessTokenServlet()
 
@@ -94,13 +86,4 @@ class AccessTokenServletSpec extends Specification {
 
         1 * requestDispatcher.forward(httpRequest, httpResponse)
     }
-
-/*    def "servlet init method should be called to enable autowiring for spring beans in servlet context"() {
-        when:
-        accessTokenServlet.init(servletConfig)
-
-        then:
-        true
-
-    }*/
 }
