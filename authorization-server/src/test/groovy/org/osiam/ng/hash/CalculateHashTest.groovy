@@ -71,6 +71,6 @@ class CalculateHashTest extends Specification {
         CalculateHash.calculate(null)
         then:
         def e = thrown(IllegalArgumentException)
-        e.message == "An error occured while trying to calculate the hash value of null"
+        e.message == "An error occurred while trying to calculate the hash value of null"
     }
 }
