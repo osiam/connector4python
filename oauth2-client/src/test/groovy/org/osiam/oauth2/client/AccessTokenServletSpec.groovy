@@ -3,6 +3,7 @@ package org.osiam.oauth2.client
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.PostMethod
+import org.json.JSONException
 import spock.lang.Specification
 
 import javax.servlet.RequestDispatcher
@@ -73,17 +74,40 @@ class AccessTokenServletSpec extends Specification {
 
         then:
         0 * postMethod.addParameter("code", null)
-        1 * postMethod.addRequestHeader("Authorization", "Basic " + encoding)
-        1 * postMethod.addParameter("grant_type", "authorization_code")
-        1 * postMethod.addParameter("redirect_uri", "http://localhost:8080/oauth2-client/accessToken")
-        1 * httpClient.executeMethod(postMethod)
+        0 * postMethod.addRequestHeader("Authorization", "Basic " + encoding)
+        0 * postMethod.addParameter("grant_type", "authorization_code")
+        0 * postMethod.addParameter("redirect_uri", "http://localhost:8080/oauth2-client/accessToken")
+        0 * httpClient.executeMethod(postMethod)
 
-        1 * httpRequest.setAttribute("response", _)
+        0 * httpRequest.setAttribute("response", _)
         1 * httpRequest.setAttribute("client_id", _)
         1 * httpRequest.setAttribute("client_secret", _)
         1 * httpRequest.setAttribute("redirect_uri", _)
-        1 * httpRequest.setAttribute("code", _)
+        0 * httpRequest.setAttribute("code", _)
 
         1 * requestDispatcher.forward(httpRequest, httpResponse)
     }
+
+
+
+    def "should wrap json exception to IllegalStateException"() {
+        given:
+        accessTokenServlet.setHttpClient(httpClient)
+        accessTokenServlet.setPost(postMethod)
+        httpRequest.getScheme() >> "http"
+        httpRequest.getServerName() >> "localhost"
+        httpRequest.getParameter("code") >> "theAuthCode"
+        def jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\""
+        postMethod.getResponseBodyAsStream() >> new ByteArrayInputStream(jsonString.getBytes())
+        httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
+
+        when:
+        accessTokenServlet.doGet(httpRequest, httpResponse)
+
+        then:
+        def e = thrown(IllegalStateException)
+        e.message == "Expected a ',' or '}' at character 119"
+        e.cause.class == JSONException.class
+    }
+
 }

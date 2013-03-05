@@ -37,7 +37,7 @@ public class CalculateHash {
         try {
             return instance.calculateHash(input);
         } catch (Exception e) {
-            throw new IllegalArgumentException("An error occured while trying to calculate the hash value of " + input, e);
+            throw new IllegalArgumentException("An error occurred while trying to calculate the hash value of " + input, e);
         }
     }
 

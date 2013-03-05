@@ -25,6 +25,9 @@ public class AccessTokenServlet extends HttpServlet{
 
     private HttpClient httpClient;
     private PostMethod post;
+    private final String clientId = "testClient";
+    private final String clientSecret = "secret";
+
 
     @Autowired
     public void setPost(PostMethod post) {
@@ -53,27 +56,33 @@ public class AccessTokenServlet extends HttpServlet{
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String tokenUrl = environment + "/authorization-server/oauth/token";
 
-        String clientId = "testClient";
-        String clientSecret = "secret";
         String combined = clientId+":"+clientSecret;
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
 
-        addPostMethodParameter(code, tokenUrl, combined, redirectUri);
-
-        httpClient.executeMethod(post);
-
-        addJsonResponseToHttpRequest(req);
-
+        sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req);
         addAttributesToHttpRequest(req, code, clientId, clientSecret, redirectUri);
 
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
+    }
+
+    private void sendAuthCodeToAuthorizationServerWhenCodeIsSent(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
+        if (code != null){
+            sendAuthCode(code, tokenUrl, combined, redirectUri, req);
+        }
+    }
+
+    private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
+        addPostMethodParameter(code, tokenUrl, combined, redirectUri);
+        httpClient.executeMethod(post);
+        addJsonResponseToHttpRequest(req);
+        req.setAttribute("code", code);
     }
 
     private void addAttributesToHttpRequest(HttpServletRequest req, String code, String clientId, String clientSecret, String redirectUri) {
         req.setAttribute("client_id", clientId);
         req.setAttribute("client_secret", clientSecret);
         req.setAttribute("redirect_uri", redirectUri);
-        req.setAttribute("code", code);
+
     }
 
     private void addJsonResponseToHttpRequest(HttpServletRequest req) throws IOException {
@@ -91,12 +100,8 @@ public class AccessTokenServlet extends HttpServlet{
     private void addPostMethodParameter(String code, String tokenUrl, String combined, String redirectUri) throws URIException {
         post.setURI(new URI(tokenUrl));
         String encoding = new String(Base64.encodeBase64(combined.getBytes()));
-
         post.addRequestHeader("Authorization", "Basic " + encoding);
-
-        if (code != null) {
-            post.addParameter("code", code);
-        }
+        post.addParameter("code", code);
         post.addParameter("grant_type", "authorization_code");
         post.addParameter("redirect_uri", redirectUri);
     }
