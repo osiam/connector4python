@@ -100,11 +100,8 @@ public class AccessTokenServlet extends HttpServlet{
     private void addPostMethodParameter(String code, String tokenUrl, String combined, String redirectUri) throws URIException {
         post.setURI(new URI(tokenUrl));
         String encoding = new String(Base64.encodeBase64(combined.getBytes()));
-
         post.addRequestHeader("Authorization", "Basic " + encoding);
-
-
-            post.addParameter("code", code);
+        post.addParameter("code", code);
         post.addParameter("grant_type", "authorization_code");
         post.addParameter("redirect_uri", redirectUri);
     }

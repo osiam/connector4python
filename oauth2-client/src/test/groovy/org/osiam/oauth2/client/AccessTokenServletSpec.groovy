@@ -94,15 +94,11 @@ class AccessTokenServletSpec extends Specification {
         given:
         accessTokenServlet.setHttpClient(httpClient)
         accessTokenServlet.setPost(postMethod)
-
-        httpRequest.getParameter("code") >> null
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
-
+        httpRequest.getParameter("code") >> "theAuthCode"
         def jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\""
-
         postMethod.getResponseBodyAsStream() >> new ByteArrayInputStream(jsonString.getBytes())
-
         httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
 
         when:
