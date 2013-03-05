@@ -1,14 +1,17 @@
 package org.osiam.oauth2.client.service;
 
-import org.osiam.oauth2.client.data.ClientEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Named;
 import java.util.*;
 
 
+@Component("clientDetails")
 public class ClientDetailsLoadingBean implements ClientDetailsService{
 
 
