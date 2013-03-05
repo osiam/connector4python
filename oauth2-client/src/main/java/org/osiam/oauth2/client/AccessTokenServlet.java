@@ -60,7 +60,7 @@ public class AccessTokenServlet extends HttpServlet{
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
 
         sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req);
-        addAttributesToHttpRequest(req, code, clientId, clientSecret, redirectUri);
+        addAttributesToHttpRequest(req, clientId, clientSecret);
 
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
     }
@@ -76,12 +76,13 @@ public class AccessTokenServlet extends HttpServlet{
         httpClient.executeMethod(post);
         addJsonResponseToHttpRequest(req);
         req.setAttribute("code", code);
+        req.setAttribute("redirect_uri", redirectUri);
     }
 
-    private void addAttributesToHttpRequest(HttpServletRequest req, String code, String clientId, String clientSecret, String redirectUri) {
+    private void addAttributesToHttpRequest(HttpServletRequest req, String clientId, String clientSecret) {
         req.setAttribute("client_id", clientId);
         req.setAttribute("client_secret", clientSecret);
-        req.setAttribute("redirect_uri", redirectUri);
+
 
     }
 

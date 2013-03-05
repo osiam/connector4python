@@ -82,7 +82,7 @@ class AccessTokenServletSpec extends Specification {
         0 * httpRequest.setAttribute("response", _)
         1 * httpRequest.setAttribute("client_id", _)
         1 * httpRequest.setAttribute("client_secret", _)
-        1 * httpRequest.setAttribute("redirect_uri", _)
+        0 * httpRequest.setAttribute("redirect_uri", _)
         0 * httpRequest.setAttribute("code", _)
 
         1 * requestDispatcher.forward(httpRequest, httpResponse)
