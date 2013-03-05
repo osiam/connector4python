@@ -19,27 +19,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 
 @WebServlet(name = "accessToken", urlPatterns = {"/accessToken"})
-public class AccessTokenServlet extends HttpServlet{
+public class AccessTokenServlet extends HttpServlet implements Serializable {
+
+    private static final long serialVersionUID = -403250971215465050L;
 
     private HttpClient httpClient;
     private PostMethod post;
-    private final String clientId = "testClient";
-    private final String clientSecret = "secret";
 
+    private static final String CLIENT_ID = "testClient";
+    private static final String CLIENT_SECRET = "secret";
 
     @Autowired
-    public void setPost(PostMethod post) {
-        this.post = post;
+    public final void setPost(PostMethod postMethod) {
+        post = postMethod;
     }
 
     @Autowired
-    public void setHttpClient(HttpClient httpClient) {
-        this.httpClient = httpClient;
+    public final void setHttpClient(HttpClient client) {
+        httpClient = client;
     }
 
-    public void init(ServletConfig config) throws ServletException {
+    public final void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         /* Servlets cannot be instantiated with Spring container, they are instantiated by servlet container.
@@ -49,18 +52,18 @@ public class AccessTokenServlet extends HttpServlet{
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected final void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String code = req.getParameter("code");
 
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String tokenUrl = environment + "/authorization-server/oauth/token";
 
-        String combined = clientId+":"+clientSecret;
+        String combined = CLIENT_ID +":"+ CLIENT_SECRET;
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
 
         sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req);
-        addAttributesToHttpRequest(req, code, clientId, clientSecret, redirectUri);
+        addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET, redirectUri);
 
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
     }
@@ -78,7 +81,7 @@ public class AccessTokenServlet extends HttpServlet{
         req.setAttribute("code", code);
     }
 
-    private void addAttributesToHttpRequest(HttpServletRequest req, String code, String clientId, String clientSecret, String redirectUri) {
+    private void addAttributesToHttpRequest(HttpServletRequest req, String clientId, String clientSecret, String redirectUri) {
         req.setAttribute("client_id", clientId);
         req.setAttribute("client_secret", clientSecret);
         req.setAttribute("redirect_uri", redirectUri);

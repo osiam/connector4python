@@ -11,8 +11,10 @@ import java.net.URLEncoder;
 @WebServlet(name = "authCode", urlPatterns = {"/authcode"})
 public class AuthCodeServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 403290981215464050L;
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected final void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String clientId = "testClient";
