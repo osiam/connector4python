@@ -4,10 +4,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Component("userDetailsService")
 public class PseudoAuthenticationBean implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {

@@ -63,7 +63,8 @@ public class AccessTokenServlet extends HttpServlet implements Serializable {
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
 
         sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req);
-        addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET, redirectUri);
+
+        addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET);
 
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
     }
@@ -79,13 +80,12 @@ public class AccessTokenServlet extends HttpServlet implements Serializable {
         httpClient.executeMethod(post);
         addJsonResponseToHttpRequest(req);
         req.setAttribute("code", code);
+        req.setAttribute("redirect_uri", redirectUri);
     }
 
-    private void addAttributesToHttpRequest(HttpServletRequest req, String clientId, String clientSecret, String redirectUri) {
+    private void addAttributesToHttpRequest(HttpServletRequest req, String clientId, String clientSecret) {
         req.setAttribute("client_id", clientId);
         req.setAttribute("client_secret", clientSecret);
-        req.setAttribute("redirect_uri", redirectUri);
-
     }
 
     private void addJsonResponseToHttpRequest(HttpServletRequest req) throws IOException {
