@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 
 @WebServlet(name = "accessToken", urlPatterns = {"/accessToken"})
-public class AccessTokenServlet extends HttpServlet implements Serializable {
+public class AccessTokenServlet extends HttpServlet {
 
     private static final long serialVersionUID = -403250971215465050L;
 
