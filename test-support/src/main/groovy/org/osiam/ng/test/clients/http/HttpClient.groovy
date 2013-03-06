@@ -40,7 +40,7 @@ class HttpClient {
     protected DefaultHttpClient httpClient = new DefaultHttpClient()
 
     HttpClient() {
-        HttpClientParams.setRedirecting(httpClient.getParams(), false)
+        //HttpClientParams.setRedirecting(httpClient.getParams(), true)
     }
 
     /**

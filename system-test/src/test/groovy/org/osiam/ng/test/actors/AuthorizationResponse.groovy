@@ -1,5 +1,7 @@
 package org.osiam.ng.test.actors
 
+import java.nio.charset.Charset
+
 import org.apache.http.NameValuePair
 import org.apache.http.client.utils.URLEncodedUtils
 import org.osiam.ng.test.clients.http.HttpResponse
@@ -18,7 +20,7 @@ class AuthorizationResponse {
     private final List<NameValuePair> queryParameters
 
     public AuthorizationResponse(HttpResponse httpResponse) {
-        this.queryParameters = URLEncodedUtils.parse(httpResponse.getLocation())
+        this.queryParameters = URLEncodedUtils.parse(httpResponse.getLocation(), Charset.forName("UTF-8"))
     }
 
     public String getCode() {

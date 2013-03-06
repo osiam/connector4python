@@ -17,7 +17,7 @@
     <properties>
         <!-- test system configuration
              these parameters should be overwritten by individual test profiles -->
-        <testSystem.host>localhost</testSystem.host>
+        <testSystem.host>omg01-systemtest.lan.tarent.de</testSystem.host>
         <testSystem.port>8080</testSystem.port>
     </properties>
 
@@ -27,7 +27,7 @@
             <groupId>org.osiam.ng</groupId>
             <artifactId>test-support</artifactId>
         </dependency>
-
+        
     </dependencies>
 
     <build>
@@ -40,35 +40,15 @@
             </testResource>
         </testResources>
 
-        <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
-
-        </plugins>
     </build>
 
     <profiles>
-        <!-- default
-             will execute the system test on the default test system -->
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <testSystem.host>omg01-systemtest.lan.tarent.de</testSystem.host>
-            </properties>
-        </profile>
-        
         <!-- local
              will execute the system test on the localhost -->
         <profile>
             <id>local</id>
             <properties>
-                <testSystem.host>omg01-systemtest.lan.tarent.de</testSystem.host>
+                <testSystem.host>localhost</testSystem.host>
             </properties>
         </profile>
     </profiles>

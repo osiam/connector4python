@@ -1,6 +1,9 @@
 package org.osiam.ng.test.actors
 
-import org.osiam.ng.test.clients.http.HttpClient
+import geb.Browser
+
+import org.apache.http.client.utils.URIBuilder
+import org.osiam.ng.test.clients.http.HttpResponse
 import org.osiam.ng.test.clients.rest.RestClient
 
 /**
@@ -12,33 +15,34 @@ import org.osiam.ng.test.clients.rest.RestClient
 class ClientTestActor {
 
     /** The authorization server's base URI. */
-    private String authorizationRequestUri = "http://localhost:8080/authorization-server/oauth/authorize"
+    private final String authorizationRequestUri
 
     /** The {@code client_id} to authenticate the client with the authorization server. */
-    private String clientId
+    private final String clientId
 
     /** The {@code client_secret} to authenticate the client with the authorization server.. */
-    private String clientSecret
+    private final String clientSecret
 
     /** The {@code redirect_uri} used for call backs at the client. */
-    private String redirectUri
+    private final String redirectUri
 
-    /** {@link HttpClient} for direct communication with the authorization server. */
-    private HttpClient httpClient = new HttpClient()
+    /** The user agent (a Browser). */
+    private final Browser userAgent
 
     /** {@link RestClient\ for communication with the resource server. */
-    private RestClient restClient = new RestClient()
+    private final RestClient restClient = new RestClient()
 
-    /**
-     * Requests authorization form the authorization server using the {@link #httpClient}.
-     * 
-     * @param scope scope to authorize for.
-     * @param state optional state to transmit with the request.
-     * @return the {@link AuthorizationResponse}.
-     */
-    public AuthorizationResponse requestAuthorization(String scope, String state = null) {
-        return new AuthorizationResponse(httpClient.get(
-        "${authorizationRequestUri}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}"
-        + (state ?: "state=${state}")))
+    public ClientTestActor(Browser userAgent, String authorizationServerUri, String clientId, String clientSecret, String redirectUri) {
+        this.userAgent = userAgent
+        this.authorizationRequestUri = "${authorizationServerUri}/oauth/authorize"
+        this.clientId = clientId
+        this.clientSecret = clientSecret
+        this.redirectUri = redirectUri
+    }
+
+    public void requestAuthorization(String scope, String state = null) {
+        Map parameters = ["response_type": "code", "client_id": clientId, "redirect_uri": redirectUri, "scope": scope]
+        if (state) parameters.put("state", state)
+        userAgent.go(parameters, authorizationRequestUri)
     }
 }
