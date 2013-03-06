@@ -29,8 +29,6 @@
         <authentication-provider user-service-ref="userDetailsService" />
     </authentication-manager>
 
-    <!-- service holding user data -->
-    <!--<bean id="userDetailsService" class="org.osiam.oauth2.user.please.remove.me.asap.PseudoAuthenticationBean" />-->
 
 
 </beans>
