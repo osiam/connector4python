@@ -12,8 +12,6 @@ import java.util.*;
 @Component("clientDetails")
 public class ClientDetailsLoadingBean implements ClientDetailsService{
 
-
-
     @Override
     public ClientDetails loadClientByClientId(final String clientId) throws ClientRegistrationException {
         //TODO implement DAO to get real client ...

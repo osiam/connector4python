@@ -30,8 +30,7 @@ public class PseudoAttributeController {
 
     private void generateLinkedAttribute(final Set<RestAttribute> attributes, final int i) {
         RestAttribute attr = new RestAttribute("key" + i, i);
-        Link detail = ControllerLinkBuilder.linkTo(PseudoAttributeController.class).slash(i).withRel(
-                Attribute.class.getSimpleName() + i);
+        Link detail = new Link(ResourceOverviewController.buildHref(PseudoAttributeController.class) + "/" + i, Attribute.class.getSimpleName() + i);
         attr.add(detail);
         attributes.add(attr);
     }
