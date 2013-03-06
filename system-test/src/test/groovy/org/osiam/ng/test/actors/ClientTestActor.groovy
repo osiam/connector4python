@@ -2,8 +2,6 @@ package org.osiam.ng.test.actors
 
 import geb.Browser
 
-import org.apache.http.client.utils.URIBuilder
-import org.osiam.ng.test.clients.http.HttpResponse
 import org.osiam.ng.test.clients.rest.RestClient
 
 /**
