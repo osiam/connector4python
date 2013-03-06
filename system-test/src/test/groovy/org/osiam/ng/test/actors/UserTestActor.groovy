@@ -26,18 +26,18 @@ class UserTestActor {
     }
 
     public void login() {
-        userAgent.to(LoginPage)
+        userAgent.at(LoginPage)
         userAgent.page.userNameInput = userName
         userAgent.page.passwordInput = password
         userAgent.page.submitButton.click()
     }
 
-    public HttpResponse grantAccess() {
+    public void grantAccess() {
         userAgent.at(AuthorizationRequestPage)
         userAgent.page.conformationButton.click()
     }
 
-    public HttpResponse denyAccess() {
+    public void denyAccess() {
         userAgent.at(AuthorizationRequestPage)
         userAgent.page.denialButton.click()
     }

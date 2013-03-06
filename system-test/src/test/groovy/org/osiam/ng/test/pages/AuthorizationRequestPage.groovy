@@ -14,8 +14,8 @@ class AuthorizationRequestPage extends Page {
 
     static content = {
         confirmationForm { $("form#confirmationForm") }
-        conformationButton { confirmationForm.user_oauth_approval() }
+        conformationButton { confirmationForm.authorize() }
         denialForm { $("form#denialForm") }
-        denialButton { denialForm.user_oauth_approval() }
+        denialButton { denialForm.deny() }
     }
 }

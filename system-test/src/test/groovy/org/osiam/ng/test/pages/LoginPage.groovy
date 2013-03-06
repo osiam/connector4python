@@ -7,8 +7,6 @@ import geb.Page
  */
 class LoginPage extends Page {
 
-    static url = "http://localhost:8080/authorization-server/login.jsp"
-
     static at = { loginForm }
 
     static content = {
