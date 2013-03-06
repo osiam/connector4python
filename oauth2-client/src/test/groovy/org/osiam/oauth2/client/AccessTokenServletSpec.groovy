@@ -24,11 +24,12 @@ class AccessTokenServletSpec extends Specification {
     def combined = "testClient:secret"
     def encoding = new String(Base64.encodeBase64(combined.getBytes()))
 
+    def setup(){
+
+    }
+
     def "should execute request with auth code to obtain access token"() {
         given:
-        accessTokenServlet.setHttpClient(httpClient)
-        accessTokenServlet.setPost(postMethod)
-
         httpRequest.getParameter("code") >> "theAuthCode"
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
@@ -58,8 +59,6 @@ class AccessTokenServletSpec extends Specification {
 
     def "should not get auth code and access token if user declines authorization"() {
         given:
-        accessTokenServlet.setHttpClient(httpClient)
-        accessTokenServlet.setPost(postMethod)
 
         httpRequest.getParameter("code") >> null
         httpRequest.getScheme() >> "http"

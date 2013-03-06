@@ -4,7 +4,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +45,7 @@ public class AccessTokenServlet extends HttpServlet {
         String tokenUrl = environment + "/authorization-server/oauth/token";
         String combined = CLIENT_ID +":"+ CLIENT_SECRET;
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
-        sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req, HTPConnectionWraper.createPost());
+        sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req, HTTPConnectionWraper.createPost());
         addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET);
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
     }
@@ -60,7 +59,7 @@ public class AccessTokenServlet extends HttpServlet {
     private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req, PostMethod post) throws IOException {
 
         addPostMethodParameter(code, tokenUrl, combined, redirectUri, post);
-        HTPConnectionWraper.createClient().executeMethod(post);
+        HTTPConnectionWraper.createClient().executeMethod(post);
         addJsonResponseToHttpRequest(req, post);
         req.setAttribute("code", code);
         req.setAttribute("redirect_uri", redirectUri);

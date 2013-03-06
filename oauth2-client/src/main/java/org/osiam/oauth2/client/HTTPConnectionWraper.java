@@ -1,7 +1,6 @@
 package org.osiam.oauth2.client;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 /**
@@ -11,8 +10,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
  * Time: 13:18
  * To change this template use File | Settings | File Templates.
  */
-public class HTPConnectionWraper {
-    static HTPConnectionWraper instance = new HTPConnectionWraper();
+public class HTTPConnectionWraper {
+    static HTTPConnectionWraper instance = new HTTPConnectionWraper();
 
     public static HttpClient createClient() {
         return instance._createHttpClient();

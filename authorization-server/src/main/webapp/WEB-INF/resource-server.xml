@@ -16,7 +16,7 @@
           access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
 
         <!-- resources below /secured/get/resource/ are accessed via scope "READ" -->
-        <intercept-url pattern="/secured/get/resource" access="SCOPE_DYNAMIC"/>
+        <intercept-url pattern="/secured/resource/*" access="SCOPE_DYNAMIC"/>
 
         <!-- validates the delivered access token -->
         <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER"/>

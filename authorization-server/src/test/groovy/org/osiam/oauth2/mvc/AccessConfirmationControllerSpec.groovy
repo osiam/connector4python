@@ -1,5 +1,6 @@
 package org.osiam.oauth2.mvc
 
+import org.osiam.oauth2.mvc.oauth2.AccessConfirmationController
 import org.springframework.security.oauth2.provider.AuthorizationRequest
 import org.springframework.security.oauth2.provider.ClientDetails
 import org.springframework.security.oauth2.provider.ClientDetailsService

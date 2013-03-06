@@ -1,4 +1,4 @@
-package org.osiam.oauth2.mvc;
+package org.osiam.oauth2.mvc.oauth2;
 
 import java.util.Map;
 
