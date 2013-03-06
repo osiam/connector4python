@@ -20,6 +20,6 @@ class AuthCodeServletSpec extends Specification {
         authCodeServlet.doGet(httpRequest, httpResponse);
 
         then:
-        1* httpResponse.sendRedirect("http://localhost:8080/authorization-server/oauth/authorize?response_type=code&client_id=testClient&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth2-client%2FaccessToken")
+        1* httpResponse.sendRedirect("http://localhost:8080/authorization-server/oauth/authorize?response_type=code&scope=GET&state=haha&client_id=testClient&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth2-client%2FaccessToken")
     }
 }
