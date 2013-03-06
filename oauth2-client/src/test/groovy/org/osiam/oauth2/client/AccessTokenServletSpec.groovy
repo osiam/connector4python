@@ -15,7 +15,6 @@ class AccessTokenServletSpec extends Specification {
     def httpRequest = Mock(HttpServletRequest)
     def httpResponse = Mock(HttpServletResponse)
     def httpClient = Mock(HttpClient)
-    def postMethod = Mock(PostMethod)
     def requestDispatcher = Mock(RequestDispatcher)
 
     def accessTokenServlet = new AccessTokenServlet()
@@ -27,13 +26,10 @@ class AccessTokenServletSpec extends Specification {
     def "should execute request with auth code to obtain access token"() {
         given:
         accessTokenServlet.setHttpClient(httpClient)
-        accessTokenServlet.setPost(postMethod)
 
         httpRequest.getParameter("code") >> "theAuthCode"
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
-
-        postMethod.getResponseBodyAsStream() >> new ByteArrayInputStream(jsonString.getBytes())
 
         httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
 
@@ -41,11 +37,13 @@ class AccessTokenServletSpec extends Specification {
         accessTokenServlet.doGet(httpRequest, httpResponse)
 
         then:
-        1 * postMethod.addParameter('code', 'theAuthCode')
-        1 * postMethod.addRequestHeader("Authorization", "Basic " + encoding)
-        1 * postMethod.addParameter("grant_type", "authorization_code")
-        1 * postMethod.addParameter("redirect_uri", "http://localhost:8080/oauth2-client/accessToken")
-        1 * httpClient.executeMethod(postMethod)
+        1 * httpClient.executeMethod({PostMethod post ->
+            post.getParameter('code').value == 'theAuthCode'
+            post.getParameter('grant_type').value == 'authorization_code'
+            post.getParameter('redirect_uri').value == 'http://localhost:8080/oauth2-client/accessToken'
+            post.addRequestHeader("Authorization", "Basic " + encoding)
+            post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
+        })
 
         1 * httpRequest.setAttribute("response", _)
         1 * httpRequest.setAttribute("client_id", _)
@@ -59,13 +57,10 @@ class AccessTokenServletSpec extends Specification {
     def "should not get auth code and access token if user declines authorization"() {
         given:
         accessTokenServlet.setHttpClient(httpClient)
-        accessTokenServlet.setPost(postMethod)
 
         httpRequest.getParameter("code") >> null
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
-
-        postMethod.getResponseBodyAsStream() >> new ByteArrayInputStream(jsonString.getBytes())
 
         httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
 
@@ -73,11 +68,7 @@ class AccessTokenServletSpec extends Specification {
         accessTokenServlet.doGet(httpRequest, httpResponse)
 
         then:
-        0 * postMethod.addParameter("code", null)
-        0 * postMethod.addRequestHeader("Authorization", "Basic " + encoding)
-        0 * postMethod.addParameter("grant_type", "authorization_code")
-        0 * postMethod.addParameter("redirect_uri", "http://localhost:8080/oauth2-client/accessToken")
-        0 * httpClient.executeMethod(postMethod)
+        0 * httpClient.executeMethod(_ as PostMethod)
 
         0 * httpRequest.setAttribute("response", _)
         1 * httpRequest.setAttribute("client_id", _)
@@ -93,18 +84,23 @@ class AccessTokenServletSpec extends Specification {
     def "should wrap json exception to IllegalStateException"() {
         given:
         accessTokenServlet.setHttpClient(httpClient)
-        accessTokenServlet.setPost(postMethod)
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
         httpRequest.getParameter("code") >> "theAuthCode"
         def jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\""
-        postMethod.getResponseBodyAsStream() >> new ByteArrayInputStream(jsonString.getBytes())
         httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
 
         when:
         accessTokenServlet.doGet(httpRequest, httpResponse)
 
         then:
+        1 * httpClient.executeMethod({PostMethod post ->
+            post.getParameter('code').value == 'theAuthCode'
+            post.getParameter('grant_type').value == 'authorization_code'
+            post.getParameter('redirect_uri').value == 'http://localhost:8080/oauth2-client/accessToken'
+            post.addRequestHeader("Authorization", "Basic " + encoding)
+            post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
+        })
         def e = thrown(IllegalStateException)
         e.message == "Expected a ',' or '}' at character 119"
         e.cause.class == JSONException.class
