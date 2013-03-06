@@ -1,14 +1,14 @@
 package org.osiam.oauth2.client;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletConfig;
@@ -19,28 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 
 @WebServlet(name = "accessToken", urlPatterns = {"/accessToken"})
 public class AccessTokenServlet extends HttpServlet {
 
     private static final long serialVersionUID = -403250971215465050L;
 
-    private HttpClient httpClient;
-    private PostMethod post;
 
     private static final String CLIENT_ID = "testClient";
     private static final String CLIENT_SECRET = "secret";
 
-    @Autowired
-    public final void setPost(PostMethod postMethod) {
-        post = postMethod;
-    }
-
-    @Autowired
-    public final void setHttpClient(HttpClient client) {
-        httpClient = client;
-    }
 
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -53,32 +41,27 @@ public class AccessTokenServlet extends HttpServlet {
 
     @Override
     protected final void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String code = req.getParameter("code");
-
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String tokenUrl = environment + "/authorization-server/oauth/token";
-
         String combined = CLIENT_ID +":"+ CLIENT_SECRET;
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
-
-        sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req);
-
+        sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req, HTPConnectionWraper.createPost());
         addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET);
-
         req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
     }
 
-    private void sendAuthCodeToAuthorizationServerWhenCodeIsSent(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
+    private void sendAuthCodeToAuthorizationServerWhenCodeIsSent(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req, PostMethod post) throws IOException {
         if (code != null){
-            sendAuthCode(code, tokenUrl, combined, redirectUri, req);
+            sendAuthCode(code, tokenUrl, combined, redirectUri, req, post);
         }
     }
 
-    private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
-        addPostMethodParameter(code, tokenUrl, combined, redirectUri);
-        httpClient.executeMethod(post);
-        addJsonResponseToHttpRequest(req);
+    private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req, PostMethod post) throws IOException {
+
+        addPostMethodParameter(code, tokenUrl, combined, redirectUri, post);
+        HTPConnectionWraper.createClient().executeMethod(post);
+        addJsonResponseToHttpRequest(req, post);
         req.setAttribute("code", code);
         req.setAttribute("redirect_uri", redirectUri);
     }
@@ -88,7 +71,7 @@ public class AccessTokenServlet extends HttpServlet {
         req.setAttribute("client_secret", clientSecret);
     }
 
-    private void addJsonResponseToHttpRequest(HttpServletRequest req) throws IOException {
+    private void addJsonResponseToHttpRequest(HttpServletRequest req, HttpMethod post) throws IOException {
         try {
             JSONObject authResponse = new JSONObject(
             new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
@@ -100,7 +83,7 @@ public class AccessTokenServlet extends HttpServlet {
         }
     }
 
-    private void addPostMethodParameter(String code, String tokenUrl, String combined, String redirectUri) throws URIException {
+    private void addPostMethodParameter(String code, String tokenUrl, String combined, String redirectUri, PostMethod post) throws URIException {
         post.setURI(new URI(tokenUrl));
         String encoding = new String(Base64.encodeBase64(combined.getBytes()));
         post.addRequestHeader("Authorization", "Basic " + encoding);

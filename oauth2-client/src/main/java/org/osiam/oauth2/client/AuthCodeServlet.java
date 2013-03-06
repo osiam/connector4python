@@ -20,7 +20,7 @@ public class AuthCodeServlet extends HttpServlet {
         String clientId = "testClient";
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080/oauth2-client/accessToken";
 
-        String url = environment + "/authorization-server/oauth/authorize?response_type=code&client_id=" +
+        String url = environment + "/authorization-server/oauth/authorize?response_type=code&scope=GET&state=haha&client_id=" +
                 clientId + "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8");
 
         resp.sendRedirect(url);
