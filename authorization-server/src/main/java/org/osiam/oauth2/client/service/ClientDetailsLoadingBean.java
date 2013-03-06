@@ -5,9 +5,7 @@ import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import javax.inject.Named;
 import java.util.*;
 
 
@@ -20,6 +18,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService{
     public ClientDetails loadClientByClientId(final String clientId) throws ClientRegistrationException {
         //TODO implement DAO to get real client ...
         return new ClientDetails() {
+
             @Override
             public String getClientId() {
                 return clientId;
@@ -49,9 +48,10 @@ public class ClientDetailsLoadingBean implements ClientDetailsService{
 
             @Override
             public Set<String> getScope() {
-                Set<String> result = new HashSet<>();
-                result.add("READ");
-                return result;
+                Set<String> scopes = new HashSet<>();
+                scopes.add("GET");
+//                scopes.add("DYNAMIC");
+                return scopes;
             }
 
             @Override

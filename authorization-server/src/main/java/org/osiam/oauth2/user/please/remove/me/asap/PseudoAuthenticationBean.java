@@ -23,7 +23,6 @@ public class PseudoAuthenticationBean implements UserDetailsService{
                         return "ROLE_USER";
                     }
                 });
-
                 return blubb;
             }
 

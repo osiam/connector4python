@@ -35,11 +35,6 @@
     <!-- the token store managing all access tokens -->
     <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore"/>
 
-
-    <!-- the client data store -->
-    <!--<bean id="clientDetails" class="org.osiam.oauth2.client.service.ClientDetailsLoadingBean" />-->
-
-
     <!-- Enabled @Secured annotation -->
     <sec:global-method-security pre-post-annotations="enabled" proxy-target-class="true">
         <!--you could also wire in the expression handler up at the layer of the http filters. See https://jira.springsource.org/browse/SEC-1452 -->
@@ -64,11 +59,6 @@
         </property>
     </bean>
 
-
-    <!-- access controller to show a login form -->
-    <!--<bean id="accessConfirmationController" class="org.osiam.oauth2.mvc.AccessConfirmationController">-->
-    <!--<property name="clientDetailsService" ref="clientDetails" />-->
-    <!--</bean>-->
 
     <!-- general access denied handler -->
     <bean id="oauthAccessDeniedHandler"

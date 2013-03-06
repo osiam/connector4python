@@ -15,8 +15,6 @@ public class ClientRegistrationBean{
    @Inject
    private ClientDAU clientDAU;
 
-
-
     public void register(String clientId, String clientSecret, String redirect, ArrayList<String> scopes) {
         ClientEntity entity = new ClientEntity(clientId, hashClientSecret(clientSecret), redirect, scopes);
         clientDAU.create(entity);
