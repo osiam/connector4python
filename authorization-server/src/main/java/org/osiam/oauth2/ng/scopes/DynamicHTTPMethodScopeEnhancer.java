@@ -4,7 +4,6 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.provider.vote.ScopeVoter;
 import org.springframework.security.web.FilterInvocation;
 
 import java.util.*;
@@ -12,27 +11,27 @@ import java.util.*;
 public class DynamicHTTPMethodScopeEnhancer implements AccessDecisionVoter<Object> {
 
     private final ConfigAttribute dynamic = new SecurityConfig("SCOPE_DYNAMIC");
-    private final ScopeVoter basedOnScopeVoter;
+    private final AccessDecisionVoter<Object> basedOnVoter;
 
-    public DynamicHTTPMethodScopeEnhancer(ScopeVoter basedOnScopeVoter) {
-        this.basedOnScopeVoter = basedOnScopeVoter;
+    public DynamicHTTPMethodScopeEnhancer(AccessDecisionVoter<Object> basedOnVoter) {
+        this.basedOnVoter = basedOnVoter;
     }
 
 
     @Override
     public boolean supports(ConfigAttribute attribute) {
-        return basedOnScopeVoter.supports(attribute);
+        return basedOnVoter.supports(attribute);
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return basedOnScopeVoter.supports(clazz);
+        return basedOnVoter.supports(clazz);
     }
 
     @Override
     public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
         Set<ConfigAttribute> dynamicConfigs = ifScopeDynamicAddMethodScope(object, attributes);
-        return basedOnScopeVoter.vote(authentication, object, dynamicConfigs);
+        return basedOnVoter.vote(authentication, object, dynamicConfigs);
     }
 
     private Set<ConfigAttribute> ifScopeDynamicAddMethodScope(final Object object,
