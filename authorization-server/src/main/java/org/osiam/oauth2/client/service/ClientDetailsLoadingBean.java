@@ -70,12 +70,6 @@ public class ClientDetailsLoadingBean implements ClientDetailsService{
             @Override
             public Collection<GrantedAuthority> getAuthorities() {
                 Collection<GrantedAuthority> blubb = new ArrayList<>();
-                blubb.add(new GrantedAuthority() {
-                    @Override
-                    public String getAuthority() {
-                        return "READ";
-                    }
-                });
                 return blubb;
 
             }
