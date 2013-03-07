@@ -2,13 +2,6 @@ package org.osiam.ng.resourceserver;
 
 import org.springframework.hateoas.ResourceSupport;
 
-/**
- * Created with IntelliJ IDEA.
- * User: phil
- * Date: 06.03.13
- * Time: 14:22
- * To change this template use File | Settings | File Templates.
- */
 public class RestAttribute extends ResourceSupport {
     private final String name;
 

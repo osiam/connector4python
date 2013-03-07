@@ -22,8 +22,6 @@ class DynamicHTTPMethodScopeEnhancerTest extends Specification {
 
     }
 
-
-
     def "should just delegate support because we don't need to enhance something there"() {
         given:
         def basedOnVoter = Mock(ScopeVoter)
@@ -60,6 +58,20 @@ class DynamicHTTPMethodScopeEnhancerTest extends Specification {
         then:
         _ * basedOnVoter.vote(_, filter, { Collection<ConfigAttribute> a ->
             assert a.contains(scope_haha)
+        })
+
+    }
+
+    def "should not touch sent attributes when object is no filter"() {
+        given:
+        def attributes = [scope_haha, scope_dynamic]
+
+        when:
+        underTest.vote(null, new Object(), attributes)
+        then:
+        _ * basedOnVoter.vote(_, filter, { Collection<ConfigAttribute> a ->
+            assert a.contains(scope_haha)
+            assert a.contains(scope_dynamic)
         })
 
     }

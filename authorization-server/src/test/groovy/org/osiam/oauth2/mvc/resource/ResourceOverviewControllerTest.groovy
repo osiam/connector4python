@@ -12,7 +12,6 @@ class ResourceOverviewControllerTest extends Specification {
         result.size() == 1
         def link = result.getAt(0)
         link.rel == "Attributes"
-        link.href == "http://localhost:8080/authorization-server/secured/attributes"
-
+        link.href == "http://localhost:8080/authorization-server/secured/attributes?access_token={access_token}"
     }
 }

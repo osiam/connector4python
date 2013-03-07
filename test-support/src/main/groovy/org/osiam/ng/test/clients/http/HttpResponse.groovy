@@ -14,6 +14,7 @@
 package org.osiam.ng.test.clients.http
 
 import static org.apache.http.HttpHeaders.*
+import groovy.json.JsonSlurper
 import groovy.util.slurpersupport.GPathResult
 
 import org.ccil.cowan.tagsoup.Parser
@@ -49,9 +50,24 @@ class HttpResponse {
      * 
      * @return the {@link #response}'s body as a {@link GPathResult}.
      */
-    GPathResult getBody() {
+    GPathResult getXmlBody() {
         XmlSlurper slurper = new XmlSlurper(new Parser())
-        return slurper.parse(response.entity.content)
+        return slurper.parse(body)
+    }
+
+    /**
+     * Returns the HTTP {@link #response}'s entity content (see {@link org.apache.http.HttpResponse#getEntity()} and
+     * {@link org.apache.http.HttpEntity#getContent()}) and returns it as a {@link Map} structure.
+     * 
+     * @return the {@link #response}'s body as a {@link Map} structure.
+     */
+    Map getJsonBody() {
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parse(body)
+    }
+
+    private Reader getBody() {
+        return new InputStreamReader(response.entity.content)
     }
 
     /**

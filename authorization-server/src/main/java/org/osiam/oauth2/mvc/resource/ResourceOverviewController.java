@@ -21,7 +21,7 @@ public class ResourceOverviewController {
     @ResponseBody
     public Set<Link> getResources() throws Exception {
         Set<Link> attributes = new HashSet<>();
-        Link detail = new Link(buildHref(PseudoAttributeController.class), "Attributes");
+        Link detail = new Link(buildHref(PseudoAttributeController.class) + "?access_token={access_token}", "Attributes");
 
         attributes.add(detail);
         return attributes;
