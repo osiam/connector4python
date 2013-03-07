@@ -13,30 +13,54 @@ import org.osiam.ng.test.pages.LoginPage
  */
 class UserTestActor {
 
-    private final String authorizationServerUri
+    /** This user's user name. */
     private final String userName
+
+    /** This user's password. */
     private final String password
+
+    /** This user's {@link Browser}. */
     private final Browser userAgent
 
-    public UserTestActor(Browser userAgent, String authorizationServerUri, String userName, String password) {
-        this.authorizationServerUri = authorizationServerUri
+    /**
+     * @param userAgent the {@link Browser} of the user.
+     * @param userName the user name.
+     * @param password the password.
+     */
+    public UserTestActor(Browser userAgent, String userName, String password) {
         this.userAgent = userAgent
         this.userName = userName
         this.password = password
     }
 
+    /**
+     * If the {@link #userAgent} is currently at the {@link LoginPage} this will fill the supplied login form, otherwise
+     * it will just return.
+     */
     public void login() {
+        if (userAgent.isAt(AuthorizationRequestPage)) {
+            return
+        }
+
         userAgent.at(LoginPage)
         userAgent.page.userNameInput = userName
         userAgent.page.passwordInput = password
         userAgent.page.submitButton.click()
     }
 
+    /**
+     * Grants access for the currently displayed request. If the {@link #userAgent} is not located at the
+     * {@link AuthorizationRequestPage} this will fail.
+     */
     public void grantAccess() {
         userAgent.at(AuthorizationRequestPage)
         userAgent.page.conformationButton.click()
     }
 
+    /**
+     * Denies access for the currently displayed request. If the {@link #userAgent} is not located at the
+     * {@link AuthorizationRequestPage} this will fail.
+     */
     public void denyAccess() {
         userAgent.at(AuthorizationRequestPage)
         userAgent.page.denialButton.click()

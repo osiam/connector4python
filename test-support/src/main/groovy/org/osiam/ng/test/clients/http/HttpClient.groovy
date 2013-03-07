@@ -14,13 +14,14 @@
 package org.osiam.ng.test.clients.http
 
 import org.apache.http.HttpRequest
-import org.apache.http.NameValuePair
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.params.HttpClientParams
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.message.BasicNameValuePair
+
+import com.gargoylesoftware.htmlunit.util.NameValuePair
 
 /**
  * <p>
@@ -39,8 +40,8 @@ class HttpClient {
 
     protected DefaultHttpClient httpClient = new DefaultHttpClient()
 
-    HttpClient() {
-        //HttpClientParams.setRedirecting(httpClient.getParams(), true)
+    HttpClient(redirecting = true) {
+        HttpClientParams.setRedirecting(httpClient.getParams(), redirecting)
     }
 
     /**
@@ -60,7 +61,7 @@ class HttpClient {
      * @param parameters the parameters to send.
      * @return the resulting {@link HttpResponse}.
      */
-    HttpResponse post(String url, Map<String, String> parameters) {
+    HttpResponse post(String url, Map<String, String> parameters, Map<String, String> headers = [:]) {
         HttpPost request = new HttpPost(url)
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(parameters.size())
@@ -69,7 +70,15 @@ class HttpClient {
         }
         request.entity = new UrlEncodedFormEntity(nameValuePairs)
 
+        headers.each {key, value ->
+            request.addHeader(key, value)
+        }
+
         return execute(request)
+    }
+
+    protected setRedirecting(boolean redirecting) {
+        HttpClientParams.setRedirecting(httpClient.getParams(), redirecting)
     }
 
     /**
