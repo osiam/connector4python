@@ -13,7 +13,7 @@ import java.util.*;
 public class ClientDetailsLoadingBean implements ClientDetailsService{
 
     @Override
-    public ClientDetails loadClientByClientId(final String clientId) throws ClientRegistrationException {
+    public ClientDetails loadClientByClientId(final String clientId) {
         //TODO implement DAO to get real client ...
         return new ClientDetails() {
 

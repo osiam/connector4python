@@ -3,7 +3,6 @@ package org.osiam.oauth2.mvc.resource;
 import org.osiam.ng.resourceserver.Attribute;
 import org.osiam.ng.resourceserver.RestAttribute;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 @Controller("pseudoResourceService")
 @RequestMapping(value = "/secured/attributes")
