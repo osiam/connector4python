@@ -1,11 +1,9 @@
 package org.osiam.ng.test
 
-import org.osiam.ng.test.actors.AuthorizationResponse
-import org.osiam.ng.test.clients.http.HttpResponse
 
 class AuthorizationServerSystemSpec extends AbstractSystemSpec {
 
-    def "OSNG-7: when the client tries to fetch a resource, OAuth2 flow should kick in"() {
+    def "OSNG-7: the client should get an authorization code if the user grants access"() {
         given:
         String state = "testState"
         String scope = "GET"
@@ -20,6 +18,31 @@ class AuthorizationServerSystemSpec extends AbstractSystemSpec {
         user.grantAccess()
 
         then:
-        true
+        client.authorizationCode
+    }
+
+    def "OSNG-8: the client should get an access token if it sends a valid athorization code"() {
+        given:
+        String state = "testState"
+        String scope = "GET"
+
+        when:
+        client.requestAuthorization(scope, state)
+
+        and:
+        user.login()
+
+        and:
+        user.grantAccess()
+
+        and:
+        client.requestAccessToken()
+
+        then:
+        client.accessToken
+    }
+
+    def "OSNG-9: the client should be able to access the requested resource if it sends a valid access token"() {
+        // TODO
     }
 }
