@@ -1,14 +1,3 @@
-Authorization Server
-=====
-
-The Authorization Server project handles the authorization requests. It is based on:
-
-* Spring Security OAuth2 1.0.0.RC3
-
-and provides
-
-* OAuth2 Authorization Code Flow
-
 Build and Deployment
 ===
 
@@ -25,8 +14,21 @@ If you want to run the authorization-server in a embedded tomcat instance run
 
 To deploy the authorization-server into a running Tomcat copy the "authorization-server.war" into the webapp folder in your Tomcat installation.
 
+
+
+Authorization Server
+=====
+
+The Authorization Server project handles the authorization requests. It is based on:
+
+* Spring Security OAuth2 1.0.0.RC3
+
+and provides
+
+* OAuth2 Authorization Code Flow
+
 Configuration
-==
+--
 
 Right now every username with the password "koala" gets accepted.
 
@@ -38,7 +40,7 @@ The client credentials are as well hardcoded:
 This will change very soon.
 
 Usage
-===
+--
 
 To get an authorization code call:
 ```html
@@ -52,4 +54,32 @@ To get an access_token call:
 ```
 
 The client authentication is done via Basic Access Authentication.
+
+Accessing Resources
+==
+
+To get an overview of all known resources call:
+```html
+ http://localhost:8080/authorization-server/
+```
+
+Getting attributes
+--
+
+Attributes are secured, so, you need to provide a valid access token.
+
+With 
+
+```html
+ http://localhost:8080/authorization-server/secured/attributes?access_token=$YOUR_ACCESS_TOKEN
+```
+
+you will get a list of accessible attributes.
+
+If you want to get a single attribute, you need to extend attributes with an id:
+
+```html
+ http://localhost:8080/authorization-server/secured/attributes/{id}?access_token=$YOUR_ACCESS_TOKEN
+```
+
 
