@@ -84,6 +84,7 @@ public class AccessTokenServlet {
         try {
             JSONObject authResponse = new JSONObject(
                     new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
+            req.setAttribute("access_token", authResponse.get("access_token"));
             req.setAttribute("response", authResponse.toString());
         } catch (JSONException e) {
             throw new IllegalStateException(e.getMessage(), e);
