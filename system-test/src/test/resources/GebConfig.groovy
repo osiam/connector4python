@@ -1,4 +1,4 @@
-import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
 /*
  * Configuration script for Geb tests. Configuration values might be overwritten using system properties or may be
@@ -22,5 +22,5 @@ waiting {
 }
 
 /* use this driver for testing */
-driver = { new FirefoxDriver() }
-//driver = { new HtmlUnitDriver(true) }
+//driver = { new FirefoxDriver() }
+driver = { new HtmlUnitDriver(enableJavascript: false) }
