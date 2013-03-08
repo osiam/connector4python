@@ -22,7 +22,7 @@ public class PseudoAttributeController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Set<RestAttribute> getAttributes() throws Exception {
+    public Set<RestAttribute> getAttributes() {
         Set<RestAttribute> attributes = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             generateLinkedAttribute(attributes, i);
@@ -40,7 +40,7 @@ public class PseudoAttributeController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Attribute getAttribute(@PathVariable final Long id) throws Exception {
+    public Attribute getAttribute(@PathVariable final Long id) {
         return new Attribute(String.valueOf(id), "val" + id);
     }
 

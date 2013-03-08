@@ -23,7 +23,7 @@ public class AccessConfirmationController {
     private ClientDetailsService clientDetailsService;
 
     @RequestMapping("/oauth/confirm_access")
-    public ModelAndView getAccessConfirmation(Map< String , Object > model) throws Exception {
+    public ModelAndView getAccessConfirmation(Map< String , Object > model) {
         AuthorizationRequest clientAuth = (AuthorizationRequest) model.remove("authorizationRequest");
         ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());
         model.put("auth_request", clientAuth);
@@ -33,7 +33,7 @@ public class AccessConfirmationController {
     }
 
     @RequestMapping("/oauth/error")
-    public String handleError(Map< String , Object > model) throws Exception {
+    public String handleError(Map< String , Object > model) {
         // We can add more stuff to the model here for JSP rendering. If the client was a machine then
         // the JSON will already have been rendered.
         model.put("message", "There was a problem with the OAuth2 protocol");

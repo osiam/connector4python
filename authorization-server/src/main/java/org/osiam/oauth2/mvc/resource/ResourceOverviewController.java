@@ -22,7 +22,7 @@ public class ResourceOverviewController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Set<Link> getResources() throws Exception {
+    public Set<Link> getResources() {
         Set<Link> attributes = new HashSet<>();
         Link detail = new Link(buildHref(PseudoAttributeController.class) + "?access_token={access_token}", "Attributes");
 
