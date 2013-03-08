@@ -103,6 +103,7 @@
             <artifactId>test-support</artifactId>
             <version>${project.version}</version>
             <type>pom</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
