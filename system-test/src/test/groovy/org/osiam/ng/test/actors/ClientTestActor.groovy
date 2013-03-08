@@ -52,6 +52,9 @@ class ClientTestActor {
     /** The last received authorization code. */
     private String authorizationCode = null
 
+    /** The last received state. */
+    private String state = null
+
     /** The last received access token. */
     private String accessToken = null
 
@@ -81,10 +84,15 @@ class ClientTestActor {
      * Requests an authorization code for the given {@code scope} from the authorization server through the
      * {@link #userAgent}.
      * 
+     * This resets the {@link #authorizationCode} and {@link #accessToken} to null.
+     * 
      * @param scope the requested scope.
      * @param state a state variable for the client.
      */
     public void requestAuthorization(String scope, String state = null) {
+        authorizationCode = null
+        accessToken = null
+
         Map parameters = ["response_type": "code", "client_id": clientId, "redirect_uri": redirectUri, "scope": scope]
         if (state) parameters.put("state", state)
         userAgent.go(parameters, authorizationRequestUri)
@@ -93,9 +101,13 @@ class ClientTestActor {
     /**
      * Requests an access token from the authorization server using the {@link #authorizationCode}.
      */
-    public void requestAccessToken() {
-        Map parameters = ["grant_type": "authorization_code", "code": getAuthorizationCode(), "redirect_uri": redirectUri]
-        Map headers = ["Authorization": "Basic ${basicAuthorizationString}"]
+    public void requestAccessToken(differendAthorizationCode = null) {
+        Map parameters = [
+            "grant_type": "authorization_code",
+            "code": differendAthorizationCode ? differendAthorizationCode : getAuthorizationCode(),
+            "redirect_uri": redirectUri]
+        Map headers = [
+            "Authorization": "Basic ${basicAuthorizationString}"]
 
         HttpResponse accessTokenResponse = http.post(accessTokenRequestUri, parameters, headers)
 
@@ -109,7 +121,7 @@ class ClientTestActor {
      * 
      * @param resourcePath the resource's path relative to the {@link #rootResourceUri}.
      */
-    public accessResource(String resourcePath = "") {
+    public accessResource(String resourcePath = "", String accessToken = accessToken) {
         HttpResponse resourceRespose = http.get("${rootResourceUri}/${resourcePath}?access_token=${accessToken}")
         def resource = resourceRespose.jsonBody
         EntityUtils.consume(resourceRespose.response.entity)
@@ -122,9 +134,24 @@ class ClientTestActor {
     public String getAuthorizationCode() {
         if (!authorizationCode) {
             Matcher matcher = userAgent.driver.currentUrl =~ ".*code=([^&]+).*"
-            authorizationCode = matcher[0][1]
+            if (matcher.matches()) {
+                authorizationCode = matcher.group(1) ? matcher.group(1) : null
+            }
         }
         return authorizationCode
+    }
+
+    /**
+     * @return the state returned by the authorization server at the last {@link #requestAccessToken()} operation.
+     */
+    public String getState() {
+        if (!state) {
+            Matcher matcher = userAgent.driver.currentUrl =~ ".*state=([^&]+).*"
+            if (matcher.matches()) {
+                state = matcher.group(1) ? matcher.group(1) : null
+            }
+        }
+        return state
     }
 
     /**
