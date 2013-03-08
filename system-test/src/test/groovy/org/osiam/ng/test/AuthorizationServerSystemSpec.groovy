@@ -43,6 +43,26 @@ class AuthorizationServerSystemSpec extends AbstractSystemSpec {
     }
 
     def "OSNG-9: the client should be able to access the requested resource if it sends a valid access token"() {
-        // TODO
+        given:
+        String state = "testState"
+        String scope = "GET"
+
+        when:
+        client.requestAuthorization(scope, state)
+
+        and:
+        user.login()
+
+        and:
+        user.grantAccess()
+
+        and:
+        client.requestAccessToken()
+
+        and:
+        client.accessToken
+
+        then:
+        client.accessResource("")
     }
 }

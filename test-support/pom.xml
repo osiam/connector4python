@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>test-support</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>OSIAM Test Support</name>
 
@@ -48,37 +48,6 @@
             <artifactId>selenium-java</artifactId>
         </dependency>
 
-
-        <!-- needed for the REST test client -->
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-        </dependency>
-
-        <!-- needed for HTTP test client -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-
-        <!-- needed for HTTP test client's getHtmlBody feature -->
-        <dependency>
-            <groupId>org.ccil.cowan.tagsoup</groupId>
-            <artifactId>tagsoup</artifactId>
-        </dependency>
-
     </dependencies>
-    <build>
-        <sourceDirectory>src/main/groovy</sourceDirectory>
-            <plugins>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-    </build>
+
 </project>
