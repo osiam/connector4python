@@ -3,7 +3,6 @@ package org.osiam.oauth2.client
 import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class AuthCodeServletSpec extends Specification {
 
