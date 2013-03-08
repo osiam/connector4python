@@ -46,15 +46,9 @@ public class AccessTokenServlet {
         String tokenUrl = environment + "/authorization-server/oauth/token";
         String combined = CLIENT_ID + ":" + CLIENT_SECRET;
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
-        sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req);
+        sendAuthCode(code, tokenUrl, combined, redirectUri, req);
         addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET);
         return "parameter";
-    }
-
-    private void sendAuthCodeToAuthorizationServerWhenCodeIsSent(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
-        if (code != null) {
-            sendAuthCode(code, tokenUrl, combined, redirectUri, req);
-        }
     }
 
     private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
