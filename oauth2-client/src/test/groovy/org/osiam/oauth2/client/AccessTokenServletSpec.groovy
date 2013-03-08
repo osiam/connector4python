@@ -13,11 +13,10 @@ import javax.servlet.http.HttpServletResponse
 class AccessTokenServletSpec extends Specification {
 
     def httpRequest = Mock(HttpServletRequest)
-    def httpResponse = Mock(HttpServletResponse)
     def httpClient = Mock(HttpClient)
     def requestDispatcher = Mock(RequestDispatcher)
 
-    def accessTokenServlet = new AccessTokenServlet()
+    def accessTokenServlet = new AccessTokenServlet(httpClient: httpClient)
 
     def jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\"}"
     def combined = "testClient:secret"
@@ -29,7 +28,6 @@ class AccessTokenServletSpec extends Specification {
 
     def "should execute request with auth code to obtain access token"() {
         given:
-        accessTokenServlet.setHttpClient(httpClient)
         httpRequest.getParameter("code") >> "theAuthCode"
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
@@ -37,7 +35,7 @@ class AccessTokenServletSpec extends Specification {
         httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
 
         when:
-        accessTokenServlet.doGet(httpRequest, httpResponse)
+        def result = accessTokenServlet.doGet(httpRequest)
 
         then:
         1 * httpClient.executeMethod({PostMethod post ->
@@ -53,39 +51,22 @@ class AccessTokenServletSpec extends Specification {
         1 * httpRequest.setAttribute("client_secret", _)
         1 * httpRequest.setAttribute("redirect_uri", _)
         1 * httpRequest.setAttribute("code", _)
-
-        1 * requestDispatcher.forward(httpRequest, httpResponse)
+        result == "parameter"
     }
 
-    def "should not get auth code and access token if user declines authorization"() {
-        given:
-        accessTokenServlet.setHttpClient(httpClient)
-        httpRequest.getParameter("code") >> null
-        httpRequest.getScheme() >> "http"
-        httpRequest.getServerName() >> "localhost"
-
-        httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
-
+    def "should return error when user declined access"() {
         when:
-        accessTokenServlet.doGet(httpRequest, httpResponse)
+        def result = accessTokenServlet.access_denied("haha", "unso")
 
         then:
-        0 * httpClient.executeMethod(_ as PostMethod)
-
-        0 * httpRequest.setAttribute("response", _)
-        1 * httpRequest.setAttribute("client_id", _)
-        1 * httpRequest.setAttribute("client_secret", _)
-        0 * httpRequest.setAttribute("redirect_uri", _)
-        0 * httpRequest.setAttribute("code", _)
-
-        1 * requestDispatcher.forward(httpRequest, httpResponse)
+        result == "error"
     }
 
 
 
     def "should wrap json exception to IllegalStateException"() {
         given:
-        accessTokenServlet.setHttpClient(httpClient)
+
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
         httpRequest.getParameter("code") >> "theAuthCode"
@@ -93,7 +74,7 @@ class AccessTokenServletSpec extends Specification {
         httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
 
         when:
-        accessTokenServlet.doGet(httpRequest, httpResponse)
+        accessTokenServlet.doGet(httpRequest)
 
         then:
         1 * httpClient.executeMethod({PostMethod post ->

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse
 class AuthCodeServletSpec extends Specification {
 
     def httpRequest = Mock(HttpServletRequest)
-    def httpResponse = Mock(HttpServletResponse)
     def authCodeServlet = new AuthCodeServlet()
 
     def "should create and send request to obtain auth code"() {
@@ -17,9 +16,9 @@ class AuthCodeServletSpec extends Specification {
         httpRequest.getServerName() >> "localhost"
 
         when:
-        authCodeServlet.doGet(httpRequest, httpResponse);
+        def result = authCodeServlet.redirectTogetAuthCode(httpRequest);
 
         then:
-        1* httpResponse.sendRedirect("http://localhost:8080/authorization-server/oauth/authorize?response_type=code&scope=GET&state=haha&client_id=testClient&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth2-client%2FaccessToken")
+        result == "redirect:http://localhost:8080/authorization-server/oauth/authorize?response_type=code&scope=GET&state=haha&client_id=testClient&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth2-client%2FaccessToken"
     }
 }
