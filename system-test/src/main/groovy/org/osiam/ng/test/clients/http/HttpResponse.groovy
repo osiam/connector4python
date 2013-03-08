@@ -50,7 +50,7 @@ class HttpResponse {
      * 
      * @return the {@link #response}'s body as a {@link GPathResult}.
      */
-    GPathResult getXmlBody() {
+    public GPathResult getXmlBody() {
         XmlSlurper slurper = new XmlSlurper(new Parser())
         return slurper.parse(body)
     }
@@ -61,7 +61,7 @@ class HttpResponse {
      * 
      * @return the {@link #response}'s body as a {@link Map} structure.
      */
-    Map getJsonBody() {
+    public getJsonBody() {
         JsonSlurper slurper = new JsonSlurper()
         return slurper.parse(body)
     }

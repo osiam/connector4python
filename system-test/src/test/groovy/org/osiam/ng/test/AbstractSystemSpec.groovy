@@ -21,9 +21,10 @@ abstract class AbstractSystemSpec extends GebReportingSpec {
     def setup() {
         systemTestProperties.load(ClassLoader.getSystemResourceAsStream("systemTestConfig.properties"))
         String authorizationServerUri = systemTestProperties.get("authorizationServer.uri")
+        String resourceServerUri = systemTestProperties.get("resourceServer.uri")
 
-        client = new ClientTestActor(browser, authorizationServerUri, "testClient", "secret", "http://localhost:8080/oauth2-client/accessToken")
-        user = new UserTestActor(browser, authorizationServerUri, "marissa", "koala")
+        client = new ClientTestActor(browser, authorizationServerUri, resourceServerUri, "testClient", "secret", "http://localhost:8080/oauth2-client/accessToken")
+        user = new UserTestActor(browser, "marissa", "koala")
     }
 
     def clearnup() {
