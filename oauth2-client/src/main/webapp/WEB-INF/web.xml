@@ -3,33 +3,35 @@
          xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext.xml</param-value>
-    </context-param>
-
     <servlet>
-        <servlet-name>authCode</servlet-name>
-        <servlet-class>org.osiam.oauth2.client.AuthCodeServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>accessToken</servlet-name>
-        <servlet-class>org.osiam.oauth2.client.AccessTokenServlet</servlet-class>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>accessToken</servlet-name>
-        <url-pattern>/accessToken</url-pattern>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>authCode</servlet-name>
-        <url-pattern>/authcode</url-pattern>
-    </servlet-mapping>
+    <!--<servlet>-->
+        <!--<servlet-name>authCode</servlet-name>-->
+        <!--<servlet-class>org.osiam.oauth2.client.AuthCodeServlet</servlet-class>-->
+    <!--</servlet>-->
+
+    <!--<servlet>-->
+        <!--<servlet-name>accessToken</servlet-name>-->
+        <!--<servlet-class>org.osiam.oauth2.client.AccessTokenServlet</servlet-class>-->
+    <!--</servlet>-->
+
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>accessToken</servlet-name>-->
+        <!--<url-pattern>/accessToken</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>authCode</servlet-name>-->
+        <!--<url-pattern>/authcode</url-pattern>-->
+    <!--</servlet-mapping>-->
 
 </web-app>

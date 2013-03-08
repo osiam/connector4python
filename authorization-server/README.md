@@ -14,8 +14,6 @@ If you want to run the authorization-server in a embedded tomcat instance run
 
 To deploy the authorization-server into a running Tomcat copy the "authorization-server.war" into the webapp folder in your Tomcat installation.
 
-
-
 Authorization Server
 =====
 
