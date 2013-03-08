@@ -2,25 +2,23 @@ package org.osiam.ng.resourceserver;
 
 import org.springframework.hateoas.ResourceSupport;
 
+/**
+ * This is a rest implementation of @link{Attribute} it enhances a attribute with a link.
+ */
 public class RestAttribute extends ResourceSupport {
-    private final String name;
-
-    private final Object value;
+    private Attribute attribute;
 
     public RestAttribute(String name, Object value) {
-        this.name = name;
-        this.value = value;
+        this.attribute = new Attribute(name, value);
     }
 
     public String getKey() {
-        return name;
+        return attribute.getKey();
     }
 
     public Object getValue() {
-        return value;
+        return attribute.getValue();
     }
-
-
 
 
 }

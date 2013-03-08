@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Component("userDetailsService")
-public class PseudoAuthenticationBean implements UserDetailsService{
+/**
+ * Mainly used for demonstration, it is used to validate the user login, before he grants or denies the client access
+ * to a resource.
+ */
+public class PseudoAuthenticationBean implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return new UserDetails() {

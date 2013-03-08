@@ -14,6 +14,10 @@ import java.util.Set;
 
 @Controller("pseudoResourceService")
 @RequestMapping(value = "/secured/attributes")
+/**
+ * Mainly used for demonstration, it is a fake of an resource server. it provides a list of 10 attributes and a method
+ * to simulate an access of one attribute.
+ */
 public class PseudoAttributeController {
 
     @RequestMapping(method = RequestMethod.GET)

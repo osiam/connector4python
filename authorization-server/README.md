@@ -74,6 +74,12 @@ With
  http://localhost:8080/authorization-server/secured/attributes?access_token=$YOUR_ACCESS_TOKEN
 ```
 
+or 
+
+```html
+curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/secured/attributes
+```
+
 you will get a list of accessible attributes.
 
 If you want to get a single attribute, you need to extend attributes with an id:
@@ -81,5 +87,12 @@ If you want to get a single attribute, you need to extend attributes with an id:
 ```html
  http://localhost:8080/authorization-server/secured/attributes/{id}?access_token=$YOUR_ACCESS_TOKEN
 ```
+
+or 
+
+```html
+curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/secured/attributes/{id}
+```
+
 
 
