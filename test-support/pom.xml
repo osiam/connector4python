@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>test-support</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>OSIAM Test Support</name>
 
@@ -72,13 +72,5 @@
         </dependency>
 
     </dependencies>
-    <build>
-        <sourceDirectory>src/main/groovy</sourceDirectory>
-            <plugins>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-    </build>
+
 </project>
