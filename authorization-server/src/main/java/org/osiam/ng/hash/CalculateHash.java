@@ -26,6 +26,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
+/**
+ * With this class you can create salt for hashes and hashes.
+ * <p/>
+ * Salts are used to complicate a rainbow table lookup @link{http://en.wikipedia.org/wiki/Rainbow_table}.
+ * <p/>
+ * Hashes are calculated in SHA-512.
+ */
 public class CalculateHash {
 
     public static CalculateHash instance = new CalculateHash();
@@ -46,6 +53,7 @@ public class CalculateHash {
     public static final int ALGOR_BIT_SIZE = 512;
     private static final String ALGORITHM = "SHA-" + ALGOR_BIT_SIZE;
 
+
     String calculateHash(String input) throws NoSuchAlgorithmException,
             UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance(ALGORITHM);
@@ -53,18 +61,32 @@ public class CalculateHash {
         return new String(Base64.encodeBase64(md.digest()));
     }
 
-    String _calculateSalt(){
+    String _calculateSalt() {
         Random r = new SecureRandom();
         byte[] salt = new byte[20];
         r.nextBytes(salt);
         return new String(Base64.encodeBase64(salt));
     }
 
+    /**
+     * This method combines a given salt and a given password with
+     * salt + passwordhash
+     * and calculate a new hash out of it.
+     *
+     * @param salt,         the salt to combine
+     * @param passwordhash, a hash of a password to be combined with the salt
+     * @return a SHA-512 hash of salt + passwordhash
+     */
     public static String calculateWithSalt(String salt, String passwordhash) {
         String input = salt + passwordhash;
         return CalculateHash.calculate(input);
     }
 
+    /**
+     * Generates a 20 byte salt with SecureRandom
+     *
+     * @return 20 bytes of random numbers.
+     */
     public static String calculateSalt() {
         return instance._calculateSalt();
     }

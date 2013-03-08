@@ -9,8 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 
+/**
+ * This class is used by clientAuthenticationManager to authenticate a client when trading an auth_code to an
+ * access_token.
+ */
 @Component("clientDetails")
-public class ClientDetailsLoadingBean implements ClientDetailsService{
+public class ClientDetailsLoadingBean implements ClientDetailsService {
 
     @Override
     public ClientDetails loadClientByClientId(final String clientId) throws ClientRegistrationException {
