@@ -8,7 +8,6 @@ import spock.lang.Specification
 
 import javax.servlet.RequestDispatcher
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class AccessTokenServletSpec extends Specification {
 
@@ -22,9 +21,6 @@ class AccessTokenServletSpec extends Specification {
     def combined = "testClient:secret"
     def encoding = new String(Base64.encodeBase64(combined.getBytes()))
 
-    def setup(){
-
-    }
 
     def "should execute request with auth code to obtain access token"() {
         given:
