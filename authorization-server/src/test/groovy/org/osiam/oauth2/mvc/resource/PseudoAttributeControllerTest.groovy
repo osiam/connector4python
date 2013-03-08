@@ -7,7 +7,7 @@ class PseudoAttributeControllerTest extends Specification {
 
     def "should return ten generated attributes"() {
         when:
-        def attributes = underTest.attributes
+        def attributes = underTest.getAttributes()
         then:
         attributes.size() == 10
     }

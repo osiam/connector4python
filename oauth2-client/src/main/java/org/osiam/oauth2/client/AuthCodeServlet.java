@@ -11,9 +11,6 @@ import java.net.URLEncoder;
 @Controller
 public class AuthCodeServlet {
 
-    private static final long serialVersionUID = 403290981215464050L;
-
-
     @RequestMapping("/authcode")
     public String redirectTogetAuthCode(HttpServletRequest req) throws ServletException, IOException {
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
