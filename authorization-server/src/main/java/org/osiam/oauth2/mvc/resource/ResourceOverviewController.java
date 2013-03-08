@@ -11,10 +11,13 @@ import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/")
+/**
+ * This class returns a list of known resources on root access.
+ */
 public class ResourceOverviewController {
 
     static final String PROTOCOLL = "http://";
-    static final  String DOMAIN_NAME = "localhost:8080";
+    static final String DOMAIN_NAME = "localhost:8080";
     static final String APP_NAME = "authorization-server";
 
     @RequestMapping(method = RequestMethod.GET)
@@ -29,7 +32,7 @@ public class ResourceOverviewController {
 
     static String buildHref(Class<?> clazz) {
         String mapping = clazz.getAnnotation(RequestMapping.class).value()[0];
-        return PROTOCOLL + DOMAIN_NAME +"/"+ APP_NAME +mapping;
+        return PROTOCOLL + DOMAIN_NAME + "/" + APP_NAME + mapping;
     }
 
 }

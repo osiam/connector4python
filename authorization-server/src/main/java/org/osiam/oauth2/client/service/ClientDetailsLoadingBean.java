@@ -9,7 +9,7 @@ import java.util.*;
 
 
 /**
- * This class is used by clientAuthenticationManager to authenticate a client when trading an auth_code to an
+ * This class is used by clientAuthenticationManager in Spring to authenticate a client when trading an auth_code to an
  * access_token.
  */
 @Component("clientDetails")
