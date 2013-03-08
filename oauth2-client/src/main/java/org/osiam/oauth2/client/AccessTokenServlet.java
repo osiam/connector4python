@@ -9,7 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,46 +23,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
-@WebServlet(name = "accessToken", urlPatterns = {"/accessToken"})
-public class AccessTokenServlet extends HttpServlet {
-
-    private static final long serialVersionUID = -403250971215465050L;
+@Controller
+@RequestMapping("/accessToken")
+public class AccessTokenServlet {
+    private final Logger logger = Logger.getLogger(AccessTokenServlet.class.getName());
 
     private HttpClient httpClient;
 
     private static final String CLIENT_ID = "testClient";
     private static final String CLIENT_SECRET = "secret";
 
-
-    @Autowired
-    public final void setHttpClient(HttpClient client) {
-        httpClient = client;
+    public AccessTokenServlet() {
+        this.httpClient = new HttpClient();
     }
 
-    public final void init(ServletConfig config) throws ServletException {
-        super.init(config);
+    @RequestMapping(params = {"error", "error_description"})
+    public String access_denied(@RequestParam String error, @RequestParam String error_description) {
+        logger.info(error + " is " + error_description);
+        return "error";
 
-        /* Servlets cannot be instantiated with Spring container, they are instantiated by servlet container.
-           Therefore we cannot declare the servlet as a spring bean in our context.xml file and add a reference
-           to inject the desired bean. With the following we enable autowiring in the servlet context.*/
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
     }
 
-    @Override
-    protected final void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @RequestMapping(params = "code")
+    public String doGet(HttpServletRequest req) throws ServletException, IOException {
         String code = req.getParameter("code");
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String tokenUrl = environment + "/authorization-server/oauth/token";
-        String combined = CLIENT_ID +":"+ CLIENT_SECRET;
+        String combined = CLIENT_ID + ":" + CLIENT_SECRET;
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080" + "/oauth2-client/accessToken";
         sendAuthCodeToAuthorizationServerWhenCodeIsSent(code, tokenUrl, combined, redirectUri, req);
         addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET);
-        req.getRequestDispatcher("/parameter.jsp").forward(req, resp);
+        return "parameter";
     }
 
     private void sendAuthCodeToAuthorizationServerWhenCodeIsSent(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
-        if (code != null){
+        if (code != null) {
             sendAuthCode(code, tokenUrl, combined, redirectUri, req);
         }
     }
@@ -80,7 +83,7 @@ public class AccessTokenServlet extends HttpServlet {
     private void addJsonResponseToHttpRequest(PostMethod post, HttpServletRequest req) throws IOException {
         try {
             JSONObject authResponse = new JSONObject(
-            new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
+                    new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
             req.setAttribute("response", authResponse.toString());
         } catch (JSONException e) {
             throw new IllegalStateException(e.getMessage(), e);
