@@ -16,11 +16,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/accessToken")
 public class AccessTokenServlet {
+
+    private static final String PARAM_CODE = "code";
+
+    private static final Charset CHARSET = Charset.forName("UTF-8");
+
     private final Logger logger = Logger.getLogger(AccessTokenServlet.class.getName());
 
     private HttpClient httpClient;
@@ -32,16 +38,16 @@ public class AccessTokenServlet {
         this.httpClient = new HttpClient();
     }
 
-    @RequestMapping(params = {"error", "error_description"})
-    public String access_denied(@RequestParam String error, @RequestParam String error_description) {
+    @RequestMapping(value = "access_denied", params = { "error", "error_description" })
+    public String accessDenied(@RequestParam String error, @RequestParam String error_description) {
         logger.info(error + " is " + error_description);
         return "error";
 
     }
 
-    @RequestMapping(params = "code")
+    @RequestMapping(params = PARAM_CODE)
     public String doGet(HttpServletRequest req) throws ServletException, IOException {
-        String code = req.getParameter("code");
+        String code = req.getParameter(PARAM_CODE);
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String tokenUrl = environment + "/authorization-server/oauth/token";
         String combined = CLIENT_ID + ":" + CLIENT_SECRET;
@@ -51,12 +57,13 @@ public class AccessTokenServlet {
         return "parameter";
     }
 
-    private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
+    private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req)
+            throws IOException {
         PostMethod post = new PostMethod();
         addPostMethodParameter(post, code, tokenUrl, combined, redirectUri);
         httpClient.executeMethod(post);
         addJsonResponseToHttpRequest(post, req);
-        req.setAttribute("code", code);
+        req.setAttribute(PARAM_CODE, code);
         req.setAttribute("redirect_uri", redirectUri);
     }
 
@@ -68,7 +75,7 @@ public class AccessTokenServlet {
     private void addJsonResponseToHttpRequest(PostMethod post, HttpServletRequest req) throws IOException {
         try {
             JSONObject authResponse = new JSONObject(
-                    new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream())));
+                    new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream(), CHARSET)));
             req.setAttribute("access_token", authResponse.get("access_token"));
             req.setAttribute("response", authResponse.toString());
         } catch (JSONException e) {
@@ -78,11 +85,12 @@ public class AccessTokenServlet {
         }
     }
 
-    private void addPostMethodParameter(PostMethod post, String code, String tokenUrl, String combined, String redirectUri) throws URIException {
+    private void addPostMethodParameter(PostMethod post, String code, String tokenUrl, String combined,
+            String redirectUri) throws URIException {
         post.setURI(new URI(tokenUrl, false));
-        String encoding = new String(Base64.encodeBase64(combined.getBytes()));
+        String encoding = new String(Base64.encodeBase64(combined.getBytes(CHARSET)), CHARSET);
         post.addRequestHeader("Authorization", "Basic " + encoding);
-        post.addParameter("code", code);
+        post.addParameter(PARAM_CODE, code);
         post.addParameter("grant_type", "authorization_code");
         post.addParameter("redirect_uri", redirectUri);
     }

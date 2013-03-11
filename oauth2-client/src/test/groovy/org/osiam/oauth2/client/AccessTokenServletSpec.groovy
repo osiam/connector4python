@@ -11,15 +11,15 @@ import javax.servlet.http.HttpServletRequest
 
 class AccessTokenServletSpec extends Specification {
 
-    def httpRequest = Mock(HttpServletRequest)
-    def httpClient = Mock(HttpClient)
-    def requestDispatcher = Mock(RequestDispatcher)
+    HttpServletRequest httpRequest = Mock()
+    HttpClient httpClient = Mock()
+    RequestDispatcher requestDispatcher = Mock()
 
-    def accessTokenServlet = new AccessTokenServlet(httpClient: httpClient)
+    AccessTokenServlet accessTokenServlet = new AccessTokenServlet(httpClient: httpClient)
 
-    def jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\"}"
-    def combined = "testClient:secret"
-    def encoding = new String(Base64.encodeBase64(combined.getBytes()))
+    String jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\"}"
+    String combined = "testClient:secret"
+    String encoding = new String(Base64.encodeBase64(combined.getBytes()))
 
 
     def "should execute request with auth code to obtain access token"() {
@@ -52,7 +52,7 @@ class AccessTokenServletSpec extends Specification {
 
     def "should return error when user declined access"() {
         when:
-        def result = accessTokenServlet.access_denied("haha", "unso")
+        def result = accessTokenServlet.accessDenied("haha", "unso")
 
         then:
         result == "error"
@@ -66,7 +66,7 @@ class AccessTokenServletSpec extends Specification {
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhost"
         httpRequest.getParameter("code") >> "theAuthCode"
-        def jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\""
+        String jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\""
         httpRequest.getRequestDispatcher("/parameter.jsp") >> requestDispatcher
 
         when:
@@ -80,9 +80,8 @@ class AccessTokenServletSpec extends Specification {
             post.addRequestHeader("Authorization", "Basic " + encoding)
             post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
         })
-        def e = thrown(IllegalStateException)
+        IllegalStateException e = thrown()
         e.message == "Expected a ',' or '}' at character 119"
         e.cause.class == JSONException.class
     }
-
 }
