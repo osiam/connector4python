@@ -1,13 +1,12 @@
 package org.osiam.oauth2.user.please.remove.me.asap;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Component("userDetailsService")
 /**
@@ -16,7 +15,7 @@ import java.util.Collection;
  */
 public class PseudoAuthenticationBean implements UserDetailsService {
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) {
         return new UserDetails() {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -32,33 +31,33 @@ public class PseudoAuthenticationBean implements UserDetailsService {
 
             @Override
             public String getPassword() {
-                return "koala";  //To change body of implemented methods use File | Settings | File Templates.
+                return "koala"; // To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public String getUsername() {
-                return username;  //To change body of implemented methods use File | Settings | File Templates.
+                return username; // To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public boolean isAccountNonExpired() {
-                return true;  //To change body of implemented methods use File | Settings | File Templates.
+                return true; // To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public boolean isAccountNonLocked() {
-                return true;  //To change body of implemented methods use File | Settings | File Templates.
+                return true; // To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public boolean isCredentialsNonExpired() {
-                return true;  //To change body of implemented methods use File | Settings | File Templates.
+                return true; // To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public boolean isEnabled() {
-                return true;  //To change body of implemented methods use File | Settings | File Templates.
+                return true; // To change body of implemented methods use File | Settings | File Templates.
             }
-        };  //To change body of implemented methods use File | Settings | File Templates.
+        }; // To change body of implemented methods use File | Settings | File Templates.
     }
 }

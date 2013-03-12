@@ -1,9 +1,14 @@
-Build and Deployment
-===
+# OSIAM NG Authorization Server
+
+This is the combined authorization and resource server of the OSIAM NG project.
+
+
+## Build and Deployment
 
 To build the authorization-server run
-
- mvn clean install
+```sh
+mvn clean install
+```
 
 in the authorization-server folder.
 
@@ -14,8 +19,8 @@ If you want to run the authorization-server in a embedded tomcat instance run
 
 To deploy the authorization-server into a running Tomcat copy the "authorization-server.war" into the webapp folder in your Tomcat installation.
 
-Authorization Server
-=====
+
+## Authorization Server
 
 The Authorization Server project handles the authorization requests. It is based on:
 
@@ -23,10 +28,10 @@ The Authorization Server project handles the authorization requests. It is based
 
 and provides
 
-* OAuth2 Authorization Code Flow
+* [OAuth2 Authorization Code Flow](http://tools.ietf.org/html/rfc6749#section-4.1)
 
-Configuration
---
+
+### Configuration
 
 Right now every username with the password "koala" gets accepted.
 
@@ -37,44 +42,41 @@ The client credentials are as well hardcoded:
 
 This will change very soon.
 
-Usage
---
+
+### Usage
 
 To get an authorization code call:
-```html
- http://localhost:8080/authorization-server/oauth/authorize?client_id=tonr&response_type=code&redirect_uri=http://localhost:8080/oauth2-client/accessToken
-```
+
+<http://localhost:8080/authorization-server/oauth/authorize?client_id=tonr&response_type=code&redirect_uri=http://localhost:8080/oauth2-client/accessToken>
 
 To get an access_token call:
+
 ```sh
- curl --user tonr:secret -X POST -d "code=$CODE&grant_type=authorization_code&redirect_uri=http://localhost:8080/oauth2-client/accessToken" \
+curl --user tonr:secret -X POST -d "code=$CODE&grant_type=authorization_code&redirect_uri=http://localhost:8080/oauth2-client/accessToken" \
  http://localhost:8080/authorization-server/oauth/token
 ```
 
-The client authentication is done via Basic Access Authentication.
+The client authentication is done via [Basic Access Authentication](http://tools.ietf.org/html/rfc2617).
 
-Accessing Resources
-==
+
+## Resource Server
 
 To get an overview of all known resources call:
-```html
- http://localhost:8080/authorization-server/
-```
 
-Getting attributes
---
+<http://localhost:8080/authorization-server>
+
+
+### Getting attributes
 
 Attributes are secured, so, you need to provide a valid access token.
 
 With 
 
-```html
- http://localhost:8080/authorization-server/secured/attributes?access_token=$YOUR_ACCESS_TOKEN
-```
+<http://localhost:8080/authorization-server/secured/attributes?access_token=$YOUR_ACCESS_TOKEN>
 
 or 
 
-```html
+```sh
 curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/secured/attributes
 ```
 
@@ -82,15 +84,10 @@ you will get a list of accessible attributes.
 
 If you want to get a single attribute, you need to extend attributes with an id:
 
-```html
- http://localhost:8080/authorization-server/secured/attributes/{id}?access_token=$YOUR_ACCESS_TOKEN
-```
+<http://localhost:8080/authorization-server/secured/attributes/{id}?access_token=$YOUR_ACCESS_TOKEN>
 
 or 
 
-```html
+```sh
 curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/secured/attributes/{id}
 ```
-
-
-

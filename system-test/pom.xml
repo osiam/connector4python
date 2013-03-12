@@ -16,7 +16,7 @@
     <properties>
         <!-- test system configuration
              these parameters should be overwritten by individual test profiles -->
-        <testSystem.host>omg01-systemtest.lan.tarent.de</testSystem.host>
+        <testSystem.host>ong01-systemtest.lan.tarent.de</testSystem.host>
         <testSystem.port>8080</testSystem.port>
     </properties>
 
