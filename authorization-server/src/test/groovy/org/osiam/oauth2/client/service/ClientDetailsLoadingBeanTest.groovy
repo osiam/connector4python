@@ -19,7 +19,7 @@ class ClientDetailsLoadingBeanTest extends Specification {
         result.getScope().size() == 1
         result.getResourceIds().size() == 0
         result.getAuthorizedGrantTypes().size() == 3
-        result.getRegisteredRedirectUri().size() == 1
+        result.getRegisteredRedirectUri().size() > 1
         !result.getAuthorities()
         !result.getAdditionalInformation()
         result.getClientSecret() == "secret"

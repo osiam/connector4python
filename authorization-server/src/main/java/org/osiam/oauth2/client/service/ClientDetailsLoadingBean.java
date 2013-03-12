@@ -67,7 +67,10 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
             @Override
             public Set<String> getRegisteredRedirectUri() {
 
-                return new HashSet<>(Arrays.asList("http://localhost:8080/oauth2-client/accessToken"));
+                return new HashSet<>(Arrays.asList("http://localhost:8080/oauth2-client/accessToken",
+                        "http://ong00-devel00:8080/oauth2-client/accessToken",
+                        "http://ong01-devel00:8080/oauth2-client/accessToken",
+                        "http://ong00-systemtest:8080/oauth2-client/accessToken"));
             }
 
             @Override
