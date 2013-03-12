@@ -1,5 +1,9 @@
-Build and Deployment
-===
+# OSIAM NG Authorization Server
+
+This is the combined authorization and resource server of the OSIAM NG project.
+
+
+## Build and Deployment
 
 To build the authorization-server run
 ```sh
@@ -15,8 +19,8 @@ If you want to run the authorization-server in a embedded tomcat instance run
 
 To deploy the authorization-server into a running Tomcat copy the "authorization-server.war" into the webapp folder in your Tomcat installation.
 
-Authorization Server
-=====
+
+## Authorization Server
 
 The Authorization Server project handles the authorization requests. It is based on:
 
@@ -26,8 +30,8 @@ and provides
 
 * [OAuth2 Authorization Code Flow](http://tools.ietf.org/html/rfc6749#section-4.1)
 
-Configuration
---
+
+### Configuration
 
 Right now every username with the password "koala" gets accepted.
 
@@ -38,8 +42,8 @@ The client credentials are as well hardcoded:
 
 This will change very soon.
 
-Usage
---
+
+### Usage
 
 To get an authorization code call:
 
@@ -54,15 +58,15 @@ curl --user tonr:secret -X POST -d "code=$CODE&grant_type=authorization_code&red
 
 The client authentication is done via [Basic Access Authentication](http://tools.ietf.org/html/rfc2617).
 
-Accessing Resources
-==
+
+## Resource Server
 
 To get an overview of all known resources call:
 
 <http://localhost:8080/authorization-server>
 
-Getting attributes
---
+
+### Getting attributes
 
 Attributes are secured, so, you need to provide a valid access token.
 
@@ -87,6 +91,3 @@ or
 ```sh
 curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/secured/attributes/{id}
 ```
-
-
-
