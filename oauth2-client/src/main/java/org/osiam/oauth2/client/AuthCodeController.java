@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 @Controller
-public class AuthCodeServlet {
+public class AuthCodeController {
 
     @RequestMapping("/authcode")
     public String redirectTogetAuthCode(HttpServletRequest req) throws ServletException, IOException {

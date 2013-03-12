@@ -21,20 +21,20 @@ import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/accessToken")
-public class AccessTokenServlet {
+public class AccessTokenController {
 
     private static final String PARAM_CODE = "code";
 
     private static final Charset CHARSET = Charset.forName("UTF-8");
 
-    private final Logger logger = Logger.getLogger(AccessTokenServlet.class.getName());
+    private final Logger logger = Logger.getLogger(AccessTokenController.class.getName());
 
     private HttpClient httpClient;
 
     private static final String CLIENT_ID = "testClient";
     private static final String CLIENT_SECRET = "secret";
 
-    public AccessTokenServlet() {
+    public AccessTokenController() {
         this.httpClient = new HttpClient();
     }
 

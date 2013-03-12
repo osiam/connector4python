@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest
 class AuthCodeServletSpec extends Specification {
 
     def httpRequest = Mock(HttpServletRequest)
-    def authCodeServlet = new AuthCodeServlet()
+    def authCodeServlet = new AuthCodeController()
 
     def "should create and send request to obtain auth code"() {
         given:

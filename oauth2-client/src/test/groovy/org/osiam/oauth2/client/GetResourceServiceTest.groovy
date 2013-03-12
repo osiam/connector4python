@@ -5,7 +5,7 @@ import spock.lang.Specification
 import javax.servlet.http.HttpServletRequest
 
 class GetResourceServiceTest extends Specification {
-    def underTest = new GetResourceService()
+    def underTest = new GetResourceController()
     def httpRequest = Mock(HttpServletRequest)
 
     def "should redirect to resource server with given access_token"() {

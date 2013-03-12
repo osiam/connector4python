@@ -15,7 +15,7 @@ class AccessTokenServletSpec extends Specification {
     HttpClient httpClient = Mock()
     RequestDispatcher requestDispatcher = Mock()
 
-    AccessTokenServlet accessTokenServlet = new AccessTokenServlet(httpClient: httpClient)
+    AccessTokenController accessTokenServlet = new AccessTokenController(httpClient: httpClient)
 
     String jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\"}"
     String combined = "testClient:secret"
