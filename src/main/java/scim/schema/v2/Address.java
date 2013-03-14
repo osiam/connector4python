@@ -3,159 +3,127 @@ package scim.schema.v2;
 /**
  * Java class for address complex type.
  */
-public class Address
-    extends MultiValuedAttribute
-{
+public class Address extends MultiValuedAttribute {
 
-    protected String formatted;
-    protected String streetAddress;
-    protected String locality;
-    protected String region;
-    protected String postalCode;
-    protected String country;
+    private final String formatted;
+    private final String streetAddress;
+    private final String locality;
+    private final String region;
+    private final String postalCode;
+    private final String country;
+
+    private Address(Builder builder) {
+        this.formatted = builder.formatted;
+        this.streetAddress = builder.streetAddress;
+        this.locality = builder.locality;
+        this.region = builder.region;
+        this.postalCode = builder.postalCode;
+        this.country = builder.country;
+
+    }
+
+    public static class Builder {
+        private String formatted;
+        private String streetAddress;
+        private String locality;
+        private String region;
+        private String postalCode;
+        private String country;
+
+        public Builder setFormatted(String formatted) {
+            this.formatted = formatted;
+            return this;
+        }
+
+        public Builder setStreetAddress(String streetAddress) {
+            this.streetAddress = streetAddress;
+            return this;
+        }
+
+        public Builder setLocality(String locality) {
+            this.locality = locality;
+            return this;
+        }
+
+        public Builder setRegion(String region) {
+            this.region = region;
+            return this;
+        }
+
+        public Builder setPostalCode(String postalCode) {
+            this.postalCode = postalCode;
+            return this;
+        }
+
+        public Builder setCountry(String country) {
+            this.country = country;
+            return this;
+        }
+
+        public Address build() {
+            return new Address(this);
+        }
+
+
+    }
 
     /**
      * Gets the value of the formatted property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getFormatted() {
         return formatted;
     }
 
     /**
-     * Sets the value of the formatted property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFormatted(String value) {
-        this.formatted = value;
-    }
-
-    /**
      * Gets the value of the streetAddress property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getStreetAddress() {
         return streetAddress;
     }
 
     /**
-     * Sets the value of the streetAddress property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStreetAddress(String value) {
-        this.streetAddress = value;
-    }
-
-    /**
      * Gets the value of the locality property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLocality() {
         return locality;
     }
 
     /**
-     * Sets the value of the locality property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLocality(String value) {
-        this.locality = value;
-    }
-
-    /**
      * Gets the value of the region property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getRegion() {
         return region;
     }
 
     /**
-     * Sets the value of the region property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRegion(String value) {
-        this.region = value;
-    }
-
-    /**
      * Gets the value of the postalCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getPostalCode() {
         return postalCode;
     }
 
     /**
-     * Sets the value of the postalCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPostalCode(String value) {
-        this.postalCode = value;
-    }
-
-    /**
      * Gets the value of the country property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCountry() {
         return country;
     }
-
-    /**
-     * Sets the value of the country property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCountry(String value) {
-        this.country = value;
-    }
-
 }

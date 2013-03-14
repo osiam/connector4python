@@ -7,13 +7,47 @@ import java.util.List;
 /**
  * Java class for Group complex type.
  */
-public class Group
-    extends CoreResource
-{
+public class Group extends CoreResource{
 
-    protected String displayName;
-    protected Group.Members members;
-    protected Object any;
+    private final String displayName;
+    private final Group.Members members;
+    private final Object any;
+
+    public Group(Builder builder) {
+        super(builder);
+        this.displayName = builder.displayName;
+        this.members = builder.members;
+        this.any = builder.any;
+
+    }
+
+    public static class Builder extends CoreResource.Builder{
+
+        protected String displayName;
+        protected Group.Members members;
+        protected Object any;
+
+        public Builder setDisplayName(String displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public Builder setMembers(Members members) {
+            this.members = members;
+            return this;
+        }
+
+        public Builder setAny(Object any) {
+            this.any = any;
+            return this;
+        }
+
+        public Group build(){
+            return new Group(this);
+        }
+    }
+
+
 
     /**
      * Gets the value of the displayName property.
@@ -27,17 +61,6 @@ public class Group
         return displayName;
     }
 
-    /**
-     * Sets the value of the displayName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDisplayName(String value) {
-        this.displayName = value;
-    }
 
     /**
      * Gets the value of the members property.
@@ -49,18 +72,6 @@ public class Group
      */
     public Group.Members getMembers() {
         return members;
-    }
-
-    /**
-     * Sets the value of the members property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Group.Members }
-     *     
-     */
-    public void setMembers(Group.Members value) {
-        this.members = value;
     }
 
     /**
@@ -76,24 +87,11 @@ public class Group
     }
 
     /**
-     * Sets the value of the any property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setAny(Object value) {
-        this.any = value;
-    }
-
-
-    /**
      * Java class for anonymous complex type.
      */
     public static class Members {
 
-        protected List<MultiValuedAttribute> member;
+        protected List<MultiValuedAttribute> member = new ArrayList<>();;
 
         /**
          * Gets the value of the member property.
@@ -118,9 +116,6 @@ public class Group
          * 
          */
         public List<MultiValuedAttribute> getMember() {
-            if (member == null) {
-                member = new ArrayList<>();
-            }
             return this.member;
         }
 
