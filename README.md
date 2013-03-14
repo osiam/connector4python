@@ -3,20 +3,6 @@ osiam
 
 OSIAM - The Open Source Identity and Access Management
 
-initialize project
-==
-
-OSIAM has the folowing submodules:
-
-- scim // A SCIM 2.0 implementation
-
-to initialize them you have to call
-
-```sh
- git submodule init
- git submodule update
-```
-
 project structure
 =================
 
