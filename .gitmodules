@@ -1,3 +1,3 @@
 [submodule "scim"]
 	path = scim
-	url = git://github.com/osiam-dev/scim.git
+	url = git://git@github.com/osiam-dev/scim.git

@@ -13,8 +13,8 @@ OSIAM has the folowing submodules:
 to initialize them you have to call
 
 ```sh
- git submodules init
- git submodules update
+ git submodule init
+ git submodule update
 ```
 
 project structure
