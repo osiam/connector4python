@@ -453,7 +453,7 @@ public class User extends CoreResource {
      */
     public static class Addresses {
 
-        private List<Address> address;
+        private List<Address> address = new ArrayList<>();
 
         /**
          * Gets the value of the address property.
@@ -476,9 +476,6 @@ public class User extends CoreResource {
          * {@link Address }
          */
         public List<Address> getAddress() {
-            if (address == null) {
-                address = new ArrayList<>();
-            }
             return this.address;
         }
 
@@ -490,7 +487,7 @@ public class User extends CoreResource {
      */
     public static class Emails {
 
-        private List<MultiValuedAttribute> email;
+        private List<MultiValuedAttribute> email = new ArrayList<>();
 
         /**
          * Gets the value of the email property.
@@ -513,9 +510,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getEmail() {
-            if (email == null) {
-                email = new ArrayList<>();
-            }
             return this.email;
         }
 
@@ -527,7 +521,7 @@ public class User extends CoreResource {
      */
     public static class Entitlements {
 
-        private List<MultiValuedAttribute> entitlement;
+        private List<MultiValuedAttribute> entitlement = new ArrayList<>();
 
         /**
          * Gets the value of the entitlement property.
@@ -550,9 +544,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getEntitlement() {
-            if (entitlement == null) {
-                entitlement = new ArrayList<>();
-            }
             return this.entitlement;
         }
 
@@ -564,7 +555,7 @@ public class User extends CoreResource {
      */
     public static class Groups {
 
-        private List<MultiValuedAttribute> group;
+        private List<MultiValuedAttribute> group = new ArrayList<>();
 
         /**
          * Gets the value of the group property.
@@ -587,9 +578,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getGroup() {
-            if (group == null) {
-                group = new ArrayList<>();
-            }
             return this.group;
         }
 
@@ -601,7 +589,7 @@ public class User extends CoreResource {
      */
     public static class Ims {
 
-        private List<MultiValuedAttribute> im;
+        private List<MultiValuedAttribute> im = new ArrayList<>();
 
         /**
          * Gets the value of the im property.
@@ -624,9 +612,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getIm() {
-            if (im == null) {
-                im = new ArrayList<>();
-            }
             return this.im;
         }
 
@@ -638,7 +623,7 @@ public class User extends CoreResource {
      */
     public static class PhoneNumbers {
 
-        private List<MultiValuedAttribute> phoneNumber;
+        private List<MultiValuedAttribute> phoneNumber = new ArrayList<>();
 
         /**
          * Gets the value of the phoneNumber property.
@@ -661,9 +646,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getPhoneNumber() {
-            if (phoneNumber == null) {
-                phoneNumber = new ArrayList<>();
-            }
             return this.phoneNumber;
         }
 
@@ -675,7 +657,7 @@ public class User extends CoreResource {
      */
     public static class Photos {
 
-        private List<MultiValuedAttribute> photo;
+        private List<MultiValuedAttribute> photo = new ArrayList<>();
 
         /**
          * Gets the value of the photo property.
@@ -698,9 +680,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getPhoto() {
-            if (photo == null) {
-                photo = new ArrayList<>();
-            }
             return this.photo;
         }
 
@@ -712,7 +691,7 @@ public class User extends CoreResource {
      */
     public static class Roles {
 
-        private List<MultiValuedAttribute> role;
+        private List<MultiValuedAttribute> role = new ArrayList<>();
 
         /**
          * Gets the value of the role property.
@@ -735,9 +714,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getRole() {
-            if (role == null) {
-                role = new ArrayList<>();
-            }
             return this.role;
         }
 
@@ -749,7 +725,7 @@ public class User extends CoreResource {
      */
     public static class X509Certificates {
 
-        private List<MultiValuedAttribute> x509Certificate;
+        private List<MultiValuedAttribute> x509Certificate = new ArrayList<>();
 
         /**
          * Gets the value of the x509Certificate property.
@@ -772,9 +748,6 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getX509Certificate() {
-            if (x509Certificate == null) {
-                x509Certificate = new ArrayList<>();
-            }
             return this.x509Certificate;
         }
 

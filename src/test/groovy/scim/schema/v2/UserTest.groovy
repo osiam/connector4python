@@ -64,4 +64,52 @@ class UserTest extends Specification {
         ]
     }
 
+    def "should be able to enrich addresses, emails, entitlements, groups, phone-numbers, photos, roles and certificates"() {
+        given:
+        def user = new User.Builder("test2").setAddresses(new User.Addresses())
+                .setEmails(new User.Emails())
+                .setEntitlements(new User.Entitlements())
+                .setGroups(new User.Groups())
+                .setIms(new User.Ims())
+                .setPhoneNumbers(new User.PhoneNumbers())
+                .setPhotos(new User.Photos())
+                .setRoles(new User.Roles())
+                .setX509Certificates(new User.X509Certificates()).build()
+        def address = new Address()
+        def generalAttribute = new MultiValuedAttribute()
+
+        when:
+        user.addresses.address.add(address)
+        user.emails.email.add(generalAttribute)
+        user.entitlements.entitlement.add(generalAttribute)
+        user.groups.group.add(generalAttribute)
+        user.ims.im.add(generalAttribute)
+        user.phoneNumbers.phoneNumber.add(generalAttribute)
+        user.photos.photo.add(generalAttribute)
+        user.roles.role.add(generalAttribute)
+        user.x509Certificates.x509Certificate.add(generalAttribute)
+
+        and:
+        user.addresses.address.get(0) == address
+        and:
+        user.emails.email.get(0) == generalAttribute
+        and:
+        user.entitlements.entitlement.get(0) == generalAttribute
+        and:
+        user.groups.group.get(0) == generalAttribute
+        and:
+        user.ims.im.get(0) == generalAttribute
+        and:
+        user.phoneNumbers.phoneNumber.get(0) == generalAttribute
+        and:
+        user.photos.photo.get(0) == generalAttribute
+        and:
+        user.roles.role.get(0) == generalAttribute
+        then:
+        user.x509Certificates.x509Certificate.get(0) == generalAttribute
+
+
+    }
+
+
 }
