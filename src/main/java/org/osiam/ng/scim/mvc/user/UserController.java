@@ -25,17 +25,8 @@ import javax.inject.Inject;
 @RequestMapping(value = "/User")
 public class UserController {
 
-    public SCIMUserProvisioning getScimUserProvisioning() {
-        return scimUserProvisioning;
-    }
-
-    public void setScimUserProvisioning(SCIMUserProvisioning scimUserProvisioning) {
-        this.scimUserProvisioning = scimUserProvisioning;
-    }
-
     @Inject
     private SCIMUserProvisioning scimUserProvisioning;
-
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
@@ -43,5 +34,8 @@ public class UserController {
         return scimUserProvisioning.getById(id);
     }
 
+    public void setScimUserProvisioning(SCIMUserProvisioning scimUserProvisioning) {
+        this.scimUserProvisioning = scimUserProvisioning;
+    }
 
 }

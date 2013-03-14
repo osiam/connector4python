@@ -39,6 +39,7 @@ class UserTest extends Specification {
         user.userName == builder.userName
 
 
+
         where:
         builder << [new User.Builder("test").setActive(true),
                 new User.Builder("test2").setAddresses(new User.Addresses()),
