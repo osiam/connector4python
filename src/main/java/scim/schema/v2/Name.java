@@ -8,6 +8,8 @@
 
 package scim.schema.v2;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -37,15 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "name", propOrder = {
-    "formatted",
-    "familyName",
-    "givenName",
-    "middleName",
-    "honorificPrefix",
-    "honorificSuffix"
-})
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Name {
 
     protected String formatted;

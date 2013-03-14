@@ -8,726 +8,452 @@
 
 package scim.schema.v2;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * <p>Java class for User complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="User">
- *   &lt;complexContent>
- *     &lt;extension base="{urn:scim:schemas:core:1.0}CoreResource">
- *       &lt;sequence>
- *         &lt;element name="userName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="name" type="{urn:scim:schemas:core:1.0}name" minOccurs="0"/>
- *         &lt;element name="displayName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="nickName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="profileUrl" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="title" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="userType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="preferredLanguage" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="locale" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="timezone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="active" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="emails" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="email" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="phoneNumbers" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="phoneNumber" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="ims" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="im" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="photos" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="photo" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="addresses" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="address" type="{urn:scim:schemas:core:1.0}address" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="groups" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="group" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="entitlements" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="entitlement" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="roles" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="role" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="x509Certificates" minOccurs="0">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="x509Certificate" type="{urn:scim:schemas:core:1.0}multiValuedAttribute" maxOccurs="unbounded" minOccurs="0"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;any namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "User", propOrder = {
-    "userName",
-    "name",
-    "displayName",
-    "nickName",
-    "profileUrl",
-    "title",
-    "userType",
-    "preferredLanguage",
-    "locale",
-    "timezone",
-    "active",
-    "password",
-    "emails",
-    "phoneNumbers",
-    "ims",
-    "photos",
-    "addresses",
-    "groups",
-    "entitlements",
-    "roles",
-    "x509Certificates",
-    "any"
-})
-public class User
-    extends CoreResource
-{
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+public class User extends CoreResource {
 
-    protected String userName;
-    protected Name name;
-    protected String displayName;
-    protected String nickName;
-    protected String profileUrl;
-    protected String title;
-    protected String userType;
-    protected String preferredLanguage;
-    protected String locale;
-    protected String timezone;
-    protected Boolean active;
-    protected String password;
-    protected User.Emails emails;
-    protected User.PhoneNumbers phoneNumbers;
-    protected User.Ims ims;
-    protected User.Photos photos;
-    protected User.Addresses addresses;
-    protected User.Groups groups;
-    protected User.Entitlements entitlements;
-    protected User.Roles roles;
-    protected User.X509Certificates x509Certificates;
-    @XmlAnyElement(lax = true)
-    protected List<Object> any;
+    private final String userName;
+    private final Name name;
+    private final String displayName;
+    private final String nickName;
+    private final String profileUrl;
+    private final String title;
+    private final String userType;
+    private final String preferredLanguage;
+    private final String locale;
+    private final String timezone;
+    private final Boolean active;
+    private final String password;
+    private final User.Emails emails;
+    private final User.PhoneNumbers phoneNumbers;
+    private final User.Ims ims;
+    private final User.Photos photos;
+    private final User.Addresses addresses;
+    private final User.Groups groups;
+    private final User.Entitlements entitlements;
+    private final User.Roles roles;
+    private final User.X509Certificates x509Certificates;
+    private List<Object> any;
+
+    private User(Builder builder) {
+        this.userName = builder.userName;
+        this.name = builder.name;
+        this.displayName = builder.displayName;
+        this.nickName = builder.nickName;
+        this.profileUrl = builder.profileUrl;
+        this.title = builder.title;
+        this.userType = builder.userType;
+        this.preferredLanguage = builder.preferredLanguage;
+        this.locale = builder.locale;
+        this.timezone = builder.timezone;
+        this.active = builder.active;
+        this.password = builder.password;
+        //Not final because those are list, which are used to get enriched afterwards for easier usage.
+        this.emails = builder.emails;
+        this.phoneNumbers = builder.phoneNumbers;
+        this.ims = builder.ims;
+        this.photos = builder.photos;
+        this.addresses = builder.addresses;
+        this.groups = builder.groups;
+        this.entitlements = builder.entitlements;
+        this.roles = builder.roles;
+        this.x509Certificates = builder.x509Certificates;
+        this.any = builder.any;
+
+    }
+
+    public static class Builder {
+        private final String userName;
+
+
+        private Name name;
+        private String displayName;
+        private String nickName;
+        private String profileUrl;
+        private String title;
+        private String userType;
+        private String preferredLanguage;
+        private String locale;
+        private String timezone;
+        private Boolean active;
+        private String password;
+
+        private User.Emails emails = new Emails();
+        private User.PhoneNumbers phoneNumbers = new PhoneNumbers();
+        private User.Ims ims = new Ims();
+        private User.Photos photos = new Photos();
+        private User.Addresses addresses = new Addresses();
+        private User.Groups groups = new Groups();
+        private User.Entitlements entitlements = new Entitlements();
+        private User.Roles roles = new Roles();
+        private User.X509Certificates x509Certificates = new X509Certificates();
+
+
+        private List<Object> any;
+
+
+        public Builder(String userName) {
+            if (userName == null)
+                throw new IllegalArgumentException("userName must not be null.");
+            this.userName = userName;
+        }
+
+        public Builder setName(Name name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setDisplayName(String displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public Builder setNickName(String nickName) {
+            this.nickName = nickName;
+            return this;
+        }
+
+        public Builder setProfileUrl(String profileUrl) {
+            this.profileUrl = profileUrl;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setUserType(String userType) {
+            this.userType = userType;
+            return this;
+        }
+
+        public Builder setPreferredLanguage(String preferredLanguage) {
+            this.preferredLanguage = preferredLanguage;
+            return this;
+        }
+
+        public Builder setLocale(String locale) {
+            this.locale = locale;
+            return this;
+        }
+
+        public Builder setTimezone(String timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        public Builder setActive(Boolean active) {
+            this.active = active;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder setEmails(Emails emails) {
+            this.emails = emails;
+            return this;
+        }
+
+        public Builder setPhoneNumbers(PhoneNumbers phoneNumbers) {
+            this.phoneNumbers = phoneNumbers;
+            return this;
+        }
+
+        public Builder setIms(Ims ims) {
+            this.ims = ims;
+            return this;
+        }
+
+        public Builder setPhotos(Photos photos) {
+            this.photos = photos;
+            return this;
+        }
+
+        public Builder setAddresses(Addresses addresses) {
+            this.addresses = addresses;
+            return this;
+        }
+
+        public Builder setGroups(Groups groups) {
+            this.groups = groups;
+            return this;
+        }
+
+        public Builder setEntitlements(Entitlements entitlements) {
+            this.entitlements = entitlements;
+            return this;
+        }
+
+        public Builder setRoles(Roles roles) {
+            this.roles = roles;
+            return this;
+        }
+
+        public Builder setX509Certificates(X509Certificates x509Certificates) {
+            this.x509Certificates = x509Certificates;
+            return this;
+        }
+
+        public Builder setAny(List<Object> any) {
+            this.any = any;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
+
+
+    }
+
 
     /**
      * Gets the value of the userName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getUserName() {
         return userName;
     }
 
     /**
-     * Sets the value of the userName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUserName(String value) {
-        this.userName = value;
-    }
-
-    /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Name }
-     *     
+     *
+     * @return possible object is
+     *         {@link Name }
      */
     public Name getName() {
         return name;
     }
 
     /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Name }
-     *     
-     */
-    public void setName(Name value) {
-        this.name = value;
-    }
-
-    /**
      * Gets the value of the displayName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * Sets the value of the displayName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDisplayName(String value) {
-        this.displayName = value;
-    }
-
-    /**
      * Gets the value of the nickName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getNickName() {
         return nickName;
     }
 
     /**
-     * Sets the value of the nickName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNickName(String value) {
-        this.nickName = value;
-    }
-
-    /**
      * Gets the value of the profileUrl property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getProfileUrl() {
         return profileUrl;
     }
 
     /**
-     * Sets the value of the profileUrl property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setProfileUrl(String value) {
-        this.profileUrl = value;
-    }
-
-    /**
      * Gets the value of the title property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * Sets the value of the title property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTitle(String value) {
-        this.title = value;
-    }
-
-    /**
      * Gets the value of the userType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getUserType() {
         return userType;
     }
 
     /**
-     * Sets the value of the userType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUserType(String value) {
-        this.userType = value;
-    }
-
-    /**
      * Gets the value of the preferredLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getPreferredLanguage() {
         return preferredLanguage;
     }
 
     /**
-     * Sets the value of the preferredLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPreferredLanguage(String value) {
-        this.preferredLanguage = value;
-    }
-
-    /**
      * Gets the value of the locale property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLocale() {
         return locale;
     }
 
     /**
-     * Sets the value of the locale property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLocale(String value) {
-        this.locale = value;
-    }
-
-    /**
      * Gets the value of the timezone property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTimezone() {
         return timezone;
     }
 
     /**
-     * Sets the value of the timezone property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTimezone(String value) {
-        this.timezone = value;
-    }
-
-    /**
      * Gets the value of the active property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isActive() {
         return active;
     }
 
     /**
-     * Sets the value of the active property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setActive(Boolean value) {
-        this.active = value;
-    }
-
-    /**
      * Gets the value of the password property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Sets the value of the password property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPassword(String value) {
-        this.password = value;
-    }
-
-    /**
      * Gets the value of the emails property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.Emails }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.Emails }
      */
     public User.Emails getEmails() {
         return emails;
     }
 
     /**
-     * Sets the value of the emails property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.Emails }
-     *     
-     */
-    public void setEmails(User.Emails value) {
-        this.emails = value;
-    }
-
-    /**
      * Gets the value of the phoneNumbers property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.PhoneNumbers }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.PhoneNumbers }
      */
     public User.PhoneNumbers getPhoneNumbers() {
         return phoneNumbers;
     }
 
     /**
-     * Sets the value of the phoneNumbers property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.PhoneNumbers }
-     *     
-     */
-    public void setPhoneNumbers(User.PhoneNumbers value) {
-        this.phoneNumbers = value;
-    }
-
-    /**
      * Gets the value of the ims property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.Ims }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.Ims }
      */
     public User.Ims getIms() {
         return ims;
     }
 
     /**
-     * Sets the value of the ims property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.Ims }
-     *     
-     */
-    public void setIms(User.Ims value) {
-        this.ims = value;
-    }
-
-    /**
      * Gets the value of the photos property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.Photos }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.Photos }
      */
     public User.Photos getPhotos() {
         return photos;
     }
 
     /**
-     * Sets the value of the photos property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.Photos }
-     *     
-     */
-    public void setPhotos(User.Photos value) {
-        this.photos = value;
-    }
-
-    /**
      * Gets the value of the addresses property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.Addresses }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.Addresses }
      */
     public User.Addresses getAddresses() {
         return addresses;
     }
 
     /**
-     * Sets the value of the addresses property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.Addresses }
-     *     
-     */
-    public void setAddresses(User.Addresses value) {
-        this.addresses = value;
-    }
-
-    /**
      * Gets the value of the groups property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.Groups }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.Groups }
      */
     public User.Groups getGroups() {
         return groups;
     }
 
     /**
-     * Sets the value of the groups property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.Groups }
-     *     
-     */
-    public void setGroups(User.Groups value) {
-        this.groups = value;
-    }
-
-    /**
      * Gets the value of the entitlements property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.Entitlements }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.Entitlements }
      */
     public User.Entitlements getEntitlements() {
         return entitlements;
     }
 
     /**
-     * Sets the value of the entitlements property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.Entitlements }
-     *     
-     */
-    public void setEntitlements(User.Entitlements value) {
-        this.entitlements = value;
-    }
-
-    /**
      * Gets the value of the roles property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.Roles }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.Roles }
      */
     public User.Roles getRoles() {
         return roles;
     }
 
     /**
-     * Sets the value of the roles property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.Roles }
-     *     
-     */
-    public void setRoles(User.Roles value) {
-        this.roles = value;
-    }
-
-    /**
      * Gets the value of the x509Certificates property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User.X509Certificates }
-     *     
+     *
+     * @return possible object is
+     *         {@link User.X509Certificates }
      */
     public User.X509Certificates getX509Certificates() {
         return x509Certificates;
     }
 
     /**
-     * Sets the value of the x509Certificates property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User.X509Certificates }
-     *     
-     */
-    public void setX509Certificates(User.X509Certificates value) {
-        this.x509Certificates = value;
-    }
-
-    /**
      * Gets the value of the any property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the any property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAny().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link Object }
-     * 
-     * 
      */
     public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
@@ -735,9 +461,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -749,38 +475,30 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "address"
-    })
     public static class Addresses {
 
-        protected List<Address> address;
+        private List<Address> address;
 
         /**
          * Gets the value of the address property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the address property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getAddress().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link Address }
-         * 
-         * 
          */
         public List<Address> getAddress() {
             if (address == null) {
@@ -794,9 +512,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -808,42 +526,34 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "email"
-    })
     public static class Emails {
 
-        protected List<MultiValuedAttribute> email;
+        private List<MultiValuedAttribute> email;
 
         /**
          * Gets the value of the email property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the email property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getEmail().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getEmail() {
             if (email == null) {
-                email = new ArrayList<MultiValuedAttribute>();
+                email = new ArrayList<>();
             }
             return this.email;
         }
@@ -853,9 +563,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -867,42 +577,34 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "entitlement"
-    })
     public static class Entitlements {
 
-        protected List<MultiValuedAttribute> entitlement;
+        private List<MultiValuedAttribute> entitlement;
 
         /**
          * Gets the value of the entitlement property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the entitlement property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getEntitlement().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getEntitlement() {
             if (entitlement == null) {
-                entitlement = new ArrayList<MultiValuedAttribute>();
+                entitlement = new ArrayList<>();
             }
             return this.entitlement;
         }
@@ -912,9 +614,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -926,38 +628,30 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "group"
-    })
     public static class Groups {
 
-        protected List<MultiValuedAttribute> group;
+        private List<MultiValuedAttribute> group;
 
         /**
          * Gets the value of the group property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the group property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getGroup().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getGroup() {
             if (group == null) {
@@ -971,9 +665,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -985,38 +679,30 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "im"
-    })
     public static class Ims {
 
-        protected List<MultiValuedAttribute> im;
+        private List<MultiValuedAttribute> im;
 
         /**
          * Gets the value of the im property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the im property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getIm().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getIm() {
             if (im == null) {
@@ -1030,9 +716,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -1044,38 +730,30 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "phoneNumber"
-    })
     public static class PhoneNumbers {
 
-        protected List<MultiValuedAttribute> phoneNumber;
+        private List<MultiValuedAttribute> phoneNumber;
 
         /**
          * Gets the value of the phoneNumber property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the phoneNumber property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getPhoneNumber().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getPhoneNumber() {
             if (phoneNumber == null) {
@@ -1089,9 +767,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -1103,38 +781,30 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "photo"
-    })
     public static class Photos {
 
-        protected List<MultiValuedAttribute> photo;
+        private List<MultiValuedAttribute> photo;
 
         /**
          * Gets the value of the photo property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the photo property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getPhoto().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getPhoto() {
             if (photo == null) {
@@ -1148,9 +818,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -1162,38 +832,31 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "role"
-    })
+
     public static class Roles {
 
-        protected List<MultiValuedAttribute> role;
+        private List<MultiValuedAttribute> role;
 
         /**
          * Gets the value of the role property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the role property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getRole().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getRole() {
             if (role == null) {
@@ -1207,9 +870,9 @@ public class User
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     * <p/>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p/>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -1221,42 +884,35 @@ public class User
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "x509Certificate"
-    })
+
     public static class X509Certificates {
 
-        protected List<MultiValuedAttribute> x509Certificate;
+        private List<MultiValuedAttribute> x509Certificate;
 
         /**
          * Gets the value of the x509Certificate property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the x509Certificate property.
-         * 
-         * <p>
+         * <p/>
+         * <p/>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getX509Certificate().add(newItem);
          * </pre>
-         * 
-         * 
-         * <p>
+         * <p/>
+         * <p/>
+         * <p/>
          * Objects of the following type(s) are allowed in the list
          * {@link MultiValuedAttribute }
-         * 
-         * 
          */
         public List<MultiValuedAttribute> getX509Certificate() {
             if (x509Certificate == null) {
-                x509Certificate = new ArrayList<MultiValuedAttribute>();
+                x509Certificate = new ArrayList<>();
             }
             return this.x509Certificate;
         }

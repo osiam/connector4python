@@ -4,7 +4,7 @@ import org.osiam.ng.scim.exceptions.ResourceNotFoundException
 import spock.lang.Specification
 
 class UserControllerTest extends Specification {
-    def underTest = new UserController()
+    def underTest = new UserController(scimUserDAO)
 
     def "should throw an ResourceNotFoundException when no user got found with a specific id"() {
         when:
