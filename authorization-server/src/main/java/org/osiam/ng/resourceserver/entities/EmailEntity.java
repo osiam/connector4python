@@ -6,10 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Phone Numbers Entity
+ * Email Entity
  */
-@Entity(name = "phoneNumber")
-public class PhoneNumbersEntity {
+@Entity(name = "email")
+public class EmailEntity {
 
     @Id
     @GeneratedValue
@@ -20,15 +20,6 @@ public class PhoneNumbersEntity {
 
     @Column
     private String home;
-
-    @Column
-    private String mobile;
-
-    @Column
-    private String fax;
-
-    @Column
-    private String pager;
 
     @Column
     private String other;
@@ -55,30 +46,6 @@ public class PhoneNumbersEntity {
 
     public void setHome(String home) {
         this.home = home;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getFax() {
-        return fax;
-    }
-
-    public void setFax(String fax) {
-        this.fax = fax;
-    }
-
-    public String getPager() {
-        return pager;
-    }
-
-    public void setPager(String pager) {
-        this.pager = pager;
     }
 
     public String getOther() {

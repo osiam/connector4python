@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * User Entity
  */
-@Entity
-@NamedQueries({@NamedQuery(name = "getUserById", query = "SELECT u FROM UserEntity u WHERE u.id = :id")})
+@Entity(name = "user")
+@NamedQueries({@NamedQuery(name = "getUserById", query = "SELECT u FROM user u WHERE u.id = :id")})
 public class UserEntity {
 
     @Id
@@ -47,35 +47,35 @@ public class UserEntity {
     @Column
     private Boolean active;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
-    @ManyToOne
-    private EmailsEntity emails;
+    @OneToOne
+    private EmailEntity emails;
 
-    @ManyToOne
+    @OneToOne
     private PhoneNumbersEntity phoneNumbers;
 
-    @ManyToOne
+    @OneToOne
     private ImsEntity ims;
 
-    @ManyToOne
+    @OneToOne
     private PhotosEntity photos;
 
     @ManyToOne
-    private AddressesEntity addresses;
+    private List<AddressEntity> addresses;
 
     @ManyToMany
-    private GroupsEntity groups;
+    private List<GroupEntity> groups;
 
     @ManyToOne
-    private EntitlementsEntity entitlements;
+    private List<EntitlementsEntity> entitlements;
 
     @ManyToOne
-    private RolesEntity roles;
+    private List<RolesEntity> roles;
 
     @ManyToOne
-    private X509CertificatesEntity x509Certificates;
+    private List<X509CertificatesEntity> x509Certificates;
 
     @ManyToOne
     private List<Object> any;
@@ -188,138 +188,308 @@ public class UserEntity {
         this.profileUrl = profileUrl;
     }
 
+    /**
+     *
+     * @return
+     *      the title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     *
+     * @param title
+     *          the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     *
+     * @return
+     *      the user type
+     */
     public String getUserType() {
         return userType;
     }
 
+    /**
+     *
+     * @param userType
+     *          the user type
+     */
     public void setUserType(String userType) {
         this.userType = userType;
     }
 
+    /**
+     *
+     * @return
+     *      the preferred languages
+     */
     public String getPreferredLanguage() {
         return preferredLanguage;
     }
 
+    /**
+     *
+     * @param preferredLanguage
+     *              the preferred languages
+     */
     public void setPreferredLanguage(String preferredLanguage) {
         this.preferredLanguage = preferredLanguage;
     }
 
+    /**
+     *
+     * @return
+     *      the locale
+     */
     public String getLocale() {
         return locale;
     }
 
+    /**
+     *
+     * @param locale
+     *          the locale
+     */
     public void setLocale(String locale) {
         this.locale = locale;
     }
 
+    /**
+     *
+     * @return
+     *      the timezone
+     */
     public String getTimezone() {
         return timezone;
     }
 
+    /**
+     *
+     * @param timezone
+     *          the timezone
+     */
     public void setTimezone(String timezone) {
         this.timezone = timezone;
     }
 
+    /**
+     *
+     * @return
+     *      the active status
+     */
     public Boolean getActive() {
         return active;
     }
 
+    /**
+     *
+     * @param active
+     *          the active status
+     */
     public void setActive(Boolean active) {
         this.active = active;
     }
 
+    /**
+     *
+     * @return
+     *      the password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     *
+     * @param password
+     *          the password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public EmailsEntity getEmails() {
+    /**
+     *
+     * @return
+     *      the emails entity
+     */
+    public EmailEntity getEmails() {
         return emails;
     }
 
-    public void setEmails(EmailsEntity emails) {
+    /**
+     *
+     * @param emails
+     *          the emails entity
+     */
+    public void setEmails(EmailEntity emails) {
         this.emails = emails;
     }
 
+    /**
+     *
+     * @return
+     *      the phone numbers entity
+     */
     public PhoneNumbersEntity getPhoneNumbers() {
         return phoneNumbers;
     }
 
+    /**
+     *
+     * @param phoneNumbers
+     *      the phone numbers entity
+     */
     public void setPhoneNumbers(PhoneNumbersEntity phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
 
+    /**
+     *
+     * @return
+     *      the instant messaging entity
+     */
     public ImsEntity getIms() {
         return ims;
     }
 
+    /**
+     *
+     * @param ims
+     *          the instant messaging entity
+     */
     public void setIms(ImsEntity ims) {
         this.ims = ims;
     }
 
+    /**
+     *
+     * @return
+     *      the photos entity
+     */
     public PhotosEntity getPhotos() {
         return photos;
     }
 
+    /**
+     *
+     * @param photos
+     *          the photos entity
+     */
     public void setPhotos(PhotosEntity photos) {
         this.photos = photos;
     }
 
-    public AddressesEntity getAddresses() {
+    /**
+     *
+     * @return
+     *      the addresses entity
+     */
+    public List<AddressEntity> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(AddressesEntity addresses) {
+    /**
+     *
+     * @param addresses
+     *          the addresses entity
+     */
+    public void setAddresses(List<AddressEntity> addresses) {
         this.addresses = addresses;
     }
 
-    public GroupsEntity getGroups() {
+    /**
+     *
+     * @return
+     *      the groups entity
+     */
+    public List<GroupEntity> getGroups() {
         return groups;
     }
 
-    public void setGroups(GroupsEntity groups) {
+    /**
+     *
+     * @param groups
+     *          the groups entity
+     */
+    public void setGroups(List<GroupEntity> groups) {
         this.groups = groups;
     }
 
-    public EntitlementsEntity getEntitlements() {
+    /**
+     *
+     * @return
+     *      the entitlements
+     */
+    public List<EntitlementsEntity> getEntitlements() {
         return entitlements;
     }
 
-    public void setEntitlements(EntitlementsEntity entitlements) {
+    /**
+     *
+     * @param entitlements
+     *          the entitlements
+     */
+    public void setEntitlements(List<EntitlementsEntity> entitlements) {
         this.entitlements = entitlements;
     }
 
-    public RolesEntity getRoles() {
+    /**
+     *
+     * @return
+     *      the roles
+     */
+    public List<RolesEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(RolesEntity roles) {
+    /**
+     *
+     * @param roles
+     *          the roles
+     */
+    public void setRoles(List<RolesEntity> roles) {
         this.roles = roles;
     }
 
-    public X509CertificatesEntity getX509Certificates() {
+    /**
+     *
+     * @return
+     *      the X509 certs
+     */
+    public List<X509CertificatesEntity> getX509Certificates() {
         return x509Certificates;
     }
 
-    public void setX509Certificates(X509CertificatesEntity x509Certificates) {
+    /**
+     *
+     * @param x509Certificates
+     *          the X509 certs
+     */
+    public void setX509Certificates(List<X509CertificatesEntity> x509Certificates) {
         this.x509Certificates = x509Certificates;
     }
 
+    /**
+     *
+     * @return
+     *      any
+     */
     public List<Object> getAny() {
         return any;
     }
 
+    /**
+     *
+     * @param any
+     *      any
+     */
     public void setAny(List<Object> any) {
         this.any = any;
     }

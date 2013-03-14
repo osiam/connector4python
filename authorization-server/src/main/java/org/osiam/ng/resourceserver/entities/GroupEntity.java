@@ -1,12 +1,13 @@
 package org.osiam.ng.resourceserver.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
- * Groups Entity
+ * Group Entity
  */
-@Entity
-public class GroupsEntity {
+@Entity(name = "group")
+public class GroupEntity {
 
     @Id
     @GeneratedValue
@@ -19,7 +20,7 @@ public class GroupsEntity {
     private String displayName;
 
     @ManyToMany
-    private UserEntity members;
+    private List<UserEntity> members;
 
     @Column
     private Object any;
@@ -48,11 +49,11 @@ public class GroupsEntity {
         this.displayName = displayName;
     }
 
-    public UserEntity getMembers() {
+    public List<UserEntity> getMembers() {
         return members;
     }
 
-    public void setMembers(UserEntity members) {
+    public void setMembers(List<UserEntity> members) {
         this.members = members;
     }
 
