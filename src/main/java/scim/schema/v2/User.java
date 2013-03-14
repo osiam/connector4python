@@ -91,7 +91,7 @@ public class User extends CoreResource {
         private User.X509Certificates x509Certificates;
 
 
-        private List<Object> any;
+        private List<Object> any = new ArrayList<>();
 
 
         public Builder(String userName) {
@@ -444,9 +444,6 @@ public class User extends CoreResource {
      * {@link Object }
      */
     public List<Object> getAny() {
-        if (any == null) {
-            any = new ArrayList<>();
-        }
         return this.any;
     }
 
