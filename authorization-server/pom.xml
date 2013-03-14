@@ -44,6 +44,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.osiam.ng</groupId>
+            <artifactId>scim</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
         </dependency>
