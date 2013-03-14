@@ -38,6 +38,7 @@ public class User extends CoreResource {
     private List<Object> any;
 
     private User(Builder builder) {
+        super(builder);
         this.userName = builder.userName;
         this.name = builder.name;
         this.displayName = builder.displayName;
@@ -64,7 +65,7 @@ public class User extends CoreResource {
 
     }
 
-    public static class Builder {
+    public static class Builder extends CoreResource.Builder{
         private final String userName;
 
 

@@ -142,7 +142,7 @@ public class Meta {
      */
     public static class Attributes {
 
-        protected List<MultiValuedAttribute> attribute;
+        protected List<MultiValuedAttribute> attribute = new ArrayList<>();
 
         /**
          * Gets the value of the attribute property.
@@ -167,9 +167,6 @@ public class Meta {
          * 
          */
         public List<MultiValuedAttribute> getAttribute() {
-            if (attribute == null) {
-                attribute = new ArrayList<>();
-            }
             return this.attribute;
         }
 

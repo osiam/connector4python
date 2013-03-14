@@ -37,6 +37,9 @@ class UserTest extends Specification {
         user.userType == builder.userType
         user.x509Certificates == builder.x509Certificates
         user.userName == builder.userName
+        user.id == builder.id
+        user.externalId == builder.externalId
+        user.meta == builder.meta
 
 
 
@@ -61,7 +64,8 @@ class UserTest extends Specification {
                 new User.Builder("test").setTimezone("time"),
                 new User.Builder("test").setTitle("title"),
                 new User.Builder("test").setUserType("userType"),
-                new User.Builder("test").setX509Certificates(new User.X509Certificates())
+                new User.Builder("test").setX509Certificates(new User.X509Certificates()),
+                new User.Builder("test").setExternalId("externalid").setId("id").setMeta(new Meta())
         ]
     }
 
@@ -76,7 +80,7 @@ class UserTest extends Specification {
                 .setPhotos(new User.Photos())
                 .setRoles(new User.Roles())
                 .setX509Certificates(new User.X509Certificates()).build()
-        def address = new Address()
+        def address =  new Address.Builder().build()
         def generalAttribute = new MultiValuedAttribute()
 
         when:

@@ -3,11 +3,24 @@ package scim.schema.v2;
 /**
  * Java class for CoreResource complex type.
  */
-public class CoreResource
-    extends Resource
-{
+public abstract class CoreResource  extends Resource{
 
-    protected String externalId;
+    protected final String externalId;
+
+    public CoreResource(Builder builder) {
+        super(builder);
+        this.externalId = builder.externalId;
+    }
+
+    public static class Builder extends Resource.Builder {
+        protected String externalId;
+
+        public Builder setExternalId(String externalId) {
+            this.externalId = externalId;
+            return this;
+        }
+    }
+
 
     /**
      * Gets the value of the externalId property.
@@ -20,17 +33,4 @@ public class CoreResource
     public String getExternalId() {
         return externalId;
     }
-
-    /**
-     * Sets the value of the externalId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExternalId(String value) {
-        this.externalId = value;
-    }
-
 }
