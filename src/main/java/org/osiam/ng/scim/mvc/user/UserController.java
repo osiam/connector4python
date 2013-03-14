@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/User")
 public class UserController {
 
+
 //    private void generateLinkedAttribute(final Set<RestAttribute> attributes, final int i) {
 //        RestAttribute attr = new RestAttribute("key" + i, i);
 //        Link detail = new Link(ResourceOverviewController.buildHref(UserController.class) + "/" + i
