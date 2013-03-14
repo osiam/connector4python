@@ -1,6 +1,21 @@
-*.class
+# ignore target-folder everywhere
+**target/
 
-# Package Files #
-*.jar
-*.war
-*.ear
+**.settings/
+**.project
+**.classpath
+.*
+.**
+.gitmodules
+**bin/
+**.ipr
+**.ips
+**.iws
+**.iml
+**.jar
+**.war
+**.ear
+**.zip
+**test-output/
+**.log
+**.*~
