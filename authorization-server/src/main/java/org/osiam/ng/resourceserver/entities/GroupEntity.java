@@ -2,6 +2,7 @@ package org.osiam.ng.resourceserver.entities;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Group Entity
@@ -14,13 +15,13 @@ public class GroupEntity {
     private long id;
 
     @Column
-    private String right;
+    private UUID value;
 
-    @Column
+    @Column(nullable = false)
     private String displayName;
 
-    @ManyToMany
-    private List<UserEntity> members;
+    @ManyToOne
+    private List<MemberEntity> members;
 
     @Column
     private Object any;
@@ -33,12 +34,12 @@ public class GroupEntity {
         this.id = id;
     }
 
-    public String getRight() {
-        return right;
+    public UUID getValue() {
+        return value;
     }
 
-    public void setRight(String right) {
-        this.right = right;
+    public void setValue(UUID value) {
+        this.value = value;
     }
 
     public String getDisplayName() {
@@ -49,11 +50,11 @@ public class GroupEntity {
         this.displayName = displayName;
     }
 
-    public List<UserEntity> getMembers() {
+    public List<MemberEntity> getMembers() {
         return members;
     }
 
-    public void setMembers(List<UserEntity> members) {
+    public void setMembers(List<MemberEntity> members) {
         this.members = members;
     }
 

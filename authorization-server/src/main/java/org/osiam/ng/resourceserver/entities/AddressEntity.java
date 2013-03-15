@@ -16,6 +16,9 @@ public class AddressEntity {
     private long id;
 
     @Column
+    private String type;
+
+    @Column
     private String formatted;
 
     @Column
@@ -33,12 +36,32 @@ public class AddressEntity {
     @Column
     private String country;
 
+    @Column
+    private boolean primary;
+
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(boolean primary) {
+        this.primary = primary;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getFormatted() {

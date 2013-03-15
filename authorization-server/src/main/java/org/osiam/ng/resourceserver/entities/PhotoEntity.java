@@ -6,10 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Email Entity
+ * Photos Entity
  */
-@Entity(name = "email")
-public class EmailEntity {
+@Entity(name = "photo")
+public class PhotoEntity {
 
     @Id
     @GeneratedValue
@@ -20,9 +20,6 @@ public class EmailEntity {
 
     @Column
     private String type;
-
-    @Column
-    private boolean primary;
 
     public long getId() {
         return id;
@@ -46,13 +43,5 @@ public class EmailEntity {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public boolean isPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(boolean primary) {
-        this.primary = primary;
     }
 }

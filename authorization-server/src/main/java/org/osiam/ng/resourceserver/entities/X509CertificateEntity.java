@@ -6,10 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Email Entity
+ * X509 Certificates Entity
  */
-@Entity(name = "email")
-public class EmailEntity {
+@Entity(name = "certificate")
+public class X509CertificateEntity {
 
     @Id
     @GeneratedValue
@@ -18,11 +18,6 @@ public class EmailEntity {
     @Column
     private String value;
 
-    @Column
-    private String type;
-
-    @Column
-    private boolean primary;
 
     public long getId() {
         return id;
@@ -38,21 +33,5 @@ public class EmailEntity {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean isPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(boolean primary) {
-        this.primary = primary;
     }
 }

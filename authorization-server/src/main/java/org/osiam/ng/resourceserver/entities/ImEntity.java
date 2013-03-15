@@ -6,20 +6,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Photos Entity
+ * Instant messaging Entity
  */
-@Entity(name = "photo")
-public class PhotosEntity {
+@Entity(name = "im")
+public class ImEntity {
 
     @Id
     @GeneratedValue
     private long id;
 
     @Column
-    private String photo;
+    private String value;
 
     @Column
-    private String thumbnail;
+    private String type;
+
 
     public long getId() {
         return id;
@@ -29,19 +30,19 @@ public class PhotosEntity {
         this.id = id;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getValue() {
+        return value;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getType() {
+        return type;
     }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
+    public void setType(String type) {
+        this.type = type;
     }
 }

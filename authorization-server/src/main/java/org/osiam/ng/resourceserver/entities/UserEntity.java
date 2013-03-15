@@ -7,14 +7,17 @@ import java.util.List;
  * User Entity
  */
 @Entity(name = "user")
-@NamedQueries({@NamedQuery(name = "getUserById", query = "SELECT u FROM user u WHERE u.id = :id")})
+@NamedQueries({@NamedQuery(name = "getUserById", query = "SELECT u FROM user u WHERE u.externalId = :externalId")})
 public class UserEntity {
 
     @Id
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false)
+    @Column
+    private String externalId;
+
+    @Column(nullable = false, unique = true)
     private String userName;
 
     @OneToOne
@@ -50,22 +53,22 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
-    private EmailEntity emails;
+    @ManyToOne
+    private List<EmailEntity> emails;
 
-    @OneToOne
-    private PhoneNumbersEntity phoneNumbers;
+    @ManyToOne
+    private List<PhoneNumberEntity> phoneNumbers;
 
-    @OneToOne
-    private ImsEntity ims;
+    @ManyToOne
+    private List<ImEntity> ims;
 
-    @OneToOne
-    private PhotosEntity photos;
+    @ManyToOne
+    private List<PhotoEntity> photos;
 
     @ManyToOne
     private List<AddressEntity> addresses;
 
-    @ManyToMany
+    @ManyToOne
     private List<GroupEntity> groups;
 
     @ManyToOne
@@ -75,7 +78,7 @@ public class UserEntity {
     private List<RolesEntity> roles;
 
     @ManyToOne
-    private List<X509CertificatesEntity> x509Certificates;
+    private List<X509CertificateEntity> x509Certificates;
 
     @ManyToOne
     private List<Object> any;
@@ -96,6 +99,24 @@ public class UserEntity {
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     *
+     * @return
+     *      the external id
+     */
+    public String getExternalId() {
+        return externalId;
+    }
+
+    /**
+     *
+     * @param externalId
+     *          the external id
+     */
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     /**
@@ -319,7 +340,7 @@ public class UserEntity {
      * @return
      *      the emails entity
      */
-    public EmailEntity getEmails() {
+    public List<EmailEntity> getEmails() {
         return emails;
     }
 
@@ -328,7 +349,7 @@ public class UserEntity {
      * @param emails
      *          the emails entity
      */
-    public void setEmails(EmailEntity emails) {
+    public void setEmails(List<EmailEntity> emails) {
         this.emails = emails;
     }
 
@@ -337,7 +358,7 @@ public class UserEntity {
      * @return
      *      the phone numbers entity
      */
-    public PhoneNumbersEntity getPhoneNumbers() {
+    public List<PhoneNumberEntity> getPhoneNumbers() {
         return phoneNumbers;
     }
 
@@ -346,7 +367,7 @@ public class UserEntity {
      * @param phoneNumbers
      *      the phone numbers entity
      */
-    public void setPhoneNumbers(PhoneNumbersEntity phoneNumbers) {
+    public void setPhoneNumbers(List<PhoneNumberEntity> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
 
@@ -355,7 +376,7 @@ public class UserEntity {
      * @return
      *      the instant messaging entity
      */
-    public ImsEntity getIms() {
+    public List<ImEntity> getIms() {
         return ims;
     }
 
@@ -364,7 +385,7 @@ public class UserEntity {
      * @param ims
      *          the instant messaging entity
      */
-    public void setIms(ImsEntity ims) {
+    public void setIms(List<ImEntity> ims) {
         this.ims = ims;
     }
 
@@ -373,7 +394,7 @@ public class UserEntity {
      * @return
      *      the photos entity
      */
-    public PhotosEntity getPhotos() {
+    public List<PhotoEntity> getPhotos() {
         return photos;
     }
 
@@ -382,7 +403,7 @@ public class UserEntity {
      * @param photos
      *          the photos entity
      */
-    public void setPhotos(PhotosEntity photos) {
+    public void setPhotos(List<PhotoEntity> photos) {
         this.photos = photos;
     }
 
@@ -463,7 +484,7 @@ public class UserEntity {
      * @return
      *      the X509 certs
      */
-    public List<X509CertificatesEntity> getX509Certificates() {
+    public List<X509CertificateEntity> getX509Certificates() {
         return x509Certificates;
     }
 
@@ -472,7 +493,7 @@ public class UserEntity {
      * @param x509Certificates
      *          the X509 certs
      */
-    public void setX509Certificates(List<X509CertificatesEntity> x509Certificates) {
+    public void setX509Certificates(List<X509CertificateEntity> x509Certificates) {
         this.x509Certificates = x509Certificates;
     }
 
