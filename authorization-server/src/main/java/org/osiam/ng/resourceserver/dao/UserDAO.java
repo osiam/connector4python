@@ -24,34 +24,38 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.osiam.ng.resourceserver.entities.UserEntity;
-import org.osiam.ng.scim.dao.SCIMUserProvisioning;
+import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
-import scim.schema.v2.User;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jtodea
- * Date: 15.03.13
- * Time: 17:36
- * To change this template use File | Settings | File Templates.
- */
 @Component
-public class ScimUserProvisioningBean implements SCIMUserProvisioning {
+public class UserDAO {
 
-    @Inject
-    private UserDAO userDao;
+    @PersistenceContext
+    private EntityManager em;
 
 
-    @Override
-    public User getById(String id) {
-        UserEntity userEntity = userDao.getById(id);
-        //TODO: Mapping to SCIM User
-        return null;
+    public UserEntity getById(String id) {
+        Query query = em.createNamedQuery("getUserById");
+        query.setParameter("externalId", id);
+        return getSingleUserEntity(query);
     }
+
+    public UserEntity getByUsername(String userName) {
+        Query query = em.createNamedQuery("getUserByUsername");
+        query.setParameter("username", userName);
+        return getSingleUserEntity(query);
+    }
+
+    private UserEntity getSingleUserEntity(Query query) {
+        List result = query.getResultList();
+        if (result.isEmpty())
+            throw new ResourceNotFoundException("No user " + query.getParameter(1) + " found.");
+        return (UserEntity) result.get(0);
+    }
+
 }

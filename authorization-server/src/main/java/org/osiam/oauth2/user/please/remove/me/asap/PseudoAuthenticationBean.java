@@ -26,10 +26,13 @@ package org.osiam.oauth2.user.please.remove.me.asap;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.osiam.ng.resourceserver.dao.ScimUserProvisioningBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
 
 @Component("userDetailsService")
 /**
@@ -37,6 +40,14 @@ import org.springframework.stereotype.Component;
  * to a resource.
  */
 public class PseudoAuthenticationBean implements UserDetailsService {
+
+    @Inject
+    private ScimUserProvisioningBean userProvisioning;
+
+    public void setUserProvisioning(ScimUserProvisioningBean userProvisioning) {
+        this.userProvisioning = userProvisioning;
+    }
+
     @Override
     public UserDetails loadUserByUsername(final String username) {
         return new UserDetails() {
