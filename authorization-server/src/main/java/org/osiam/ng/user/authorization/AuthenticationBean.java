@@ -21,31 +21,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.oauth2.user.please.remove.me.asap
+package org.osiam.ng.user.authorization;
 
-import spock.lang.Specification
+import org.osiam.ng.resourceserver.dao.UserDAO;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 
-class PseudoAuthenticationBeanTest extends Specification {
-    def underTest = new PseudoAuthenticationBean()
+import javax.inject.Inject;
 
-    def "should return an activated account"(){
-        when:
-           def result = underTest.loadUserByUsername("blubb")
-        then:
-        result.accountNonExpired
-        result.accountNonLocked
-        result.credentialsNonExpired
-        result.enabled
+@Component("userDetailsService")
+/**
+ * Mainly used for demonstration, it is used to validate the user login, before he grants or denies the client access
+ * to a resource.
+ */
+public class AuthenticationBean implements UserDetailsService {
+
+    @Inject
+    private UserDAO userDAO;
+
+    @Override
+    public UserDetails loadUserByUsername(final String username) {
+        return userDAO.getByUsername(username);
     }
-
-    def "should dummy data of account"(){
-        when:
-        def result = underTest.loadUserByUsername("blubb")
-        then:
-        result.password == "koala"
-        result.username == "blubb"
-        result.getAuthorities().size() == 1
-        result.getAuthorities().iterator().next().authority == "ROLE_USER"
-    }
-
 }
