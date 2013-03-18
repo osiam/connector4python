@@ -39,22 +39,26 @@ public class UserDAO {
     private EntityManager em;
 
 
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
     public UserEntity getById(String id) {
         Query query = em.createNamedQuery("getUserById");
         query.setParameter("externalId", id);
-        return getSingleUserEntity(query);
+        return getSingleUserEntity(query, id);
     }
 
     public UserEntity getByUsername(String userName) {
         Query query = em.createNamedQuery("getUserByUsername");
         query.setParameter("username", userName);
-        return getSingleUserEntity(query);
+        return getSingleUserEntity(query, userName);
     }
 
-    private UserEntity getSingleUserEntity(Query query) {
+    private UserEntity getSingleUserEntity(Query query, String identifier) {
         List result = query.getResultList();
         if (result.isEmpty())
-            throw new ResourceNotFoundException("No user " + query.getParameter(1) + " found.");
+            throw new ResourceNotFoundException("No user " + identifier + " found.");
         return (UserEntity) result.get(0);
     }
 

@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import org.springframework.security.core.userdetails.UserDetails
 import spock.lang.Specification
 
 /**
@@ -35,6 +36,23 @@ import spock.lang.Specification
 class UserEntitySpec extends Specification {
 
     UserEntity userEntity = new UserEntity()
+
+    def "should inherit UserDetails"(){
+        given:
+        def roles = [new RolesEntity()]
+        when:
+        userEntity.setUsername("username")
+        userEntity.setRoles(roles)
+        then:
+        userEntity instanceof UserDetails
+        userEntity.getAuthorities() == roles
+        //not correctly set yet
+        userEntity.isAccountNonExpired()
+        userEntity.isAccountNonLocked()
+        userEntity.isCredentialsNonExpired()
+        userEntity.isEnabled()
+
+    }
 
     def "setter and getter for the Id should be present"() {
         when:
@@ -54,10 +72,10 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the username should be present"() {
         when:
-        userEntity.setUserName("bjensen@example.com")
+        userEntity.setUsername("bjensen@example.com")
 
         then:
-        userEntity.getUserName() == "bjensen@example.com"
+        userEntity.getUsername() == "bjensen@example.com"
     }
 
     def "setter and getter for the name should be present"() {
