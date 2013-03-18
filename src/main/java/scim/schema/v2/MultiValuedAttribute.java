@@ -28,11 +28,11 @@ package scim.schema.v2;
  */
 public class MultiValuedAttribute {
 
-    protected final Object value;
-    protected final String display;
-    protected final Boolean primary;
-    protected final String type;
-    protected final String operation;
+    private final Object value;
+    private final String display;
+    private final Boolean primary;
+    private final String type;
+    private final String operation;
 
     protected MultiValuedAttribute(Builder builder) {
         this.value = builder.value;
