@@ -21,34 +21,41 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver.entities
+package org.osiam.ng.resourceserver.dao;
 
-import spock.lang.Specification
+import org.osiam.ng.resourceserver.entities.UserEntity;
+import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
+import org.springframework.stereotype.Component;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jtodea
- * Date: 15.03.13
- * Time: 14:51
- * To change this template use File | Settings | File Templates.
- */
-class EntitlementsEntitySpec extends Specification {
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
-    EntitlementsEntity entitlementsEntity = new EntitlementsEntity()
+@Component
+public class UserDAO {
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        entitlementsEntity.setId(123456)
+    @PersistenceContext
+    private EntityManager em;
 
-        then:
-        entitlementsEntity.getId() == 123456
+
+    public UserEntity getById(String id) {
+        Query query = em.createNamedQuery("getUserById");
+        query.setParameter("externalId", id);
+        return getSingleUserEntity(query);
     }
 
-    def "setter and getter for the value should be present"(){
-        when:
-        entitlementsEntity.setValue("someValue")
-
-        then:
-        entitlementsEntity.getValue() == "someValue"
+    public UserEntity getByUsername(String userName) {
+        Query query = em.createNamedQuery("getUserByUsername");
+        query.setParameter("username", userName);
+        return getSingleUserEntity(query);
     }
+
+    private UserEntity getSingleUserEntity(Query query) {
+        List result = query.getResultList();
+        if (result.isEmpty())
+            throw new ResourceNotFoundException("No user " + query.getParameter(1) + " found.");
+        return (UserEntity) result.get(0);
+    }
+
 }
