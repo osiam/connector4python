@@ -23,5 +23,27 @@
 
 package scim.schema.v2
 
-class EnterpriseTest {
+import spock.lang.Specification
+
+class EnterpriseTest extends Specification {
+    def "should contain employeeNumber, costCenter, organization, division, department as well as a manager"() {
+        given:
+        def builder = new Enterprise.Builder()
+                .setCostCenter("costCenter")
+                .setDepartment("department")
+                .setDivision("division")
+                .setEmployeeNumber("2342")
+                .setManager(new Manager("id", "unso"))
+                .setOrganization("illuminatus")
+        when:
+        def enterprise = builder.build()
+        then:
+        enterprise.costCenter == builder.costCenter
+        enterprise.department == builder.department
+        enterprise.division == builder.division
+        enterprise.employeeNumber == builder.employeeNumber
+        enterprise.manager == builder.manager
+        enterprise.organization == builder.organization
+    }
+
 }

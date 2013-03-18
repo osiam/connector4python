@@ -28,59 +28,92 @@ package scim.schema.v2;
  */
 public class Enterprise {
 
-    protected String employeeNumber;
-    protected String costCenter;
-    protected String organization;
-    protected String division;
-    protected String department;
-    protected Manager manager;
+    private final String employeeNumber;
+    private final String costCenter;
+    private final String organization;
+    private final String division;
+    private final String department;
+    private final Manager manager;
+
+    private Enterprise(Builder builder) {
+        this.employeeNumber = builder.employeeNumber;
+        this.costCenter = builder.costCenter;
+        this.organization = builder.organization;
+        this.division = builder.division;
+        this.department = builder.department;
+        this.manager = builder.manager;
+    }
+
+    public static class Builder {
+        private String employeeNumber;
+        private String costCenter;
+        private String organization;
+        private String division;
+        private String department;
+        private Manager manager;
+
+        public Builder setEmployeeNumber(String employeeNumber) {
+            this.employeeNumber = employeeNumber;
+            return this;
+        }
+
+        public Builder setCostCenter(String costCenter) {
+            this.costCenter = costCenter;
+            return this;
+
+        }
+
+        public Builder setOrganization(String organization) {
+            this.organization = organization;
+            return this;
+
+        }
+
+        public Builder setDivision(String division) {
+            this.division = division;
+            return this;
+
+        }
+
+        public Builder setDepartment(String department) {
+            this.department = department;
+            return this;
+
+        }
+
+        public Builder setManager(Manager manager) {
+            this.manager = manager;
+            return this;
+        }
+
+        public Enterprise build() {
+            return new Enterprise(this);
+        }
+    }
 
 
     public String getEmployeeNumber() {
         return employeeNumber;
     }
 
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
-    }
-
     public String getCostCenter() {
         return costCenter;
-    }
-
-    public void setCostCenter(String costCenter) {
-        this.costCenter = costCenter;
     }
 
     public String getOrganization() {
         return organization;
     }
 
-    public void setOrganization(String organization) {
-        this.organization = organization;
-    }
-
     public String getDivision() {
         return division;
-    }
-
-    public void setDivision(String division) {
-        this.division = division;
     }
 
     public String getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
     public Manager getManager() {
         return manager;
     }
 
-    public void setManager(Manager manager) {
-        this.manager = manager;
-    }
 }

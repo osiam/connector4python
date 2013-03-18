@@ -36,6 +36,7 @@ public class Address extends MultiValuedAttribute {
     private final String country;
 
     private Address(Builder builder) {
+        super(builder);
         this.formatted = builder.formatted;
         this.streetAddress = builder.streetAddress;
         this.locality = builder.locality;
@@ -45,7 +46,7 @@ public class Address extends MultiValuedAttribute {
 
     }
 
-    public static class Builder {
+    public static class Builder extends MultiValuedAttribute.Builder{
         private String formatted;
         private String streetAddress;
         private String locality;
@@ -83,6 +84,7 @@ public class Address extends MultiValuedAttribute {
             return this;
         }
 
+        @Override
         public Address build() {
             return new Address(this);
         }

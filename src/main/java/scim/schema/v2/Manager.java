@@ -28,8 +28,13 @@ package scim.schema.v2;
  */
 public class Manager {
 
-    protected String managerId;
-    protected String displayName;
+    private final String managerId;
+    private final String displayName;
+
+    public Manager(String managerId, String displayName) {
+        this.managerId = managerId;
+        this.displayName = displayName;
+    }
 
     /**
      * Gets the value of the managerId property.
@@ -44,18 +49,6 @@ public class Manager {
     }
 
     /**
-     * Sets the value of the managerId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setManagerId(String value) {
-        this.managerId = value;
-    }
-
-    /**
      * Gets the value of the displayName property.
      * 
      * @return
@@ -65,18 +58,6 @@ public class Manager {
      */
     public String getDisplayName() {
         return displayName;
-    }
-
-    /**
-     * Sets the value of the displayName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDisplayName(String value) {
-        this.displayName = value;
     }
 
 }

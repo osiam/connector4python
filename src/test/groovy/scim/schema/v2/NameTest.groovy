@@ -25,26 +25,27 @@ package scim.schema.v2
 
 import spock.lang.Specification
 
-class GroupTest extends Specification {
-    def "should be able to generate a group"() {
+class NameTest extends Specification {
+    def "should contain a bunch of values"() {
         given:
-        def builder = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object())
+        def builder = new Name.Builder()
+                .setFamilyName("familyName")
+                .setFormatted("formatted")
+                .setGivenName("given by whom?")
+                .setHonorificPrefix("prof")
+                .setHonorificSuffix("dunno?")
+                .setMiddleName("jack")
         when:
-        def group = builder.build()
-
+        def name = builder.build()
         then:
-        group.any == builder.any
-        group.displayName == builder.displayName
-        group.members == builder.members
-    }
 
-    def "should be able to enrich group members"() {
-        given:
-        def group = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object()).build()
-        when:
-        group.members.member.add(new MultiValuedAttribute.Builder().build())
+        name.formatted == builder.formatted;
+        name.familyName == builder.familyName;
+        name.givenName == builder.givenName;
+        name.middleName == builder.middleName;
+        name.honorificPrefix == builder.honorificPrefix;
+        name.honorificSuffix == builder.honorificSuffix;
 
-        then:
-        group.members.member.size() == 1
+
     }
 }

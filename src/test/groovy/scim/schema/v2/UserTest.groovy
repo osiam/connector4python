@@ -76,7 +76,7 @@ class UserTest extends Specification {
                 new User.Builder("test").setGroups(new User.Groups()),
                 new User.Builder("test").setIms(new User.Ims()),
                 new User.Builder("test").setLocale("locale"),
-                new User.Builder("test").setName(new Name()),
+                new User.Builder("test").setName(new Name.Builder().build()),
                 new User.Builder("test").setNickName("nickname"),
                 new User.Builder("test").setPassword("password"),
                 new User.Builder("test").setPhoneNumbers(new User.PhoneNumbers()),
@@ -88,7 +88,7 @@ class UserTest extends Specification {
                 new User.Builder("test").setTitle("title"),
                 new User.Builder("test").setUserType("userType"),
                 new User.Builder("test").setX509Certificates(new User.X509Certificates()),
-                new User.Builder("test").setExternalId("externalid").setId("id").setMeta(new Meta())
+                new User.Builder("test").setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
         ]
     }
 
@@ -104,7 +104,7 @@ class UserTest extends Specification {
                 .setRoles(new User.Roles())
                 .setX509Certificates(new User.X509Certificates()).build()
         def address =  new Address.Builder().build()
-        def generalAttribute = new MultiValuedAttribute()
+        def generalAttribute = new MultiValuedAttribute.Builder().build()
 
         when:
         user.addresses.address.add(address)

@@ -28,11 +28,57 @@ package scim.schema.v2;
  */
 public class MultiValuedAttribute {
 
-    protected Object value;
-    protected String display;
-    protected Boolean primary;
-    protected String type;
-    protected String operation;
+    protected final Object value;
+    protected final String display;
+    protected final Boolean primary;
+    protected final String type;
+    protected final String operation;
+
+    protected MultiValuedAttribute(Builder builder) {
+        this.value = builder.value;
+        this.display = builder.display;
+        this.primary = builder.primary;
+        this.type = builder.type;
+        this.operation = builder.operation;
+    }
+
+    public static class Builder{
+
+        private Object value;
+        private String display;
+        private Boolean primary;
+        private String type;
+        private String operation;
+
+        public Builder setValue(Object value) {
+            this.value = value;
+            return this;
+        }
+
+        public Builder setDisplay(String display) {
+            this.display = display;
+            return this;
+        }
+
+        public Builder setPrimary(Boolean primary) {
+            this.primary = primary;
+            return this;
+        }
+
+        public Builder setType(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setOperation(String operation) {
+            this.operation = operation;
+            return this;
+        }
+
+        public MultiValuedAttribute build(){
+            return new MultiValuedAttribute(this);
+        }
+    }
 
     /**
      * Gets the value of the value property.
@@ -44,18 +90,6 @@ public class MultiValuedAttribute {
      */
     public Object getValue() {
         return value;
-    }
-
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setValue(Object value) {
-        this.value = value;
     }
 
     /**
@@ -71,18 +105,6 @@ public class MultiValuedAttribute {
     }
 
     /**
-     * Sets the value of the display property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDisplay(String value) {
-        this.display = value;
-    }
-
-    /**
      * Gets the value of the primary property.
      * 
      * @return
@@ -92,18 +114,6 @@ public class MultiValuedAttribute {
      */
     public Boolean isPrimary() {
         return primary;
-    }
-
-    /**
-     * Sets the value of the primary property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setPrimary(Boolean value) {
-        this.primary = value;
     }
 
     /**
@@ -119,18 +129,6 @@ public class MultiValuedAttribute {
     }
 
     /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setType(String value) {
-        this.type = value;
-    }
-
-    /**
      * Gets the value of the operation property.
      * 
      * @return
@@ -140,18 +138,6 @@ public class MultiValuedAttribute {
      */
     public String getOperation() {
         return operation;
-    }
-
-    /**
-     * Sets the value of the operation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOperation(String value) {
-        this.operation = value;
     }
 
 }

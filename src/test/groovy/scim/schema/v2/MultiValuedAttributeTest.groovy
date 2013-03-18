@@ -25,26 +25,23 @@ package scim.schema.v2
 
 import spock.lang.Specification
 
-class GroupTest extends Specification {
-    def "should be able to generate a group"() {
+class MultiValuedAttributeTest extends Specification {
+    def "should contain value, display, primary, type and operation"() {
         given:
-        def builder = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object())
+        def builder = new MultiValuedAttribute.Builder()
+                .setDisplay("display")
+                .setOperation("op")
+                .setPrimary(true)
+                .setType("type")
+                .setValue("value")
         when:
-        def group = builder.build()
+        def mva = builder.build()
 
         then:
-        group.any == builder.any
-        group.displayName == builder.displayName
-        group.members == builder.members
-    }
-
-    def "should be able to enrich group members"() {
-        given:
-        def group = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object()).build()
-        when:
-        group.members.member.add(new MultiValuedAttribute.Builder().build())
-
-        then:
-        group.members.member.size() == 1
+        mva.display == builder.display
+        mva.isPrimary() == builder.primary
+        mva.value == builder.value
+        mva.type == builder.type
+        mva.operation == builder.operation
     }
 }

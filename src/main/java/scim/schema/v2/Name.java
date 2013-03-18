@@ -32,12 +32,65 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Name {
 
-    protected String formatted;
-    protected String familyName;
-    protected String givenName;
-    protected String middleName;
-    protected String honorificPrefix;
-    protected String honorificSuffix;
+    private final String formatted;
+    private final String familyName;
+    private final String givenName;
+    private final String middleName;
+    private final String honorificPrefix;
+    private final String honorificSuffix;
+
+    private Name(Builder builder) {
+        this.formatted = builder.formatted;
+        this.familyName = builder.familyName;
+        this.givenName = builder.givenName;
+        this.middleName = builder.middleName;
+        this.honorificPrefix = builder.honorificPrefix;
+        this.honorificSuffix = builder.honorificSuffix;
+
+    }
+
+    public static class Builder{
+        private String formatted;
+        private String familyName;
+        private String givenName;
+        private String middleName;
+        private String honorificPrefix;
+        private String honorificSuffix;
+
+        public Builder setFormatted(String formatted) {
+            this.formatted = formatted;
+            return this;
+        }
+
+        public Builder setFamilyName(String familyName) {
+            this.familyName = familyName;
+            return this;
+        }
+
+        public Builder setGivenName(String givenName) {
+            this.givenName = givenName;
+            return this;
+        }
+
+        public Builder setMiddleName(String middleName) {
+            this.middleName = middleName;
+            return this;
+        }
+
+        public Builder setHonorificPrefix(String honorificPrefix) {
+            this.honorificPrefix = honorificPrefix;
+            return this;
+        }
+
+        public Builder setHonorificSuffix(String honorificSuffix) {
+            this.honorificSuffix = honorificSuffix;
+            return this;
+        }
+
+        public Name build(){
+            return new Name(this);
+        }
+    }
 
     /**
      * Gets the value of the formatted property.
@@ -49,18 +102,6 @@ public class Name {
      */
     public String getFormatted() {
         return formatted;
-    }
-
-    /**
-     * Sets the value of the formatted property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFormatted(String value) {
-        this.formatted = value;
     }
 
     /**
@@ -76,18 +117,6 @@ public class Name {
     }
 
     /**
-     * Sets the value of the familyName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFamilyName(String value) {
-        this.familyName = value;
-    }
-
-    /**
      * Gets the value of the givenName property.
      * 
      * @return
@@ -97,18 +126,6 @@ public class Name {
      */
     public String getGivenName() {
         return givenName;
-    }
-
-    /**
-     * Sets the value of the givenName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGivenName(String value) {
-        this.givenName = value;
     }
 
     /**
@@ -124,18 +141,6 @@ public class Name {
     }
 
     /**
-     * Sets the value of the middleName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMiddleName(String value) {
-        this.middleName = value;
-    }
-
-    /**
      * Gets the value of the honorificPrefix property.
      * 
      * @return
@@ -147,17 +152,6 @@ public class Name {
         return honorificPrefix;
     }
 
-    /**
-     * Sets the value of the honorificPrefix property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHonorificPrefix(String value) {
-        this.honorificPrefix = value;
-    }
 
     /**
      * Gets the value of the honorificSuffix property.
@@ -169,18 +163,6 @@ public class Name {
      */
     public String getHonorificSuffix() {
         return honorificSuffix;
-    }
-
-    /**
-     * Sets the value of the honorificSuffix property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHonorificSuffix(String value) {
-        this.honorificSuffix = value;
     }
 
 }

@@ -25,6 +25,7 @@ package scim.schema.v2;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,59 +34,72 @@ import java.util.List;
  */
 public class Meta {
 
-    protected XMLGregorianCalendar created;
-    protected XMLGregorianCalendar lastModified;
-    protected String location;
-    protected String version;
-    protected Meta.Attributes attributes;
+    private final Date created;
+    private final Date lastModified;
+    private final String location;
+    private final String version;
+    private final Meta.Attributes attributes;
 
-    /**
-     * Gets the value of the created property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public XMLGregorianCalendar getCreated() {
-        return created;
+    private Meta(Builder builder) {
+        this.created = builder.created;
+        this.lastModified = builder.lastModified;
+        this.attributes = builder.attributes;
+        this.location = builder.location;
+        this.version = builder.version;
     }
 
-    /**
-     * Sets the value of the created property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setCreated(XMLGregorianCalendar value) {
-        this.created = value;
+    public static class Builder{
+        private final Date created;
+        private final Date lastModified;
+        private String location;
+        private String version;
+        private Meta.Attributes attributes;
+
+        /**
+         * Will set created, as well as lastModified to System.currentTime
+         */
+        public Builder(){
+            this.created = new Date(System.currentTimeMillis());
+            this.lastModified = new Date(System.currentTimeMillis());
+        }
+
+        /**
+         * Will set created to given value and lastModified to System.currentTime
+         */
+        public Builder(Date created){
+            this.created = new Date(created.getTime());
+            this.lastModified = new Date(System.currentTimeMillis());
+        }
+
+        /**
+         * Will set created to given value and lastModified to System.currentTime
+         */
+        public Builder(Date created, Date lastModified){
+            this.created = new Date(created.getTime());
+            this.lastModified = new Date(lastModified.getTime());
+        }
+
+        public Builder setLocation(String location) {
+            this.location = location;
+            return this;
+        }
+
+        public Builder setVersion(String version) {
+            this.version = version;
+            return this;
+        }
+
+        public Builder setAttributes(Attributes attributes) {
+            this.attributes = attributes;
+            return this;
+        }
+
+        public Meta build(){
+            return new Meta(this);
+        }
     }
 
-    /**
-     * Gets the value of the lastModified property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public XMLGregorianCalendar getLastModified() {
-        return lastModified;
-    }
 
-    /**
-     * Sets the value of the lastModified property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setLastModified(XMLGregorianCalendar value) {
-        this.lastModified = value;
-    }
 
     /**
      * Gets the value of the location property.
@@ -100,18 +114,6 @@ public class Meta {
     }
 
     /**
-     * Sets the value of the location property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLocation(String value) {
-        this.location = value;
-    }
-
-    /**
      * Gets the value of the version property.
      * 
      * @return
@@ -123,17 +125,6 @@ public class Meta {
         return version;
     }
 
-    /**
-     * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVersion(String value) {
-        this.version = value;
-    }
 
     /**
      * Gets the value of the attributes property.
@@ -147,25 +138,20 @@ public class Meta {
         return attributes;
     }
 
-    /**
-     * Sets the value of the attributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Meta.Attributes }
-     *     
-     */
-    public void setAttributes(Meta.Attributes value) {
-        this.attributes = value;
+    public Date getCreated() {
+        return new Date(created.getTime());
     }
 
+    public Date getLastModified() {
+        return new Date(lastModified.getTime());
+    }
 
     /**
      * Java class for anonymous complex type.
      */
     public static class Attributes {
 
-        protected List<MultiValuedAttribute> attribute = new ArrayList<>();
+        private List<MultiValuedAttribute> attribute = new ArrayList<>();
 
         /**
          * Gets the value of the attribute property.
