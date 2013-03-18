@@ -33,10 +33,10 @@ import java.util.List;
 /**
  * User Entity
  */
-@Entity(name = "user")
+@Entity(name = "scimuser")
 @NamedQueries({
-        @NamedQuery(name = "getUserById", query = "SELECT u FROM user u WHERE u.externalId = :externalId"),
-        @NamedQuery(name = "getUserByUsername", query = "SELECT u FROM user u WHERE u.username = :username")
+        @NamedQuery(name = "getUserById", query = "SELECT u FROM scimuser u WHERE u.externalId = :externalId"),
+        @NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scimuser u WHERE u.userName = :username")
 })
 public class UserEntity implements UserDetails{
 
@@ -83,34 +83,35 @@ public class UserEntity implements UserDetails{
     @Column(nullable = false)
     private String password;
 
-    @OneToMany()
+    @OneToMany
     private List<EmailEntity> emails;
 
-    @ManyToOne
+    @OneToMany
     private List<PhoneNumberEntity> phoneNumbers;
 
-    @ManyToOne
+    @OneToMany
     private List<ImEntity> ims;
 
-    @ManyToOne
+    @OneToMany
     private List<PhotoEntity> photos;
 
-    @ManyToOne
+    @OneToMany
     private List<AddressEntity> addresses;
 
-    @ManyToOne
+    @OneToMany
     private List<GroupEntity> groups;
 
-    @ManyToOne
+    @OneToMany
     private List<EntitlementsEntity> entitlements;
 
-    @ManyToOne
+    @OneToMany
     private List<RolesEntity> roles;
 
-    @ManyToOne
+    @OneToMany
     private List<X509CertificateEntity> x509Certificates;
 
-    @ManyToOne
+//    @OneToMany
+    @Transient
     private List<Object> any;
 
     /**

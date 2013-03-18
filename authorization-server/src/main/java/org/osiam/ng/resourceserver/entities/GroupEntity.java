@@ -43,11 +43,11 @@ public class GroupEntity {
     @Column(nullable = false)
     private String displayName;
 
-    @ManyToOne
+    @OneToMany
     private List<MemberEntity> members;
 
     @Column
-    private Object any;
+    private String any;
 
     public long getId() {
         return id;
@@ -85,7 +85,7 @@ public class GroupEntity {
         return any;
     }
 
-    public void setAny(Object any) {
+    public void setAny(String any) {
         this.any = any;
     }
 }
