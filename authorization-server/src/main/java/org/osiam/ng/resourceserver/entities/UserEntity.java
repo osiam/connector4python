@@ -76,7 +76,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @ManyToOne
+    @OneToMany()
     private List<EmailEntity> emails;
 
     @ManyToOne

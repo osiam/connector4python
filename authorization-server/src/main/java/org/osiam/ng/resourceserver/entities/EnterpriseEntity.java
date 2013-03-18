@@ -54,7 +54,7 @@ public class EnterpriseEntity {
     @Column
     private String department;
 
-    @OneToOne
+    @ManyToOne
     private ManagerEntity manager;
 
     public long getId() {
