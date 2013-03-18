@@ -21,34 +21,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver.entities
+package org.osiam;
 
-import spock.lang.Specification
+import org.osiam.ng.scim.dao.SCIMUserProvisioning;
+import org.springframework.stereotype.Service;
+import scim.schema.v2.Name;
+import scim.schema.v2.User;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jtodea
- * Date: 15.03.13
- * Time: 14:51
- * To change this template use File | Settings | File Templates.
- */
-class EntitlementsEntitySpec extends Specification {
+@Service
+public class SCIMUserProvisioningFake implements SCIMUserProvisioning {
 
-    EntitlementsEntity entitlementsEntity = new EntitlementsEntity()
-
-    def "setter and getter for the Id should be present"() {
-        when:
-        entitlementsEntity.setId(123456)
-
-        then:
-        entitlementsEntity.getId() == 123456
-    }
-
-    def "setter and getter for the value should be present"(){
-        when:
-        entitlementsEntity.setValue("someValue")
-
-        then:
-        entitlementsEntity.getValue() == "someValue"
+    @Override
+    public User getById(String id) {
+        return new User.Builder("username").build();
     }
 }
