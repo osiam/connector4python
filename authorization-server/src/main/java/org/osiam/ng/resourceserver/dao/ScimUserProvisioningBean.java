@@ -26,6 +26,7 @@ package org.osiam.ng.resourceserver.dao;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
@@ -37,7 +38,7 @@ import javax.inject.Inject;
  * Time: 17:36
  * To change this template use File | Settings | File Templates.
  */
-@Component
+@Service
 public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Inject

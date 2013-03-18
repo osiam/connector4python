@@ -26,13 +26,16 @@ package org.osiam.ng.resourceserver.dao;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
-@Component
+@Repository
 public class UserDAO {
 
     @PersistenceContext

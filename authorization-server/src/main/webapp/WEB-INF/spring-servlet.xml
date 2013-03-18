@@ -39,6 +39,8 @@
     <import resource="resource-server.xml"/>
     <!-- needed for getting an authorization-code -->
     <import resource="user-authentication.xml"/>
+    <!-- JPA -->
+    <import resource="jpa-configuration.xml"/>
 
     <!-- configures the OAuth2 authorization server -->
     <oauth:authorization-server client-details-service-ref="clientDetails"
