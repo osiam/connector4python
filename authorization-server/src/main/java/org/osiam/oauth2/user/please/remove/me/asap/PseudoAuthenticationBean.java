@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.osiam.ng.resourceserver.dao.ScimUserProvisioningBean;
+import org.osiam.ng.resourceserver.dao.UserDAO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,10 +43,10 @@ import javax.inject.Inject;
 public class PseudoAuthenticationBean implements UserDetailsService {
 
     @Inject
-    private ScimUserProvisioningBean userProvisioning;
+    private UserDAO userDAO;
 
-    public void setUserProvisioning(ScimUserProvisioningBean userProvisioning) {
-        this.userProvisioning = userProvisioning;
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
