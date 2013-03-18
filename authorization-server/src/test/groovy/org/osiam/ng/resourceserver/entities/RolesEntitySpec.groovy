@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import org.springframework.security.core.GrantedAuthority
 import spock.lang.Specification
 
 /**
@@ -50,5 +51,15 @@ class RolesEntitySpec extends Specification {
 
         then:
         rolesEntity.getValue() == "someValue"
+    }
+
+    def "a role should implemented grantedAuthority from Spring for authorization purposes"(){
+        given:
+        rolesEntity.setValue("USER")
+        when:
+        def authority = rolesEntity.authority;
+        then:
+        authority == "ROLE_USER"
+        rolesEntity instanceof GrantedAuthority
     }
 }
