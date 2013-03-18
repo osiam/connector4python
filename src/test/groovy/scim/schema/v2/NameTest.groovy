@@ -38,14 +38,11 @@ class NameTest extends Specification {
         when:
         def name = builder.build()
         then:
-
         name.formatted == builder.formatted;
         name.familyName == builder.familyName;
         name.givenName == builder.givenName;
         name.middleName == builder.middleName;
         name.honorificPrefix == builder.honorificPrefix;
         name.honorificSuffix == builder.honorificSuffix;
-
-
     }
 }
