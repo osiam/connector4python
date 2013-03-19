@@ -38,12 +38,6 @@ class SCIMUserSystemSpec extends AbstractSystemSpec {
 
     }
 
-    def valid_access_token(def scope, def state){
-        client.requestAuthorization(scope, state)
-        user.login()
-        user.grantAccess()
-        client.requestAccessToken()
-    }
 
 
 }
