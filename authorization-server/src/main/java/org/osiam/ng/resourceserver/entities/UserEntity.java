@@ -38,7 +38,7 @@ import java.util.List;
         @NamedQuery(name = "getUserById", query = "SELECT u FROM scimuser u WHERE u.externalId = :externalId"),
         @NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scimuser u WHERE u.userName = :username")
 })
-public class UserEntity implements UserDetails{
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -110,9 +110,10 @@ public class UserEntity implements UserDetails{
     @OneToMany
     private List<X509CertificateEntity> x509Certificates;
 
-//    @OneToMany
-    @Transient
-    private List<Object> any;
+    //    @OneToMany
+//    @Transient
+    @ElementCollection
+    private List<String> any;
 
     /**
      * @param id the unique entity id
@@ -462,14 +463,14 @@ public class UserEntity implements UserDetails{
     /**
      * @return any
      */
-    public List<Object> getAny() {
+    public List<String> getAny() {
         return any;
     }
 
     /**
      * @param any any
      */
-    public void setAny(List<Object> any) {
+    public void setAny(List<String> any) {
         this.any = any;
     }
 }
