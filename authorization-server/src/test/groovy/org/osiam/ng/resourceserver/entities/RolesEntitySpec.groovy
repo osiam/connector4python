@@ -62,4 +62,12 @@ class RolesEntitySpec extends Specification {
         authority == "ROLE_USER"
         rolesEntity instanceof GrantedAuthority
     }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = rolesEntity.toScim()
+
+        then:
+        multivalue.value == rolesEntity.value
+    }
 }

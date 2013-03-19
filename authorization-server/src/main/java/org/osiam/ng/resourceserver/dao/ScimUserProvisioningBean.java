@@ -43,12 +43,13 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     @Inject
     private UserDAO userDao;
 
+    @Inject
+    EntityToScimMapper entityToScimMapper;
+
 
     @Override
     public User getById(String id) {
         UserEntity userEntity = userDao.getById(id);
-
-        EntityToScimMapper entityToScimMapper = new EntityToScimMapper();
         return entityToScimMapper.entityUserToScim(userEntity);
     }
 }

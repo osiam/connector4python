@@ -1,6 +1,7 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.osiam.ng.resourceserver.entities.*;
+import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
  * Time: 11:06
  * To change this template use File | Settings | File Templates.
  */
+@Service
 public class EntityToScimMapper {
 
 

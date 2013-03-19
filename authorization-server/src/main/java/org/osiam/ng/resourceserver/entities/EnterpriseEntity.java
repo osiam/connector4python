@@ -121,7 +121,7 @@ public class EnterpriseEntity {
                 setDepartment(getDepartment()).
                 setDivision(getDivision()).
                 setEmployeeNumber(getEmployeeNumber()).
-                setManager(getManager().toScim()).
+                setManager(getManager() !=null ? getManager().toScim() : null).
                 setOrganization(getOrganization()).
                 build();
     }

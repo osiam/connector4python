@@ -76,6 +76,6 @@ public class ManagerEntity {
     }
 
     public Manager toScim() {
-        return new Manager(getManagerId().toString(), getDisplayName());
+        return new Manager(getManagerId() != null ? getManagerId().toString() : null, getDisplayName());
     }
 }

@@ -35,6 +35,7 @@ import spock.lang.Specification
 class ImsEntitySpec extends Specification {
 
     ImEntity imsEntity = new ImEntity()
+    def userEntity = Mock(UserEntity)
 
     def "setter and getter for the Id should be present"() {
         when:
@@ -58,5 +59,22 @@ class ImsEntitySpec extends Specification {
 
         then:
         imsEntity.getType() == "gTalk"
+    }
+
+    def "setter and getter for the user should be present"() {
+        when:
+        imsEntity.setUser(userEntity)
+
+        then:
+        imsEntity.getUser() == userEntity
+    }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = imsEntity.toScim()
+
+        then:
+        multivalue.value == imsEntity.value
+        multivalue.type == imsEntity.type
     }
 }
