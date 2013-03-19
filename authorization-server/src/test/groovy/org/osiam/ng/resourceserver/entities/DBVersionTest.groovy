@@ -21,28 +21,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver;
+package org.osiam.ng.resourceserver.entities
 
-/**
- * This is a simple Attribute, it contains a key to find the attribute and a value.
- */
-public class Attribute {
-    private final String key;
+import spock.lang.Specification
 
-    private final Object value;
-
-    public Attribute(String key, Object value) {
-        this.key = key;
-        this.value = value;
+class DBVersionTest extends Specification {
+    def "DBVersion should contain the DataBase scheme version"() {
+        when:
+        def underTest = new DBVersion()
+        then:
+        underTest.version == DBVersion.DB_VERSION
     }
-
-    public String getKey() {
-        return key;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-
 }

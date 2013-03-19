@@ -21,24 +21,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver
+package org.osiam.ng.resourceserver.entities;
 
-import spock.lang.Specification
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-/**
- * Created with IntelliJ IDEA.
- * User: phil
- * Date: 06.03.13
- * Time: 14:24
- * To change this template use File | Settings | File Templates.
- */
-class RestAttributeTest extends Specification {
-    def "an attribute should contain a key and value"() {
-        when:
-        def attr = new RestAttribute("key", "val")
-        then:
-        attr.getKey() == "key"
-        attr.value == "val"
-    }
-
+@Entity(name = "database_scheme_version")
+public class DBVersion {
+    public static final double DB_VERSION = 0.01;
+    @Id
+    public double version = DB_VERSION;
 }

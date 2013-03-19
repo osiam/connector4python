@@ -21,27 +21,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver;
+package org.osiam.ng;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.osiam.ng.resourceserver.entities.DBVersion;
+import org.springframework.stereotype.Service;
 
-/**
- * This is a rest implementation of @link{Attribute} it enhances a attribute with a link.
- */
-public class RestAttribute extends ResourceSupport {
-    private Attribute attribute;
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-    public RestAttribute(String name, Object value) {
-        this.attribute = new Attribute(name, value);
+@Service
+public class DataBaseSchemeVersionValidator {
+
+    @PersistenceContext
+    private EntityManager em;
+
+
+    @PostConstruct
+    public void checkVersion() {
+        DBVersion version = em.find(DBVersion.class, DBVersion.DB_VERSION);
+        if (version == null || version.version != DBVersion.DB_VERSION)
+            throw new IllegalStateException("Database Scheme " + DBVersion.DB_VERSION + " not found. " +
+                    "The reason may be that the wrong database scheme is enrolled, please contact a System-Administrator");
     }
-
-    public String getKey() {
-        return attribute.getKey();
-    }
-
-    public Object getValue() {
-        return attribute.getValue();
-    }
-
-
 }

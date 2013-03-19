@@ -24,15 +24,11 @@
 package org.osiam.ng.test.actors
 
 import geb.Browser
-import groovy.util.slurpersupport.GPathResult
 
-import java.io.InputStreamReader
 import java.util.regex.Matcher
 
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.util.EntityUtils
-import org.json.JSONObject
-import org.json.JSONTokener
 import org.osiam.ng.test.clients.http.HttpClient
 import org.osiam.ng.test.clients.http.HttpResponse
 import org.osiam.ng.test.clients.rest.RestClient
@@ -52,7 +48,7 @@ class ClientTestActor {
     private final String accessTokenRequestUri
 
     /** The resource server's root resource URI. */
-    private final String rootResourceUri
+    private final String explicitUserResourceUri
 
     /** The {@code client_id} to authenticate the client with the authorization server. */
     private final String clientId
@@ -95,7 +91,7 @@ class ClientTestActor {
         this.userAgent = userAgent
         this.authorizationRequestUri = "${authorizationServerUri}/oauth/authorize"
         this.accessTokenRequestUri = "${authorizationServerUri}/oauth/token"
-        this.rootResourceUri = "${resourceServerUri}/secured/attributes"
+        this.explicitUserResourceUri = "${resourceServerUri}/User"
 
         this.clientId = clientId
         this.clientSecret = clientSecret
@@ -142,10 +138,10 @@ class ClientTestActor {
     /**
      * Tries to access the specified resource using the current {@link #accessToken}.
      * 
-     * @param resourcePath the resource's path relative to the {@link #rootResourceUri}.
+     * @param resourcePath the resource's path relative to the {@link #explicitUserResourceUri}.
      */
     public accessResource(String resourcePath = "", String accessToken = accessToken) {
-        HttpResponse resourceRespose = http.get("${rootResourceUri}/${resourcePath}?access_token=${accessToken}")
+        HttpResponse resourceRespose = http.get("${explicitUserResourceUri}/${resourcePath}?access_token=${accessToken}")
         def resource = resourceRespose.jsonBody
         EntityUtils.consume(resourceRespose.response.entity)
         return resource

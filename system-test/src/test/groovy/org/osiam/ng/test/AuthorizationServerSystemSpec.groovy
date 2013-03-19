@@ -110,7 +110,7 @@ class AuthorizationServerSystemSpec extends AbstractSystemSpec {
         client.accessToken
 
         then:
-        client.accessResource("")
+        client.accessResource("marissa")
     }
 
 

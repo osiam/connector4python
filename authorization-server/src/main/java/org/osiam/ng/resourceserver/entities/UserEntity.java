@@ -33,10 +33,10 @@ import java.util.List;
 /**
  * User Entity
  */
-@Entity(name = "scimuser")
+@Entity(name = "scim_user")
 @NamedQueries({
-        @NamedQuery(name = "getUserById", query = "SELECT u FROM scimuser u WHERE u.externalId = :externalId"),
-        @NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scimuser u WHERE u.userName = :username")
+        @NamedQuery(name = "getUserById", query = "SELECT u FROM scim_user u WHERE u.externalId = :externalId"),
+        @NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scim_user u WHERE u.userName = :username")
 })
 public class UserEntity implements UserDetails {
 
@@ -83,16 +83,16 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<EmailEntity> emails;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<PhoneNumberEntity> phoneNumbers;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<ImEntity> ims;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<PhotoEntity> photos;
 
     @OneToMany
@@ -104,14 +104,13 @@ public class UserEntity implements UserDetails {
     @OneToMany
     private List<EntitlementsEntity> entitlements;
 
-    @OneToMany
+    //needs to be eager fetched due to authorization decisions
+    @OneToMany(fetch = FetchType.EAGER)
     private List<RolesEntity> roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<X509CertificateEntity> x509Certificates;
 
-    //    @OneToMany
-//    @Transient
     @ElementCollection
     private List<String> any;
 

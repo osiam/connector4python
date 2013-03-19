@@ -34,7 +34,7 @@ import javax.persistence.Id;
 /**
  * Roles Entity
  */
-@Entity(name = "roles")
+@Entity(name = "scim_roles")
 public class RolesEntity implements GrantedAuthority{
 
     @Id

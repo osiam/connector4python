@@ -29,11 +29,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Phone Numbers Entity
  */
-@Entity(name = "phoneNumber")
+@Entity(name = "scim_phoneNumber")
 public class PhoneNumberEntity {
 
     @Id
@@ -45,6 +46,10 @@ public class PhoneNumberEntity {
 
     @Column
     private String type;
+
+    @ManyToOne
+    private UserEntity user;
+
 
 
     public long getId() {
@@ -76,5 +81,13 @@ public class PhoneNumberEntity {
                 setType(getType()).
                 setValue(getValue()).
                 build();
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

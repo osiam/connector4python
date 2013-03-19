@@ -21,26 +21,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.oauth2.mvc.resource
+package org.osiam.ng
 
+import org.osiam.ng.resourceserver.entities.DBVersion
 import spock.lang.Specification
 
-class PseudoAttributeControllerTest extends Specification {
-    def underTest = new PseudoAttributeController()
+import javax.persistence.EntityManager
 
-    def "should return ten generated attributes"() {
+class DataBaseSchemeVersionValidatorTest extends Specification {
+    def em = Mock(EntityManager)
+    def underTest = new DataBaseSchemeVersionValidator(em: em)
+
+    def "should not throw an exception if set version of database-scheme got found"() {
+        given:
+        def version = new DBVersion()
+
         when:
-        def attributes = underTest.getAttributes()
+        underTest.checkVersion()
         then:
-        attributes.size() == 10
+        1 * em.find(DBVersion, DBVersion.DB_VERSION) >> version
+
     }
 
-    def "should return one attribute"() {
+    def "should throw an exception if set version of database-scheme got not found"() {
         when:
-        def attribute = underTest.getAttribute(23)
+        underTest.checkVersion()
         then:
-        attribute.key == "23"
-        attribute.value == "val23"
+        def e = thrown(IllegalStateException)
+        e.message == "Database Scheme " + DBVersion.DB_VERSION +
+                " not found. The reason may be that the wrong database scheme is enrolled, please contact a System-Administrator"
     }
+
 
 }

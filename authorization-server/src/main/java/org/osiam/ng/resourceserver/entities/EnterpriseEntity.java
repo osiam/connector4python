@@ -34,7 +34,7 @@ import javax.persistence.*;
  * Time: 16:19
  * To change this template use File | Settings | File Templates.
  */
-@Entity(name = "enterprise")
+@Entity(name = "scim_enterprise")
 public class EnterpriseEntity {
 
     @Id

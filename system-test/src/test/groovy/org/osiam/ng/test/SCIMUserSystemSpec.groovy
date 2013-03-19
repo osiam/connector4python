@@ -21,24 +21,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver
 
-import spock.lang.Specification
 
-/**
- * Created with IntelliJ IDEA.
- * User: phil
- * Date: 06.03.13
- * Time: 14:24
- * To change this template use File | Settings | File Templates.
- */
-class AttributeTest extends Specification {
-    def "an attribute should contain a key and value"() {
+package org.osiam.ng.test
+
+
+class SCIMUserSystemSpec extends AbstractSystemSpec {
+
+    def "OSNG-10: the client should be able to access the requested user if it sends a valid access token"() {
+        given:
+        valid_access_token("GET", UUID.randomUUID().toString())
         when:
-        def attr = new Attribute("key", "val")
+        def result = client.accessResource("Fnordy")
         then:
-        attr.getKey() == "key"
-        attr.value == "val"
+        result.externalId == "Fnordy"
+
     }
+
+
 
 }

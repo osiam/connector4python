@@ -32,7 +32,7 @@ import java.util.UUID;
 /**
  * Group Entity
  */
-@Entity(name = "group")
+@Entity(name = "scim_group")
 public class GroupEntity {
 
     @Id

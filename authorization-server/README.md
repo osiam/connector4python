@@ -2,6 +2,7 @@
 
 This is the combined authorization and resource server of the OSIAM NG project.
 
+Right now only PostgreSQL is supported as a database.
 
 ## Build and Deployment
 
@@ -33,7 +34,13 @@ and provides
 
 ### Configuration
 
-Right now every username with the password "koala" gets accepted.
+To create the database scheme you have to execute init.sql. 
+
+This SQL-Script will create you all the needed tables as well as create a demo user called Marissa and a password 'koala'.
+
+Right now the password is, as you can see, in plaintext, when this changes then a command line tool 
+to create the first user will be delivered.
+
 
 The client credentials are as well hardcoded:
  * client_id=tonr
@@ -66,28 +73,18 @@ To get an overview of all known resources call:
 <http://localhost:8080/authorization-server>
 
 
-### Getting attributes
+### Getting User
 
-Attributes are secured, so, you need to provide a valid access token.
+Not supported right now.
 
-With 
+#### Getting an User
 
-<http://localhost:8080/authorization-server/secured/attributes?access_token=$YOUR_ACCESS_TOKEN>
+If you want to get a single user, you need to extend User with the external ID of the user:
 
-or 
-
-```sh
-curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/secured/attributes
-```
-
-you will get a list of accessible attributes.
-
-If you want to get a single attribute, you need to extend attributes with an id:
-
-<http://localhost:8080/authorization-server/secured/attributes/{id}?access_token=$YOUR_ACCESS_TOKEN>
+<http://localhost:8080/authorization-server/User/{id}?access_token=$YOUR_ACCESS_TOKEN>
 
 or 
 
 ```sh
-curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/secured/attributes/{id}
+curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/User/{id}
 ```

@@ -50,6 +50,14 @@ abstract class AbstractSystemSpec extends GebReportingSpec {
         user = new UserTestActor(browser, "marissa", "koala")
     }
 
+    def valid_access_token(def scope, def state){
+        client.requestAuthorization(scope, state)
+        user.login()
+        user.grantAccess()
+        client.requestAccessToken()
+    }
+
+
     def clearnup() {
     }
 }

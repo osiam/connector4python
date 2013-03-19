@@ -33,7 +33,7 @@ import javax.persistence.Id;
 /**
  * Address Entity
  */
-@Entity(name = "address")
+@Entity(name = "scim_address")
 public class AddressEntity {
 
     @Id
