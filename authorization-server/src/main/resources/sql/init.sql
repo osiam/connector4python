@@ -5,6 +5,11 @@ CREATE SEQUENCE hibernate_sequence
     NO MAXVALUE
     CACHE 1;
 
+
+CREATE TABLE database_scheme_version(
+  version double precision NOT NULL
+);
+
 --
 -- Name: scim_certificate; Type: TABLE; Schema: public;  
 --
@@ -264,6 +269,9 @@ CREATE TABLE scim_user_scim_roles (
 
 -- we need at least one role and one user
 SELECT pg_catalog.setval('hibernate_sequence', 3, false);
+
+
+INSERT INTO database_scheme_version (version) values (0.01);
 
 
 --
