@@ -23,15 +23,12 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Photos Entity
  */
-@Entity(name = "photo")
+@Entity(name = "scim_photo")
 public class PhotoEntity {
 
     @Id
@@ -43,6 +40,10 @@ public class PhotoEntity {
 
     @Column
     private String type;
+
+    @ManyToOne
+    private UserEntity user;
+
 
     public long getId() {
         return id;
@@ -66,5 +67,13 @@ public class PhotoEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

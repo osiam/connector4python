@@ -36,7 +36,7 @@ import java.util.UUID;
  * Time: 16:18
  * To change this template use File | Settings | File Templates.
  */
-@Entity(name = "manager")
+@Entity(name = "scim_manager")
 public class ManagerEntity {
 
     @Id

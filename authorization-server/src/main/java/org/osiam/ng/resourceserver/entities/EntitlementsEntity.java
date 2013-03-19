@@ -31,7 +31,7 @@ import javax.persistence.Id;
 /**
  * Entitlements Entity
  */
-@Entity(name = "entitlements")
+@Entity(name = "scim_entitlements")
 public class EntitlementsEntity {
 
     @Id

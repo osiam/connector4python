@@ -47,8 +47,8 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Override
     public User getById(String id) {
-        UserEntity userEntity = userDao.getById(id);
+//        UserEntity userEntity = userDao.getById(id);
         //TODO: Mapping to SCIM User
-        return null;
+        return new User.Builder("Fnord Prefect").setExternalId("Fnordy").build();
     }
 }

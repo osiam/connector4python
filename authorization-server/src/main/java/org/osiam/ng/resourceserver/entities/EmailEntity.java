@@ -23,15 +23,12 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Email Entity
  */
-@Entity(name = "email")
+@Entity(name = "scim_email")
 public class EmailEntity {
 
     @Id
@@ -44,8 +41,11 @@ public class EmailEntity {
     @Column
     private String type;
 
-    @Column
+    @Column(name = "postgresql_does_not_like_primary")
     private boolean primary;
+
+    @ManyToOne
+    private UserEntity user;
 
     public long getId() {
         return id;
@@ -77,5 +77,13 @@ public class EmailEntity {
 
     public void setPrimary(boolean primary) {
         this.primary = primary;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

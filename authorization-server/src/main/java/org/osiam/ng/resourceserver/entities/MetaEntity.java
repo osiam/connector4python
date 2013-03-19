@@ -36,7 +36,7 @@ import java.util.GregorianCalendar;
  * Time: 14:35
  * To change this template use File | Settings | File Templates.
  */
-@Entity(name = "meta")
+@Entity(name = "scim_meta")
 public class MetaEntity {
 
     @Id

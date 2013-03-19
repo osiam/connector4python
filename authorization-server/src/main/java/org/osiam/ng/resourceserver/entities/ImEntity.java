@@ -23,15 +23,12 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Instant messaging Entity
  */
-@Entity(name = "im")
+@Entity(name = "scim_im")
 public class ImEntity {
 
     @Id
@@ -43,6 +40,10 @@ public class ImEntity {
 
     @Column
     private String type;
+
+    @ManyToOne
+    private UserEntity user;
+
 
 
     public long getId() {
@@ -67,5 +68,13 @@ public class ImEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

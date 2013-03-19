@@ -21,26 +21,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.oauth2.mvc.resource
 
-import spock.lang.Specification
 
-class PseudoAttributeControllerTest extends Specification {
-    def underTest = new PseudoAttributeController()
+package org.osiam.ng.test
 
-    def "should return ten generated attributes"() {
+
+class SCIMUserSystemSpec extends AbstractSystemSpec {
+
+    def "OSNG-10: the client should be able to access the requested user if it sends a valid access token"() {
+        given:
+        valid_access_token("GET", UUID.randomUUID().toString())
         when:
-        def attributes = underTest.getAttributes()
+        def result = client.accessResource("Fnordy")
         then:
-        attributes.size() == 10
+        result.externalId == "Fnordy"
+
     }
 
-    def "should return one attribute"() {
-        when:
-        def attribute = underTest.getAttribute(23)
-        then:
-        attribute.key == "23"
-        attribute.value == "val23"
+    def valid_access_token(def scope, def state){
+        client.requestAuthorization(scope, state)
+        user.login()
+        user.grantAccess()
+        client.requestAccessToken()
     }
+
 
 }

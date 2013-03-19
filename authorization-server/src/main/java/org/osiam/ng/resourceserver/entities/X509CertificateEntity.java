@@ -23,15 +23,12 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * X509 Certificates Entity
  */
-@Entity(name = "certificate")
+@Entity(name = "scim_certificate")
 public class X509CertificateEntity {
 
     @Id
@@ -40,6 +37,10 @@ public class X509CertificateEntity {
 
     @Column
     private String value;
+
+    @ManyToOne
+    private UserEntity user;
+
 
 
     public long getId() {
@@ -56,5 +57,13 @@ public class X509CertificateEntity {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }
