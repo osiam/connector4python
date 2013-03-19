@@ -25,7 +25,6 @@ package org.osiam.ng.resourceserver.dao;
 
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
-import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
@@ -47,12 +46,9 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Override
     public User getById(String id) {
-        //TODO: Mapping to SCIM User
-        try {
-            UserEntity userEntity = userDao.getById(id);
-        } catch (ResourceNotFoundException e) {
+        UserEntity userEntity = userDao.getById(id);
 
-        }
-        return new User.Builder("userName@ong10.de").setNickName("Jabba the Hutt").build();
+        EntityToScimMapper entityToScimMapper = new EntityToScimMapper();
+        return entityToScimMapper.entityUserToScim(userEntity);
     }
 }

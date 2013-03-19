@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.Address;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -133,5 +135,16 @@ public class AddressEntity {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Address toScim() {
+        return new Address.Builder().
+                setCountry(getCountry()).
+                setFormatted(getFormatted()).
+                setLocality(getLocality()).
+                setPostalCode(String.valueOf(getPostalCode())).
+                setRegion(getRegion()).
+                setStreetAddress(getStreetAddress()).
+                build();
     }
 }

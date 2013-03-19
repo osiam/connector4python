@@ -24,6 +24,7 @@
 package org.osiam.ng.resourceserver.entities;
 
 import org.springframework.security.core.GrantedAuthority;
+import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,5 +64,11 @@ public class RolesEntity implements GrantedAuthority{
     @Override
     public String getAuthority() {
         return "ROLE_"+value;
+    }
+
+    public MultiValuedAttribute toScim() {
+        return new MultiValuedAttribute.Builder().
+                setValue(getValue()).
+                build();
     }
 }

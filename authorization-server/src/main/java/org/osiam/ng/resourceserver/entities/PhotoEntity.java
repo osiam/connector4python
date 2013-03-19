@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.MultiValuedAttribute;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -66,5 +68,12 @@ public class PhotoEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public MultiValuedAttribute toScim() {
+        return new MultiValuedAttribute.Builder().
+                setType(getType()).
+                setValue(getValue()).
+                build();
     }
 }

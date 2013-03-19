@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.MultiValuedAttribute;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -77,5 +79,13 @@ public class EmailEntity {
 
     public void setPrimary(boolean primary) {
         this.primary = primary;
+    }
+
+    public MultiValuedAttribute toScim() {
+        return new MultiValuedAttribute.Builder().
+                setPrimary(isPrimary()).
+                setType(getType()).
+                setValue(getValue()).
+                build();
     }
 }

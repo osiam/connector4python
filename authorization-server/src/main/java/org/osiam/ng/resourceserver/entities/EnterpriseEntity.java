@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.Enterprise;
+
 import javax.persistence.*;
 
 /**
@@ -111,5 +113,16 @@ public class EnterpriseEntity {
 
     public void setManager(ManagerEntity manager) {
         this.manager = manager;
+    }
+
+    public Enterprise toScim() {
+        return new Enterprise.Builder().
+                setCostCenter(getCostCenter()).
+                setDepartment(getDepartment()).
+                setDivision(getDivision()).
+                setEmployeeNumber(getEmployeeNumber()).
+                setManager(getManager().toScim()).
+                setOrganization(getOrganization()).
+                build();
     }
 }
