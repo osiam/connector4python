@@ -35,7 +35,7 @@ public abstract class CoreResource  extends Resource{
         this.externalId = builder.externalId;
     }
 
-    public static class Builder extends Resource.Builder {
+    public abstract static class Builder extends Resource.Builder {
         protected String externalId;
 
         public Builder setExternalId(String externalId) {

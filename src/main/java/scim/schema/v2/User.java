@@ -88,7 +88,7 @@ public class User extends CoreResource {
 
     }
 
-    public static class Builder extends CoreResource.Builder{
+    public static class Builder extends CoreResource.Builder {
         private final String userName;
 
 
@@ -229,11 +229,10 @@ public class User extends CoreResource {
             return this;
         }
 
+        @Override
         public User build() {
             return new User(this);
         }
-
-
     }
 
 

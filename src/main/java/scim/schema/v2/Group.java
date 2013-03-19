@@ -68,6 +68,7 @@ public class Group extends CoreResource{
         public Group build(){
             return new Group(this);
         }
+
     }
 
 

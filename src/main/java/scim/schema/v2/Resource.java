@@ -36,7 +36,7 @@ public abstract class Resource {
         this.meta = builder.meta;
     }
 
-    public static class Builder {
+    public abstract static class Builder {
         protected String id;
         protected Meta meta;
 
@@ -49,6 +49,8 @@ public abstract class Resource {
             this.meta = meta;
             return this;
         }
+
+        public abstract <T> T build();
     }
 
     /**
