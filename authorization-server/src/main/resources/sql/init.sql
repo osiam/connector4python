@@ -7,7 +7,7 @@ CREATE SEQUENCE hibernate_sequence
 
 
 CREATE TABLE database_scheme_version(
-  version double precision NOT NULL
+  version double precision NOT NULL PRIMARY KEY
 );
 
 --

@@ -33,10 +33,13 @@ class DataBaseSchemeVersionValidatorTest extends Specification {
     def underTest = new DataBaseSchemeVersionValidator(em: em)
 
     def "should not throw an exception if set version of database-scheme got found"() {
+        given:
+        def version = new DBVersion()
+
         when:
         underTest.checkVersion()
         then:
-        1 * em.find(DBVersion, DBVersion.DB_VERSION) >> Mock(DBVersion)
+        1 * em.find(DBVersion, DBVersion.DB_VERSION) >> version
 
     }
 
