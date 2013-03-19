@@ -25,7 +25,7 @@ package org.osiam.ng.resourceserver.dao;
 
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
-import org.springframework.stereotype.Component;
+import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
