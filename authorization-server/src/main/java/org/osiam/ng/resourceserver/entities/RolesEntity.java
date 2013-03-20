@@ -37,6 +37,8 @@ import javax.persistence.Id;
 @Entity(name = "scim_roles")
 public class RolesEntity implements GrantedAuthority{
 
+    private static final long serialVersionUID = 1546546513218916131L;
+
     @Id
     @GeneratedValue
     private long id;

@@ -50,7 +50,7 @@ public class EntityToScimMapper {
         for (X509CertificateEntity x509CertificateEntity : x509CertificateEntities) {
             x509Certificates.getX509Certificate().add(x509CertificateEntity.toScim());
         }
-        return null;
+        return x509Certificates;
     }
 
     private User.Roles entityRolesToScim(List<RolesEntity> rolesEntities) {
@@ -58,7 +58,7 @@ public class EntityToScimMapper {
         for (RolesEntity rolesEntity : rolesEntities) {
             roles.getRole().add(rolesEntity.toScim());
         }
-        return null;
+        return roles;
     }
 
     private User.Photos entityPhotosToScim(List<PhotoEntity> photoEntities) {
@@ -66,7 +66,7 @@ public class EntityToScimMapper {
         for (PhotoEntity photoEntity : photoEntities) {
             photos.getPhoto().add(photoEntity.toScim());
         }
-        return null;
+        return photos;
     }
 
     private User.PhoneNumbers entityPhonenumbersToScim(List<PhoneNumberEntity> phoneNumberEntities) {
@@ -74,7 +74,7 @@ public class EntityToScimMapper {
         for (PhoneNumberEntity phoneNumberEntity : phoneNumberEntities) {
             phoneNumbers.getPhoneNumber().add(phoneNumberEntity.toScim());
         }
-        return null;
+        return phoneNumbers;
     }
 
     private User.Ims entityImsToScim(List<ImEntity> imEntities) {

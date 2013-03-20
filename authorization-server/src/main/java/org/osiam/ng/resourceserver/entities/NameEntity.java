@@ -41,22 +41,22 @@ public class NameEntity {
     private long id;
 
     @Column
-    protected String formatted;
+    private String formatted;
 
     @Column
-    protected String familyName;
+    private String familyName;
 
     @Column
-    protected String givenName;
+    private String givenName;
 
     @Column
-    protected String middleName;
+    private String middleName;
 
     @Column
-    protected String honorificPrefix;
+    private String honorificPrefix;
 
     @Column
-    protected String honorificSuffix;
+    private String honorificSuffix;
 
     public long getId() {
         return id;

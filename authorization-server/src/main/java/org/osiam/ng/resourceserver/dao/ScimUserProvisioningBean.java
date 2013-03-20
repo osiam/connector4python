@@ -44,7 +44,7 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     private UserDAO userDao;
 
     @Inject
-    EntityToScimMapper entityToScimMapper;
+    private EntityToScimMapper entityToScimMapper;
 
 
     @Override
