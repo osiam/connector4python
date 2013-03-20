@@ -38,19 +38,33 @@ class DataBaseSchemeVersionValidatorTest extends Specification {
 
         when:
         underTest.checkVersion()
+
         then:
         1 * em.find(DBVersion, DBVersion.DB_VERSION) >> version
-
     }
 
     def "should throw an exception if set version of database-scheme got not found"() {
         when:
         underTest.checkVersion()
+
         then:
         def e = thrown(IllegalStateException)
         e.message == "Database Scheme " + DBVersion.DB_VERSION +
                 " not found. The reason may be that the wrong database scheme is enrolled, please contact a System-Administrator"
     }
 
+    def "should throw an exception if the versions of database-scheme are not equals"() {
+        given:
+        def version = new DBVersion()
+        version.version = 0.02
+        em.find(DBVersion, DBVersion.DB_VERSION) >> version
 
+        when:
+        underTest.checkVersion()
+
+        then:
+        def e = thrown(IllegalStateException)
+        e.message == "Database Scheme " + DBVersion.DB_VERSION +
+                " not found. The reason may be that the wrong database scheme is enrolled, please contact a System-Administrator"
+    }
 }
