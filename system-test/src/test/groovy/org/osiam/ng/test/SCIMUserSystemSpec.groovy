@@ -32,9 +32,9 @@ class SCIMUserSystemSpec extends AbstractSystemSpec {
         given:
         valid_access_token("GET", UUID.randomUUID().toString())
         when:
-        def result = client.accessResource("Fnordy")
+        def result = client.accessResource("marissa")
         then:
-        result.externalId == "Fnordy"
+        result.externalId == "marissa"
 
     }
 
