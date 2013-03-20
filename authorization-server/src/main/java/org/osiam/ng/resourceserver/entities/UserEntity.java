@@ -40,6 +40,9 @@ import java.util.List;
 })
 public class UserEntity implements UserDetails {
 
+    private static final long serialVersionUID = 4265464684797943613L;
+    private static final String MAPPING_NAME = "user";
+
     @Id
     @GeneratedValue
     private long id;
@@ -83,16 +86,16 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = MAPPING_NAME)
     private List<EmailEntity> emails;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = MAPPING_NAME)
     private List<PhoneNumberEntity> phoneNumbers;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = MAPPING_NAME)
     private List<ImEntity> ims;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = MAPPING_NAME)
     private List<PhotoEntity> photos;
 
     @OneToMany
@@ -108,7 +111,7 @@ public class UserEntity implements UserDetails {
     @OneToMany(fetch = FetchType.EAGER)
     private List<RolesEntity> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = MAPPING_NAME)
     private List<X509CertificateEntity> x509Certificates;
 
     @ElementCollection

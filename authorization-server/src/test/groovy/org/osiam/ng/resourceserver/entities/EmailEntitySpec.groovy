@@ -35,6 +35,7 @@ import spock.lang.Specification
 class EmailEntitySpec extends Specification {
 
     EmailEntity emailEntity = new EmailEntity()
+    def userEntity = Mock(UserEntity)
 
     def "setter and getter for the Id should be present"() {
         when:
@@ -66,5 +67,23 @@ class EmailEntitySpec extends Specification {
 
         then:
         emailEntity.isPrimary() == true
+    }
+
+    def "setter and getter for user should be present"() {
+        when:
+        emailEntity.setUser(userEntity)
+
+        then:
+        emailEntity.getUser() == userEntity
+    }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = emailEntity.toScim()
+
+        then:
+        multivalue.type == emailEntity.type
+        multivalue.value == emailEntity.value
+        multivalue.isPrimary() == emailEntity.primary
     }
 }

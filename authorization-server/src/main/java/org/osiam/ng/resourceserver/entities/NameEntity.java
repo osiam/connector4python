@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.Name;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,22 +41,22 @@ public class NameEntity {
     private long id;
 
     @Column
-    protected String formatted;
+    private String formatted;
 
     @Column
-    protected String familyName;
+    private String familyName;
 
     @Column
-    protected String givenName;
+    private String givenName;
 
     @Column
-    protected String middleName;
+    private String middleName;
 
     @Column
-    protected String honorificPrefix;
+    private String honorificPrefix;
 
     @Column
-    protected String honorificSuffix;
+    private String honorificSuffix;
 
     public long getId() {
         return id;
@@ -110,5 +112,16 @@ public class NameEntity {
 
     public void setHonorificSuffix(String honorificSuffix) {
         this.honorificSuffix = honorificSuffix;
+    }
+
+    public Name toScim() {
+        return new Name.Builder().
+                setFamilyName(getFamilyName()).
+                setFormatted(getFormatted()).
+                setGivenName(getGivenName()).
+                setHonorificPrefix(getHonorificPrefix()).
+                setHonorificSuffix(getHonorificSuffix()).
+                setMiddleName(getMiddleName()).
+                build();
     }
 }

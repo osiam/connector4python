@@ -23,6 +23,12 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.MultiValuedAttribute;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
@@ -57,6 +63,12 @@ public class X509CertificateEntity {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public MultiValuedAttribute toScim() {
+        return new MultiValuedAttribute.Builder().
+                setValue(getValue()).
+                build();
     }
 
     public UserEntity getUser() {

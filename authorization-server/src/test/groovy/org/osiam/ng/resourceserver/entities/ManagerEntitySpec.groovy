@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.Manager
 import spock.lang.Specification
 
 /**
@@ -61,5 +62,13 @@ class ManagerEntitySpec extends Specification {
 
         then:
         managerEntity.getDisplayName() == "John Smith"
+    }
+
+    def "mapping to scim should be present"() {
+        when:
+        def manager = managerEntity.toScim()
+
+        then:
+        manager != null
     }
 }

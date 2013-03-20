@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.Address
 import spock.lang.Specification
 
 /**
@@ -108,4 +109,16 @@ class AddressEntitySpec extends Specification {
         addressEntity.isPrimary() == true
     }
 
+    def "mapping to scim should be present"() {
+        when:
+        def address = addressEntity.toScim()
+
+        then:
+        address.country == addressEntity.country
+        address.formatted == addressEntity.formatted
+        address.locality == addressEntity.locality
+        address.postalCode == addressEntity.postalCode.toString()
+        address.region == addressEntity.region
+        address.streetAddress == addressEntity.streetAddress
+    }
 }

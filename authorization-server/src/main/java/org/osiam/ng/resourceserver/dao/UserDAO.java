@@ -57,8 +57,9 @@ public class UserDAO {
 
     private UserEntity getSingleUserEntity(Query query, String identifier) {
         List result = query.getResultList();
-        if (result.isEmpty())
+        if (result.isEmpty()) {
             throw new ResourceNotFoundException("No user " + identifier + " found.");
+        }
         return (UserEntity) result.get(0);
     }
 }

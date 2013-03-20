@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.MultiValuedAttribute;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
@@ -87,5 +89,12 @@ public class GroupEntity {
 
     public void setAny(String any) {
         this.any = any;
+    }
+
+    public MultiValuedAttribute toScim() {
+        return new MultiValuedAttribute.Builder().
+                setDisplay(getDisplayName()).
+                setValue(getValue()).
+                build();
     }
 }

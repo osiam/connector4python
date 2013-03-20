@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.Manager;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -71,5 +73,9 @@ public class ManagerEntity {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Manager toScim() {
+        return new Manager(getManagerId() != null ? getManagerId().toString() : null, getDisplayName());
     }
 }

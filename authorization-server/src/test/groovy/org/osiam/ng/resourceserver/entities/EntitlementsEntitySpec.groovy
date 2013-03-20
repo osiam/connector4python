@@ -51,4 +51,12 @@ class EntitlementsEntitySpec extends Specification {
         then:
         entitlementsEntity.getValue() == "someValue"
     }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = entitlementsEntity.toScim()
+
+        then:
+        multivalue.value == entitlementsEntity.value
+    }
 }

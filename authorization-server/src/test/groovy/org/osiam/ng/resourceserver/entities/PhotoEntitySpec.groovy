@@ -35,6 +35,7 @@ import spock.lang.Specification
 class PhotoEntitySpec extends Specification {
 
     PhotoEntity photoEntity = new PhotoEntity()
+    def userEntity = Mock(UserEntity)
 
     def "setter and getter for the Id should be present"() {
         when:
@@ -58,5 +59,22 @@ class PhotoEntitySpec extends Specification {
 
         then:
         photoEntity.getType() == "thumbnail"
+    }
+
+    def "setter and getter for the user should be present"() {
+        when:
+        photoEntity.setUser(userEntity)
+
+        then:
+        photoEntity.getUser() == userEntity
+    }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = photoEntity.toScim()
+
+        then:
+        multivalue.value == photoEntity.value
+        multivalue.type == photoEntity.type
     }
 }

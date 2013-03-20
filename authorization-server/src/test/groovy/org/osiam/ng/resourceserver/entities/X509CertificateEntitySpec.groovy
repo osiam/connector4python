@@ -35,7 +35,7 @@ import spock.lang.Specification
 class X509CertificateEntitySpec extends Specification {
 
     X509CertificateEntity certificateEntity = new X509CertificateEntity()
-
+    def userEntity = Mock(UserEntity)
 
     def "setter and getter for the Id should be present"() {
         when:
@@ -51,5 +51,21 @@ class X509CertificateEntitySpec extends Specification {
 
         then:
         certificateEntity.getValue() == "someValue"
+    }
+
+    def "setter and getter for the user should be present"() {
+        when:
+        certificateEntity.setUser(userEntity)
+
+        then:
+        certificateEntity.getUser() == userEntity
+    }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = certificateEntity.toScim()
+
+        then:
+        multivalue.value == certificateEntity.value
     }
 }

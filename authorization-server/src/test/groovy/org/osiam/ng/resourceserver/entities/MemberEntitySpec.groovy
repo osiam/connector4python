@@ -62,4 +62,13 @@ class MemberEntitySpec extends Specification {
         then:
         memberEntity.getDisplay() == "John Do"
     }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = memberEntity.toScim()
+
+        then:
+        multivalue.value == memberEntity.value
+        multivalue.display == memberEntity.display
+    }
 }

@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.Enterprise
 import spock.lang.Specification
 
 /**
@@ -93,5 +94,18 @@ class EnterpriseEntitySpec extends Specification {
 
         then:
         enterpriseEntity.getManager() == manager
+    }
+
+    def "mapping to scim should be present"() {
+        when:
+        def enterprise = enterpriseEntity.toScim()
+
+        then:
+        enterprise.costCenter == enterpriseEntity.costCenter
+        enterprise.department == enterpriseEntity.department
+        enterprise.division == enterpriseEntity.division
+        enterprise.employeeNumber == enterpriseEntity.employeeNumber
+        enterprise.manager == enterpriseEntity.manager
+        enterprise.organization == enterpriseEntity.organization
     }
 }

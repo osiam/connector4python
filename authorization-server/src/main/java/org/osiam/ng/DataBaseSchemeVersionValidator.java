@@ -40,8 +40,9 @@ public class DataBaseSchemeVersionValidator {
     @PostConstruct
     public void checkVersion() {
         DBVersion version = em.find(DBVersion.class, DBVersion.DB_VERSION);
-        if (version == null || version.version != DBVersion.DB_VERSION)
+        if (version == null || !new Double(version.version).equals(DBVersion.DB_VERSION)) {
             throw new IllegalStateException("Database Scheme " + DBVersion.DB_VERSION + " not found. " +
                     "The reason may be that the wrong database scheme is enrolled, please contact a System-Administrator");
+        }
     }
 }

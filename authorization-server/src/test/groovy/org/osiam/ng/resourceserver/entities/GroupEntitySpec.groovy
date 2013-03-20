@@ -83,4 +83,13 @@ class GroupEntitySpec extends Specification {
         then:
         groupEntity.getAny() == "Some Object"
     }
+
+    def "mapping to scim should be present"() {
+        when:
+        def multivalue = groupEntity.toScim()
+
+        then:
+        multivalue.value == groupEntity.value
+        multivalue.display == groupEntity.displayName
+    }
 }
