@@ -93,6 +93,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
                 return new HashSet<>(Arrays.asList("http://localhost:8080/oauth2-client/accessToken",
                         "http://ong00-devel00:8080/oauth2-client/accessToken",
                         "http://ong01-devel00:8080/oauth2-client/accessToken",
+                        "http://ong01-systemtest.lan.tarent.de:8080/oauth2-client/accessToken",
                         "http://ong00-systemtest:8080/oauth2-client/accessToken"));
             }
 
