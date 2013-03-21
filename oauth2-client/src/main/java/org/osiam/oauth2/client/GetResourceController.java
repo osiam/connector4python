@@ -36,10 +36,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class GetResourceController {
 
     @RequestMapping("/resource")
-    public String redirectToResourceServer(HttpServletRequest req, @RequestParam String access_token)
+    public String redirectToResourceServer(HttpServletRequest req, @RequestParam String access_token, @RequestParam String username)
             throws ServletException, IOException {
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String url = environment + "/authorization-server/secured/attributes?access_token=" + access_token;
+        String url = environment + "/authorization-server/User/"+ username + "?access_token=" + access_token;
         return "redirect:" + url;
     }
 }

@@ -36,8 +36,10 @@
     <p>Auth code: <%= request.getAttribute("code") %></p>
     <p>Authorization-Server response:</p>
     <p><%= request.getAttribute("response") %></p>
+    <h2>Search Resource:</h2>
     <form action="resource" method="post">
         <input id="hidden_access" type="hidden" name="access_token" value="<%= request.getAttribute("access_token") %>" />
+        <label>Username:<br><input id="username" name="username" type="text"></label><br>
         <input type="submit" value="Get Resource"/>
     </form>
 </body>

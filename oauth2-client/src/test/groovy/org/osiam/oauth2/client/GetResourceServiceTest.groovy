@@ -36,8 +36,8 @@ class GetResourceServiceTest extends Specification {
         httpRequest.getScheme() >> "http"
         httpRequest.getServerName() >> "localhorst";
         when:
-        def e = underTest.redirectToResourceServer(httpRequest, "abc")
+        def e = underTest.redirectToResourceServer(httpRequest, "abc", "username")
         then:
-        e == "redirect:http://localhorst:8080/authorization-server/secured/attributes?access_token=abc"
+        e == "redirect:http://localhorst:8080/authorization-server/User/username?access_token=abc"
     }
 }
