@@ -51,14 +51,20 @@ public class UserController {
     @Inject
     private SCIMUserProvisioning scimUserProvisioning;
 
+
+    public void setScimUserProvisioning(SCIMUserProvisioning scimUserProvisioning) {
+        this.scimUserProvisioning = scimUserProvisioning;
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public User getUser(@PathVariable final String id) {
         return scimUserProvisioning.getById(id);
     }
 
-    public void setScimUserProvisioning(SCIMUserProvisioning scimUserProvisioning) {
-        this.scimUserProvisioning = scimUserProvisioning;
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    public User createUser(@PathVariable final User user) {
+        return scimUserProvisioning.createUser(user);
     }
-
 }

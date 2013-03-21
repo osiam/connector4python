@@ -46,4 +46,15 @@ class UserControllerTest extends Specification {
         result == user
     }
 
+    def "should return the user previously created"() {
+        given:
+        def user = Mock(User)
+
+        when:
+        def result = underTest.createUser(user)
+
+        then:
+        1 * provisioning.createUser(user) >> user
+        result == user
+    }
 }

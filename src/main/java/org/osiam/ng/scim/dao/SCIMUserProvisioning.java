@@ -41,4 +41,13 @@ public interface SCIMUserProvisioning {
      *          if no user with the given id got found
      */
     User getById(String id);
+
+
+    /**
+     * This method creates a user.
+     *
+     * @param user A user representation which should be created
+     * @return the created user representation
+     */
+    User createUser(User user);
 }
