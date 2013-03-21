@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.Name
 import spock.lang.Specification
 
 /**
@@ -103,5 +104,23 @@ class NameEntitySpec extends Specification {
         name.honorificPrefix == nameEntity.honorificPrefix
         name.honorificSuffix == nameEntity.honorificSuffix
         name.middleName == nameEntity.middleName
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        Name name = new Name.Builder().
+                setFamilyName("familyName").
+                setFormatted("formattedName").
+                setGivenName("givenName").
+                setHonorificPrefix("prefix").
+                setHonorificSuffix("suffix").
+                setMiddleName("middleName").
+                build()
+
+        when:
+        def result = NameEntity.fromScim(name)
+
+        then:
+        result != null
     }
 }

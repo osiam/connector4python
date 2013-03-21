@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 /**
@@ -67,5 +68,18 @@ class X509CertificateEntitySpec extends Specification {
 
         then:
         multivalue.value == certificateEntity.value
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                build()
+
+        when:
+        def result = X509CertificateEntity.fromScim(multiValuedAttribute)
+
+        then:
+        result != null
     }
 }

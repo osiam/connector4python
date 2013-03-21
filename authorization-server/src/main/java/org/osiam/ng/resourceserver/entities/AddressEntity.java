@@ -73,7 +73,7 @@ public class AddressEntity {
         this.id = id;
     }
 
-    public boolean setPostgresql_does_not_like_primary() {
+    public boolean isPrimary() {
         return primary;
     }
 
@@ -154,5 +154,18 @@ public class AddressEntity {
                 setRegion(getRegion()).
                 setStreetAddress(getStreetAddress()).
                 build();
+    }
+
+    public static AddressEntity fromScim(Address address) {
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setCountry(address.getCountry());
+        addressEntity.setFormatted(address.getFormatted());
+        addressEntity.setLocality(address.getLocality());
+        addressEntity.setPostalCode(Integer.parseInt(address.getPostalCode()));
+        addressEntity.setPrimary(address.isPrimary());
+        addressEntity.setRegion(address.getRegion());
+        addressEntity.setStreetAddress(address.getStreetAddress());
+        addressEntity.setType(address.getType());
+        return addressEntity;
     }
 }

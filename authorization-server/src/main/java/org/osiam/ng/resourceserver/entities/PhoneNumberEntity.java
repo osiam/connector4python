@@ -76,6 +76,14 @@ public class PhoneNumberEntity {
         this.type = type;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     public MultiValuedAttribute toScim() {
         return new MultiValuedAttribute.Builder().
                 setType(getType()).
@@ -83,11 +91,10 @@ public class PhoneNumberEntity {
                 build();
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public static PhoneNumberEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        PhoneNumberEntity phoneNumberEntity = new PhoneNumberEntity();
+        phoneNumberEntity.setType(multiValuedAttribute.getType());
+        phoneNumberEntity.setValue(multiValuedAttribute.getValue().toString());
+        return phoneNumberEntity;
     }
 }

@@ -75,6 +75,14 @@ public class PhotoEntity {
         this.type = type;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     public MultiValuedAttribute toScim() {
         return new MultiValuedAttribute.Builder().
                 setType(getType()).
@@ -82,11 +90,10 @@ public class PhotoEntity {
                 build();
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public static PhotoEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        PhotoEntity photoEntity = new PhotoEntity();
+        photoEntity.setType(multiValuedAttribute.getType());
+        photoEntity.setValue(multiValuedAttribute.getValue().toString());
+        return photoEntity;
     }
 }

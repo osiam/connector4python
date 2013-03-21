@@ -43,6 +43,11 @@ public class UserDAO {
         this.em = em;
     }
 
+    public UserEntity createUser (UserEntity userEntity) {
+        em.persist(userEntity);
+        return getByUsername(userEntity.getUsername());
+    }
+
     public UserEntity getById(String id) {
         Query query = em.createNamedQuery("getUserById");
         query.setParameter("externalId", id);

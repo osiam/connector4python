@@ -124,4 +124,15 @@ public class NameEntity {
                 setMiddleName(getMiddleName()).
                 build();
     }
+
+    public static NameEntity fromScim(Name name) {
+        NameEntity nameEntity = new NameEntity();
+        nameEntity.setFamilyName(name.getFamilyName());
+        nameEntity.setFormatted(name.getFormatted());
+        nameEntity.setGivenName(name.getGivenName());
+        nameEntity.setHonorificPrefix(name.getHonorificPrefix());
+        nameEntity.setHonorificSuffix(name.getHonorificSuffix());
+        nameEntity.setMiddleName(name.getMiddleName());
+        return nameEntity;
+    }
 }

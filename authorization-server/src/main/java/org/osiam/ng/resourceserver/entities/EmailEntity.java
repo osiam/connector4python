@@ -85,6 +85,14 @@ public class EmailEntity {
         this.primary = primary;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     public MultiValuedAttribute toScim() {
         return new MultiValuedAttribute.Builder().
                 setPrimary(isPrimary()).
@@ -93,11 +101,11 @@ public class EmailEntity {
                 build();
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public static EmailEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        EmailEntity emailEntity = new EmailEntity();
+        emailEntity.setType(multiValuedAttribute.getType());
+        emailEntity.setValue(multiValuedAttribute.getValue().toString());
+        emailEntity.setPrimary(multiValuedAttribute.isPrimary());
+        return emailEntity;
     }
 }

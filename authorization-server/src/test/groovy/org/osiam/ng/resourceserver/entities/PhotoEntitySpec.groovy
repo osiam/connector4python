@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 /**
@@ -76,5 +77,19 @@ class PhotoEntitySpec extends Specification {
         then:
         multivalue.value == photoEntity.value
         multivalue.type == photoEntity.type
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                setType("type").
+                build()
+
+        when:
+        def result = PhotoEntity.fromScim(multiValuedAttribute)
+
+        then:
+        result != null
     }
 }

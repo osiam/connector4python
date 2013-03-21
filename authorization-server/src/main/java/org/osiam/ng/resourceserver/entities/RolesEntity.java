@@ -73,4 +73,10 @@ public class RolesEntity implements GrantedAuthority{
                 setValue(getValue()).
                 build();
     }
+
+    public static RolesEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        RolesEntity rolesEntity = new RolesEntity();
+        rolesEntity.setValue(multiValuedAttribute.getValue().toString());
+        return rolesEntity;
+    }
 }

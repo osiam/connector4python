@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 /**
@@ -76,5 +77,19 @@ class PhoneNumberEntitySpec extends Specification {
         then:
         multivalue.value == phoneNumberEntity.value
         multivalue.type == phoneNumberEntity.type
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        MultiValuedAttribute phoneNumber = new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                setType("type").
+                build()
+
+        when:
+        def result = PhoneNumberEntity.fromScim(phoneNumber)
+
+        then:
+        result != null
     }
 }

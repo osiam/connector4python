@@ -97,4 +97,11 @@ public class GroupEntity {
                 setValue(getValue()).
                 build();
     }
+
+    public static GroupEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        GroupEntity groupEntity = new GroupEntity();
+        groupEntity.setDisplayName(multiValuedAttribute.getDisplay());
+        groupEntity.setValue(UUID.fromString(multiValuedAttribute.getValue().toString()));
+        return groupEntity;
+    }
 }

@@ -24,6 +24,7 @@
 package org.osiam.ng.resourceserver.entities
 
 import org.springframework.security.core.GrantedAuthority
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 /**
@@ -69,5 +70,18 @@ class RolesEntitySpec extends Specification {
 
         then:
         multivalue.value == rolesEntity.value
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        MultiValuedAttribute attribute = new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                build()
+
+        when:
+        def result = RolesEntity.fromScim(attribute)
+
+        then:
+        result != null
     }
 }

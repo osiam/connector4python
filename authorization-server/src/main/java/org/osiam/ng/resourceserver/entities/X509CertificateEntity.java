@@ -65,17 +65,23 @@ public class X509CertificateEntity {
         this.value = value;
     }
 
-    public MultiValuedAttribute toScim() {
-        return new MultiValuedAttribute.Builder().
-                setValue(getValue()).
-                build();
-    }
-
     public UserEntity getUser() {
         return user;
     }
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public MultiValuedAttribute toScim() {
+        return new MultiValuedAttribute.Builder().
+                setValue(getValue()).
+                build();
+    }
+
+    public static X509CertificateEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        X509CertificateEntity x509CertificateEntity = new X509CertificateEntity();
+        x509CertificateEntity.setValue(multiValuedAttribute.getValue().toString());
+        return x509CertificateEntity;
     }
 }

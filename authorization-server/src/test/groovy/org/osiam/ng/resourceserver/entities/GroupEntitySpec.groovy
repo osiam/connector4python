@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 /**
@@ -91,5 +92,18 @@ class GroupEntitySpec extends Specification {
         then:
         multivalue.value == groupEntity.value
         multivalue.display == groupEntity.displayName
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
+                setValue(UUID.randomUUID().toString()).
+                setDisplay("display").
+                build()
+        when:
+        def result = GroupEntity.fromScim(multiValuedAttribute)
+
+        then:
+        result != null
     }
 }

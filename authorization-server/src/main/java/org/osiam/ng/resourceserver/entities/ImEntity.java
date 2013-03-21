@@ -76,6 +76,14 @@ public class ImEntity {
         this.type = type;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     public MultiValuedAttribute toScim() {
         return new MultiValuedAttribute.Builder().
                 setType(getType()).
@@ -83,11 +91,10 @@ public class ImEntity {
                 build();
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public static ImEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        ImEntity imEntity = new ImEntity();
+        imEntity.setType(multiValuedAttribute.getType());
+        imEntity.setValue(multiValuedAttribute.getValue().toString());
+        return imEntity;
     }
 }

@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 /**
@@ -85,5 +86,20 @@ class EmailEntitySpec extends Specification {
         multivalue.type == emailEntity.type
         multivalue.value == emailEntity.value
         multivalue.isPrimary() == emailEntity.primary
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
+                setPrimary(true).
+                setType("type").
+                setValue("value").
+                build()
+
+        when:
+        def result = EmailEntity.fromScim(multiValuedAttribute)
+
+        then:
+        result != null
     }
 }

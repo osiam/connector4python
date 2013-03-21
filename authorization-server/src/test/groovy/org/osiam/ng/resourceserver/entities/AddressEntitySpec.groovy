@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.Address
 import spock.lang.Specification
 
 /**
@@ -106,7 +107,7 @@ class AddressEntitySpec extends Specification {
         addressEntity.setPrimary(true)
 
         then:
-        addressEntity.setPostgresql_does_not_like_primary()
+        addressEntity.isPrimary()
     }
 
     def "setter and getter for the user should be present"() {
@@ -128,5 +129,22 @@ class AddressEntitySpec extends Specification {
         address.postalCode == addressEntity.postalCode.toString()
         address.region == addressEntity.region
         address.streetAddress == addressEntity.streetAddress
+    }
+
+    def "mapping from scim should be possible"() {
+        given:
+        Address address =new Address.Builder().
+                setCountry("country").
+                setFormatted("formatted").
+                setLocality("locality").
+                setPostalCode("123456").
+                setRegion("region").
+                setStreetAddress("streetAddress").setPrimary(true).
+                build()
+        when:
+        def result = AddressEntity.fromScim(address)
+
+        then:
+        result != null
     }
 }

@@ -65,4 +65,10 @@ public class EntitlementsEntity {
                 setValue(getValue()).
                 build();
     }
+
+    public static EntitlementsEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+        EntitlementsEntity entitlementsEntity = new EntitlementsEntity();
+        entitlementsEntity.setValue(multiValuedAttribute.getValue().toString());
+        return entitlementsEntity;
+    }
 }

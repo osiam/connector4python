@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 /**
@@ -58,5 +59,18 @@ class EntitlementsEntitySpec extends Specification {
 
         then:
         multivalue.value == entitlementsEntity.value
+    }
+
+    def "mapping from scim should be present"() {
+        given:
+        MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
+                setValue("value").
+                build()
+
+        when:
+        def result = EntitlementsEntity.fromScim(multiValuedAttribute)
+
+        then:
+        result != null
     }
 }

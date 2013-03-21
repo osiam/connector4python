@@ -146,7 +146,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.1.10.Final</version>
+            <version>${org.hibernate-version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
