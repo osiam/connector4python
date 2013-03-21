@@ -37,6 +37,24 @@ CREATE TABLE scim_email (
 
 
 
+--
+-- Name: scim_address; Type: TABLE; Schema: public;
+--
+
+CREATE TABLE scim_address (
+  id bigint NOT NULL,
+  postgresql_does_not_like_primary boolean,
+  type character varying(255),
+  formatted character varying(255),
+  streetAddress character varying(255),
+  locality character varying(255),
+  region character varying(255),
+  country character varying(255),
+  postalCode bigint,
+  user_id bigint
+);
+
+
 
 --
 -- Name: scim_enterprise; Type: TABLE; Schema: public;  
@@ -78,6 +96,17 @@ CREATE TABLE scim_group_scim_member (
 
 
 
+--
+-- Name: scim_group; Type: TABLE; Schema: public;
+--
+
+CREATE TABLE scim_group (
+  id bigint NOT NULL,
+  value character varying(255),
+  displayName character varying(255),
+  additional character varying(255)
+);
+
 
 --
 -- Name: scim_im; Type: TABLE; Schema: public;  
@@ -89,8 +118,6 @@ CREATE TABLE scim_im (
     value character varying(255),
     user_id bigint
 );
-
-
 
 
 --
@@ -190,7 +217,6 @@ CREATE TABLE scim_roles (
 
 
 
-
 --
 -- Name: scim_user; Type: TABLE; Schema: public;  
 --
@@ -209,9 +235,20 @@ CREATE TABLE scim_user (
     title character varying(255),
     username character varying(255) NOT NULL,
     usertype character varying(255),
-    name_id bigint
+    name_id bigint,
+    additional_id bigint
 );
 
+
+
+--
+-- Name: scim_user_additional; Type: TABLE; Schema: public;
+--
+
+CREATE TABLE scim_user_additional (
+    id bigint NOT NULL,
+    additional character varying(255)
+);
 
 
 
@@ -262,7 +299,6 @@ CREATE TABLE scim_user_scim_roles (
 
 
 
-
 --
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: phil
 --
@@ -300,6 +336,12 @@ INSERT INTO database_scheme_version (version) values (0.01);
 
 --
 -- Data for Name: scim_group_scim_member; Type: TABLE DATA; Schema: public; Owner: phil
+--
+
+
+
+--
+-- Data for Name: scim_group; Type: TABLE DATA; Schema: public; Owner: phil
 --
 
 
@@ -414,6 +456,24 @@ ALTER TABLE ONLY scim_entitlements
     ADD CONSTRAINT scim_entitlements_pkey PRIMARY KEY (id);
 
 
+
+--
+-- Name: scim_address_pkey; Type: CONSTRAINT; Schema: public;
+--
+
+ALTER TABLE ONLY scim_address
+    ADD CONSTRAINT scim_address_pkey PRIMARY KEY (id);
+
+
+
+--
+-- Name: scim_group_pkey; Type: CONSTRAINT; Schema: public;
+--
+
+ALTER TABLE ONLY scim_group
+    ADD CONSTRAINT scim_group_pkey PRIMARY KEY (id);
+
+
 --
 -- Name: scim_im_pkey; Type: CONSTRAINT; Schema: public;  
 --
@@ -486,6 +546,17 @@ ALTER TABLE ONLY scim_user
     ADD CONSTRAINT scim_user_pkey PRIMARY KEY (id);
 
 
+
+--
+-- Name: scim_user_additional; Type: CONSTRAINT; Schema: public;
+--
+
+ALTER TABLE ONLY scim_user_additional
+    ADD CONSTRAINT scim_user_additional_pkey PRIMARY KEY (id);
+
+
+
+
 --
 -- Name: fk2d3225882cd755b0; Type: FK CONSTRAINT; Schema: public; Owner: phil
 --
@@ -510,6 +581,16 @@ ALTER TABLE ONLY scim_user_scim_address
     ADD CONSTRAINT fk340ed2122cd755b0 FOREIGN KEY (scim_user_id) REFERENCES scim_user(id);
 
 
+
+--
+-- Name: fk340ed9122cd755b0; Type: FK CONSTRAINT; Schema: public; Owner: phil
+--
+
+ALTER TABLE ONLY scim_user_scim_address
+ADD CONSTRAINT fk340ed9122cd755b0 FOREIGN KEY (addresses_id) REFERENCES scim_address(id);
+
+
+
 --
 -- Name: fk38b265b627b5137b; Type: FK CONSTRAINT; Schema: public; Owner: phil
 --
@@ -519,11 +600,28 @@ ALTER TABLE ONLY scim_user
 
 
 --
+-- Name: fk38b265b927b5137b; Type: FK CONSTRAINT; Schema: public; Owner: phil
+--
+
+ALTER TABLE ONLY scim_user
+    ADD CONSTRAINT fk38b265b927b5137b FOREIGN KEY (additional_id) REFERENCES scim_user_additional(id);
+
+
+--
 -- Name: fk704b1c1d2cd755b0; Type: FK CONSTRAINT; Schema: public; Owner: phil
 --
 
 ALTER TABLE ONLY scim_user_scim_group
     ADD CONSTRAINT fk704b1c1d2cd755b0 FOREIGN KEY (scim_user_id) REFERENCES scim_user(id);
+
+
+--
+-- Name: fk704b1c1d9cd755b0; Type: FK CONSTRAINT; Schema: public; Owner: phil
+--
+
+ALTER TABLE ONLY scim_user_scim_group
+ADD CONSTRAINT fk704b1c1d9cd755b0 FOREIGN KEY (groups_id) REFERENCES scim_group(id);
+
 
 
 --
@@ -540,6 +638,7 @@ ALTER TABLE ONLY scim_user_scim_roles
 
 ALTER TABLE ONLY scim_user_scim_roles
     ADD CONSTRAINT fk70e4b45ba7c830bf FOREIGN KEY (roles_id) REFERENCES scim_roles(id);
+
 
 
 --
@@ -596,6 +695,15 @@ ALTER TABLE ONLY scim_enterprise
 
 ALTER TABLE ONLY scim_group_scim_member
     ADD CONSTRAINT fke59cfffa843a1b7c FOREIGN KEY (members_id) REFERENCES scim_member(id);
+
+
+--
+-- Name: fk90e4b45ba9c830bf; Type: FK CONSTRAINT; Schema: public; Owner: phil
+--
+
+ALTER TABLE ONLY scim_group_scim_member
+ADD CONSTRAINT fk90e4b45ba9c830bf FOREIGN KEY (scim_group_id) REFERENCES scim_group(id);
+
 
 --
 -- PostgreSQL database dump complete
