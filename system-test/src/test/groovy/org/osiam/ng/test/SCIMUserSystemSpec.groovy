@@ -25,10 +25,11 @@
 
 package org.osiam.ng.test
 
+import groovy.json.JsonException
 
 class SCIMUserSystemSpec extends AbstractSystemSpec {
 
-    def "OSNG-10: the client should be able to access the requested user if it sends a valid access token"() {
+    def "OSNG-10: the client should be able to access the requested user if it sends a valid access token and the user exists"() {
         given:
         valid_access_token("GET", UUID.randomUUID().toString())
         when:
@@ -38,6 +39,14 @@ class SCIMUserSystemSpec extends AbstractSystemSpec {
 
     }
 
-
+    def "OSNG-10: the client should be able to access the requested user if it sends a valid access token, but resource not found exception occur if user not exists"() {
+        given:
+        def identifier = "JohnDo"
+        valid_access_token("GET", UUID.randomUUID().toString())
+        when:
+        client.accessResource(identifier)
+        then:
+        thrown(JsonException)
+    }
 
 }
