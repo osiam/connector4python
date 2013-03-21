@@ -28,7 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 /**
  * User Entity
@@ -86,36 +86,38 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = MAPPING_NAME)
-    private List<EmailEntity> emails;
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    private Set<EmailEntity> emails;
 
-    @OneToMany(mappedBy = MAPPING_NAME)
-    private List<PhoneNumberEntity> phoneNumbers;
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    private Set<PhoneNumberEntity> phoneNumbers;
 
-    @OneToMany(mappedBy = MAPPING_NAME)
-    private List<ImEntity> ims;
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    private Set<ImEntity> ims;
 
-    @OneToMany(mappedBy = MAPPING_NAME)
-    private List<PhotoEntity> photos;
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    private Set<PhotoEntity> photos;
 
-    @OneToMany
-    private List<AddressEntity> addresses;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<AddressEntity> addresses;
 
-    @OneToMany
-    private List<GroupEntity> groups;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<GroupEntity> groups;
 
-    @OneToMany
-    private List<EntitlementsEntity> entitlements;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<EntitlementsEntity> entitlements;
 
     //needs to be eager fetched due to authorization decisions
     @OneToMany(fetch = FetchType.EAGER)
-    private List<RolesEntity> roles;
+    private Set<RolesEntity> roles;
 
-    @OneToMany(mappedBy = MAPPING_NAME)
-    private List<X509CertificateEntity> x509Certificates;
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    private Set<X509CertificateEntity> x509Certificates;
 
-    @ElementCollection
-    private List<String> any;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "scim_user_additional", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "additional")
+    private Set<String> any;
 
     /**
      * @param id the unique entity id
@@ -339,140 +341,140 @@ public class UserEntity implements UserDetails {
     /**
      * @return the emails entity
      */
-    public List<EmailEntity> getEmails() {
+    public Set<EmailEntity> getEmails() {
         return emails;
     }
 
     /**
      * @param emails the emails entity
      */
-    public void setEmails(List<EmailEntity> emails) {
+    public void setEmails(Set<EmailEntity> emails) {
         this.emails = emails;
     }
 
     /**
      * @return the phone numbers entity
      */
-    public List<PhoneNumberEntity> getPhoneNumbers() {
+    public Set<PhoneNumberEntity> getPhoneNumbers() {
         return phoneNumbers;
     }
 
     /**
      * @param phoneNumbers the phone numbers entity
      */
-    public void setPhoneNumbers(List<PhoneNumberEntity> phoneNumbers) {
+    public void setPhoneNumbers(Set<PhoneNumberEntity> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
 
     /**
      * @return the instant messaging entity
      */
-    public List<ImEntity> getIms() {
+    public Set<ImEntity> getIms() {
         return ims;
     }
 
     /**
      * @param ims the instant messaging entity
      */
-    public void setIms(List<ImEntity> ims) {
+    public void setIms(Set<ImEntity> ims) {
         this.ims = ims;
     }
 
     /**
      * @return the photos entity
      */
-    public List<PhotoEntity> getPhotos() {
+    public Set<PhotoEntity> getPhotos() {
         return photos;
     }
 
     /**
      * @param photos the photos entity
      */
-    public void setPhotos(List<PhotoEntity> photos) {
+    public void setPhotos(Set<PhotoEntity> photos) {
         this.photos = photos;
     }
 
     /**
      * @return the addresses entity
      */
-    public List<AddressEntity> getAddresses() {
+    public Set<AddressEntity> getAddresses() {
         return addresses;
     }
 
     /**
      * @param addresses the addresses entity
      */
-    public void setAddresses(List<AddressEntity> addresses) {
+    public void setAddresses(Set<AddressEntity> addresses) {
         this.addresses = addresses;
     }
 
     /**
      * @return the groups entity
      */
-    public List<GroupEntity> getGroups() {
+    public Set<GroupEntity> getGroups() {
         return groups;
     }
 
     /**
      * @param groups the groups entity
      */
-    public void setGroups(List<GroupEntity> groups) {
+    public void setGroups(Set<GroupEntity> groups) {
         this.groups = groups;
     }
 
     /**
      * @return the entitlements
      */
-    public List<EntitlementsEntity> getEntitlements() {
+    public Set<EntitlementsEntity> getEntitlements() {
         return entitlements;
     }
 
     /**
      * @param entitlements the entitlements
      */
-    public void setEntitlements(List<EntitlementsEntity> entitlements) {
+    public void setEntitlements(Set<EntitlementsEntity> entitlements) {
         this.entitlements = entitlements;
     }
 
     /**
      * @return the roles
      */
-    public List<RolesEntity> getRoles() {
+    public Set<RolesEntity> getRoles() {
         return roles;
     }
 
     /**
      * @param roles the roles
      */
-    public void setRoles(List<RolesEntity> roles) {
+    public void setRoles(Set<RolesEntity> roles) {
         this.roles = roles;
     }
 
     /**
      * @return the X509 certs
      */
-    public List<X509CertificateEntity> getX509Certificates() {
+    public Set<X509CertificateEntity> getX509Certificates() {
         return x509Certificates;
     }
 
     /**
      * @param x509Certificates the X509 certs
      */
-    public void setX509Certificates(List<X509CertificateEntity> x509Certificates) {
+    public void setX509Certificates(Set<X509CertificateEntity> x509Certificates) {
         this.x509Certificates = x509Certificates;
     }
 
     /**
      * @return any
      */
-    public List<String> getAny() {
+    public Set<String> getAny() {
         return any;
     }
 
     /**
      * @param any any
      */
-    public void setAny(List<String> any) {
+    public void setAny(Set<String> any) {
         this.any = any;
     }
 }

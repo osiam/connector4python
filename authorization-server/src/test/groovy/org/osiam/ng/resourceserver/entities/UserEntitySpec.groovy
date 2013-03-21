@@ -39,7 +39,7 @@ class UserEntitySpec extends Specification {
 
     def "should inherit UserDetails"(){
         given:
-        def roles = [new RolesEntity()]
+        def roles = [new RolesEntity()] as Set<RolesEntity>
         when:
         userEntity.setUsername("username")
         userEntity.setRoles(roles)
@@ -158,7 +158,7 @@ class UserEntitySpec extends Specification {
         userEntity.setActive(true)
 
         then:
-        userEntity.getActive() == true
+        userEntity.getActive()
     }
 
     def "setter and getter for the password should be present"() {
@@ -171,7 +171,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the emails should be present"() {
         given:
-        def emails = new ArrayList<EmailEntity>()
+        def emails = [EmailEntity] as Set<EmailEntity>
 
         when:
         userEntity.setEmails(emails)
@@ -182,7 +182,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the phoneNumbers should be present"() {
         given:
-        def phoneNumbers = new ArrayList<PhoneNumberEntity>()
+        def phoneNumbers = [PhoneNumberEntity] as Set<PhoneNumberEntity>
 
         when:
         userEntity.setPhoneNumbers(phoneNumbers)
@@ -193,7 +193,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the ims should be present"() {
         given:
-        def ims = new ArrayList<ImEntity>()
+        def ims = [ImEntity] as Set<ImEntity>
 
         when:
         userEntity.setIms(ims)
@@ -204,7 +204,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the photos should be present"() {
         given:
-        def photos = new ArrayList<PhotoEntity>()
+        def photos = [PhotoEntity] as Set<PhotoEntity>
 
         when:
         userEntity.setPhotos(photos)
@@ -215,7 +215,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the addresses should be present"() {
         given:
-        def addresses = new ArrayList<AddressEntity>()
+        def addresses = [AddressEntity] as Set<AddressEntity>
 
         when:
         userEntity.setAddresses(addresses)
@@ -226,7 +226,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the groups should be present"() {
         given:
-        def groups = new ArrayList<GroupEntity>()
+        def groups = [GroupEntity] as Set<GroupEntity>
 
         when:
         userEntity.setGroups(groups)
@@ -237,7 +237,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the entitlements should be present"() {
         given:
-        def entitlements = new ArrayList<EntitlementsEntity>()
+        def entitlements = [EntitlementsEntity] as Set<EntitlementsEntity>
 
         when:
         userEntity.setEntitlements(entitlements)
@@ -248,7 +248,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the roles should be present"() {
         given:
-        def roles = new ArrayList<RolesEntity>()
+        def roles = [RolesEntity] as Set<RolesEntity>
 
         when:
         userEntity.setRoles(roles)
@@ -259,7 +259,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the certificates should be present"() {
         given:
-        def certs = new ArrayList<X509CertificateEntity>()
+        def certs = [X509CertificateEntity] as Set<X509CertificateEntity>
 
         when:
         userEntity.setX509Certificates(certs)
@@ -270,7 +270,7 @@ class UserEntitySpec extends Specification {
 
     def "setter and getter for the any field should be present"() {
         given:
-        def any = new ArrayList<Object>()
+        def any = ["any"] as Set<String>
 
         when:
         userEntity.setAny(any)

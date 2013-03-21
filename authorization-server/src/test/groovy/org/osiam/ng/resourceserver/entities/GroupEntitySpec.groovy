@@ -66,8 +66,8 @@ class GroupEntitySpec extends Specification {
     def "setter and getter for the member should be present"() {
         given:
         def memberEntity = Mock(MemberEntity)
-        def List<MemberEntity> members = new ArrayList<>()
-        members.add(memberEntity)
+        def members = [memberEntity] as Set<MemberEntity>
+
 
         when:
         groupEntity.setMembers(members)

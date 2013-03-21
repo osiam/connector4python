@@ -26,7 +26,7 @@ package org.osiam.ng.resourceserver.entities;
 import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -45,10 +45,10 @@ public class GroupEntity {
     @Column(nullable = false)
     private String displayName;
 
-    @OneToMany
-    private List<MemberEntity> members;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<MemberEntity> members;
 
-    @Column
+    @Column(name = "additional")
     private String any;
 
     public long getId() {
@@ -75,11 +75,11 @@ public class GroupEntity {
         this.displayName = displayName;
     }
 
-    public List<MemberEntity> getMembers() {
+    public Set<MemberEntity> getMembers() {
         return members;
     }
 
-    public void setMembers(List<MemberEntity> members) {
+    public void setMembers(Set<MemberEntity> members) {
         this.members = members;
     }
 

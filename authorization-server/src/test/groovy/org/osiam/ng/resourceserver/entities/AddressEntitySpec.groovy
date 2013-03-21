@@ -23,7 +23,6 @@
 
 package org.osiam.ng.resourceserver.entities
 
-import scim.schema.v2.Address
 import spock.lang.Specification
 
 /**
@@ -36,6 +35,7 @@ import spock.lang.Specification
 class AddressEntitySpec extends Specification {
 
     AddressEntity addressEntity = new AddressEntity()
+    def userEntity = Mock(UserEntity)
 
     def "setter and getter for the Id should be present"() {
         when:
@@ -106,7 +106,15 @@ class AddressEntitySpec extends Specification {
         addressEntity.setPrimary(true)
 
         then:
-        addressEntity.isPrimary() == true
+        addressEntity.setPostgresql_does_not_like_primary()
+    }
+
+    def "setter and getter for the user should be present"() {
+        when:
+        addressEntity.setUser(userEntity)
+
+        then:
+        addressEntity.getUser() == userEntity
     }
 
     def "mapping to scim should be present"() {

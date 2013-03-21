@@ -6,6 +6,7 @@ import scim.schema.v2.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,14 +24,14 @@ public class EntityToScimMapper {
         return new User.Builder(userEntity.getUsername()).
                     setActive(userEntity.getActive()).
                     setAddresses(entityAddressToScim(userEntity.getAddresses())).
-                    setAny(anyStringListToObjectList(userEntity.getAny())).
+                    setAny(anyStringSetToObjectSet(userEntity.getAny())).
                     setDisplayName(userEntity.getDisplayName()).
                     setEmails(entityEmailToScim(userEntity.getEmails())).
                     setEntitlements(entityEntitlementsToScim(userEntity.getEntitlements())).
                     setGroups(entityGroupsToScim(userEntity.getGroups())).
                     setIms(entityImsToScim(userEntity.getIms())).
                     setLocale(userEntity.getLocale()).
-                    setName(userEntity.getName().toScim()).
+                    setName(userEntity.getName() != null ? userEntity.getName().toScim() : null).
                     setNickName(userEntity.getNickName()).
                     setPassword(userEntity.getPassword()).
                     setPhoneNumbers(entityPhonenumbersToScim(userEntity.getPhoneNumbers())).
@@ -42,10 +43,11 @@ public class EntityToScimMapper {
                     setTitle(userEntity.getTitle()).
                     setUserType(userEntity.getUserType()).
                     setX509Certificates(entityX509CertificatesToScim(userEntity.getX509Certificates())).
+                    setExternalId(userEntity.getExternalId()).
                     build();
     }
 
-    private User.X509Certificates entityX509CertificatesToScim(List<X509CertificateEntity> x509CertificateEntities) {
+    private User.X509Certificates entityX509CertificatesToScim(Set<X509CertificateEntity> x509CertificateEntities) {
         User.X509Certificates x509Certificates = new User.X509Certificates();
         for (X509CertificateEntity x509CertificateEntity : x509CertificateEntities) {
             x509Certificates.getX509Certificate().add(x509CertificateEntity.toScim());
@@ -53,7 +55,7 @@ public class EntityToScimMapper {
         return x509Certificates;
     }
 
-    private User.Roles entityRolesToScim(List<RolesEntity> rolesEntities) {
+    private User.Roles entityRolesToScim(Set<RolesEntity> rolesEntities) {
         User.Roles roles = new User.Roles();
         for (RolesEntity rolesEntity : rolesEntities) {
             roles.getRole().add(rolesEntity.toScim());
@@ -61,7 +63,7 @@ public class EntityToScimMapper {
         return roles;
     }
 
-    private User.Photos entityPhotosToScim(List<PhotoEntity> photoEntities) {
+    private User.Photos entityPhotosToScim(Set<PhotoEntity> photoEntities) {
         User.Photos photos = new User.Photos();
         for (PhotoEntity photoEntity : photoEntities) {
             photos.getPhoto().add(photoEntity.toScim());
@@ -69,7 +71,7 @@ public class EntityToScimMapper {
         return photos;
     }
 
-    private User.PhoneNumbers entityPhonenumbersToScim(List<PhoneNumberEntity> phoneNumberEntities) {
+    private User.PhoneNumbers entityPhonenumbersToScim(Set<PhoneNumberEntity> phoneNumberEntities) {
         User.PhoneNumbers phoneNumbers = new User.PhoneNumbers();
         for (PhoneNumberEntity phoneNumberEntity : phoneNumberEntities) {
             phoneNumbers.getPhoneNumber().add(phoneNumberEntity.toScim());
@@ -77,7 +79,7 @@ public class EntityToScimMapper {
         return phoneNumbers;
     }
 
-    private User.Ims entityImsToScim(List<ImEntity> imEntities) {
+    private User.Ims entityImsToScim(Set<ImEntity> imEntities) {
         User.Ims ims = new User.Ims();
         for (ImEntity imEntity : imEntities) {
             ims.getIm().add(imEntity.toScim());
@@ -85,7 +87,7 @@ public class EntityToScimMapper {
         return ims;
     }
 
-    private User.Groups entityGroupsToScim(List<GroupEntity> groupEntities) {
+    private User.Groups entityGroupsToScim(Set<GroupEntity> groupEntities) {
         User.Groups groups = new User.Groups();
         for (GroupEntity groupEntity : groupEntities) {
             groups.getGroup().add(groupEntity.toScim());
@@ -94,7 +96,7 @@ public class EntityToScimMapper {
     }
 
 
-    private User.Entitlements entityEntitlementsToScim(List<EntitlementsEntity> entitlementsEntities) {
+    private User.Entitlements entityEntitlementsToScim(Set<EntitlementsEntity> entitlementsEntities) {
         User.Entitlements entitlements = new User.Entitlements();
         for (EntitlementsEntity entitlementsEntity : entitlementsEntities) {
             entitlements.getEntitlement().add(entitlementsEntity.toScim());
@@ -102,7 +104,7 @@ public class EntityToScimMapper {
         return entitlements;
     }
 
-    private User.Emails entityEmailToScim(List<EmailEntity> emailEntities) {
+    private User.Emails entityEmailToScim(Set<EmailEntity> emailEntities) {
         User.Emails emails = new User.Emails();
         for (EmailEntity emailEntity : emailEntities) {
             emails.getEmail().add(emailEntity.toScim());
@@ -110,15 +112,15 @@ public class EntityToScimMapper {
         return emails;
     }
 
-    private List<Object> anyStringListToObjectList(List<String> anyList) {
-        List<Object> objectList = new ArrayList<>();
-        for (String any: anyList) {
-            objectList.add(any);
+    private List<Object> anyStringSetToObjectSet(Set<String> anySet) {
+        List<Object> objectSet = new ArrayList<>();
+        for (String any: anySet) {
+            objectSet.add(any);
         }
-        return objectList;
+        return objectSet;
     }
 
-    private User.Addresses entityAddressToScim(List<AddressEntity> addressEntities) {
+    private User.Addresses entityAddressToScim(Set<AddressEntity> addressEntities) {
         User.Addresses addresses = new User.Addresses();
         for (AddressEntity addressEntity : addressEntities) {
             addresses.getAddress().add(addressEntity.toScim());

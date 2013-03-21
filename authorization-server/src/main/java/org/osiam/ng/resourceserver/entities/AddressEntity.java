@@ -25,10 +25,7 @@ package org.osiam.ng.resourceserver.entities;
 
 import scim.schema.v2.Address;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Address Entity
@@ -61,8 +58,11 @@ public class AddressEntity {
     @Column
     private String country;
 
-    @Column
+    @Column(name = "postgresql_does_not_like_primary")
     private boolean primary;
+
+    @ManyToOne
+    private UserEntity user;
 
 
     public long getId() {
@@ -73,7 +73,7 @@ public class AddressEntity {
         this.id = id;
     }
 
-    public boolean isPrimary() {
+    public boolean setPostgresql_does_not_like_primary() {
         return primary;
     }
 
@@ -135,6 +135,14 @@ public class AddressEntity {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public Address toScim() {
