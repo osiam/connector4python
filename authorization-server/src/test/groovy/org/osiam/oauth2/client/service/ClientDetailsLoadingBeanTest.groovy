@@ -33,13 +33,14 @@ class ClientDetailsLoadingBeanTest extends Specification {
         def result = underTest.loadClientByClientId("client!")
         then:
         result.clientId == "client!"
-        result.isScoped() == true
-        result.isSecretRequired() == true
+        result.isScoped()
+        result.isSecretRequired()
         result.getAccessTokenValiditySeconds() == 1337
         result.getRefreshTokenValiditySeconds() == 1337
 
         result.getScope().contains("GET")
-        result.getScope().size() == 1
+        result.getScope().contains("POST")
+        result.getScope().size() == 2
         result.getResourceIds().size() == 0
         result.getAuthorizedGrantTypes().size() == 3
         result.getRegisteredRedirectUri().size() > 1

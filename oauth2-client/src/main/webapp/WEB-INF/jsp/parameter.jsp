@@ -42,5 +42,13 @@
         <label>Username:<br><input id="username" name="username" type="text"></label><br>
         <input type="submit" value="Get Resource"/>
     </form>
+    <h2>Add Resource:</h2>
+    <form action="createResource" method="post">
+        <input id="hidden_access_token" type="hidden" name="access_token" value="<%= request.getAttribute("access_token") %>" />
+        <label>ExternalID:<br><input id="externalId" name="externalId" type="text"></label><br>
+        <label>Username:<br><input id="name" name="name" type="text"></label><br>
+        <label>Password:<br><input id="password" name="password" type="text"></label><br>
+        <input type="submit" value="Add Resource"/>
+    </form>
 </body>
 </html>
