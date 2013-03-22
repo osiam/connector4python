@@ -24,9 +24,11 @@
 package org.osiam.ng.resourceserver.dao
 
 import org.osiam.ng.resourceserver.entities.UserEntity
+import org.osiam.ng.scim.exceptions.ResourceExistsException
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException
 import spock.lang.Specification
 
+import javax.persistence.EntityExistsException
 import javax.persistence.EntityManager
 import javax.persistence.Query
 
@@ -110,5 +112,18 @@ class UserDAOTest extends Specification {
         1 * query.setParameter("username", "userName")
         1 * query.getResultList() >> queryResults
         result == queryResults.get(0)
+    }
+
+    def "should throw exception if user already exists"() {
+        given:
+        em.persist(userEntity) >> {throw new EntityExistsException()}
+        userEntity.getUsername() >> "Bäm"
+
+        when:
+        underTest.createUser(userEntity)
+
+        then:
+        def e = thrown(ResourceExistsException)
+        e.getMessage() == "The user with name Bäm already exists."
     }
 }
