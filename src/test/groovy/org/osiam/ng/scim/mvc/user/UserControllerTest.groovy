@@ -27,10 +27,15 @@ import org.osiam.ng.scim.dao.SCIMUserProvisioning
 import scim.schema.v2.User
 import spock.lang.Specification
 
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
 class UserControllerTest extends Specification {
 
     def underTest = new UserController()
     def provisioning = Mock(SCIMUserProvisioning)
+    def httpServletRequest = Mock(HttpServletRequest)
+    def httpServletResponse = Mock(HttpServletResponse)
 
     def setup() {
         underTest.setScimUserProvisioning(provisioning)
@@ -46,15 +51,19 @@ class UserControllerTest extends Specification {
         result == user
     }
 
-    def "should return the user previously created"() {
+    def "should create the user and add the location header"() {
         given:
         def user = Mock(User)
+        user.getExternalId() >> "test"
+        httpServletRequest.getRequestURL() >> new StringBuffer("http://host:port/deployment/User")
+        def uri = new URI("http://host:port/deployment/User/test")
 
         when:
-        def result = underTest.createUser(user)
+        def result = underTest.createUser(user, httpServletRequest, httpServletResponse)
 
         then:
         1 * provisioning.createUser(user) >> user
+        1 * httpServletResponse.setHeader("Location", uri.toASCIIString())
         result == user
     }
 }

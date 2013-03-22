@@ -24,14 +24,16 @@
 package org.osiam.ng.scim.mvc.user;
 
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriTemplate;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
 
 /**
  * This Controller is used to manage User
@@ -63,8 +65,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public User createUser(@PathVariable final User user) {
-        return scimUserProvisioning.createUser(user);
+    public User createUser(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
+        User createdUser = scimUserProvisioning.createUser(user);
+
+        String requestUrl = request.getRequestURL().toString();
+        URI uri = new UriTemplate("{requestUrl}/{externalId}").expand(requestUrl, createdUser.getExternalId());
+        response.setHeader("Location", uri.toASCIIString());
+
+        return createdUser;
     }
 }

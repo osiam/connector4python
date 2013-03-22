@@ -21,35 +21,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.scim.dao;
+package org.osiam.ng.scim.exceptions;
 
-import scim.schema.v2.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-/**
- * This interface has the purpose to get SCIM user out of and into a database, which must be provided by the using
- * application. Inside UserController
- */
-public interface SCIMUserProvisioning {
-    /**
-     * This method returns a SCIM user.
-     * <p/>
-     * It must throw an ResourceNotFoundException if no user got found.
-     *
-     * @param id the identifier of the user
-     * @return the found user
-     * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
-     *          if no user with the given id got found
-     */
-    User getById(String id);
-
-
-    /**
-     * This method creates a user.
-     *
-     * @param user A user representation which should be created
-     * @return the created user representation
-     * @throws org.osiam.ng.scim.exceptions.ResourceExistsException
-     *          if the resource already exists
-     */
-    User createUser(User user);
+@ResponseStatus(value = HttpStatus.CONFLICT)
+public class ResourceExistsException extends IllegalArgumentException {
+    public ResourceExistsException(String s) {
+        super(s);
+    }
 }
