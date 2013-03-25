@@ -28,7 +28,12 @@ package scim.schema.v2;
  */
 public abstract class CoreResource  extends Resource{
 
-    protected final String externalId;
+
+
+    protected  String externalId;
+
+    public CoreResource() {}
+
 
     public CoreResource(Builder builder) {
         super(builder);

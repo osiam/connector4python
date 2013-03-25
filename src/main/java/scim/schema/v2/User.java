@@ -37,28 +37,32 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User extends CoreResource {
 
-    private final String userName;
-    private final Name name;
-    private final String displayName;
-    private final String nickName;
-    private final String profileUrl;
-    private final String title;
-    private final String userType;
-    private final String preferredLanguage;
-    private final String locale;
-    private final String timezone;
-    private final Boolean active;
-    private final String password;
-    private final User.Emails emails;
-    private final User.PhoneNumbers phoneNumbers;
-    private final User.Ims ims;
-    private final User.Photos photos;
-    private final User.Addresses addresses;
-    private final User.Groups groups;
-    private final User.Entitlements entitlements;
-    private final User.Roles roles;
-    private final User.X509Certificates x509Certificates;
+    private String userName;
+    private Name name;
+    private String displayName;
+    private String nickName;
+    private String profileUrl;
+    private String title;
+    private String userType;
+    private String preferredLanguage;
+    private String locale;
+    private String timezone;
+    private Boolean active;
+    private String password;
+    private User.Emails emails;
+    private User.PhoneNumbers phoneNumbers;
+    private User.Ims ims;
+    private User.Photos photos;
+    private User.Addresses addresses;
+    private User.Groups groups;
+    private User.Entitlements entitlements;
+    private User.Roles roles;
+    private User.X509Certificates x509Certificates;
     private List<Object> any;
+
+    public User(){
+
+    }
 
     private User(Builder builder) {
         super(builder);

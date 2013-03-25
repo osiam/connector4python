@@ -28,8 +28,10 @@ package scim.schema.v2;
  */
 public abstract class Resource {
 
-    protected final String id;
-    protected final Meta meta;
+    protected  String id;
+    protected Meta meta;
+
+    protected Resource(){}
 
     protected Resource(Builder builder) {
         this.id = builder.id;
