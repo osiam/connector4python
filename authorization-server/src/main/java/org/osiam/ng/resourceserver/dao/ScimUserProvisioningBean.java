@@ -25,6 +25,7 @@ package org.osiam.ng.resourceserver.dao;
 
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
+import org.osiam.ng.scim.exceptions.ResourceExistsException;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
