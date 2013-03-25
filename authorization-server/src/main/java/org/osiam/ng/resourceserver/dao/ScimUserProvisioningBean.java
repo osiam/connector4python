@@ -58,4 +58,9 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
         userDao.createUser(userEntity);
         return user;
     }
+
+    @Override
+    public User updateUser(String id, User user) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

@@ -26,12 +26,14 @@
 package org.osiam.ng.test
 
 import groovy.json.JsonException
+import scim.schema.v2.CoreResource
+import scim.schema.v2.User
 
 class SCIMUserSystemSpec extends AbstractSystemSpec {
 
     def "OSNG-10: the client should be able to access the requested user if it sends a valid access token and the user exists"() {
         given:
-        valid_access_token("GET", UUID.randomUUID().toString())
+        valid_access_token("GET POST", UUID.randomUUID().toString())
         when:
         def result = client.accessResource("marissa")
         then:
@@ -42,11 +44,23 @@ class SCIMUserSystemSpec extends AbstractSystemSpec {
     def "OSNG-10: the client should be able to access the requested user if it sends a valid access token, but resource not found exception occur if user not exists"() {
         given:
         def identifier = "JohnDo"
-        valid_access_token("GET", UUID.randomUUID().toString())
+        valid_access_token("GET POST", UUID.randomUUID().toString())
         when:
         client.accessResource(identifier)
         then:
         thrown(JsonException)
     }
+
+    def "OSNG-11: the client should be able to create an unique user"() {
+        given:
+        def scimUser = new User.Builder(UUID.randomUUID().toString()).setPassword("pass").build()
+        valid_access_token("GET POST", UUID.randomUUID().toString())
+        when:
+        def e = client.postUserResource(scimUser)
+        then:
+        e
+
+    }
+
 
 }

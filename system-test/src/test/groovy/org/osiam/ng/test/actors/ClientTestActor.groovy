@@ -24,6 +24,8 @@
 package org.osiam.ng.test.actors
 
 import geb.Browser
+import org.codehaus.jackson.map.ObjectMapper
+import scim.schema.v2.User
 
 import java.util.regex.Matcher
 
@@ -77,7 +79,7 @@ class ClientTestActor {
     /** The last received access token. */
     private String accessToken = null
 
-    /** {@link RestClient\ for communication with the resource server. */
+    /** {@link RestClient\ for communication with the resource server.  */
     private final RestClient restClient = new RestClient()
 
     /**
@@ -102,9 +104,9 @@ class ClientTestActor {
     /**
      * Requests an authorization code for the given {@code scope} from the authorization server through the
      * {@link #userAgent}.
-     * 
+     *
      * This resets the {@link #authorizationCode} and {@link #accessToken} to null.
-     * 
+     *
      * @param scope the requested scope.
      * @param state a state variable for the client.
      */
@@ -122,11 +124,11 @@ class ClientTestActor {
      */
     public void requestAccessToken(differendAthorizationCode = null) {
         Map parameters = [
-            "grant_type": "authorization_code",
-            "code": differendAthorizationCode ? differendAthorizationCode : getAuthorizationCode(),
-            "redirect_uri": redirectUri]
+                "grant_type": "authorization_code",
+                "code": differendAthorizationCode ? differendAthorizationCode : getAuthorizationCode(),
+                "redirect_uri": redirectUri]
         Map headers = [
-            "Authorization": "Basic ${basicAuthorizationString}"]
+                "Authorization": "Basic ${basicAuthorizationString}"]
 
         HttpResponse accessTokenResponse = http.post(accessTokenRequestUri, parameters, headers)
 
@@ -137,11 +139,26 @@ class ClientTestActor {
 
     /**
      * Tries to access the specified resource using the current {@link #accessToken}.
-     * 
+     *
      * @param resourcePath the resource's path relative to the {@link #explicitUserResourceUri}.
      */
     public accessResource(String resourcePath = "", String accessToken = accessToken) {
         HttpResponse resourceRespose = http.get("${explicitUserResourceUri}/${resourcePath}?access_token=${accessToken}")
+        def resource = resourceRespose.jsonBody
+        EntityUtils.consume(resourceRespose.response.entity)
+        return resource
+    }
+
+    public postUserResource(User user, String resourcePath = "", String accessToken = accessToken) {
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        def json = mapper.writeValueAsString(user)
+
+        HttpResponse resourceRespose = http.post("${explicitUserResourceUri}/${resourcePath}?access_token=${accessToken}",
+                ['user': json]
+        )
+
         def resource = resourceRespose.jsonBody
         EntityUtils.consume(resourceRespose.response.entity)
         return resource
