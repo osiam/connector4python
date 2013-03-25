@@ -50,7 +50,6 @@ public class UserDAO {
     public void createUser (UserEntity userEntity) {
         try {
             em.persist(userEntity);
-//            em.flush();
         } catch (EntityExistsException e) {
             throw new ResourceExistsException("The user with name " + userEntity.getUsername() + " already exists.");
         }

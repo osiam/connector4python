@@ -98,20 +98,11 @@ class UserDAOTest extends Specification {
     }
 
     def "should be able to create a user"() {
-        given:
-        userEntity.getUsername() >> "userName"
-        def query = Mock(Query)
-        def queryResults = [new UserEntity()]
-
         when:
-        def result = underTest.createUser(userEntity)
+        underTest.createUser(userEntity)
 
         then:
         1 * em.persist(userEntity)
-        1 * em.createNamedQuery("getUserByUsername") >> query
-        1 * query.setParameter("username", "userName")
-        1 * query.getResultList() >> queryResults
-        result == queryResults.get(0)
     }
 
     def "should throw exception if user already exists"() {

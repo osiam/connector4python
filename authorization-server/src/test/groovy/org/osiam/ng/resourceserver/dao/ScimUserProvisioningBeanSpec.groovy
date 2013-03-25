@@ -35,9 +35,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should be possible to create a user"() {
         given:
-        userDao.createUser(_) >> userEntity
         userEntity.toScim() >> scimUser
-
 
         when:
         def user = scimUserProvisioningBean.createUser(scimUser)
