@@ -59,7 +59,7 @@ public class AddResourceController {
             JSONObject authResponse = new JSONObject(
                     new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream(), CHARSET)));
             req.setAttribute("userResponse", authResponse.toString());
-            req.setAttribute("LocationHeader", post.getRequestHeader("Location"));
+            req.setAttribute("LocationHeader", post.getResponseHeader("Location"));
         } catch (JSONException e) {
             throw new IllegalStateException(e.getMessage(), e);
         } finally {

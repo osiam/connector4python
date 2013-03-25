@@ -54,7 +54,11 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     @Override
     public User createUser(User user) {
         UserEntity userEntity = UserEntity.fromScim(user);
-        userDao.createUser(userEntity);
+        try {
+            userDao.createUser(userEntity);
+        } catch (Exception e) {
+            throw new ResourceExistsException("The user with name " + user.getUserName() + " already exists.");
+        }
         return user;
     }
 }

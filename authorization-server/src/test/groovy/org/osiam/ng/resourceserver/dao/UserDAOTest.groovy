@@ -104,17 +104,4 @@ class UserDAOTest extends Specification {
         then:
         1 * em.persist(userEntity)
     }
-
-    def "should throw exception if user already exists"() {
-        given:
-        em.persist(userEntity) >> {throw new EntityExistsException()}
-        userEntity.getUsername() >> "Bäm"
-
-        when:
-        underTest.createUser(userEntity)
-
-        then:
-        def e = thrown(ResourceExistsException)
-        e.getMessage() == "The user with name Bäm already exists."
-    }
 }
