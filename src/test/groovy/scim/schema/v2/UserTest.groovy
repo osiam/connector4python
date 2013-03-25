@@ -26,6 +26,15 @@ package scim.schema.v2
 import spock.lang.Specification
 
 class UserTest extends Specification {
+
+    def "default constructor should be present due to json mappings"() {
+        when:
+        def user = new User()
+
+        then:
+        user != null
+    }
+
     def "userName is a required field so it should throw an exception when setting it null"() {
         when:
         new User.Builder(null)
