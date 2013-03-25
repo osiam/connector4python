@@ -29,9 +29,12 @@ import groovy.json.JsonException
 
 class SCIMUserSystemSpec extends AbstractSystemSpec {
 
+    String state = "testState"
+    String scope = "GET POST"
+
     def "OSNG-10: the client should be able to access the requested user if it sends a valid access token and the user exists"() {
         given:
-        valid_access_token("GET", UUID.randomUUID().toString())
+        valid_access_token(scope, state)
         when:
         def result = client.accessResource("marissa")
         then:
@@ -39,14 +42,24 @@ class SCIMUserSystemSpec extends AbstractSystemSpec {
 
     }
 
-    def "OSNG-10: the client should be able to access the requested user if it sends a valid access token, but resource not found exception occur if user not exists"() {
+    def "OSNG-10: a resource not found exception should occur if the requested user does not exist"() {
         given:
-        def identifier = "JohnDo"
-        valid_access_token("GET", UUID.randomUUID().toString())
+        valid_access_token(scope, state)
         when:
-        client.accessResource(identifier)
+        client.accessResource("JohnDo")
         then:
         thrown(JsonException)
     }
 
+    def "OSNG-11: the client should be able to create a new user if it sends a valid access token"() {
+        given:
+        valid_access_token(scope, state)
+        def jsonString = "{\"userName\":\"bam\",\"password\":\"1234\",\"externalId\":\"bam\"}"
+
+        when:
+        def result = client.createResource(jsonString)
+
+        then:
+        result.externalId == "bam"
+    }
 }

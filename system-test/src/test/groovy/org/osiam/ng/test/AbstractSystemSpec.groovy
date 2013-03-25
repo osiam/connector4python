@@ -57,7 +57,6 @@ abstract class AbstractSystemSpec extends GebReportingSpec {
         client.requestAccessToken()
     }
 
-
-    def clearnup() {
+    def cleanup() {
     }
 }
