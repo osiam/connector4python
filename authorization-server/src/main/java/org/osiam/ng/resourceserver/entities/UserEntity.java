@@ -25,10 +25,13 @@ package org.osiam.ng.resourceserver.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import scim.schema.v2.Address;
+import scim.schema.v2.MultiValuedAttribute;
+import scim.schema.v2.Name;
+import scim.schema.v2.User;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User Entity
@@ -40,8 +43,8 @@ import java.util.Set;
 })
 public class UserEntity implements UserDetails {
 
-    private static final long serialVersionUID = 4265464684797943613L;
-    private static final String MAPPING_NAME = "user";
+    private final long serialVersionUID = 4265464684797943613L;
+    private final String MAPPING_NAME = "user";
 
     @Id
     @GeneratedValue
@@ -477,4 +480,225 @@ public class UserEntity implements UserDetails {
     public void setAny(Set<String> any) {
         this.any = any;
     }
+
+    public User toScim() {
+        return new User.Builder(getUsername()).
+                setActive(getActive()).
+                setAddresses(entityAddressToScim(getAddresses())).
+                setAny(anyStringSetToObjectSet(getAny())).
+                setDisplayName(getDisplayName()).
+                setEmails(entityEmailToScim(getEmails())).
+                setEntitlements(entityEntitlementsToScim(getEntitlements())).
+                setGroups(entityGroupsToScim(getGroups())).
+                setIms(entityImsToScim(getIms())).
+                setLocale(getLocale()).
+                setName(getName() != null ? getName().toScim() : null).
+                setNickName(getNickName()).
+                setPassword(getPassword()).
+                setPhoneNumbers(entityPhonenumbersToScim(getPhoneNumbers())).
+                setPhotos(entityPhotosToScim(getPhotos())).
+                setPreferredLanguage(getPreferredLanguage()).
+                setProfileUrl(getProfileUrl()).
+                setRoles(entityRolesToScim(getRoles())).
+                setTimezone(getTimezone()).
+                setTitle(getTitle()).
+                setUserType(getUserType()).
+                setX509Certificates(entityX509CertificatesToScim(getX509Certificates())).
+                setExternalId(getExternalId()).
+                build();
+    }
+
+    private User.X509Certificates entityX509CertificatesToScim(Set<X509CertificateEntity> x509CertificateEntities) {
+        User.X509Certificates x509Certificates = new User.X509Certificates();
+        for (X509CertificateEntity x509CertificateEntity : x509CertificateEntities) {
+            x509Certificates.getX509Certificate().add(x509CertificateEntity.toScim());
+        }
+        return x509Certificates;
+    }
+
+    private User.Roles entityRolesToScim(Set<RolesEntity> rolesEntities) {
+        User.Roles roles = new User.Roles();
+        for (RolesEntity rolesEntity : rolesEntities) {
+            roles.getRole().add(rolesEntity.toScim());
+        }
+        return roles;
+    }
+
+    private User.Photos entityPhotosToScim(Set<PhotoEntity> photoEntities) {
+        User.Photos photos = new User.Photos();
+        for (PhotoEntity photoEntity : photoEntities) {
+            photos.getPhoto().add(photoEntity.toScim());
+        }
+        return photos;
+    }
+
+    private User.PhoneNumbers entityPhonenumbersToScim(Set<PhoneNumberEntity> phoneNumberEntities) {
+        User.PhoneNumbers phoneNumbers = new User.PhoneNumbers();
+        for (PhoneNumberEntity phoneNumberEntity : phoneNumberEntities) {
+            phoneNumbers.getPhoneNumber().add(phoneNumberEntity.toScim());
+        }
+        return phoneNumbers;
+    }
+
+    private User.Ims entityImsToScim(Set<ImEntity> imEntities) {
+        User.Ims ims = new User.Ims();
+        for (ImEntity imEntity : imEntities) {
+            ims.getIm().add(imEntity.toScim());
+        }
+        return ims;
+    }
+
+    private User.Groups entityGroupsToScim(Set<GroupEntity> groupEntities) {
+        User.Groups groups = new User.Groups();
+        for (GroupEntity groupEntity : groupEntities) {
+            groups.getGroup().add(groupEntity.toScim());
+        }
+        return groups;
+    }
+
+
+    private User.Entitlements entityEntitlementsToScim(Set<EntitlementsEntity> entitlementsEntities) {
+        User.Entitlements entitlements = new User.Entitlements();
+        for (EntitlementsEntity entitlementsEntity : entitlementsEntities) {
+            entitlements.getEntitlement().add(entitlementsEntity.toScim());
+        }
+        return entitlements;
+    }
+
+    private User.Emails entityEmailToScim(Set<EmailEntity> emailEntities) {
+        User.Emails emails = new User.Emails();
+        for (EmailEntity emailEntity : emailEntities) {
+            emails.getEmail().add(emailEntity.toScim());
+        }
+        return emails;
+    }
+
+    private List<Object> anyStringSetToObjectSet(Set<String> anySet) {
+        List<Object> objectSet = new ArrayList<>();
+        for (String any : anySet) {
+            objectSet.add(any);
+        }
+        return objectSet;
+    }
+
+    private User.Addresses entityAddressToScim(Set<AddressEntity> addressEntities) {
+        User.Addresses addresses = new User.Addresses();
+        for (AddressEntity addressEntity : addressEntities) {
+            addresses.getAddress().add(addressEntity.toScim());
+        }
+        return addresses;
+    }
+
+    public static UserEntity fromScim(User user){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setActive(user.isActive());
+        userEntity.setAddresses(scimUserAddressesToEntity(user.getAddresses()));
+        userEntity.setAny(scimAnyToStringSet(user.getAny()));
+        userEntity.setDisplayName(user.getDisplayName());
+        userEntity.setEmails(scimEmailsToEntity(user.getEmails()));
+        userEntity.setEntitlements(scimEntitlementsToEntity(user.getEntitlements()));
+        userEntity.setExternalId(user.getExternalId());
+        userEntity.setGroups(scimUserGroupsToEntity(user.getGroups()));
+        userEntity.setIms(scimImsToEntity(user.getIms()));
+        userEntity.setLocale(user.getLocale());
+        userEntity.setName(scimNameToEntity(user.getName()));
+        userEntity.setNickName(user.getNickName());
+        userEntity.setPassword(user.getPassword());
+        userEntity.setPhoneNumbers(scimPhonenumbersToEntity(user.getPhoneNumbers()));
+        userEntity.setPhotos(scimPhotosToEntity(user.getPhotos()));
+        userEntity.setPreferredLanguage(user.getPreferredLanguage());
+        userEntity.setProfileUrl(user.getProfileUrl());
+        userEntity.setRoles(scimUserRolesToEntity(user.getRoles()));
+        userEntity.setTimezone(user.getTimezone());
+        userEntity.setTitle(user.getTitle());
+        userEntity.setUsername(user.getUserName());
+        userEntity.setUserType(user.getUserType());
+        userEntity.setX509Certificates(scimCertificatesToEntity(user.getX509Certificates()));
+        return userEntity;
+    }
+
+    private static Set<X509CertificateEntity> scimCertificatesToEntity(User.X509Certificates x509Certificates) {
+        Set<X509CertificateEntity> x509CertificateEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : x509Certificates.getX509Certificate()) {
+            x509CertificateEntities.add(X509CertificateEntity.fromScim(multiValuedAttribute));
+        }
+        return x509CertificateEntities;
+    }
+
+    private static Set<RolesEntity> scimUserRolesToEntity(User.Roles roles) {
+        Set<RolesEntity> rolesEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : roles.getRole()) {
+            rolesEntities.add(RolesEntity.fromScim(multiValuedAttribute));
+        }
+        return rolesEntities;
+    }
+
+    private static Set<PhotoEntity> scimPhotosToEntity(User.Photos photos) {
+        Set<PhotoEntity> photoEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : photos.getPhoto()) {
+            photoEntities.add(PhotoEntity.fromScim(multiValuedAttribute));
+        }
+        return photoEntities;
+    }
+
+    private static Set<PhoneNumberEntity> scimPhonenumbersToEntity(User.PhoneNumbers phoneNumbers) {
+        Set<PhoneNumberEntity> phoneNumberEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : phoneNumbers.getPhoneNumber()) {
+            phoneNumberEntities.add(PhoneNumberEntity.fromScim(multiValuedAttribute));
+        }
+        return phoneNumberEntities;
+    }
+
+    private static NameEntity scimNameToEntity(Name name) {
+        return NameEntity.fromScim(name);
+    }
+
+    private static Set<ImEntity> scimImsToEntity(User.Ims ims) {
+        Set<ImEntity> imEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : ims.getIm()) {
+            imEntities.add(ImEntity.fromScim(multiValuedAttribute));
+        }
+        return imEntities;
+    }
+
+    private static Set<GroupEntity> scimUserGroupsToEntity(User.Groups groups) {
+        Set<GroupEntity> groupEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : groups.getGroup()) {
+            groupEntities.add(GroupEntity.fromScim(multiValuedAttribute));
+        }
+        return groupEntities;
+    }
+
+    private static Set<EntitlementsEntity> scimEntitlementsToEntity(User.Entitlements entitlements) {
+        Set<EntitlementsEntity> entitlementsEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : entitlements.getEntitlement()) {
+            entitlementsEntities.add(EntitlementsEntity.fromScim(multiValuedAttribute));
+        }
+        return entitlementsEntities;
+    }
+
+    private static Set<AddressEntity> scimUserAddressesToEntity(User.Addresses addresses) {
+        Set<AddressEntity> addressEntities = new HashSet<>();
+        for (Address address : addresses.getAddress()) {
+            addressEntities.add(AddressEntity.fromScim(address));
+        }
+        return addressEntities;
+    }
+
+    private static Set<String> scimAnyToStringSet(List<Object> any) {
+        Set<String> anyStrings = new HashSet<>();
+        for (Object object : any) {
+            anyStrings.add(object.toString());
+        }
+        return anyStrings;
+    }
+
+    private static Set<EmailEntity> scimEmailsToEntity(User.Emails emails) {
+        Set<EmailEntity> emailEntities = new HashSet<>();
+        for (MultiValuedAttribute multiValuedAttribute : emails.getEmail()) {
+            emailEntities.add(EmailEntity.fromScim(multiValuedAttribute));
+        }
+        return emailEntities;
+    }
+
 }

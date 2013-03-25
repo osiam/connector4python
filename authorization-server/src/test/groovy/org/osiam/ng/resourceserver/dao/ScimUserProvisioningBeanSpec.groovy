@@ -15,8 +15,8 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
 
     def userDao = Mock(UserDAO)
-    def entityToScimMapper = Mock(EntityToScimMapper)
-    def scimToEntityMapper = Mock(ScimToEntityMapper)
+
+//    def scimToEntityMapper = Mock(ScimToEntityMapper)
     def userEntity = Mock(UserEntity)
     def scimUser = Mock(User)
     ScimUserProvisioningBean scimUserProvisioningBean =
@@ -26,7 +26,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
     def "should be possible to get an user by his id"() {
         given:
         userDao.getById("1234") >> userEntity
-        entityToScimMapper.entityUserToScim(userEntity) >> scimUser
+        userEntity.toScim() >> scimUser
 
         when:
         def user = scimUserProvisioningBean.getById("1234")
@@ -37,9 +37,8 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should be possible to create a user"() {
         given:
-        scimToEntityMapper.scimUserToEntity(scimUser) >> userEntity
         userDao.createUser(userEntity) >> userEntity
-        entityToScimMapper.entityUserToScim(userEntity) >> scimUser
+        userEntity.toScim() >> scimUser
 
         when:
         def user = scimUserProvisioningBean.createUser(scimUser)

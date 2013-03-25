@@ -24,6 +24,10 @@
 package org.osiam.ng.resourceserver.entities
 
 import org.springframework.security.core.userdetails.UserDetails
+import scim.schema.v2.Address
+import scim.schema.v2.MultiValuedAttribute
+import scim.schema.v2.Name
+import scim.schema.v2.User
 import spock.lang.Specification
 
 /**
@@ -277,5 +281,235 @@ class UserEntitySpec extends Specification {
 
         then:
         userEntity.getAny() == any
+    }
+
+    def name = new NameEntity()
+    def scimName
+
+    def setup() {
+        name.setFamilyName("familyName")
+        name.setFormatted("formattedName")
+        name.setGivenName("givenName")
+        name.setHonorificPrefix("prefix")
+        name.setHonorificSuffix("suffix")
+        name.setId(1234)
+        name.setMiddleName("middleName")
+
+
+        scimName = new Name.Builder().
+                setFamilyName("familyName").
+                setFormatted("formattedName").
+                setGivenName("givenName").
+                setHonorificPrefix("prefix").
+                setHonorificSuffix("suffix").
+                setMiddleName("middleName").
+                build()
+
+        addresses.getAddress().add(new Address.Builder().
+                setCountry("country").
+                setFormatted("formatted").
+                setLocality("locality").
+                setPostalCode("123456").
+                setRegion("region").
+                setStreetAddress("streetAddress").setPrimary(true).
+                build())
+
+        emails.getEmail().add(new MultiValuedAttribute.Builder().
+                setPrimary(true).
+                setType("type").
+                setValue("value").
+                build())
+
+        entitlements.getEntitlement().add(new MultiValuedAttribute.Builder().
+                setValue("value").
+                build())
+
+        groups.getGroup().add(new MultiValuedAttribute.Builder().
+                setValue(UUID.randomUUID().toString()).
+                setDisplay("display").
+                build())
+
+        ims.getIm().add(new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                setType("type").
+                build())
+
+        phoneNumbers.getPhoneNumber().add(new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                setType("type").
+                build())
+
+        photos.getPhoto().add(new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                setType("type").
+                build())
+
+        roles.getRole().add(new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                build())
+
+        certificates.getX509Certificate().add(new MultiValuedAttribute.Builder().
+                setValue("blaaaa").
+                build())
+    }
+
+    def "should be possible to map a user entity to a scim user class"() {
+        given:
+        userEntity.setActive(true)
+        userEntity.setAddresses([Mock(AddressEntity)] as Set<AddressEntity>)
+        userEntity.setAny(["stuff", "bro"] as Set<String>)
+        userEntity.setDisplayName("displayName")
+        userEntity.setEmails([Mock(EmailEntity)] as Set<EmailEntity>)
+        userEntity.setEntitlements([Mock(EntitlementsEntity)] as Set<EntitlementsEntity>)
+        userEntity.setExternalId("externalId")
+        userEntity.setGroups([Mock(GroupEntity)] as Set<GroupEntity>)
+        userEntity.setId(123456)
+        userEntity.setIms([Mock(ImEntity)] as Set<ImEntity>)
+        userEntity.setLocale("locale")
+        userEntity.setName(name)
+        userEntity.setNickName("nickName")
+        userEntity.setPassword("topS3cr3t")
+        userEntity.setPhoneNumbers([Mock(PhoneNumberEntity)] as Set<PhoneNumberEntity>)
+        userEntity.setPhotos([Mock(PhotoEntity)] as Set<PhotoEntity>)
+        userEntity.setPreferredLanguage("preferredLanguage")
+        userEntity.setProfileUrl("profileURL")
+        userEntity.setRoles([Mock(RolesEntity)] as Set<RolesEntity>)
+        userEntity.setTimezone("timeZone")
+        userEntity.setTitle("title")
+        userEntity.setUsername("userName")
+        userEntity.setUserType("userType")
+        userEntity.setX509Certificates([Mock(X509CertificateEntity)] as Set<X509CertificateEntity>)
+        userEntity.setExternalId("externalId")
+
+        when:
+        def user = userEntity.toScim()
+
+        then:
+        user.isActive()
+        user.addresses != null
+        user.any == ["stuff", "bro"]
+        user.displayName == "displayName"
+        user.emails != null
+        user.entitlements != null
+        user.externalId == "externalId"
+        user.groups != null
+        user.id == null
+        user.ims != null
+        user.locale == "locale"
+        user.name != null
+        user.nickName == "nickName"
+        user.password == "topS3cr3t"
+        user.phoneNumbers != null
+        user.photos != null
+        user.preferredLanguage == "preferredLanguage"
+        user.profileUrl == "profileURL"
+        user.roles != null
+        user.timezone == "timeZone"
+        user.title == "title"
+        user.userName == "userName"
+        user.userType == "userType"
+        user.x509Certificates != null
+    }
+
+    def "should be possible to map a user entity to a scim user class without setting the name"() {
+        given:
+        userEntity.setActive(true)
+        userEntity.setAddresses([Mock(AddressEntity)] as Set<AddressEntity>)
+        userEntity.setAny(["stuff", "bro"] as Set<String>)
+        userEntity.setDisplayName("displayName")
+        userEntity.setEmails([Mock(EmailEntity)] as Set<EmailEntity>)
+        userEntity.setEntitlements([Mock(EntitlementsEntity)] as Set<EntitlementsEntity>)
+        userEntity.setExternalId("externalId")
+        userEntity.setGroups([Mock(GroupEntity)] as Set<GroupEntity>)
+        userEntity.setId(123456)
+        userEntity.setIms([Mock(ImEntity)] as Set<ImEntity>)
+        userEntity.setLocale("locale")
+        userEntity.setName(null)
+        userEntity.setNickName("nickName")
+        userEntity.setPassword("topS3cr3t")
+        userEntity.setPhoneNumbers([Mock(PhoneNumberEntity)] as Set<PhoneNumberEntity>)
+        userEntity.setPhotos([Mock(PhotoEntity)] as Set<PhotoEntity>)
+        userEntity.setPreferredLanguage("preferredLanguage")
+        userEntity.setProfileUrl("profileURL")
+        userEntity.setRoles([Mock(RolesEntity)] as Set<RolesEntity>)
+        userEntity.setTimezone("timeZone")
+        userEntity.setTitle("title")
+        userEntity.setUsername("userName")
+        userEntity.setUserType("userType")
+        userEntity.setX509Certificates([Mock(X509CertificateEntity)] as Set<X509CertificateEntity>)
+        userEntity.setExternalId("externalId")
+
+        when:
+        def user = userEntity.toScim()
+
+        then:
+        user.isActive()
+        user.addresses != null
+        user.any == ["stuff", "bro"]
+        user.displayName == "displayName"
+        user.emails != null
+        user.entitlements != null
+        user.externalId == "externalId"
+        user.groups != null
+        user.id == null
+        user.ims != null
+        user.locale == "locale"
+        user.name == null
+        user.nickName == "nickName"
+        user.password == "topS3cr3t"
+        user.phoneNumbers != null
+        user.photos != null
+        user.preferredLanguage == "preferredLanguage"
+        user.profileUrl == "profileURL"
+        user.roles != null
+        user.timezone == "timeZone"
+        user.title == "title"
+        user.userName == "userName"
+        user.userType == "userType"
+        user.x509Certificates != null
+    }
+
+    User.Addresses addresses = new User.Addresses()
+    User.Emails emails = new User.Emails()
+    User.Entitlements entitlements = new User.Entitlements()
+    User.Groups groups = new User.Groups()
+    User.Ims ims = new User.Ims()
+    User.PhoneNumbers phoneNumbers = new User.PhoneNumbers()
+    User.Photos photos = new User.Photos()
+    User.Roles roles = new User.Roles()
+    User.X509Certificates certificates = new User.X509Certificates()
+
+    def "should be possible to map a scim user class to a user entity"() {
+        given:
+        User user = new User.Builder("username").
+                setActive(true).
+                setAddresses(addresses).
+                setAny(["test","this", "stuff"]).
+                setDisplayName("displayname").
+                setEmails(emails).
+                setEntitlements(entitlements).
+                setGroups(groups).
+                setIms(ims).
+                setLocale("locale").
+                setName(scimName).
+                setNickName("nickname").
+                setPassword("password").
+                setPhoneNumbers(phoneNumbers).
+                setPhotos(photos).
+                setPreferredLanguage("preferredLanguage").
+                setProfileUrl("profileUrl").
+                setRoles(roles).
+                setTimezone("timeZone").
+                setTitle("title").
+                setUserType("userType").
+                setX509Certificates(certificates).
+                setExternalId("externalId").
+                build()
+
+        when:
+        def userEntity = UserEntity.fromScim(user)
+
+        then:
+        userEntity != null
     }
 }
