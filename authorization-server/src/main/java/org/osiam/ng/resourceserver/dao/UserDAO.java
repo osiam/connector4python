@@ -69,4 +69,8 @@ public class UserDAO {
         }
         return (UserEntity) result.get(0);
     }
+
+    public void update(UserEntity entity) {
+        em.merge(entity);
+    }
 }

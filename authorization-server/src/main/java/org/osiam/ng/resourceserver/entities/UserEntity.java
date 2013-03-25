@@ -56,7 +56,7 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false, unique = true)
     private String userName;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private NameEntity name;
 
     @Column
@@ -89,32 +89,32 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmailEntity> emails;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PhoneNumberEntity> phoneNumbers;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ImEntity> ims;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PhotoEntity> photos;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<AddressEntity> addresses;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<GroupEntity> groups;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<EntitlementsEntity> entitlements;
 
     //needs to be eager fetched due to authorization decisions
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<RolesEntity> roles;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<X509CertificateEntity> x509Certificates;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -509,6 +509,10 @@ public class UserEntity implements UserDetails {
     }
 
     private User.X509Certificates entityX509CertificatesToScim(Set<X509CertificateEntity> x509CertificateEntities) {
+        if (x509CertificateEntities == null){
+            return null;
+        }
+
         User.X509Certificates x509Certificates = new User.X509Certificates();
         for (X509CertificateEntity x509CertificateEntity : x509CertificateEntities) {
             x509Certificates.getX509Certificate().add(x509CertificateEntity.toScim());
@@ -517,6 +521,10 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Roles entityRolesToScim(Set<RolesEntity> rolesEntities) {
+        if (rolesEntities == null){
+            return null;
+        }
+
         User.Roles roles = new User.Roles();
         for (RolesEntity rolesEntity : rolesEntities) {
             roles.getRole().add(rolesEntity.toScim());
@@ -525,6 +533,10 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Photos entityPhotosToScim(Set<PhotoEntity> photoEntities) {
+        if (photoEntities == null){
+            return null;
+        }
+
         User.Photos photos = new User.Photos();
         for (PhotoEntity photoEntity : photoEntities) {
             photos.getPhoto().add(photoEntity.toScim());
@@ -533,6 +545,10 @@ public class UserEntity implements UserDetails {
     }
 
     private User.PhoneNumbers entityPhonenumbersToScim(Set<PhoneNumberEntity> phoneNumberEntities) {
+        if (phoneNumberEntities == null){
+            return null;
+        }
+
         User.PhoneNumbers phoneNumbers = new User.PhoneNumbers();
         for (PhoneNumberEntity phoneNumberEntity : phoneNumberEntities) {
             phoneNumbers.getPhoneNumber().add(phoneNumberEntity.toScim());
@@ -541,6 +557,10 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Ims entityImsToScim(Set<ImEntity> imEntities) {
+        if (imEntities == null){
+            return null;
+        }
+
         User.Ims ims = new User.Ims();
         for (ImEntity imEntity : imEntities) {
             ims.getIm().add(imEntity.toScim());
@@ -549,6 +569,10 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Groups entityGroupsToScim(Set<GroupEntity> groupEntities) {
+        if (groupEntities == null){
+            return null;
+        }
+
         User.Groups groups = new User.Groups();
         for (GroupEntity groupEntity : groupEntities) {
             groups.getGroup().add(groupEntity.toScim());
@@ -558,6 +582,10 @@ public class UserEntity implements UserDetails {
 
 
     private User.Entitlements entityEntitlementsToScim(Set<EntitlementsEntity> entitlementsEntities) {
+        if (entitlements== null){
+            return null;
+        }
+
         User.Entitlements entitlements = new User.Entitlements();
         for (EntitlementsEntity entitlementsEntity : entitlementsEntities) {
             entitlements.getEntitlement().add(entitlementsEntity.toScim());
@@ -566,6 +594,9 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Emails entityEmailToScim(Set<EmailEntity> emailEntities) {
+        if (emailEntities == null){
+            return null;
+        }
         User.Emails emails = new User.Emails();
         for (EmailEntity emailEntity : emailEntities) {
             emails.getEmail().add(emailEntity.toScim());
@@ -573,8 +604,8 @@ public class UserEntity implements UserDetails {
         return emails;
     }
 
-    private List<Object> anyStringSetToObjectSet(Set<String> anySet) {
-        List<Object> objectSet = new ArrayList<>();
+    private Set<Object> anyStringSetToObjectSet(Set<String> anySet) {
+        Set<Object> objectSet = new HashSet<>();
         for (String any : anySet) {
             objectSet.add(any);
         }
@@ -582,6 +613,8 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Addresses entityAddressToScim(Set<AddressEntity> addressEntities) {
+        if (addressEntities == null)
+            return null;
         User.Addresses addresses = new User.Addresses();
         for (AddressEntity addressEntity : addressEntities) {
             addresses.getAddress().add(addressEntity.toScim());
@@ -694,7 +727,7 @@ public class UserEntity implements UserDetails {
         return addressEntities;
     }
 
-    private static Set<String> scimAnyToStringSet(List<Object> any) {
+    private static Set<String> scimAnyToStringSet(Set<Object> any) {
         Set<String> anyStrings = new HashSet<>();
         if (any != null)
             for (Object object : any) {
