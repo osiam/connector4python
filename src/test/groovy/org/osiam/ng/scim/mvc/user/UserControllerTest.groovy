@@ -55,7 +55,7 @@ class UserControllerTest extends Specification {
         given:
         def user = Mock(User)
         user.getExternalId() >> "test"
-        httpServletRequest.getRequestURL() >> new StringBuffer("http://host:port/deployment/User")
+        httpServletRequest.getRequestURL() >> new StringBuffer("http://host:port/deployment/User/")
         def uri = new URI("http://host:port/deployment/User/test")
 
         when:
