@@ -43,8 +43,8 @@ import java.util.*;
 })
 public class UserEntity implements UserDetails {
 
-    private final long serialVersionUID = 4265464684797943613L;
-    private final String MAPPING_NAME = "user";
+    private static final String MAPPING_NAME = "user";
+
 
     @Id
     @GeneratedValue
@@ -56,7 +56,7 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false, unique = true)
     private String userName;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     private NameEntity name;
 
     @Column
@@ -89,32 +89,32 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<EmailEntity> emails;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<PhoneNumberEntity> phoneNumbers;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<ImEntity> ims;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<PhotoEntity> photos;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<AddressEntity> addresses;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<GroupEntity> groups;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<EntitlementsEntity> entitlements;
 
     //needs to be eager fetched due to authorization decisions
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<RolesEntity> roles;
 
-    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<X509CertificateEntity> x509Certificates;
 
     @ElementCollection(fetch = FetchType.EAGER)

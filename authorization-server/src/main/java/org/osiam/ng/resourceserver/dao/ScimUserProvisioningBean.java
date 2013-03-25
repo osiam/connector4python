@@ -26,6 +26,7 @@ package org.osiam.ng.resourceserver.dao;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
@@ -38,6 +39,7 @@ import javax.inject.Inject;
  * To change this template use File | Settings | File Templates.
  */
 @Service
+
 public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Inject
@@ -52,7 +54,9 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Override
     public User createUser(User user) {
-        UserEntity userEntity = userDao.createUser(UserEntity.fromScim(user));
-        return userEntity.toScim();
+        UserEntity userEntity = UserEntity.fromScim(user);
+        userDao.createUser(userEntity);
+//        UserEntity userEntity = userDao.getByUsername(user.getUserName());
+        return user;
     }
 }

@@ -27,6 +27,7 @@ import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -35,6 +36,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
+@Transactional
 public class UserDAO {
 
     @PersistenceContext
@@ -45,14 +47,13 @@ public class UserDAO {
         this.em = em;
     }
 
-    public UserEntity createUser (UserEntity userEntity) {
+    public void createUser (UserEntity userEntity) {
         try {
             em.persist(userEntity);
+//            em.flush();
         } catch (EntityExistsException e) {
             throw new ResourceExistsException("The user with name " + userEntity.getUsername() + " already exists.");
         }
-
-        return getByUsername(userEntity.getUsername());
     }
 
     public UserEntity getById(String id) {

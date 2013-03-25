@@ -45,7 +45,7 @@ public class GroupEntity {
     @Column(nullable = false)
     private String displayName;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<MemberEntity> members;
 
     @Column(name = "additional")

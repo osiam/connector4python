@@ -15,8 +15,6 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
 
     def userDao = Mock(UserDAO)
-
-//    def scimToEntityMapper = Mock(ScimToEntityMapper)
     def userEntity = Mock(UserEntity)
     def scimUser = Mock(User)
     ScimUserProvisioningBean scimUserProvisioningBean =
