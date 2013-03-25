@@ -35,7 +35,7 @@ public interface SCIMUserProvisioning {
      * <p/>
      * It must throw an ResourceNotFoundException if no user got found.
      *
-     * @param id the identifier of the user
+     * @param id the external identifier of an user
      * @return the found user
      * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
      *          if no user with the given id got found
@@ -52,4 +52,15 @@ public interface SCIMUserProvisioning {
      *          if the resource already exists
      */
     User createUser(User user);
+
+    /**
+     * This method updates an user.
+     *
+     * @param id,   the external identifier of an user
+     * @param user, an user representation which should be created
+     * @return the updated user
+     * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
+     *          if no user with the given id got found
+     */
+    User updateUser(String id, User user);
 }

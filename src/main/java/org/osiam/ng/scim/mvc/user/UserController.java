@@ -80,4 +80,18 @@ public class UserController {
         return createdUser;
     }
 
+    @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public User updateUser(@PathVariable final String id,
+                           @RequestBody User user,
+                           HttpServletRequest request, HttpServletResponse response) {
+        User createdUser = scimUserProvisioning.updateUser(id, user);
+        String requestUrl = request.getRequestURL().toString();
+        URI uri = new UriTemplate("{requestUrl}/{externalId}").expand(requestUrl, createdUser.getExternalId());
+        response.setHeader("Location", uri.toASCIIString());
+        return createdUser;
+    }
+
+
 }
