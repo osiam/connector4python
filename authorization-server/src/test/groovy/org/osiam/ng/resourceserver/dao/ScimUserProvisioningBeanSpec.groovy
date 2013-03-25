@@ -1,6 +1,7 @@
 package org.osiam.ng.resourceserver.dao
 
 import org.osiam.ng.resourceserver.entities.UserEntity
+import org.osiam.ng.scim.exceptions.ResourceExistsException
 import scim.schema.v2.User
 import spock.lang.Specification
 
@@ -35,14 +36,25 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should be possible to create a user"() {
         given:
-        userDao.createUser(_) >> userEntity
         userEntity.toScim() >> scimUser
-
 
         when:
         def user = scimUserProvisioningBean.createUser(scimUser)
 
         then:
         user == scimUser
+    }
+
+    def "should throw exception if user already exists"() {
+        given:
+        userDao.createUser(_) >> {throw new Exception()}
+        scimUser.getUserName() >> "Bäm"
+
+        when:
+        scimUserProvisioningBean.createUser(scimUser)
+
+        then:
+        def e = thrown(ResourceExistsException)
+        e.getMessage() == "The user with name Bäm already exists."
     }
 }

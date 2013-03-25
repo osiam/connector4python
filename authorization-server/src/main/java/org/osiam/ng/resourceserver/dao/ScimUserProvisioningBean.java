@@ -27,7 +27,6 @@ import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
@@ -55,9 +54,14 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     @Override
     public User createUser(User user) {
         UserEntity userEntity = UserEntity.fromScim(user);
-        userDao.createUser(userEntity);
+        try {
+            userDao.createUser(userEntity);
+        } catch (Exception e) {
+            throw new ResourceExistsException("The user with name " + user.getUserName() + " already exists.");
+        }
         return user;
     }
+
 
     @Override
     public User updateUser(String id, User user) {
