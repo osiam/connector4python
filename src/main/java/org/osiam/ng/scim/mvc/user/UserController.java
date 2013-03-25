@@ -24,7 +24,6 @@
 package org.osiam.ng.scim.mvc.user;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.util.JSONPObject;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
