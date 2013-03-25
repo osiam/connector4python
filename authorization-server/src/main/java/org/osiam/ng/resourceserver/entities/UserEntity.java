@@ -589,7 +589,7 @@ public class UserEntity implements UserDetails {
         return addresses;
     }
 
-    public static UserEntity fromScim(User user){
+    public static UserEntity fromScim(User user) {
         UserEntity userEntity = new UserEntity();
         userEntity.setActive(user.isActive());
         userEntity.setAddresses(scimUserAddressesToEntity(user.getAddresses()));
@@ -619,33 +619,37 @@ public class UserEntity implements UserDetails {
 
     private static Set<X509CertificateEntity> scimCertificatesToEntity(User.X509Certificates x509Certificates) {
         Set<X509CertificateEntity> x509CertificateEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : x509Certificates.getX509Certificate()) {
-            x509CertificateEntities.add(X509CertificateEntity.fromScim(multiValuedAttribute));
-        }
+        if (x509Certificates != null)
+            for (MultiValuedAttribute multiValuedAttribute : x509Certificates.getX509Certificate()) {
+                x509CertificateEntities.add(X509CertificateEntity.fromScim(multiValuedAttribute));
+            }
         return x509CertificateEntities;
     }
 
     private static Set<RolesEntity> scimUserRolesToEntity(User.Roles roles) {
         Set<RolesEntity> rolesEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : roles.getRole()) {
-            rolesEntities.add(RolesEntity.fromScim(multiValuedAttribute));
-        }
+        if (roles != null)
+            for (MultiValuedAttribute multiValuedAttribute : roles.getRole()) {
+                rolesEntities.add(RolesEntity.fromScim(multiValuedAttribute));
+            }
         return rolesEntities;
     }
 
     private static Set<PhotoEntity> scimPhotosToEntity(User.Photos photos) {
         Set<PhotoEntity> photoEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : photos.getPhoto()) {
-            photoEntities.add(PhotoEntity.fromScim(multiValuedAttribute));
-        }
+        if (photos != null)
+            for (MultiValuedAttribute multiValuedAttribute : photos.getPhoto()) {
+                photoEntities.add(PhotoEntity.fromScim(multiValuedAttribute));
+            }
         return photoEntities;
     }
 
     private static Set<PhoneNumberEntity> scimPhonenumbersToEntity(User.PhoneNumbers phoneNumbers) {
         Set<PhoneNumberEntity> phoneNumberEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : phoneNumbers.getPhoneNumber()) {
-            phoneNumberEntities.add(PhoneNumberEntity.fromScim(multiValuedAttribute));
-        }
+        if (phoneNumbers != null)
+            for (MultiValuedAttribute multiValuedAttribute : phoneNumbers.getPhoneNumber()) {
+                phoneNumberEntities.add(PhoneNumberEntity.fromScim(multiValuedAttribute));
+            }
         return phoneNumberEntities;
     }
 
@@ -655,49 +659,56 @@ public class UserEntity implements UserDetails {
 
     private static Set<ImEntity> scimImsToEntity(User.Ims ims) {
         Set<ImEntity> imEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : ims.getIm()) {
-            imEntities.add(ImEntity.fromScim(multiValuedAttribute));
-        }
+        if (ims != null)
+            for (MultiValuedAttribute multiValuedAttribute : ims.getIm()) {
+                imEntities.add(ImEntity.fromScim(multiValuedAttribute));
+            }
         return imEntities;
     }
 
     private static Set<GroupEntity> scimUserGroupsToEntity(User.Groups groups) {
         Set<GroupEntity> groupEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : groups.getGroup()) {
-            groupEntities.add(GroupEntity.fromScim(multiValuedAttribute));
-        }
+        if (groups != null)
+            for (MultiValuedAttribute multiValuedAttribute : groups.getGroup()) {
+                groupEntities.add(GroupEntity.fromScim(multiValuedAttribute));
+            }
         return groupEntities;
     }
 
     private static Set<EntitlementsEntity> scimEntitlementsToEntity(User.Entitlements entitlements) {
         Set<EntitlementsEntity> entitlementsEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : entitlements.getEntitlement()) {
-            entitlementsEntities.add(EntitlementsEntity.fromScim(multiValuedAttribute));
-        }
+        if (entitlements != null)
+            for (MultiValuedAttribute multiValuedAttribute : entitlements.getEntitlement()) {
+                entitlementsEntities.add(EntitlementsEntity.fromScim(multiValuedAttribute));
+            }
         return entitlementsEntities;
     }
 
     private static Set<AddressEntity> scimUserAddressesToEntity(User.Addresses addresses) {
+
         Set<AddressEntity> addressEntities = new HashSet<>();
-        for (Address address : addresses.getAddress()) {
-            addressEntities.add(AddressEntity.fromScim(address));
-        }
+        if (addresses != null)
+            for (Address address : addresses.getAddress()) {
+                addressEntities.add(AddressEntity.fromScim(address));
+            }
         return addressEntities;
     }
 
     private static Set<String> scimAnyToStringSet(List<Object> any) {
         Set<String> anyStrings = new HashSet<>();
-        for (Object object : any) {
-            anyStrings.add(object.toString());
-        }
+        if (any != null)
+            for (Object object : any) {
+                anyStrings.add(object.toString());
+            }
         return anyStrings;
     }
 
     private static Set<EmailEntity> scimEmailsToEntity(User.Emails emails) {
         Set<EmailEntity> emailEntities = new HashSet<>();
-        for (MultiValuedAttribute multiValuedAttribute : emails.getEmail()) {
-            emailEntities.add(EmailEntity.fromScim(multiValuedAttribute));
-        }
+        if (emails != null)
+            for (MultiValuedAttribute multiValuedAttribute : emails.getEmail()) {
+                emailEntities.add(EmailEntity.fromScim(multiValuedAttribute));
+            }
         return emailEntities;
     }
 
