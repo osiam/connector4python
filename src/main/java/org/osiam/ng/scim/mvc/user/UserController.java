@@ -70,8 +70,8 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public User createUser(HttpServletRequest request, HttpServletResponse response) {
-        User user = generateUser(request);
+    public User createUser(@RequestBody User user,
+            HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.createUser(user);
         String requestUrl = request.getRequestURL().toString();
         URI uri = new UriTemplate("{requestUrl}/{externalId}").expand(requestUrl, createdUser.getExternalId());
@@ -79,22 +79,4 @@ public class UserController {
         return createdUser;
     }
 
-    private User generateUser(HttpServletRequest request) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        StringBuffer jb = new StringBuffer();
-        String line;
-        try {
-            BufferedReader reader = request.getReader();
-            while ((line = reader.readLine()) != null)
-                jb.append(line);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
-        try {
-            return objectMapper.readValue(jb.toString(), User.class);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-
-    }
 }
