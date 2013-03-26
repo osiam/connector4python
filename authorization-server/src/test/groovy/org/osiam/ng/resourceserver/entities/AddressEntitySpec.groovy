@@ -80,10 +80,10 @@ class AddressEntitySpec extends Specification {
 
     def "setter and getter for the postal code should be present"() {
         when:
-        addressEntity.setPostalCode(123456)
+        addressEntity.setPostalCode("123456")
 
         then:
-        addressEntity.getPostalCode() == 123456
+        addressEntity.getPostalCode() == "123456"
     }
 
     def "setter and getter for the country should be present"() {

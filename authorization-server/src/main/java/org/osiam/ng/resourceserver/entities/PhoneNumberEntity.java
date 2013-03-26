@@ -94,7 +94,7 @@ public class PhoneNumberEntity {
     public static PhoneNumberEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
         PhoneNumberEntity phoneNumberEntity = new PhoneNumberEntity();
         phoneNumberEntity.setType(multiValuedAttribute.getType());
-        phoneNumberEntity.setValue(multiValuedAttribute.getValue().toString());
+        phoneNumberEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return phoneNumberEntity;
     }
 }

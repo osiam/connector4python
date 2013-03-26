@@ -41,7 +41,7 @@ public class SetUserSingleFields {
         if (userValue instanceof Name) {
             entity.setName(NameEntity.fromScim(user.getName()));
         } else {
-            if (!(key == "password" && String.valueOf(userValue).isEmpty()))
+            if (!(key == "password" && userValue != null && String.valueOf(userValue).isEmpty()))
                 updateSimpleField(entity, entityField, userValue);
         }
     }

@@ -74,27 +74,24 @@ public class SetUserFields {
     static final String[] READ_ONLY_FIELDS = {"id", "meta", "groups"};
     static final Set<String> READ_ONLY_FIELD_SET = new HashSet<>(Arrays.asList(READ_ONLY_FIELDS));
 
-    public void setFields() {
+    public void setFields() throws IllegalAccessException {
         Map<String, Field> userFields = getFieldsAsNormalizedMap(user.getClass());
         Map<String, Field> entityFields = getFieldsAsNormalizedMap(entity.getClass());
         SetUserListFields setUserListFields = new SetUserListFields(entity);
         SetUserSingleFields setUserSingleFields = new SetUserSingleFields(entity);
-        try {
-            for (String key : userFields.keySet()) {
-                Field field = userFields.get(key);
-                field.setAccessible(true);
-                if (!READ_ONLY_FIELD_SET.contains(key)) {
-                    Object userValue = field.get(user);
-                    UserLists attributes = UserLists.fromString.get(key);
-                    if (attributes == null) {
-                        setUserSingleFields.updateSingleField(user, entityFields.get(key), userValue, key);
-                    } else {
-                        setUserListFields.updateListFields(userValue, attributes);
-                    }
+
+        for (String key : userFields.keySet()) {
+            Field field = userFields.get(key);
+            field.setAccessible(true);
+            if (!READ_ONLY_FIELD_SET.contains(key)) {
+                Object userValue = field.get(user);
+                UserLists attributes = UserLists.fromString.get(key);
+                if (attributes == null) {
+                    setUserSingleFields.updateSingleField(user, entityFields.get(key), userValue, key);
+                } else {
+                    setUserListFields.updateListFields(userValue, attributes);
                 }
             }
-        } catch (IllegalAccessException e1) {
-            throw new IllegalStateException("This should not happen.");
         }
     }
 

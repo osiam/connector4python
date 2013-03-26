@@ -40,7 +40,7 @@ class ClientDetailsLoadingBeanTest extends Specification {
 
         result.getScope().contains("GET")
         result.getScope().contains("POST")
-        result.getScope().size() == 2
+        result.getScope().contains("PUT")
         result.getResourceIds().size() == 0
         result.getAuthorizedGrantTypes().size() == 3
         result.getRegisteredRedirectUri().size() > 1

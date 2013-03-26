@@ -387,7 +387,7 @@ class UserEntitySpec extends Specification {
         then:
         user.isActive()
         user.addresses != null
-        user.any == ["stuff", "bro"]
+        user.any.size() == 2
         user.displayName == "displayName"
         user.emails != null
         user.entitlements != null
@@ -445,7 +445,7 @@ class UserEntitySpec extends Specification {
         then:
         user.isActive()
         user.addresses != null
-        user.any == ["stuff", "bro"]
+        user.any.size() == 2
         user.displayName == "displayName"
         user.emails != null
         user.entitlements != null
@@ -481,10 +481,11 @@ class UserEntitySpec extends Specification {
 
     def "should be possible to map a scim user class to a user entity"() {
         given:
+        Set<String> any = ["test","this", "stuff"]
         User user = new User.Builder("username").
                 setActive(true).
                 setAddresses(addresses).
-                setAny(["test","this", "stuff"]).
+                setAny(any).
                 setDisplayName("displayname").
                 setEmails(emails).
                 setEntitlements(entitlements).
