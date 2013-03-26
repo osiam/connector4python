@@ -48,7 +48,7 @@ class UserTest extends Specification {
         given:
         def builder = new User.Builder("test").setActive(true)
                 .setAddresses(new User.Addresses())
-                .setAny(["ha"])
+                .setAny(["ha"] as Set)
                 .setDisplayName("display")
                 .setEmails(new User.Emails())
                 .setEntitlements(new User.Entitlements())
