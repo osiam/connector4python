@@ -24,16 +24,13 @@
 package org.osiam.ng.test.actors
 
 import geb.Browser
-import org.codehaus.jackson.map.ObjectMapper
-import scim.schema.v2.User
-
-import java.util.regex.Matcher
-
 import org.apache.commons.codec.binary.Base64
 import org.apache.http.util.EntityUtils
 import org.osiam.ng.test.clients.http.HttpClient
 import org.osiam.ng.test.clients.http.HttpResponse
 import org.osiam.ng.test.clients.rest.RestClient
+
+import java.util.regex.Matcher
 
 /**
  * Test actor representing a client in terms of OAuth 2.0 (see
@@ -144,21 +141,6 @@ class ClientTestActor {
      */
     public accessResource(String resourcePath = "", String accessToken) {
         HttpResponse resourceRespose = http.get("${explicitUserResourceUri}/${resourcePath}?access_token=${accessToken}")
-        def resource = resourceRespose.jsonBody
-        EntityUtils.consume(resourceRespose.response.entity)
-        return resource
-    }
-
-    public postUserResource(User user, String resourcePath = "", String accessToken = accessToken) {
-
-
-        ObjectMapper mapper = new ObjectMapper();
-        def json = mapper.writeValueAsString(user)
-
-        HttpResponse resourceRespose = http.post("${explicitUserResourceUri}/${resourcePath}?access_token=${accessToken}",
-                ['user': json]
-        )
-
         def resource = resourceRespose.jsonBody
         EntityUtils.consume(resourceRespose.response.entity)
         return resource
