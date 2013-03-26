@@ -41,6 +41,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.params.HttpClientParams
+import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.message.BasicNameValuePair
 
@@ -82,9 +83,11 @@ class HttpClient {
      * 
      * @param url the URL to call.
      * @param parameters the parameters to send.
+     * @param headers the headers
+     * @param jsonString the JSON representation of the user
      * @return the resulting {@link HttpResponse}.
      */
-    HttpResponse post(String url, Map<String, String> parameters, Map<String, String> headers = [:]) {
+    HttpResponse post(String url, Map<String, String> parameters = [:], Map<String, String> headers = [:], String jsonString = null) {
         HttpPost request = new HttpPost(url)
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(parameters.size())
@@ -95,6 +98,11 @@ class HttpClient {
 
         headers.each {key, value ->
             request.addHeader(key, value)
+        }
+
+        if (jsonString) {
+            StringEntity stringEntity = new StringEntity(jsonString, "application/json", "UTF-8")
+            request.setEntity(stringEntity)
         }
 
         return execute(request)

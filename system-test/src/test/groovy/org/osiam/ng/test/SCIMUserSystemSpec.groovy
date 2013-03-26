@@ -31,9 +31,16 @@ import scim.schema.v2.User
 
 class SCIMUserSystemSpec extends AbstractSystemSpec {
 
+    String state = "testState"
+    String scope = "GET POST"
+
     def "OSNG-10: the client should be able to access the requested user if it sends a valid access token and the user exists"() {
         given:
+<<<<<<< HEAD
         valid_access_token("GET POST", UUID.randomUUID().toString())
+=======
+        valid_access_token(scope, state)
+>>>>>>> origin/master
         when:
         def result = client.accessResource("marissa")
         then:
@@ -41,16 +48,21 @@ class SCIMUserSystemSpec extends AbstractSystemSpec {
 
     }
 
-    def "OSNG-10: the client should be able to access the requested user if it sends a valid access token, but resource not found exception occur if user not exists"() {
+    def "OSNG-10: a resource not found exception should occur if the requested user does not exist"() {
         given:
+<<<<<<< HEAD
         def identifier = "JohnDo"
         valid_access_token("GET POST", UUID.randomUUID().toString())
+=======
+        valid_access_token(scope, state)
+>>>>>>> origin/master
         when:
-        client.accessResource(identifier)
+        client.accessResource("JohnDo")
         then:
         thrown(JsonException)
     }
 
+<<<<<<< HEAD
     def "OSNG-11: the client should be able to create an unique user"() {
         given:
         def scimUser = new User.Builder(UUID.randomUUID().toString()).setPassword("pass").build()
@@ -63,4 +75,17 @@ class SCIMUserSystemSpec extends AbstractSystemSpec {
     }
 
 
+=======
+    def "OSNG-11: the client should be able to create a new user if it sends a valid access token"() {
+        given:
+        valid_access_token(scope, state)
+        def jsonString = "{\"userName\":\"bam\",\"password\":\"1234\",\"externalId\":\"bam\"}"
+
+        when:
+        def result = client.createResource(jsonString)
+
+        then:
+        result.externalId == "bam"
+    }
+>>>>>>> origin/master
 }

@@ -27,7 +27,7 @@ package org.osiam.ng.test
 class AuthorizationServerSystemSpec extends AbstractSystemSpec {
 
     String state = "testState"
-    String scope = "GET"
+    String scope = "GET POST"
 
     def "OSNG-7: the client should get an authorization code if the user grants access"() {
         when:

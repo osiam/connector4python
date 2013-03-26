@@ -34,9 +34,9 @@ import javax.servlet.http.HttpServletRequest
 
 class AccessTokenServletSpec extends Specification {
 
-    HttpServletRequest httpRequest = Mock()
-    HttpClient httpClient = Mock()
-    RequestDispatcher requestDispatcher = Mock()
+    def httpRequest = Mock(HttpServletRequest)
+    def httpClient = Mock(HttpClient)
+    def requestDispatcher = Mock(RequestDispatcher)
 
     AccessTokenController accessTokenServlet = new AccessTokenController(httpClient: httpClient)
 
@@ -80,8 +80,6 @@ class AccessTokenServletSpec extends Specification {
         then:
         result == "error"
     }
-
-
 
     def "should wrap json exception to IllegalStateException"() {
         given:

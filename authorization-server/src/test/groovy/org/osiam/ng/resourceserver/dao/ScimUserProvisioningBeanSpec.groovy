@@ -95,7 +95,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
         def entity = new UserEntity()
         when:
-        scimUserProvisioningBean.updateUser("1234", scimUser)
+        scimUserProvisioningBean.replaceUser("1234", scimUser)
 
 
         then:

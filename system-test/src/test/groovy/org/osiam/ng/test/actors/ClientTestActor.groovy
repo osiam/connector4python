@@ -142,7 +142,7 @@ class ClientTestActor {
      *
      * @param resourcePath the resource's path relative to the {@link #explicitUserResourceUri}.
      */
-    public accessResource(String resourcePath = "", String accessToken = accessToken) {
+    public accessResource(String resourcePath = "", String accessToken) {
         HttpResponse resourceRespose = http.get("${explicitUserResourceUri}/${resourcePath}?access_token=${accessToken}")
         def resource = resourceRespose.jsonBody
         EntityUtils.consume(resourceRespose.response.entity)
@@ -161,6 +161,18 @@ class ClientTestActor {
 
         def resource = resourceRespose.jsonBody
         EntityUtils.consume(resourceRespose.response.entity)
+        return resource
+    }
+
+    /**
+     * Tries to create the specified resource using the current {@link #accessToken}.
+     * @param the JSON representation of the user
+     */
+    public createResource(String jsonString) {
+        def url = "${explicitUserResourceUri}/?access_token=${accessToken}"
+        HttpResponse resourceResponse = http.post(url, [:], [:], jsonString)
+        def resource = resourceResponse.jsonBody
+        EntityUtils.consume(resourceResponse.response.entity)
         return resource
     }
 

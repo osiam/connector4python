@@ -605,6 +605,9 @@ public class UserEntity implements UserDetails {
     }
 
     private Set<Object> anyStringSetToObjectSet(Set<String> anySet) {
+        if (anySet == null){
+            return null;
+        }
         Set<Object> objectSet = new HashSet<>();
         for (String any : anySet) {
             objectSet.add(any);
