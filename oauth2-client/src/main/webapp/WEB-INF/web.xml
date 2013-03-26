@@ -37,4 +37,9 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <error-page>
+        <exception-type>org.osiam.oauth2.client.exceptions.UserFriendlyException</exception-type>
+        <location>/WEB-INF/jsp/exception.jsp</location>
+    </error-page>
+
 </web-app>
