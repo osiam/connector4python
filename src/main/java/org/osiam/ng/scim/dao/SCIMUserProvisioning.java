@@ -62,5 +62,5 @@ public interface SCIMUserProvisioning {
      * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
      *          if no user with the given id got found
      */
-    User updateUser(String id, User user);
+    User replaceUser(String id, User user);
 }

@@ -28,7 +28,7 @@ package scim.schema.v2;
  */
 public abstract class Resource {
 
-    protected  String id;
+    protected String id;
     protected Meta meta;
 
     protected Resource(){}

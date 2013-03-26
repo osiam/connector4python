@@ -26,7 +26,9 @@ package scim.schema.v2;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -58,7 +60,7 @@ public class User extends CoreResource {
     private User.Entitlements entitlements;
     private User.Roles roles;
     private User.X509Certificates x509Certificates;
-    private List<Object> any;
+    private Set<Object> any;
 
     public User(){
 
@@ -119,7 +121,7 @@ public class User extends CoreResource {
         private User.X509Certificates x509Certificates;
 
 
-        private List<Object> any = new ArrayList<>();
+        private Set<Object> any;
 
 
         public Builder(String userName) {
@@ -228,7 +230,7 @@ public class User extends CoreResource {
             return this;
         }
 
-        public Builder setAny(List<Object> any) {
+        public Builder setAny(Set<Object> any) {
             this.any = any;
             return this;
         }
@@ -470,7 +472,7 @@ public class User extends CoreResource {
      * Objects of the following type(s) are allowed in the list
      * {@link Object }
      */
-    public List<Object> getAny() {
+    public Set<Object> getAny() {
         return this.any;
     }
 
@@ -478,7 +480,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Addresses {
+    public static class Addresses implements UserFields{
 
         private List<Address> address = new ArrayList<>();
 
@@ -509,10 +511,11 @@ public class User extends CoreResource {
     }
 
 
+    public static interface UserFields{}
     /**
      * Java class for anonymous complex type.
      */
-    public static class Emails {
+    public static class Emails implements UserFields{
 
         private List<MultiValuedAttribute> email = new ArrayList<>();
 
@@ -546,7 +549,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Entitlements {
+    public static class Entitlements implements UserFields{
 
         private List<MultiValuedAttribute> entitlement = new ArrayList<>();
 
@@ -580,7 +583,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Groups {
+    public static class Groups implements UserFields{
 
         private List<MultiValuedAttribute> group = new ArrayList<>();
 
@@ -614,7 +617,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Ims {
+    public static class Ims implements UserFields{
 
         private List<MultiValuedAttribute> im = new ArrayList<>();
 
@@ -648,7 +651,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class PhoneNumbers {
+    public static class PhoneNumbers implements UserFields{
 
         private List<MultiValuedAttribute> phoneNumber = new ArrayList<>();
 
@@ -682,7 +685,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Photos {
+    public static class Photos implements UserFields{
 
         private List<MultiValuedAttribute> photo = new ArrayList<>();
 
@@ -716,7 +719,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Roles {
+    public static class Roles implements UserFields{
 
         private List<MultiValuedAttribute> role = new ArrayList<>();
 
@@ -750,7 +753,7 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class X509Certificates {
+    public static class X509Certificates implements UserFields{
 
         private List<MultiValuedAttribute> x509Certificate = new ArrayList<>();
 

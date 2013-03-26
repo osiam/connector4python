@@ -45,8 +45,32 @@ class UserTest extends Specification {
 
 
     def "should generate a user based on builder"() {
-        expect:
+        given:
+        def builder = new User.Builder("test").setActive(true)
+                .setAddresses(new User.Addresses())
+                .setAny(["ha"])
+                .setDisplayName("display")
+                .setEmails(new User.Emails())
+                .setEntitlements(new User.Entitlements())
+                .setGroups(new User.Groups())
+                .setIms(new User.Ims())
+                .setLocale("locale")
+                .setName(new Name.Builder().build())
+                .setNickName("nickname")
+                .setPassword("password")
+                .setPhoneNumbers(new User.PhoneNumbers())
+                .setPhotos(new User.Photos())
+                .setPreferredLanguage("prefereedLanguage")
+                .setProfileUrl("profileUrl")
+                .setRoles(new User.Roles())
+                .setTimezone("time")
+                .setTitle("title")
+                .setUserType("userType")
+                .setX509Certificates(new User.X509Certificates())
+                .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
+        when:
         User user = builder.build()
+        then:
         user.active == builder.active
         user.addresses == builder.addresses
         user.any == builder.any
@@ -72,33 +96,6 @@ class UserTest extends Specification {
         user.id == builder.id
         user.externalId == builder.externalId
         user.meta == builder.meta
-
-
-
-        where:
-        builder << [new User.Builder("test").setActive(true),
-                new User.Builder("test2").setAddresses(new User.Addresses()),
-                new User.Builder("test").setAny(["ha"]),
-                new User.Builder("test").setDisplayName("display"),
-                new User.Builder("test").setEmails(new User.Emails()),
-                new User.Builder("test").setEntitlements(new User.Entitlements()),
-                new User.Builder("test").setGroups(new User.Groups()),
-                new User.Builder("test").setIms(new User.Ims()),
-                new User.Builder("test").setLocale("locale"),
-                new User.Builder("test").setName(new Name.Builder().build()),
-                new User.Builder("test").setNickName("nickname"),
-                new User.Builder("test").setPassword("password"),
-                new User.Builder("test").setPhoneNumbers(new User.PhoneNumbers()),
-                new User.Builder("test").setPhotos(new User.Photos()),
-                new User.Builder("test").setPreferredLanguage("prefereedLanguage"),
-                new User.Builder("test").setProfileUrl("profileUrl"),
-                new User.Builder("test").setRoles(new User.Roles()),
-                new User.Builder("test").setTimezone("time"),
-                new User.Builder("test").setTitle("title"),
-                new User.Builder("test").setUserType("userType"),
-                new User.Builder("test").setX509Certificates(new User.X509Certificates()),
-                new User.Builder("test").setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
-        ]
     }
 
     def "should be able to enrich addresses, emails, entitlements, groups, phone-numbers, photos, roles and certificates"() {
@@ -112,7 +109,7 @@ class UserTest extends Specification {
                 .setPhotos(new User.Photos())
                 .setRoles(new User.Roles())
                 .setX509Certificates(new User.X509Certificates()).build()
-        def address =  new Address.Builder().build()
+        def address = new Address.Builder().build()
         def generalAttribute = new MultiValuedAttribute.Builder().build()
 
         when:
