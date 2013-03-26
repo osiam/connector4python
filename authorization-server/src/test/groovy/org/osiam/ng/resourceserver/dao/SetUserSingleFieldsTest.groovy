@@ -44,7 +44,7 @@ class SetUserSingleFieldsTest extends Specification {
 
         when:
         underTest.updateSingleField(scimUser, aha.get("displayname"), scimUser.displayName, "displayname")
-        underTest.updateSingleField(scimUser, aha.get("name"), scimUser.name, "name")
+        underTest.updateSingleField(scimUser, aha.get("name"), scimUser.getName(), "name")
         then:
         scimUser.displayName == entity.displayName
         scimUser.name.familyName == entity.name.familyName

@@ -47,7 +47,6 @@ public class UserEntity implements UserDetails {
 
     private static final String MAPPING_NAME = "user";
 
-
     @Id
     @GeneratedValue
     private long id;
@@ -92,32 +91,32 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<EmailEntity> emails = new HashSet<>();
+    private Set<EmailEntity> emails;
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PhoneNumberEntity> phoneNumbers = new HashSet<>();
+    private Set<PhoneNumberEntity> phoneNumbers;
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ImEntity> ims = new HashSet<>();
+    private Set<ImEntity> ims;
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PhotoEntity> photos = new HashSet<>();
+    private Set<PhotoEntity> photos;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<AddressEntity> addresses = new HashSet<>();
+    private Set<AddressEntity> addresses;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<GroupEntity> groups = new HashSet<>();
+    private Set<GroupEntity> groups;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<EntitlementsEntity> entitlements = new HashSet<>();
+    private Set<EntitlementsEntity> entitlements;
 
     //needs to be eager fetched due to authorization decisions
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<RolesEntity> roles = new HashSet<>();
+    private Set<RolesEntity> roles;
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<X509CertificateEntity> x509Certificates = new HashSet<>();
+    private Set<X509CertificateEntity> x509Certificates;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "scim_user_additional", joinColumns = @JoinColumn(name = "id"))
@@ -347,6 +346,8 @@ public class UserEntity implements UserDetails {
      * @return the emails entity
      */
     public Set<EmailEntity> getEmails() {
+//        if (emails == null)
+//            emails = new HashSet<>();
         return emails;
     }
 
@@ -361,6 +362,8 @@ public class UserEntity implements UserDetails {
      * @return the phone numbers entity
      */
     public Set<PhoneNumberEntity> getPhoneNumbers() {
+//        if (phoneNumbers == null)
+//            phoneNumbers = new HashSet<>();
         return phoneNumbers;
     }
 
@@ -375,6 +378,8 @@ public class UserEntity implements UserDetails {
      * @return the instant messaging entity
      */
     public Set<ImEntity> getIms() {
+        if (ims == null)
+            ims = new HashSet<>();
         return ims;
     }
 
@@ -389,6 +394,8 @@ public class UserEntity implements UserDetails {
      * @return the photos entity
      */
     public Set<PhotoEntity> getPhotos() {
+//        if (photos == null)
+//            photos = new HashSet<>();
         return photos;
     }
 
@@ -403,6 +410,8 @@ public class UserEntity implements UserDetails {
      * @return the addresses entity
      */
     public Set<AddressEntity> getAddresses() {
+//        if (addresses == null)
+//            addresses = new HashSet<>();
         return addresses;
     }
 
@@ -417,6 +426,8 @@ public class UserEntity implements UserDetails {
      * @return the groups entity
      */
     public Set<GroupEntity> getGroups() {
+//        if (groups == null)
+//            groups = new HashSet<>();
         return groups;
     }
 
@@ -431,6 +442,8 @@ public class UserEntity implements UserDetails {
      * @return the entitlements
      */
     public Set<EntitlementsEntity> getEntitlements() {
+//        if (entitlements == null)
+//            entitlements = new HashSet<>();
         return entitlements;
     }
 
@@ -445,6 +458,8 @@ public class UserEntity implements UserDetails {
      * @return the roles
      */
     public Set<RolesEntity> getRoles() {
+//        if (roles == null)
+//            roles = new HashSet<>();
         return roles;
     }
 
@@ -459,6 +474,8 @@ public class UserEntity implements UserDetails {
      * @return the X509 certs
      */
     public Set<X509CertificateEntity> getX509Certificates() {
+//        if (x509Certificates == null)
+//            x509Certificates = new HashSet<>();
         return x509Certificates;
     }
 
@@ -519,7 +536,7 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Roles entityRolesToScim(Set<RolesEntity> rolesEntities) {
-        if (rolesEntities == null){
+        if (rolesEntities == null) {
             return null;
         }
 
@@ -531,7 +548,7 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Photos entityPhotosToScim(Set<PhotoEntity> photoEntities) {
-        if (photoEntities == null){
+        if (photoEntities == null) {
             return null;
         }
 
@@ -543,7 +560,7 @@ public class UserEntity implements UserDetails {
     }
 
     private User.PhoneNumbers entityPhonenumbersToScim(Set<PhoneNumberEntity> phoneNumberEntities) {
-        if (phoneNumberEntities == null){
+        if (phoneNumberEntities == null) {
             return null;
         }
 
@@ -555,7 +572,7 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Ims entityImsToScim(Set<ImEntity> imEntities) {
-        if (imEntities == null){
+        if (imEntities == null) {
             return null;
         }
 
@@ -567,7 +584,7 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Groups entityGroupsToScim(Set<GroupEntity> groupEntities) {
-        if (groupEntities == null){
+        if (groupEntities == null) {
             return null;
         }
 
@@ -580,7 +597,7 @@ public class UserEntity implements UserDetails {
 
 
     private User.Entitlements entityEntitlementsToScim(Set<EntitlementsEntity> entitlementsEntities) {
-        if (entitlements== null){
+        if (entitlements == null) {
             return null;
         }
 
@@ -592,7 +609,7 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Emails entityEmailToScim(Set<EmailEntity> emailEntities) {
-        if (emailEntities == null){
+        if (emailEntities == null) {
             return null;
         }
         User.Emails emails = new User.Emails();
@@ -603,7 +620,7 @@ public class UserEntity implements UserDetails {
     }
 
     private Set<Object> anyStringSetToObjectSet(Set<String> anySet) {
-        if (anySet == null){
+        if (anySet == null) {
             return null;
         }
         Set<Object> objectSet = new HashSet<>();
