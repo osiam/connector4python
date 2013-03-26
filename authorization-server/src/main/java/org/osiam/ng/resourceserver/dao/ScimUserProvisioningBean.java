@@ -23,15 +23,13 @@
 
 package org.osiam.ng.resourceserver.dao;
 
-import org.osiam.ng.resourceserver.entities.*;
+import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
-import java.lang.reflect.Field;
-import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,35 +41,6 @@ import java.util.*;
 @Service
 public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
-    private static final String[] READ_ONLY_FIELDS = {"id", "meta", "groups"};
-    private static final Set<String> READ_ONLY_FIELD_SET = new HashSet<>(Arrays.asList(READ_ONLY_FIELDS));
-
-
-
-    public enum UserLists {
-        EMAILS("emails"),
-        IMS("ims"),
-        PHONENUMBERS("phonenumbers"),
-        PHOTOS("photos"),
-
-        ENTITLEMENTS("entitlements"),
-        ROLES("roles"),
-        X509("x509certificates"),
-        ADDRESSES("addresses");
-
-        private final String isUserClass;
-
-        UserLists(String isUserClass) {
-            this.isUserClass = isUserClass;
-        }
-
-        private static Map<String, UserLists> fromString = new HashMap<>();
-
-        static {
-            for (UserLists d : values())
-                fromString.put(d.isUserClass, d);
-        }
-    }
 
     @Inject
     private UserDAO userDao;
@@ -97,46 +66,14 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Override
     public User replaceUser(String id, User user) {
-        UserEntity entity = userDao.getById(id);
-        setFields(user, entity);
-        userDao.update(entity);
-        return entity.toScim();
-    }
-
-    private void setFields(User user, UserEntity entity) {
-        Map<String, Field> userFields = getFieldsAsNormalizedMap(user.getClass());
-        Map<String, Field> entityFields = getFieldsAsNormalizedMap(entity.getClass());
-        SetUserListFields setUserListFields = new SetUserListFields(entity);
-        SetUserSingleFields setUserSingleFields = new SetUserSingleFields(entity);
         try {
-            for (String key : userFields.keySet()) {
-                Field field = userFields.get(key);
-                field.setAccessible(true);
-                if (!READ_ONLY_FIELD_SET.contains(key)) {
-                    Object userValue = field.get(user);
-                    UserLists attributes = UserLists.fromString.get(key);
-                    if (attributes == null) {
-                        setUserSingleFields.updateSingleField(user, entityFields.get(key), userValue, key);
-                    } else {
-                        setUserListFields.updateListFields(userValue, attributes);
-                    }
-                }
-            }
-        } catch (IllegalAccessException e1) {
+            UserEntity entity = userDao.getById(id);
+            SetUserFields setUserFields = new SetUserFields(user, entity);
+            setUserFields.setFields();
+            userDao.update(entity);
+            return entity.toScim();
+        } catch (IllegalAccessException e) {
             throw new IllegalStateException("This should not happen.");
         }
-    }
-
-
-    private Map<String, Field> getFieldsAsNormalizedMap(Class<?> clazz) {
-        Map<String, Field> fields = new HashMap<>();
-        if (clazz != null) {
-            for (Field f : clazz.getDeclaredFields()) {
-                fields.put(f.getName().toLowerCase(), f);
-            }
-            fields.putAll(getFieldsAsNormalizedMap(clazz.getSuperclass()));
-        }
-
-        return fields;
     }
 }

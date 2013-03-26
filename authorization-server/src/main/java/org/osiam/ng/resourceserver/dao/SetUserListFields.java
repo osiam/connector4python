@@ -40,7 +40,7 @@ public class SetUserListFields {
         this.entity = entity;
     }
 
-    public void updateListFields(Object userValue, ScimUserProvisioningBean.UserLists attributes) {
+    public void updateListFields(Object userValue, SetUserFields.UserLists attributes) {
         switch (attributes) {
             case EMAILS:
                 setEmails(userValue);
@@ -70,113 +70,91 @@ public class SetUserListFields {
     }
 
     void setX509(Object userValue) {
+        entity.getX509Certificates().clear();
         if (userValue != null) {
-            Set<X509CertificateEntity> x509 = new HashSet<X509CertificateEntity>();
             for (MultiValuedAttribute m : User.X509Certificates.class.cast(userValue).getX509Certificate()) {
                 X509CertificateEntity fromScim = X509CertificateEntity.fromScim(m);
                 fromScim.setUser(entity);
-                x509.add(fromScim);
+                entity.getX509Certificates().add(fromScim);
             }
-            entity.setX509Certificates(x509);
-        } else {
-            entity.getX509Certificates().clear();
         }
     }
 
     void setRoles(Object userValue) {
+        entity.getRoles().clear();
         if (userValue != null) {
-            Set<RolesEntity> roles = new HashSet<RolesEntity>();
             for (MultiValuedAttribute m : User.Roles.class.cast(userValue).getRole()) {
                 RolesEntity fromScim = RolesEntity.fromScim(m);
-                roles.add(fromScim);
+                entity.getRoles().add(fromScim);
             }
-            entity.setRoles(roles);
-        } else {
-            entity.getRoles().clear();
         }
     }
 
     void setPhotos(Object userValue) {
+        entity.getPhotos().clear();
         if (userValue != null) {
-            Set<PhotoEntity> photos = new HashSet<PhotoEntity>();
             for (MultiValuedAttribute m : User.Photos.class.cast(userValue).getPhoto()) {
                 PhotoEntity fromScim = PhotoEntity.fromScim(m);
                 fromScim.setUser(entity);
-                photos.add(fromScim);
+                entity.getPhotos().add(fromScim);
             }
-            entity.setPhotos(photos);
-        } else {
-            entity.getPhotos().clear();
         }
     }
 
     void setPhoneNumbers(Object userValue) {
+        entity.getPhoneNumbers().clear();
         if (userValue != null) {
-            Set<PhoneNumberEntity> phonenUmbers = new HashSet<PhoneNumberEntity>();
+
             for (MultiValuedAttribute m : User.PhoneNumbers.class.cast(userValue).getPhoneNumber()) {
                 PhoneNumberEntity fromScim = PhoneNumberEntity.fromScim(m);
                 fromScim.setUser(entity);
-                phonenUmbers.add(fromScim);
+                entity.getPhoneNumbers().add(fromScim);
             }
-            entity.setPhoneNumbers(phonenUmbers);
-        } else {
-            entity.getPhoneNumbers().clear();
         }
     }
 
     void setIMS(Object userValue) {
+        entity.getIms().clear();
         if (userValue != null) {
-            Set<ImEntity> ims = new HashSet<ImEntity>();
             for (MultiValuedAttribute m : User.Ims.class.cast(userValue).getIm()) {
                 ImEntity fromScim = ImEntity.fromScim(m);
                 fromScim.setUser(entity);
-                ims.add(fromScim);
+                entity.getIms().add(fromScim);
             }
-            entity.setIms(ims);
-        } else {
-            entity.getIms().clear();
+
         }
     }
 
     void setAddresses(Object userValue) {
+        entity.getAddresses().clear();
         if (userValue != null) {
-            Set<AddressEntity> addresses = new HashSet<AddressEntity>();
             for (Address m : User.Addresses.class.cast(userValue).getAddress()) {
                 AddressEntity fromScim = AddressEntity.fromScim(m);
                 fromScim.setUser(entity);
-                addresses.add(fromScim);
+                entity.getAddresses().add(fromScim);
             }
-            entity.setAddresses(addresses);
-        } else {
-            entity.getAddresses().clear();
         }
     }
 
     void setEntitlements(Object userValue) {
+        entity.getEntitlements().clear();
         if (userValue != null) {
-            Set<EntitlementsEntity> entitlements = new HashSet<EntitlementsEntity>();
             for (MultiValuedAttribute m : User.Entitlements.class.cast(userValue).getEntitlement()) {
                 EntitlementsEntity entitlement = EntitlementsEntity.fromScim(m);
-                entitlements.add(entitlement);
+                entity.getEntitlements().add(entitlement);
             }
-
-            entity.setEntitlements(entitlements);
-        } else {
-            entity.getEntitlements().clear();
         }
     }
 
     void setEmails(Object userValue) {
+        entity.getEmails().clear();
         if (userValue != null) {
-            Set<EmailEntity> emails = new HashSet<EmailEntity>();
+
             for (MultiValuedAttribute m : User.Emails.class.cast(userValue).getEmail()) {
                 EmailEntity email = EmailEntity.fromScim(m);
                 email.setUser(entity);
-                emails.add(email);
+                entity.getEmails().add(email);
             }
-            entity.setEmails(emails);
-        } else {
-            entity.getEmails().clear();
         }
     }
 }

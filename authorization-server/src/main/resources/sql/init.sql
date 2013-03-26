@@ -50,7 +50,7 @@ CREATE TABLE scim_address (
   locality character varying(255),
   region character varying(255),
   country character varying(255),
-  postalCode bigint,
+  postalCode character varying(255),
   user_id bigint
 );
 

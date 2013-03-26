@@ -104,8 +104,8 @@ public class EmailEntity {
     public static EmailEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
         EmailEntity emailEntity = new EmailEntity();
         emailEntity.setType(multiValuedAttribute.getType());
-        emailEntity.setValue(multiValuedAttribute.getValue().toString());
-        emailEntity.setPrimary(multiValuedAttribute.isPrimary());
+        emailEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
+        emailEntity.setPrimary((multiValuedAttribute.isPrimary() == null ? false : multiValuedAttribute.isPrimary()));
         return emailEntity;
     }
 }

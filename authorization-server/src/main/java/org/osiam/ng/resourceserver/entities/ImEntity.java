@@ -94,7 +94,7 @@ public class ImEntity {
     public static ImEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
         ImEntity imEntity = new ImEntity();
         imEntity.setType(multiValuedAttribute.getType());
-        imEntity.setValue(multiValuedAttribute.getValue().toString());
+        imEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return imEntity;
     }
 }

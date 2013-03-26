@@ -93,7 +93,7 @@ public class PhotoEntity {
     public static PhotoEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
         PhotoEntity photoEntity = new PhotoEntity();
         photoEntity.setType(multiValuedAttribute.getType());
-        photoEntity.setValue(multiValuedAttribute.getValue().toString());
+        photoEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return photoEntity;
     }
 }

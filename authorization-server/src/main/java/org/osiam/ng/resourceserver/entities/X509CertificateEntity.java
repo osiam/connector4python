@@ -81,7 +81,7 @@ public class X509CertificateEntity {
 
     public static X509CertificateEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
         X509CertificateEntity x509CertificateEntity = new X509CertificateEntity();
-        x509CertificateEntity.setValue(multiValuedAttribute.getValue().toString());
+        x509CertificateEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return x509CertificateEntity;
     }
 }

@@ -53,7 +53,7 @@ public class AddressEntity {
     private String region;
 
     @Column
-    private int postalCode;
+    private String postalCode;
 
     @Column
     private String country;
@@ -121,11 +121,11 @@ public class AddressEntity {
         this.region = region;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -161,8 +161,8 @@ public class AddressEntity {
         addressEntity.setCountry(address.getCountry());
         addressEntity.setFormatted(address.getFormatted());
         addressEntity.setLocality(address.getLocality());
-        addressEntity.setPostalCode(Integer.parseInt(address.getPostalCode()));
-        addressEntity.setPrimary(address.isPrimary());
+        addressEntity.setPostalCode(address.getPostalCode());
+        addressEntity.setPrimary((address.isPrimary() == null? false : address.isPrimary()));
         addressEntity.setRegion(address.getRegion());
         addressEntity.setStreetAddress(address.getStreetAddress());
         addressEntity.setType(address.getType());

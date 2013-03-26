@@ -31,7 +31,9 @@ import scim.schema.v2.Name;
 import scim.schema.v2.User;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * User Entity
@@ -90,32 +92,32 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<EmailEntity> emails;
+    private Set<EmailEntity> emails = new HashSet<>();
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PhoneNumberEntity> phoneNumbers;
+    private Set<PhoneNumberEntity> phoneNumbers = new HashSet<>();
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ImEntity> ims;
+    private Set<ImEntity> ims = new HashSet<>();
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PhotoEntity> photos;
+    private Set<PhotoEntity> photos = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<AddressEntity> addresses;
+    private Set<AddressEntity> addresses = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<GroupEntity> groups;
+    private Set<GroupEntity> groups = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<EntitlementsEntity> entitlements;
+    private Set<EntitlementsEntity> entitlements = new HashSet<>();
 
     //needs to be eager fetched due to authorization decisions
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<RolesEntity> roles;
+    private Set<RolesEntity> roles = new HashSet<>();
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<X509CertificateEntity> x509Certificates;
+    private Set<X509CertificateEntity> x509Certificates = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "scim_user_additional", joinColumns = @JoinColumn(name = "id"))
@@ -509,10 +511,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.X509Certificates entityX509CertificatesToScim(Set<X509CertificateEntity> x509CertificateEntities) {
-        if (x509CertificateEntities == null){
-            return null;
-        }
-
         User.X509Certificates x509Certificates = new User.X509Certificates();
         for (X509CertificateEntity x509CertificateEntity : x509CertificateEntities) {
             x509Certificates.getX509Certificate().add(x509CertificateEntity.toScim());

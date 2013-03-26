@@ -37,16 +37,16 @@ public class SetUserSingleFields {
         this.entity = entity;
     }
 
-    void updateSingleField(User user, Field entityField, Object userValue, String key) throws IllegalAccessException {
+    public void updateSingleField(User user, Field entityField, Object userValue, String key) throws IllegalAccessException {
         if (userValue instanceof Name) {
             entity.setName(NameEntity.fromScim(user.getName()));
         } else {
-            if (!(key == "password" && String.valueOf(userValue).isEmpty()))
+            if (!(key == "password" && userValue != null && String.valueOf(userValue).isEmpty()))
                 updateSimpleField(entity, entityField, userValue);
         }
     }
 
-    void updateSimpleField(Object entity, Field entityField, Object userValue) throws IllegalAccessException {
+    private void updateSimpleField(Object entity, Field entityField, Object userValue) throws IllegalAccessException {
         entityField.setAccessible(true);
         entityField.set(entity, userValue);
     }
