@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%--
   ~ Copyright (C) 2013 tarent AG
   ~
@@ -21,11 +20,10 @@
   ~ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
   ~ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   --%>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Oauth2 Client</title>
 </head>
 <body>
@@ -36,19 +34,21 @@
     <p>Auth code: <%= request.getAttribute("code") %></p>
     <p>Authorization-Server response:</p>
     <p><%= request.getAttribute("response") %></p>
-    <h2>Search Resource:</h2>
-    <form action="resource" method="post">
+    <h2>Get User Resource:</h2>
+    <form method="post">
         <input id="hidden_access" type="hidden" name="access_token" value="<%= request.getAttribute("access_token") %>" />
         <label>Username:<br><input id="username" name="username" type="text"></label><br>
-        <input type="submit" value="Get Resource"/>
+        <input type="submit" formaction="resource" value="Get Resource"/>
     </form>
-    <h2>Add Resource:</h2>
-    <form action="createResource" method="post">
+    <h2>Add/Update User Resource:</h2>
+    <form method="post">
         <input id="hidden_access_token" type="hidden" name="access_token" value="<%= request.getAttribute("access_token") %>" />
         <label>ExternalID:<br><input id="externalId" name="externalId" type="text"></label><br>
         <label>Username:<br><input id="name" name="name" type="text"></label><br>
         <label>Password:<br><input id="password" name="password" type="text"></label><br>
-        <input type="submit" value="Add Resource"/>
+        <label>ID for Update:<br><input id="idForUpdate" name="idForUpdate" type="text"></label><br>
+        <input type="submit" formaction="createResource" value="Add Resource" />
+        <input type="submit" formaction="updateResource" value="Update Resource" />
     </form>
 </body>
 </html>
