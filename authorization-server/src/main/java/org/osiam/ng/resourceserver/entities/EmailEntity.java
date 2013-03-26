@@ -50,7 +50,7 @@ public class EmailEntity {
     @Column(name = "postgresql_does_not_like_primary")
     private boolean primary;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private UserEntity user;
 
     public long getId() {

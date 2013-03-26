@@ -21,26 +21,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.oauth2.client;
+package org.osiam.ng.resourceserver.dao;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.osiam.ng.resourceserver.entities.NameEntity;
+import org.osiam.ng.resourceserver.entities.UserEntity;
+import scim.schema.v2.Name;
+import scim.schema.v2.User;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.net.URLEncoder;
+import java.lang.reflect.Field;
 
-@Controller
-public class AuthCodeController {
+public class SetUserSingleFields {
+    private UserEntity entity;
 
-    @RequestMapping("/authcode")
-    public String redirectTogetAuthCode(HttpServletRequest req) throws ServletException, IOException {
-        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String clientId = "testClient";
-        String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080/oauth2-client/accessToken";
-        String url = environment + "/authorization-server/oauth/authorize?response_type=code&scope=GET%20POST%20PUT&state=haha&" +
-                "client_id=" + clientId + "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8");
-        return "redirect:" + url;
+    public SetUserSingleFields(UserEntity entity) {
+        this.entity = entity;
+    }
+
+    void updateSingleField(User user, Field entityField, Object userValue, String key) throws IllegalAccessException {
+        if (userValue instanceof Name) {
+            entity.setName(NameEntity.fromScim(user.getName()));
+        } else {
+            if (!(key == "password" && String.valueOf(userValue).isEmpty()))
+                updateSimpleField(entity, entityField, userValue);
+        }
+    }
+
+    void updateSimpleField(Object entity, Field entityField, Object userValue) throws IllegalAccessException {
+        entityField.setAccessible(true);
+        entityField.set(entity, userValue);
     }
 }
