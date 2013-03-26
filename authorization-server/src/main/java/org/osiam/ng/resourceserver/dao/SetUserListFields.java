@@ -40,7 +40,7 @@ public class SetUserListFields {
         this.entity = entity;
     }
 
-    public void updateListFields(Object userValue, ScimUserProvisioningBean.UserLists attributes) {
+    public void updateListFields(Object userValue, SetUserFields.UserLists attributes) {
         switch (attributes) {
             case EMAILS:
                 setEmails(userValue);
@@ -71,7 +71,7 @@ public class SetUserListFields {
 
     void setX509(Object userValue) {
         if (userValue != null) {
-            Set<X509CertificateEntity> x509 = new HashSet<X509CertificateEntity>();
+            Set<X509CertificateEntity> x509 = new HashSet<>();
             for (MultiValuedAttribute m : User.X509Certificates.class.cast(userValue).getX509Certificate()) {
                 X509CertificateEntity fromScim = X509CertificateEntity.fromScim(m);
                 fromScim.setUser(entity);
@@ -85,7 +85,7 @@ public class SetUserListFields {
 
     void setRoles(Object userValue) {
         if (userValue != null) {
-            Set<RolesEntity> roles = new HashSet<RolesEntity>();
+            Set<RolesEntity> roles = new HashSet<>();
             for (MultiValuedAttribute m : User.Roles.class.cast(userValue).getRole()) {
                 RolesEntity fromScim = RolesEntity.fromScim(m);
                 roles.add(fromScim);

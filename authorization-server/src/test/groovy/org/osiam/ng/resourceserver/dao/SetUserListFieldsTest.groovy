@@ -21,33 +21,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver.dao;
+package org.osiam.ng.resourceserver.dao
 
-import org.osiam.ng.resourceserver.entities.NameEntity;
-import org.osiam.ng.resourceserver.entities.UserEntity;
-import scim.schema.v2.Name;
-import scim.schema.v2.User;
+import spock.lang.Specification
 
-import java.lang.reflect.Field;
-
-public class SetUserSingleFields {
-    private UserEntity entity;
-
-    public SetUserSingleFields(UserEntity entity) {
-        this.entity = entity;
-    }
-
-    public void updateSingleField(User user, Field entityField, Object userValue, String key) throws IllegalAccessException {
-        if (userValue instanceof Name) {
-            entity.setName(NameEntity.fromScim(user.getName()));
-        } else {
-            if (!(key == "password" && String.valueOf(userValue).isEmpty()))
-                updateSimpleField(entity, entityField, userValue);
-        }
-    }
-
-    private void updateSimpleField(Object entity, Field entityField, Object userValue) throws IllegalAccessException {
-        entityField.setAccessible(true);
-        entityField.set(entity, userValue);
-    }
+class SetUserListFieldsTest extends Specification {
 }
