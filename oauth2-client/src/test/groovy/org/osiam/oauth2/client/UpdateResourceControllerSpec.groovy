@@ -4,6 +4,7 @@ import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.PostMethod
 import org.apache.commons.httpclient.methods.PutMethod
 import org.json.JSONException
+import org.osiam.oauth2.client.exceptions.UserFriendlyException
 import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
@@ -34,10 +35,24 @@ class UpdateResourceControllerSpec extends Specification {
 
         then:
         1 * httpClient.executeMethod({PutMethod put ->
+            put.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
             put.responseStream = new ByteArrayInputStream(jsonString.getBytes())
         })
         1 * servletRequest.setAttribute("userResponse", _)
         1 * servletRequest.setAttribute("LocationHeader", _)
+    }
+
+    def "should return userFriendlyException when StatusCode is 404"() {
+        given:
+        def put = Mock(PutMethod)
+        put.getStatusCode() >> 404
+
+        when:
+        updateResourceController.readJsonFromBody(servletRequest, put)
+
+        then:
+        def e = thrown(UserFriendlyException)
+        e.toString() == "Error Code: 404<br>Message: User doesn't exists and can't be updated"
     }
 
     def "should wrap json exception to IllegalStateException"() {
