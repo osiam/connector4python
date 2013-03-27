@@ -104,4 +104,11 @@ class UserDAOTest extends Specification {
         then:
         1 * em.persist(userEntity)
     }
+
+    def "should be able to update user"(){
+        when:
+        underTest.update(userEntity)
+        then:
+        1* em.merge(userEntity)
+    }
 }
