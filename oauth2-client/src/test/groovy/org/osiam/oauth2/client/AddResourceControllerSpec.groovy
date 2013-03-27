@@ -2,6 +2,7 @@ package org.osiam.oauth2.client
 
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.PostMethod
+import org.apache.http.StatusLine
 import org.json.JSONException
 import spock.lang.Specification
 
@@ -32,7 +33,7 @@ class AddResourceControllerSpec extends Specification {
         addResourceController.createResource(servletRequest, "externalId", "userName", "password", "access_token")
 
         then:
-        1 * httpClient.executeMethod({PostMethod post ->
+        1 * httpClient.executeMethod({ PostMethod post ->
             post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
         })
         1 * servletRequest.setAttribute("userResponse", _)
@@ -45,13 +46,17 @@ class AddResourceControllerSpec extends Specification {
         servletRequest.getServerName() >> "localhost"
         String jsonString = "{\"userName\":\"userName\",\"password\":\"password\",\"externalId\":\"externalId\""
 
+
         when:
         addResourceController.createResource(servletRequest, "externalId", "userName", "password", "access_token")
 
         then:
-        1 * httpClient.executeMethod({PostMethod post ->
+        _ * httpClient.executeMethod({ PostMethod post ->
+            post.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
             post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
         })
+
+
         IllegalStateException e = thrown()
         e.message == "Expected a ',' or '}' at character 70"
         e.cause.class == JSONException.class

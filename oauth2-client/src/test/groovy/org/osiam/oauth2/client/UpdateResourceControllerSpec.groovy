@@ -51,6 +51,7 @@ class UpdateResourceControllerSpec extends Specification {
 
         then:
         1 * httpClient.executeMethod({PutMethod put ->
+            put.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
             put.responseStream = new ByteArrayInputStream(jsonString.getBytes())
         })
         IllegalStateException e = thrown()
