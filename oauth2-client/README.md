@@ -36,3 +36,6 @@ Open the following uri in your browser:
 * Now you will be redirected to the authentication server where you need to pass the credentials
 * After that you will be asked whether you want to authorize the client application to access the requested resources
 * In the end a page with the access token and other parameters will be presented or the error if the access was declined
+
+On the last page there are additionally options to get, create and update a resource. Also the errors with code and message
+are visible e.g. if a user does not exist or a update was not possible or you want to create a user twice with the same user name.
