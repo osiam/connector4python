@@ -84,10 +84,9 @@ public class UserController {
                            HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.replaceUser(id, user);
         String requestUrl = request.getRequestURL().toString();
-        URI uri = new UriTemplate("{requestUrl}").expand(requestUrl);
+        String newLocation = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+        URI uri = new UriTemplate("{newLocation}/{externalId}").expand(newLocation, createdUser.getExternalId());
         response.setHeader("Location", uri.toASCIIString());
         return createdUser;
     }
-
-
 }
