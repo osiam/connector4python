@@ -47,7 +47,9 @@ public class SetUserSingleFields {
     }
 
     private void updateSimpleField(Object entity, Field entityField, Object userValue) throws IllegalAccessException {
-        entityField.setAccessible(true);
-        entityField.set(entity, userValue);
+        if (entityField != null) {
+            entityField.setAccessible(true);
+            entityField.set(entity, userValue);
+        }
     }
 }
