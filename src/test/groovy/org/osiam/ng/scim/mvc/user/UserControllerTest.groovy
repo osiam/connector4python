@@ -66,4 +66,18 @@ class UserControllerTest extends Specification {
         1 * httpServletResponse.setHeader("Location", uri.toASCIIString())
         result == user
     }
+
+    def "should update an user and set location header"() {
+        given:
+        def id = UUID.randomUUID().toString()
+        def user = Mock(User)
+        user.externalId >> "schlemmer"
+        when:
+        def result = underTest.updateUser(id, user, httpServletRequest, httpServletResponse)
+        then:
+        1 * provisioning.replaceUser(id, user) >> user
+        1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
+        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/schlemmer")
+        result == user
+    }
 }
