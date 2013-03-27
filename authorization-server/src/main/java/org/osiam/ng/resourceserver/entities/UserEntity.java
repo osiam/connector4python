@@ -346,8 +346,8 @@ public class UserEntity implements UserDetails {
      * @return the emails entity
      */
     public Set<EmailEntity> getEmails() {
-//        if (emails == null)
-//            emails = new HashSet<>();
+        if (emails == null)
+            emails = new HashSet<>();
         return emails;
     }
 
@@ -362,8 +362,8 @@ public class UserEntity implements UserDetails {
      * @return the phone numbers entity
      */
     public Set<PhoneNumberEntity> getPhoneNumbers() {
-//        if (phoneNumbers == null)
-//            phoneNumbers = new HashSet<>();
+        if (phoneNumbers == null)
+            phoneNumbers = new HashSet<>();
         return phoneNumbers;
     }
 
@@ -394,8 +394,8 @@ public class UserEntity implements UserDetails {
      * @return the photos entity
      */
     public Set<PhotoEntity> getPhotos() {
-//        if (photos == null)
-//            photos = new HashSet<>();
+        if (photos == null)
+            photos = new HashSet<>();
         return photos;
     }
 
@@ -410,8 +410,8 @@ public class UserEntity implements UserDetails {
      * @return the addresses entity
      */
     public Set<AddressEntity> getAddresses() {
-//        if (addresses == null)
-//            addresses = new HashSet<>();
+        if (addresses == null)
+            addresses = new HashSet<>();
         return addresses;
     }
 
@@ -426,8 +426,8 @@ public class UserEntity implements UserDetails {
      * @return the groups entity
      */
     public Set<GroupEntity> getGroups() {
-//        if (groups == null)
-//            groups = new HashSet<>();
+        if (groups == null)
+            groups = new HashSet<>();
         return groups;
     }
 
@@ -442,8 +442,8 @@ public class UserEntity implements UserDetails {
      * @return the entitlements
      */
     public Set<EntitlementsEntity> getEntitlements() {
-//        if (entitlements == null)
-//            entitlements = new HashSet<>();
+        if (entitlements == null)
+            entitlements = new HashSet<>();
         return entitlements;
     }
 
@@ -458,8 +458,8 @@ public class UserEntity implements UserDetails {
      * @return the roles
      */
     public Set<RolesEntity> getRoles() {
-//        if (roles == null)
-//            roles = new HashSet<>();
+        if (roles == null)
+            roles = new HashSet<>();
         return roles;
     }
 
@@ -474,8 +474,8 @@ public class UserEntity implements UserDetails {
      * @return the X509 certs
      */
     public Set<X509CertificateEntity> getX509Certificates() {
-//        if (x509Certificates == null)
-//            x509Certificates = new HashSet<>();
+        if (x509Certificates == null)
+            x509Certificates = new HashSet<>();
         return x509Certificates;
     }
 

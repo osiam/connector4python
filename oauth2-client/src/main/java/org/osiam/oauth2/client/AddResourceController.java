@@ -39,7 +39,7 @@ public class AddResourceController {
 
     @RequestMapping("/createResource")
     public String createResource(HttpServletRequest req, @RequestParam String externalId,
-                    @RequestParam String name, @RequestParam String password, @RequestParam String access_token)
+                                 @RequestParam String name, @RequestParam String password, @RequestParam String access_token)
             throws ServletException, IOException, UserFriendlyException {
 
         StringRequestEntity requestEntity = new StringRequestEntity(getJsonString(externalId, name, password),
@@ -56,15 +56,17 @@ public class AddResourceController {
     }
 
     private void readJsonFromBody(HttpServletRequest req, PostMethod post) throws IOException, UserFriendlyException {
+        if (post.getStatusCode() == 409) {
+            throw new UserFriendlyException("409");
+        }
+
         try {
             JSONObject authResponse = new JSONObject(
                     new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream(), CHARSET)));
             req.setAttribute("userResponse", authResponse.toString());
             req.setAttribute("LocationHeader", post.getResponseHeader("Location"));
         } catch (JSONException e) {
-            if (post.getStatusCode() == 409) {
-                throw new UserFriendlyException("409");
-            }
+
             throw new IllegalStateException(e.getMessage(), e);
         } finally {
             post.releaseConnection();

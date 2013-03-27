@@ -24,4 +24,11 @@ class UserFriendlyExceptionSpec extends Specification {
         then:
         result.toString() == "Error Code: 404<br>Message: User doesn't exists and can't be updated"
     }
+
+    def "should return given error code when not 409 nor 404"(){
+        when:
+        def result = new UserFriendlyException("not404nor409")
+        then:
+        result.toString() == "not404nor409"
+    }
 }

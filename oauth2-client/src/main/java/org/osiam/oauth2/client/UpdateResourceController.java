@@ -40,14 +40,14 @@ public class UpdateResourceController {
 
     @RequestMapping("/updateResource")
     public String updateResource(HttpServletRequest req, @RequestParam String externalId,
-        @RequestParam String name, @RequestParam String password, @RequestParam String access_token,
-            @RequestParam String idForUpdate) throws ServletException, IOException, UserFriendlyException {
+                                 @RequestParam String name, @RequestParam String password, @RequestParam String access_token,
+                                 @RequestParam String idForUpdate) throws ServletException, IOException, UserFriendlyException {
 
         StringRequestEntity requestEntity = new StringRequestEntity(getJsonString(externalId, name, password),
                 "application/json", "UTF-8");
 
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String url = environment + "/authorization-server/User/"+ idForUpdate  + "?access_token=" + access_token;
+        String url = environment + "/authorization-server/User/" + idForUpdate + "?access_token=" + access_token;
 
         PutMethod put = executePutMethod(requestEntity, url);
 
@@ -57,15 +57,16 @@ public class UpdateResourceController {
     }
 
     private void readJsonFromBody(HttpServletRequest req, PutMethod put) throws IOException, UserFriendlyException {
+        if (put.getStatusCode() == 404) {
+            throw new UserFriendlyException("404");
+        }
+
         try {
             JSONObject authResponse = new JSONObject(
                     new JSONTokener(new InputStreamReader(put.getResponseBodyAsStream(), CHARSET)));
             req.setAttribute("userResponse", authResponse.toString());
             req.setAttribute("LocationHeader", put.getResponseHeader("Location"));
         } catch (JSONException e) {
-            if (put.getStatusCode() == 404) {
-                throw new UserFriendlyException("404");
-            }
             throw new IllegalStateException(e.getMessage(), e);
         } finally {
             put.releaseConnection();

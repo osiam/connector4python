@@ -2,7 +2,9 @@ package org.osiam.oauth2.client
 
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.PostMethod
+import org.apache.http.StatusLine
 import org.json.JSONException
+import org.osiam.oauth2.client.exceptions.UserFriendlyException
 import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
@@ -20,38 +22,57 @@ class AddResourceControllerSpec extends Specification {
     def httpClient = Mock(HttpClient)
     def jsonString = "{\"userName\":\"userName\",\"password\":\"password\",\"externalId\":\"externalId\"}"
 
+    def setup() {
+        servletRequest.getScheme() >> "http"
+        servletRequest.getServerName() >> "localhost"
+    }
+
+
+
     AddResourceController addResourceController = new AddResourceController(httpClient: httpClient)
 
 
     def "should be able to create a user resource"() {
         given:
-        servletRequest.getScheme() >> "http"
-        servletRequest.getServerName() >> "localhost"
 
         when:
         addResourceController.createResource(servletRequest, "externalId", "userName", "password", "access_token")
 
         then:
-        1 * httpClient.executeMethod({PostMethod post ->
+        1 * httpClient.executeMethod({ PostMethod post ->
+            post.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
             post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
         })
         1 * servletRequest.setAttribute("userResponse", _)
         1 * servletRequest.setAttribute("LocationHeader", _)
     }
 
+    def "should return userFriendlyException when StatusCode is 409"() {
+        given:
+        def post2 = Mock(PostMethod)
+        post2.getStatusCode() >> 409
+
+        when:
+        addResourceController.readJsonFromBody(servletRequest, post2)
+
+        then:
+        def e = thrown(UserFriendlyException)
+        e.toString() == "Error Code: 409<br>Message: User already exists and can't be created"
+    }
+
     def "should wrap json exception to IllegalStateException"() {
         given:
-        servletRequest.getScheme() >> "http"
-        servletRequest.getServerName() >> "localhost"
         String jsonString = "{\"userName\":\"userName\",\"password\":\"password\",\"externalId\":\"externalId\""
 
         when:
         addResourceController.createResource(servletRequest, "externalId", "userName", "password", "access_token")
 
         then:
-        1 * httpClient.executeMethod({PostMethod post ->
+        1 * httpClient.executeMethod({ PostMethod post ->
+            post.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
             post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
         })
+
         IllegalStateException e = thrown()
         e.message == "Expected a ',' or '}' at character 70"
         e.cause.class == JSONException.class
