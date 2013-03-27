@@ -68,23 +68,18 @@ The client authentication is done via [Basic Access Authentication](http://tools
 
 ## Resource Server
 
-To get an overview of all known resources call:
+All resource rest calls are implemented by the scim project.
 
-<http://localhost:8080/authorization-server>
+https://github.com/osiam-dev/scim
 
-
-### Getting User
-
-Not supported right now.
-
-#### Getting an User
-
-If you want to get a single user, you need to extend User with the external ID of the user:
-
-<http://localhost:8080/authorization-server/User/{id}?access_token=$YOUR_ACCESS_TOKEN>
-
-or 
+All scim calls are secured by oauth2, so have to send an access_token in order to get access, e.q.:
 
 ```sh
 curl -H "Authorization: Bearer {YOUR_ACCESS_TOKEN}" http://localhost:8080/authorization-server/User/{id}
 ```
+
+### User Services
+
+See https://github.com/osiam-dev/scim/blob/master/README.md#crud-user
+
+
