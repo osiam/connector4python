@@ -62,6 +62,25 @@ however, there is a reference implementation of it in:
 
 ## CRUD User
 
+### Get a single User
+
+If you want to get a single user, you need to extend User with the external ID of the user:
+
+```http
+ http://localhost:8080/authorization-server/User/{id}
+```
+
+## Create a new User
+
+```sh
+curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST localhost:8080/authorization-server/User -d '{"externalId":"marissa","userName":"Arthur Dent","password":""}' 
+```
+
+## Replace an old User
+```sh
+curl -i -H "Accept: application/json" -H "Content-type: application/json" -X PUT localhost:8080/authorization-server/User/marissa -d '{"externalId":"marissa","userName":"Arthur Dent","password":""}'
+```
+
 ## CRUD Groups
 
 
