@@ -36,14 +36,13 @@ class UserControllerTest extends Specification {
     def provisioning = Mock(SCIMUserProvisioning)
     def httpServletRequest = Mock(HttpServletRequest)
     def httpServletResponse = Mock(HttpServletResponse)
+    def user = Mock(User)
 
     def setup() {
         underTest.setScimUserProvisioning(provisioning)
     }
 
     def "should return the user found by provisioning on getUser"() {
-        given:
-        def user = Mock(User)
         when:
         def result = underTest.getUser("one")
         then:
@@ -53,7 +52,6 @@ class UserControllerTest extends Specification {
 
     def "should create the user and add the location header"() {
         given:
-        def user = Mock(User)
         user.getExternalId() >> "test"
         httpServletRequest.getRequestURL() >> new StringBuffer("http://host:port/deployment/User/")
         def uri = new URI("http://host:port/deployment/User/test")
@@ -64,6 +62,19 @@ class UserControllerTest extends Specification {
         then:
         1 * provisioning.createUser(user) >> user
         1 * httpServletResponse.setHeader("Location", uri.toASCIIString())
+        result == user
+    }
+
+    def "should update an user and set location header"() {
+        given:
+        def id = UUID.randomUUID().toString()
+        user.externalId >> "schlemmer"
+        when:
+        def result = underTest.updateUser(id, user, httpServletRequest, httpServletResponse)
+        then:
+        1 * provisioning.replaceUser(id, user) >> user
+        1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
+        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/schlemmer")
         result == user
     }
 }
