@@ -52,7 +52,7 @@ class UserControllerTest extends Specification {
 
     def "should create the user and add the location header"() {
         given:
-        user.getExternalId() >> "test"
+        user.getId() >> "test"
         httpServletRequest.getRequestURL() >> new StringBuffer("http://host:port/deployment/User/")
         def uri = new URI("http://host:port/deployment/User/test")
 
@@ -68,7 +68,7 @@ class UserControllerTest extends Specification {
     def "should update an user and set location header"() {
         given:
         def id = UUID.randomUUID().toString()
-        user.externalId >> "schlemmer"
+        user.id >> "schlemmer"
         when:
         def result = underTest.updateUser(id, user, httpServletRequest, httpServletResponse)
         then:

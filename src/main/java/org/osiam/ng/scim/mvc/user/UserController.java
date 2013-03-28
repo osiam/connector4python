@@ -71,7 +71,7 @@ public class UserController {
             HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.createUser(user);
         String requestUrl = request.getRequestURL().toString();
-        URI uri = new UriTemplate("{requestUrl}{externalId}").expand(requestUrl, createdUser.getExternalId());
+        URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, createdUser.getId());
         response.setHeader("Location", uri.toASCIIString());
         return createdUser;
     }
@@ -85,7 +85,7 @@ public class UserController {
         User createdUser = scimUserProvisioning.replaceUser(id, user);
         String requestUrl = request.getRequestURL().toString();
         String newLocation = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
-        URI uri = new UriTemplate("{newLocation}/{externalId}").expand(newLocation, createdUser.getExternalId());
+        URI uri = new UriTemplate("{newLocation}/{internalId}").expand(newLocation, createdUser.getId());
         response.setHeader("Location", uri.toASCIIString());
         return createdUser;
     }
