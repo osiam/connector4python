@@ -283,6 +283,17 @@ class UserEntitySpec extends Specification {
         userEntity.getAny() == any
     }
 
+    def "setter and getter for internalID should be present and it must be a UUID"() {
+        given:
+        def internalId = UUID.randomUUID()
+
+        when:
+        userEntity.setInternalId(internalId)
+
+        then:
+        internalId == userEntity.getInternalId()
+    }
+
     def name = new NameEntity()
     def scimName
 
@@ -355,6 +366,9 @@ class UserEntitySpec extends Specification {
 
     def "should be possible to map a user entity to a scim user class"() {
         given:
+        def internalId = UUID.randomUUID()
+
+        userEntity.setInternalId(internalId)
         userEntity.setActive(true)
         userEntity.setAddresses([Mock(AddressEntity)] as Set<AddressEntity>)
         userEntity.setAny(["stuff", "bro"] as Set<String>)
@@ -385,6 +399,7 @@ class UserEntitySpec extends Specification {
         def user = userEntity.toScim()
 
         then:
+        user.id == internalId.toString()
         user.isActive()
         user.addresses != null
         user.any.size() == 2
@@ -393,7 +408,6 @@ class UserEntitySpec extends Specification {
         user.entitlements != null
         user.externalId == "externalId"
         user.groups != null
-        user.id == null
         user.ims != null
         user.locale == "locale"
         user.name != null
@@ -413,6 +427,8 @@ class UserEntitySpec extends Specification {
 
     def "should be possible to map a user entity to a scim user class without setting the name"() {
         given:
+        def internalId = UUID.randomUUID()
+
         userEntity.setActive(true)
         userEntity.setAddresses([Mock(AddressEntity)] as Set<AddressEntity>)
         userEntity.setAny(["stuff", "bro"] as Set<String>)
@@ -438,11 +454,13 @@ class UserEntitySpec extends Specification {
         userEntity.setUserType("userType")
         userEntity.setX509Certificates([Mock(X509CertificateEntity)] as Set<X509CertificateEntity>)
         userEntity.setExternalId("externalId")
+        userEntity.setInternalId(internalId)
 
         when:
         def user = userEntity.toScim()
 
         then:
+        user.id == internalId.toString()
         user.isActive()
         user.addresses != null
         user.any.size() == 2
@@ -451,7 +469,6 @@ class UserEntitySpec extends Specification {
         user.entitlements != null
         user.externalId == "externalId"
         user.groups != null
-        user.id == null
         user.ims != null
         user.locale == "locale"
         user.name == null
@@ -481,11 +498,12 @@ class UserEntitySpec extends Specification {
 
     def "should be possible to map a scim user class to a user entity"() {
         given:
-        Set<String> any = ["test","this", "stuff"]
+        def internalId = UUID.randomUUID()
+
         User user = new User.Builder("username").
                 setActive(true).
                 setAddresses(addresses).
-                setAny(any).
+                setAny(["test","this", "stuff"] as Set).
                 setDisplayName("displayname").
                 setEmails(emails).
                 setEntitlements(entitlements).
@@ -505,12 +523,24 @@ class UserEntitySpec extends Specification {
                 setUserType("userType").
                 setX509Certificates(certificates).
                 setExternalId("externalId").
+                setId(internalId.toString()).
                 build()
 
         when:
         def userEntity = UserEntity.fromScim(user)
 
         then:
-        userEntity != null
+        userEntity.getUsername() == "username"
+        userEntity.getAny() == ["test","this", "stuff"] as Set
+        userEntity.getDisplayName() == "displayname"
+        userEntity.getLocale() == "locale"
+        userEntity.getNickName() == "nickname"
+        userEntity.getPassword() == "password"
+        userEntity.getPreferredLanguage() == "preferredLanguage"
+        userEntity.getProfileUrl() == "profileUrl"
+        userEntity.getTimezone() == "timeZone"
+        userEntity.getTitle() == "title"
+        userEntity.getUserType() == "userType"
+        userEntity.getExternalId() == "externalId"
     }
 }

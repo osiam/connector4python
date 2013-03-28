@@ -223,6 +223,7 @@ CREATE TABLE scim_roles (
 
 CREATE TABLE scim_user (
     id bigint NOT NULL,
+    internalId UUID NOT NULL UNIQUE,
     active boolean,
     displayname character varying(255),
     externalid character varying(255),
@@ -307,7 +308,7 @@ CREATE TABLE scim_user_scim_roles (
 SELECT pg_catalog.setval('hibernate_sequence', 3, false);
 
 
-INSERT INTO database_scheme_version (version) values (0.01);
+INSERT INTO database_scheme_version (version) values (0.02);
 
 
 --
@@ -398,7 +399,7 @@ INSERT INTO scim_roles (id, value) values (2, 'USER');
 -- Data for Name: scim_user; Type: TABLE DATA; Schema: public; 
 --
 
-INSERT INTO scim_user (id, externalid, password, username) VALUES (1, 'marissa', 'koala', 'marissa');
+INSERT INTO scim_user (id, internalId, externalid, password, username) VALUES (1, uuid_generate_v4(), 'marissa', 'koala', 'marissa');
 
 --
 -- Data for Name: scim_user_scim_address; Type: TABLE DATA; Schema: public; 

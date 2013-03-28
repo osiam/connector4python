@@ -52,7 +52,7 @@ public class UserDAO {
 
     public UserEntity getById(String id) {
         Query query = em.createNamedQuery("getUserById");
-        query.setParameter("externalId", id);
+        query.setParameter("internalId", id);
         return getSingleUserEntity(query, id);
     }
 

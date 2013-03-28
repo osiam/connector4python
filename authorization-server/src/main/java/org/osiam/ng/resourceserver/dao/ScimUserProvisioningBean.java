@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,12 +56,13 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     @Override
     public User createUser(User user) {
         UserEntity userEntity = UserEntity.fromScim(user);
+        userEntity.setInternalId(UUID.randomUUID());
         try {
             userDao.createUser(userEntity);
         } catch (Exception e) {
             throw new ResourceExistsException("The user with name " + user.getUserName() + " already exists.");
         }
-        return user;
+        return userEntity.toScim();
     }
 
 

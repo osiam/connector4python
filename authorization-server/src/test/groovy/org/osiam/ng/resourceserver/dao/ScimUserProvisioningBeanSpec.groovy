@@ -36,15 +36,16 @@ class ScimUserProvisioningBeanSpec extends Specification {
         user == scimUser
     }
 
-    def "should be possible to create a user"() {
+    def "should be possible to create a user with generated UUID as internalId"() {
         given:
-        userEntity.toScim() >> scimUser
+        def scimUser = new User.Builder("test").build()
 
         when:
         def user = scimUserProvisioningBean.createUser(scimUser)
 
         then:
-        user == scimUser
+        user.userName == "test"
+        user.id ==~ "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
     }
 
     def "should throw exception if user already exists"() {
@@ -62,12 +63,15 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should get an user before update, set the expected fields, merge the result"() {
         given:
+        def internalId = UUID.randomUUID()
         def scimUser = new User.Builder("test").build()
         def entity = new UserEntity()
+        entity.setInternalId(internalId)
+
         when:
-        scimUserProvisioningBean.replaceUser("1234", scimUser)
+        scimUserProvisioningBean.replaceUser(internalId.toString(), scimUser)
         then:
-        1 * userDao.getById("1234") >> entity
+        1 * userDao.getById(internalId.toString()) >> entity
         1 * userDao.update(entity)
     }
 

@@ -41,7 +41,7 @@ class UserDAOTest extends Specification {
         underTest.setEm(em)
     }
 
-    def "should get user by external id"() {
+    def "should get user by internal id"() {
         given:
         def query = Mock(Query)
         def queryResults = [new UserEntity()]
@@ -49,7 +49,7 @@ class UserDAOTest extends Specification {
         def result = underTest.getById("id")
         then:
         1 * em.createNamedQuery("getUserById") >> query
-        1 * query.setParameter("externalId", "id")
+        1 * query.setParameter("internalId", "id")
         1 * query.getResultList() >> queryResults
         result == queryResults.get(0)
     }
@@ -62,7 +62,7 @@ class UserDAOTest extends Specification {
         underTest.getById("id")
         then:
         1 * em.createNamedQuery("getUserById") >> query
-        1 * query.setParameter("externalId", "id")
+        1 * query.setParameter("internalId", "id")
         1 * query.getResultList() >> queryResults
         def e = thrown(ResourceNotFoundException)
         e.message == "No user id found."

@@ -34,13 +34,14 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * User Entity
  */
 @Entity(name = "scim_user")
 @NamedQueries({
-        @NamedQuery(name = "getUserById", query = "SELECT u FROM scim_user u WHERE u.externalId = :externalId"),
+        @NamedQuery(name = "getUserById", query = "SELECT u FROM scim_user u WHERE u.internalId = :internalId"),
         @NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scim_user u WHERE u.userName = :username")
 })
 public class UserEntity implements UserDetails {
@@ -50,6 +51,9 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue
     private long id;
+
+    @Column(nullable = false, unique = true)
+    private UUID internalId;
 
     @Column
     private String externalId;
@@ -135,6 +139,14 @@ public class UserEntity implements UserDetails {
      */
     public long getId() {
         return id;
+    }
+
+    public UUID getInternalId() {
+        return internalId;
+    }
+
+    public void setInternalId(UUID internalId) {
+        this.internalId = internalId;
     }
 
     /**
@@ -524,6 +536,7 @@ public class UserEntity implements UserDetails {
                 setUserType(getUserType()).
                 setX509Certificates(entityX509CertificatesToScim(getX509Certificates())).
                 setExternalId(getExternalId()).
+                setId(getInternalId().toString()).
                 build();
     }
 
