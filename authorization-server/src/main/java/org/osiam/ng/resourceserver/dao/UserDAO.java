@@ -32,6 +32,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @Transactional
@@ -52,7 +53,7 @@ public class UserDAO {
 
     public UserEntity getById(String id) {
         Query query = em.createNamedQuery("getUserById");
-        query.setParameter("internalId", id);
+        query.setParameter("internalId", UUID.fromString(id));
         return getSingleUserEntity(query, id);
     }
 

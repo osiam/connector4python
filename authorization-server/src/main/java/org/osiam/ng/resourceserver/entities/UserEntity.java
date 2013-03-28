@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import scim.schema.v2.Address;
@@ -52,6 +53,7 @@ public class UserEntity implements UserDetails {
     @GeneratedValue
     private long id;
 
+    @Type(type="pg-uuid")
     @Column(nullable = false, unique = true)
     private UUID internalId;
 

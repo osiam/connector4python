@@ -43,29 +43,31 @@ class UserDAOTest extends Specification {
 
     def "should get user by internal id"() {
         given:
+        def internalId = UUID.randomUUID()
         def query = Mock(Query)
         def queryResults = [new UserEntity()]
         when:
-        def result = underTest.getById("id")
+        def result = underTest.getById(internalId.toString())
         then:
         1 * em.createNamedQuery("getUserById") >> query
-        1 * query.setParameter("internalId", "id")
+        1 * query.setParameter("internalId", internalId)
         1 * query.getResultList() >> queryResults
         result == queryResults.get(0)
     }
 
     def "should throw an exception when no user got found by id"(){
         given:
+        def internalId = UUID.randomUUID()
         def query = Mock(Query)
         def queryResults = []
         when:
-        underTest.getById("id")
+        underTest.getById(internalId.toString())
         then:
         1 * em.createNamedQuery("getUserById") >> query
-        1 * query.setParameter("internalId", "id")
+        1 * query.setParameter("internalId", internalId)
         1 * query.getResultList() >> queryResults
         def e = thrown(ResourceNotFoundException)
-        e.message == "No user id found."
+        e.message == "No user " + internalId.toString() + " found."
     }
 
     def "should throw an exception when no user got found by name"(){
