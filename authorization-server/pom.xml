@@ -126,14 +126,6 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
         </dependency>
-        <!-- Test -->
-        <dependency>
-            <groupId>org.osiam.ng</groupId>
-            <artifactId>test-support</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>

@@ -2,7 +2,6 @@ package org.osiam.oauth2.client
 
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.PostMethod
-import org.apache.http.StatusLine
 import org.json.JSONException
 import org.osiam.oauth2.client.exceptions.UserFriendlyException
 import spock.lang.Specification
@@ -33,8 +32,6 @@ class AddResourceControllerSpec extends Specification {
 
 
     def "should be able to create a user resource"() {
-        given:
-
         when:
         addResourceController.createResource(servletRequest, "externalId", "userName", "password", "access_token")
 
