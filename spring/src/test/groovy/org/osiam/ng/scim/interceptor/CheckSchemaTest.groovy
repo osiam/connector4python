@@ -24,10 +24,13 @@
 package org.osiam.ng.scim.interceptor
 
 import org.aspectj.lang.JoinPoint
+import org.aspectj.lang.annotation.Pointcut
 import org.osiam.ng.scim.exceptions.SchemaUnknownException
 import scim.schema.v2.Constants
 import scim.schema.v2.User
 import spock.lang.Specification
+
+import java.lang.reflect.Method
 
 class CheckSchemaTest extends Specification {
     def underTest = new CheckSchema()
@@ -41,6 +44,17 @@ class CheckSchemaTest extends Specification {
         notThrown(SchemaUnknownException)
 
     }
+
+    def "should do nothing when args doesn't contain user"() {
+        given:
+        joint.args >> ["haha"]
+        when:
+        underTest.checkUser(joint)
+        then:
+        notThrown(SchemaUnknownException)
+
+    }
+
 
     def "should throw an org.osiam.ng.scim.exceptions.SchemaUnknownException when User schema is empty"() {
         given:
@@ -65,7 +79,7 @@ class CheckSchemaTest extends Specification {
 
     def "should throw an org.osiam.ng.scim.exceptions.SchemaUnknownException when User schema is unknown"() {
         given:
-        def schema = [] as Set
+        def schema = ["moep"] as Set
         User user = new User.Builder("test").setSchemas(schema).build()
         joint.args >> [user]
         when:
@@ -84,5 +98,20 @@ class CheckSchemaTest extends Specification {
         underTest.checkUser(joint)
         then:
         notThrown(SchemaUnknownException)
+    }
+
+    def "should contain controller and method pointcut"(){
+        given:
+        Method methodPointcut = CheckSchema.class.getDeclaredMethod("methodPointcut")
+        Method controllerPointcut = CheckSchema.class.getDeclaredMethod("controllerBean")
+        when:
+        underTest.methodPointcut()
+        underTest.controllerBean()
+        then:
+        def mPointcut = methodPointcut.getAnnotation(Pointcut)
+        mPointcut.value() == "execution(* *(..))"
+        def cPointcut = controllerPointcut.getAnnotation(Pointcut)
+        cPointcut.value() == "within(@org.springframework.stereotype.Controller *)"
+
     }
 }
