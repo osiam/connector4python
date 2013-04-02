@@ -35,6 +35,32 @@ class UserTest extends Specification {
         user != null
     }
 
+    def "user should contain core schemas as default"() {
+        when:
+        def user = new User.Builder("username").build()
+        then:
+        user.schemas == Constants.CORE_SCHEMAS;
+    }
+
+    def "user should be able to contain schemas"(){
+        def schemas = ["urn:wtf", "urn:hajo"] as Set
+        when:
+        User user = new User.Builder("username").setSchemas(schemas).build()
+        then:
+        user.schemas == schemas
+
+    }
+
+    def "user should clone schemas"(){
+        def schemas = ["urn:wtf", "urn:hajo"] as Set
+        User oldUser = new User.Builder("username").setSchemas(schemas).build()
+        when:
+        User user = new User.Builder(oldUser).build();
+        then:
+        user.schemas == oldUser.schemas
+
+    }
+
     def "userName is a required field so it should throw an exception when setting it null"() {
         when:
         new User.Builder(null)

@@ -23,6 +23,10 @@
 
 package scim.schema.v2;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Java class for Resource complex type.
  */
@@ -30,17 +34,25 @@ public abstract class Resource {
 
     protected String id;
     protected Meta meta;
+    protected Set<String> schemas;
 
     protected Resource(){}
 
     protected Resource(Builder builder) {
         this.id = builder.id;
         this.meta = builder.meta;
+        this.schemas = builder.schemas;
     }
 
     public abstract static class Builder {
         protected String id;
         protected Meta meta;
+        protected Set<String> schemas = Constants.CORE_SCHEMAS;
+
+        public Builder setSchemas(Set<String> schemas) {
+            this.schemas = schemas;
+            return this;
+        }
 
         public Builder setId(String id) {
             this.id = id;
@@ -75,5 +87,7 @@ public abstract class Resource {
         return meta;
     }
 
-
+    public Set<String> getSchemas() {
+        return schemas;
+    }
 }

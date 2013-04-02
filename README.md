@@ -50,6 +50,13 @@ SCIMUserProvisioning
 ```
 via xml in your project.
 
+In order to use the interceptors you have to add:
+```xml
+<aop:aspectj-autoproxy />
+<bean id="logAspect" class="org.osiam.ng.scim.interceptor.CheckSchema" />
+```
+in your spring configuration
+
 ### UserProvisioning
 We didn't want to enforce a specific database nor a database scheme, therefor we just created the Interface 
 ```Java

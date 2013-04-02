@@ -92,6 +92,7 @@ public class User extends CoreResource {
         this.x509Certificates = builder.x509Certificates;
         this.any = builder.any;
 
+
     }
 
     public static class Builder extends CoreResource.Builder {
@@ -155,6 +156,7 @@ public class User extends CoreResource {
             this.roles = user.roles;
             this.x509Certificates = user.x509Certificates;
             this.any = user.any;
+            this.schemas = user.schemas;
             //we don't want to set user passwords ...
             this.password = null;
         }
