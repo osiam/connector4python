@@ -11,6 +11,7 @@ import org.osiam.oauth2.client.exceptions.UserFriendlyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import scim.schema.v2.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -83,10 +84,7 @@ public class AddResourceController {
     }
 
     private String getJsonString(String externalId, String name, String password) {
-        try {
-            return new JSONObject().put("externalId", externalId).put("userName", name).put("password", password).toString();
-        } catch (JSONException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+            User user = new User.Builder(name).setPassword(password).setExternalId(externalId).build();
+            return new JSONObject(user).toString();
     }
 }

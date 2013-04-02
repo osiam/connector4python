@@ -399,7 +399,7 @@ INSERT INTO scim_roles (id, value) values (2, 'USER');
 -- Data for Name: scim_user; Type: TABLE DATA; Schema: public; 
 --
 
-INSERT INTO scim_user (id, internalId, externalid, password, username) VALUES (1, 'CEF9452E-00A9-4CEC-A086-D171374FFBEF', 'marissa', '60b26cf7a6f8bb56a8e725aaf9566ad51948810c482e783200a3e64951d1c70172ca47ce0f46c44ae52912068a0e7b7515c740358bd103590518d31bfdf100b1', 'marissa');
+INSERT INTO scim_user (id, internalId, externalid, password, username) VALUES (1, 'CEF9452E-00A9-4CEC-A086-D171374FFBEF', 'marissa', 'cbae73fac0893291c4792ef19d158a589402288b35cb18fb8406e951b9d95f6b8b06a3526ffebe96ae0d91c04ae615a7fe2af362763db386ccbf3b55c29ae800', 'marissa');
 
 --
 -- Data for Name: scim_user_scim_address; Type: TABLE DATA; Schema: public; 

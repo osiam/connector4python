@@ -87,6 +87,12 @@
             <version>20090211</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.osiam.ng</groupId>
+            <artifactId>scim</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
