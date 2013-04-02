@@ -24,6 +24,7 @@
 package org.osiam.ng.scim.interceptor
 
 import org.aspectj.lang.JoinPoint
+import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
 import org.osiam.ng.scim.exceptions.SchemaUnknownException
 import scim.schema.v2.Constants
@@ -101,12 +102,11 @@ class CheckSchemaTest extends Specification {
     }
 
     def "should contain controller and method pointcut"(){
-        given:
-        Method methodPointcut = CheckSchema.class.getDeclaredMethod("methodPointcut")
-        Method controllerPointcut = CheckSchema.class.getDeclaredMethod("controllerBean")
         when:
         underTest.methodPointcut()
+        Method methodPointcut = CheckSchema.class.getDeclaredMethod("methodPointcut")
         underTest.controllerBean()
+        Method controllerPointcut = CheckSchema.class.getDeclaredMethod("controllerBean")
         then:
         def mPointcut = methodPointcut.getAnnotation(Pointcut)
         mPointcut.value() == "execution(* *(..))"
@@ -114,4 +114,14 @@ class CheckSchemaTest extends Specification {
         cPointcut.value() == "within(@org.springframework.stereotype.Controller *)"
 
     }
+
+    def "checkUser should ref controller and method pointcut in before"(){
+        when:
+        Method checkUser = CheckSchema.class.getDeclaredMethod("checkUser", JoinPoint.class)
+        then:
+        def before = checkUser.getAnnotation(Before)
+        before.value() == "controllerBean() && methodPointcut() "
+
+    }
+
 }
