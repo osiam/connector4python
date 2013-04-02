@@ -38,9 +38,7 @@ To create the database scheme you have to execute init.sql.
 
 This SQL-Script will create you all the needed tables as well as create a demo user called Marissa and a password 'koala'.
 
-Right now the password is, as you can see, in plaintext, when this changes then a command line tool 
-to create the first user will be delivered.
-
+The database configuration is done via
 
 The client credentials are as well hardcoded:
  * client_id=tonr

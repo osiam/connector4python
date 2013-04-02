@@ -26,6 +26,7 @@ package org.osiam.ng.resourceserver.dao
 import org.osiam.ng.resourceserver.entities.UserEntity
 import org.osiam.ng.scim.exceptions.ResourceExistsException
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException
+import org.springframework.security.authentication.encoding.PasswordEncoder
 import spock.lang.Specification
 
 import javax.persistence.EntityExistsException
@@ -100,11 +101,19 @@ class UserDAOTest extends Specification {
     }
 
     def "should be able to create a user"() {
+        given:
+        def passwordEncoder = Mock(PasswordEncoder)
+        underTest.setPasswordEncoder(passwordEncoder)
+        def id = UUID.randomUUID()
         when:
         underTest.createUser(userEntity)
 
         then:
+        1 * userEntity.password >> "password"
+        1 * userEntity.internalId >> id
+        1 * passwordEncoder.encodePassword("password", id) >> "moep"
         1 * em.persist(userEntity)
+
     }
 
     def "should be able to update user"(){

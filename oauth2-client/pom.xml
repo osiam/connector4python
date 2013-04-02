@@ -89,8 +89,7 @@
 
         <dependency>
             <groupId>org.osiam.ng</groupId>
-            <artifactId>scim</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <artifactId>scim-schema</artifactId>
         </dependency>
 
     </dependencies>

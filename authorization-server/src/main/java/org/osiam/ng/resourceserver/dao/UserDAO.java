@@ -52,6 +52,10 @@ public class UserDAO {
         this.em = em;
     }
 
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public void createUser(UserEntity userEntity) {
         String hash = passwordEncoder.encodePassword(userEntity.getPassword(), userEntity.getInternalId());
         userEntity.setPassword(hash);
