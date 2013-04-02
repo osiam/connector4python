@@ -40,7 +40,29 @@ class UserControllerTest extends Specification {
     def provisioning = Mock(SCIMUserProvisioning)
     def httpServletRequest = Mock(HttpServletRequest)
     def httpServletResponse = Mock(HttpServletResponse)
-    def user = Mock(User)
+    User user = new User.Builder("test").setActive(true)
+            .setAddresses(new User.Addresses())
+            .setAny(["ha"] as Set)
+            .setDisplayName("display")
+            .setEmails(new User.Emails())
+            .setEntitlements(new User.Entitlements())
+            .setGroups(new User.Groups())
+            .setIms(new User.Ims())
+            .setLocale("locale")
+            .setName(new Name.Builder().build())
+            .setNickName("nickname")
+            .setPassword("password")
+            .setPhoneNumbers(new User.PhoneNumbers())
+            .setPhotos(new User.Photos())
+            .setPreferredLanguage("prefereedLanguage")
+            .setProfileUrl("profileUrl")
+            .setRoles(new User.Roles())
+            .setTimezone("time")
+            .setTitle("title")
+            .setUserType("userType")
+            .setX509Certificates(new User.X509Certificates())
+            .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
+            .build()
 
 
     def setup() {
@@ -53,13 +75,40 @@ class UserControllerTest extends Specification {
         then:
         1 * provisioning.getById("one") >> user
         result != user
+        user.password != null
+        result.password == null
+        result.active == user.active
+        result.addresses == user.addresses
+        result.any == user.any
+        result.displayName == user.displayName
+        result.emails == user.emails
+        result.entitlements == user.entitlements
+        result.groups == user.groups
+        result.ims == user.ims
+        result.locale == user.locale
+        result.name == user.name
+        result.nickName == user.nickName
+        result.phoneNumbers == user.phoneNumbers
+        result.photos == user.photos
+        result.preferredLanguage == user.preferredLanguage
+        result.profileUrl == user.profileUrl
+        result.roles == user.roles
+        result.timezone == user.timezone
+        result.title == user.title
+        result.userType == user.userType
+        result.x509Certificates == user.x509Certificates
+        result.userName == user.userName
+        result.id == user.id
+        result.externalId == user.externalId
+        result.meta == user.meta
+
+
     }
 
     def "should create the user and add the location header"() {
         given:
-        user.getId() >> "test"
         httpServletRequest.getRequestURL() >> new StringBuffer("http://host:port/deployment/User/")
-        def uri = new URI("http://host:port/deployment/User/test")
+        def uri = new URI("http://host:port/deployment/User/id")
 
         when:
         def result = underTest.createUser(user, httpServletRequest, httpServletResponse)
@@ -73,13 +122,12 @@ class UserControllerTest extends Specification {
     def "should update an user and set location header"() {
         given:
         def id = UUID.randomUUID().toString()
-        user.id >> "schlemmer"
         when:
         def result = underTest.updateUser(id, user, httpServletRequest, httpServletResponse)
         then:
         1 * provisioning.replaceUser(id, user) >> user
         1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
-        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/schlemmer")
+        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/id")
         result == user
     }
 }
