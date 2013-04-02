@@ -98,6 +98,62 @@ class UserTest extends Specification {
         user.meta == builder.meta
     }
 
+    def "should clone an user without his password"() {
+        given:
+        User user = new User.Builder("test").setActive(true)
+                .setAddresses(new User.Addresses())
+                .setAny(["ha"] as Set)
+                .setDisplayName("display")
+                .setEmails(new User.Emails())
+                .setEntitlements(new User.Entitlements())
+                .setGroups(new User.Groups())
+                .setIms(new User.Ims())
+                .setLocale("locale")
+                .setName(new Name.Builder().build())
+                .setNickName("nickname")
+                .setPassword("password")
+                .setPhoneNumbers(new User.PhoneNumbers())
+                .setPhotos(new User.Photos())
+                .setPreferredLanguage("prefereedLanguage")
+                .setProfileUrl("profileUrl")
+                .setRoles(new User.Roles())
+                .setTimezone("time")
+                .setTitle("title")
+                .setUserType("userType")
+                .setX509Certificates(new User.X509Certificates())
+                .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
+                .build()
+        when:
+        User clonedUser = new User.Builder(user).build()
+        then:
+        clonedUser.password == null
+
+        clonedUser.active == user.active
+        clonedUser.addresses == user.addresses
+        clonedUser.any == user.any
+        clonedUser.displayName == user.displayName
+        clonedUser.emails == user.emails
+        clonedUser.entitlements == user.entitlements
+        clonedUser.groups == user.groups
+        clonedUser.ims == user.ims
+        clonedUser.locale == user.locale
+        clonedUser.name == user.name
+        clonedUser.nickName == user.nickName
+        clonedUser.phoneNumbers == user.phoneNumbers
+        clonedUser.photos == user.photos
+        clonedUser.preferredLanguage == user.preferredLanguage
+        clonedUser.profileUrl == user.profileUrl
+        clonedUser.roles == user.roles
+        clonedUser.timezone == user.timezone
+        clonedUser.title == user.title
+        clonedUser.userType == user.userType
+        clonedUser.x509Certificates == user.x509Certificates
+        clonedUser.userName == user.userName
+        clonedUser.id == user.id
+        clonedUser.externalId == user.externalId
+        clonedUser.meta == user.meta
+    }
+
     def "should be able to enrich addresses, emails, entitlements, groups, phone-numbers, photos, roles and certificates"() {
         given:
         def user = new User.Builder("test2").setAddresses(new User.Addresses())

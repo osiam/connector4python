@@ -24,8 +24,12 @@
 package org.osiam.ng.scim.mvc.user
 
 import org.osiam.ng.scim.dao.SCIMUserProvisioning
+import scim.schema.v2.Address
+import scim.schema.v2.Meta
+import scim.schema.v2.Name
 import scim.schema.v2.User
 import spock.lang.Specification
+import sun.security.ssl.KeyManagerFactoryImpl
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -38,16 +42,17 @@ class UserControllerTest extends Specification {
     def httpServletResponse = Mock(HttpServletResponse)
     def user = Mock(User)
 
+
     def setup() {
         underTest.setScimUserProvisioning(provisioning)
     }
 
-    def "should return the user found by provisioning on getUser"() {
+    def "should return a cloned user based on a user found by provisioning on getUser"() {
         when:
         def result = underTest.getUser("one")
         then:
         1 * provisioning.getById("one") >> user
-        result == user
+        result != user
     }
 
     def "should create the user and add the location header"() {

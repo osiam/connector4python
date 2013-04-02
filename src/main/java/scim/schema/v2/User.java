@@ -130,6 +130,35 @@ public class User extends CoreResource {
             this.userName = userName;
         }
 
+        public Builder(User user) {
+            this.id = user.id;
+            this.meta = user.meta;
+            this.externalId = user.externalId;
+            this.userName = user.userName;
+            this.name = user.name;
+            this.displayName = user.displayName;
+            this.nickName = user.nickName;
+            this.profileUrl = user.profileUrl;
+            this.title = user.title;
+            this.userType = user.userType;
+            this.preferredLanguage = user.preferredLanguage;
+            this.locale = user.locale;
+            this.timezone = user.timezone;
+            this.active = user.active;
+            this.emails = user.emails;
+            this.phoneNumbers = user.phoneNumbers;
+            this.ims = user.ims;
+            this.photos = user.photos;
+            this.addresses = user.addresses;
+            this.groups = user.groups;
+            this.entitlements = user.entitlements;
+            this.roles = user.roles;
+            this.x509Certificates = user.x509Certificates;
+            this.any = user.any;
+            //we don't want to set user passwords ...
+            this.password = null;
+        }
+
         public Builder setName(Name name) {
             this.name = name;
             return this;

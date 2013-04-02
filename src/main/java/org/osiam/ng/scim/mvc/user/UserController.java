@@ -61,14 +61,16 @@ public class UserController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public User getUser(@PathVariable final String id) {
-        return scimUserProvisioning.getById(id);
+        User user = scimUserProvisioning.getById(id);
+        //clone without password
+        return new User.Builder(user).build();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public User createUser(@RequestBody User user,
-            HttpServletRequest request, HttpServletResponse response) {
+                           HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.createUser(user);
         String requestUrl = request.getRequestURL().toString();
         URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, createdUser.getId());
@@ -76,7 +78,7 @@ public class UserController {
         return createdUser;
     }
 
-    @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public User updateUser(@PathVariable final String id,
