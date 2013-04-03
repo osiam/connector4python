@@ -21,35 +21,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver.dao;
+package org.osiam.oauth2.client;
 
-import org.osiam.ng.resourceserver.entities.NameEntity;
-import org.osiam.ng.resourceserver.entities.UserEntity;
-import scim.schema.v2.Name;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.osiam.oauth2.client.exceptions.UserFriendlyException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import scim.schema.v2.User;
 
-import java.lang.reflect.Field;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
-public class SetUserSingleFields {
-    private UserEntity entity;
+/**
+ * Created with IntelliJ IDEA.
+ * User: jtodea
+ * Date: 22.03.13
+ * Time: 11:21
+ * To change this template use File | Settings | File Templates.
+ */
+@Controller
+@RequestMapping("/crud")
+public class CRUDRedirectController {
 
-    public SetUserSingleFields(UserEntity entity) {
-        this.entity = entity;
+    @RequestMapping("/user")
+    public String redirectToCreateUpdateUser() {
+        return "create_update_user";
     }
 
-    public void updateSingleField(User user, Field entityField, Object userValue, String key) throws IllegalAccessException {
-        if (userValue instanceof Name) {
-            entity.setName(NameEntity.fromScim(user.getName()));
-        } else {
-            if (!(key == "password" && userValue != null && String.valueOf(userValue).isEmpty()))
-                updateSimpleField(entity, entityField, userValue);
-        }
-    }
-
-    private void updateSimpleField(Object entity, Field entityField, Object userValue) throws IllegalAccessException {
-        if (entityField != null) {
-            entityField.setAccessible(true);
-            entityField.set(entity, userValue);
-        }
-    }
 }

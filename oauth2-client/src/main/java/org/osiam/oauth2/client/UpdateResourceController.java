@@ -39,11 +39,63 @@ public class UpdateResourceController {
     }
 
     @RequestMapping("/updateResource")
-    public String updateResource(HttpServletRequest req, @RequestParam String externalId,
-                                 @RequestParam String name, @RequestParam String password, @RequestParam String access_token,
+    public String updateResource(HttpServletRequest req,
+                                 @RequestParam String schema,
+                                 @RequestParam String user_name,
+                                 @RequestParam String firstname,
+                                 @RequestParam String lastname,
+                                 @RequestParam String displayname,
+                                 @RequestParam String nickname,
+                                 @RequestParam String profileurl,
+                                 @RequestParam String title,
+                                 @RequestParam String usertype,
+                                 @RequestParam String preferredlanguage,
+                                 @RequestParam String locale,
+                                 @RequestParam String timezone,
+                                 //@RequestParam String timezone
+                                 @RequestParam String password,
+                                 @RequestParam String emails,
+                                 @RequestParam String phonenumbers,
+                                 @RequestParam String ims,
+                                 @RequestParam String photos,
+                                 @RequestParam String addresses,
+                                 @RequestParam String groups,
+                                 @RequestParam String entitlements,
+                                 @RequestParam String roles,
+                                 @RequestParam String x509,
+                                 @RequestParam String any,
+
+                                 @RequestParam String access_token,
                                  @RequestParam String idForUpdate) throws ServletException, IOException, UserFriendlyException {
 
-        StringRequestEntity requestEntity = new StringRequestEntity(AddResourceController.getJsonString(externalId, name, password),
+        String jsonString = AddResourceController.getJsonString(
+                schema,
+                user_name,
+                firstname,
+                lastname,
+                displayname,
+                nickname,
+                profileurl,
+                title,
+                usertype,
+                preferredlanguage,
+                locale,
+                timezone,
+                //timezone
+                password,
+                emails,
+                phonenumbers,
+                ims,
+                photos,
+                addresses,
+                groups,
+                entitlements,
+                roles,
+                x509,
+                any
+        );
+
+        StringRequestEntity requestEntity = new StringRequestEntity(jsonString,
                 "application/json", "UTF-8");
 
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
@@ -57,13 +109,13 @@ public class UpdateResourceController {
     }
 
     private void readJsonFromBody(HttpServletRequest req, PutMethod put) throws IOException, UserFriendlyException {
-        if (put.getStatusCode() == 404) {
-            throw new UserFriendlyException("404");
+        if (put.getStatusCode() > 399) {
+            throw new UserFriendlyException(String.valueOf(put.getStatusCode()));
         }
         try {
             req.setAttribute("userResponse", put.getResponseBodyAsString());
             req.setAttribute("LocationHeader", put.getResponseHeader("Location"));
-        } finally{
+        } finally {
             put.releaseConnection();
         }
     }

@@ -40,15 +40,6 @@
         <label>Username:<br><input id="username" name="username" type="text"></label><br>
         <input type="submit" formaction="resource" value="Get Resource"/>
     </form>
-    <h2>Add/Update User Resource:</h2>
-    <form method="post">
-        <input id="hidden_access_token" type="hidden" name="access_token" value="<%= request.getAttribute("access_token") %>" />
-        <label>ExternalID:<br><input id="externalId" name="externalId" type="text"></label><br>
-        <label>Username:<br><input id="name" name="name" type="text"></label><br>
-        <label>Password:<br><input id="password" name="password" type="text"></label><br>
-        <label>ID for Update:<br><input id="idForUpdate" name="idForUpdate" type="text"></label><br>
-        <input type="submit" formaction="createResource" value="Add Resource" />
-        <input type="submit" formaction="updateResource" value="Update Resource" />
-    </form>
+    <a href="crud/user?access_token=<%= request.getAttribute("access_token") %>">moep!</a>
 </body>
 </html>

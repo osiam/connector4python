@@ -23,6 +23,6 @@ public class UserFriendlyException extends Exception {
         } else if (errorCode.equals("404")) {
             return ("Error Code: " + errorCode + "<br>Message: User doesn't exists and can't be updated");
         }
-        return errorCode;
+        return "Error code:"+ errorCode;
     }
 }

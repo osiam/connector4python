@@ -1,6 +1,7 @@
 package org.osiam.oauth2.client
 
 import org.apache.commons.httpclient.HttpClient
+import org.apache.commons.httpclient.StatusLine
 import org.apache.commons.httpclient.methods.PostMethod
 import org.apache.commons.httpclient.methods.PutMethod
 import org.json.JSONException
@@ -31,12 +32,37 @@ class UpdateResourceControllerSpec extends Specification {
         servletRequest.getServerName() >> "localhost"
 
         when:
-        updateResourceController.updateResource(servletRequest, "externalId", "userName", "password", "access_token", "idForUpdate")
+        updateResourceController.updateResource(servletRequest,  "schema",
+                "user_name",
+                "firstname",
+                "lastname",
+                "displayname",
+                "nickname",
+                "profileurl",
+                "title",
+                "usertype",
+                "preferredlanguage",
+                "locale",
+                "timezone",
+                //timezone
+                "password",
+                "emails",
+                "phonenumbers",
+                "ims",
+                "photos",
+                "addresses",
+                "groups",
+                "entitlements",
+                "roles",
+                "x509",
+                "any",
+                "access_token",
+                "idForUpdate"
+        )
 
         then:
-        1 * httpClient.executeMethod({PutMethod put ->
-            put.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
-            put.responseStream = new ByteArrayInputStream(jsonString.getBytes())
+        1 * httpClient.executeMethod({ PutMethod put ->
+            put.statusLine = new StatusLine("HTTP/1.1 200 OK")
         })
         1 * servletRequest.setAttribute("userResponse", _)
         1 * servletRequest.setAttribute("LocationHeader", _)

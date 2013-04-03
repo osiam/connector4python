@@ -29,6 +29,6 @@ class UserFriendlyExceptionSpec extends Specification {
         when:
         def result = new UserFriendlyException("not404nor409")
         then:
-        result.toString() == "not404nor409"
+        result.toString() == "Error code:not404nor409"
     }
 }

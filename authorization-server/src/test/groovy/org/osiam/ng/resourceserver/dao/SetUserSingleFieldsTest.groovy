@@ -65,7 +65,17 @@ class SetUserSingleFieldsTest extends Specification {
         underTest.updateSingleField(scimUser, aha.get("password"), scimUser.password, "password")
         then:
         scimUser.password == entity.password
+    }
 
+    def "should ignore null fields"() {
+        given:
+        def scimUser = new User.Builder("test").setPassword("a").build()
+        def entity = new UserEntity()
+        def underTest = new SetUserSingleFields(entity)
+        when:
+        underTest.updateSimpleField(entity, null, scimUser)
+        then:
+        notThrown(NullPointerException)
     }
 
     def "should not update a empty password of an entity"() {
@@ -82,6 +92,5 @@ class SetUserSingleFieldsTest extends Specification {
         underTest.updateSingleField(scimUser, aha.get("password"), scimUser.password, "password")
         then:
         entity.password == "nicht hallo"
-
     }
 }
