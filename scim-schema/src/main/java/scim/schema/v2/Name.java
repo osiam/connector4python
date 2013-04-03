@@ -29,15 +29,20 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 /**
  * Java class for name complex type.
  */
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Name {
 
-    private final String formatted;
-    private final String familyName;
-    private final String givenName;
-    private final String middleName;
-    private final String honorificPrefix;
-    private final String honorificSuffix;
+    private String formatted;
+    private String familyName;
+    private String givenName;
+    private String middleName;
+    private String honorificPrefix;
+    private String honorificSuffix;
+
+    /**
+     * needed for json serializing
+     */
+    public Name() {}
 
     private Name(Builder builder) {
         this.formatted = builder.formatted;
@@ -49,7 +54,7 @@ public class Name {
 
     }
 
-    public static class Builder{
+    public static class Builder {
         private String formatted;
         private String familyName;
         private String givenName;
@@ -87,18 +92,16 @@ public class Name {
             return this;
         }
 
-        public Name build(){
+        public Name build() {
             return new Name(this);
         }
     }
 
     /**
      * Gets the value of the formatted property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getFormatted() {
         return formatted;
@@ -106,11 +109,9 @@ public class Name {
 
     /**
      * Gets the value of the familyName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getFamilyName() {
         return familyName;
@@ -118,11 +119,9 @@ public class Name {
 
     /**
      * Gets the value of the givenName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getGivenName() {
         return givenName;
@@ -130,11 +129,9 @@ public class Name {
 
     /**
      * Gets the value of the middleName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getMiddleName() {
         return middleName;
@@ -142,11 +139,9 @@ public class Name {
 
     /**
      * Gets the value of the honorificPrefix property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getHonorificPrefix() {
         return honorificPrefix;
@@ -155,11 +150,9 @@ public class Name {
 
     /**
      * Gets the value of the honorificSuffix property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getHonorificSuffix() {
         return honorificSuffix;

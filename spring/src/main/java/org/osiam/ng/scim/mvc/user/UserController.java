@@ -23,6 +23,8 @@
 
 package org.osiam.ng.scim.mvc.user;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,8 @@ import scim.schema.v2.User;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.net.URI;
 
 /**
@@ -69,8 +73,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public User createUser(@RequestBody User user,
-                           HttpServletRequest request, HttpServletResponse response) {
+    public User createUser(@RequestBody User user,HttpServletRequest request, HttpServletResponse response) throws IOException {
         User createdUser = scimUserProvisioning.createUser(user);
         String requestUrl = request.getRequestURL().toString();
         URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, createdUser.getId());

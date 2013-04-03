@@ -124,7 +124,7 @@ class UserTest extends Specification {
         user.meta == builder.meta
     }
 
-    def "should clone an user without his password"() {
+    def "should clone an user without its password"() {
         given:
         User user = new User.Builder("test").setActive(true)
                 .setAddresses(new User.Addresses())

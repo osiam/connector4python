@@ -25,10 +25,7 @@ package scim.schema.v2;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -36,7 +33,7 @@ import java.util.Set;
  * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class User extends CoreResource {
 
     private String userName;
@@ -62,7 +59,7 @@ public class User extends CoreResource {
     private User.X509Certificates x509Certificates;
     private Set<Object> any;
 
-    public User(){
+    public User() {
 
     }
 
@@ -80,7 +77,7 @@ public class User extends CoreResource {
         this.timezone = builder.timezone;
         this.active = builder.active;
         this.password = builder.password;
-        //Not final because those are list, which are used to get enriched afterwards for easier usage.
+
         this.emails = builder.emails;
         this.phoneNumbers = builder.phoneNumbers;
         this.ims = builder.ims;
@@ -91,8 +88,6 @@ public class User extends CoreResource {
         this.roles = builder.roles;
         this.x509Certificates = builder.x509Certificates;
         this.any = builder.any;
-
-
     }
 
     public static class Builder extends CoreResource.Builder {
@@ -511,9 +506,12 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Addresses implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Addresses extends JSONEmptySkeleton<List<Address>>  {
 
-        private List<Address> address = new ArrayList<>();
+        public Addresses() {
+            super(new ArrayList<Address>());
+        }
 
         /**
          * Gets the value of the address property.
@@ -536,19 +534,21 @@ public class User extends CoreResource {
          * {@link Address }
          */
         public List<Address> getAddress() {
-            return this.address;
+            return this.collection;
         }
 
     }
 
 
-    public static interface UserFields{}
     /**
      * Java class for anonymous complex type.
      */
-    public static class Emails implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Emails extends JSONEmptySkeleton<List<MultiValuedAttribute>>  {
 
-        private List<MultiValuedAttribute> email = new ArrayList<>();
+        public Emails() {
+            super(new ArrayList<MultiValuedAttribute>());
+        }
 
         /**
          * Gets the value of the email property.
@@ -571,7 +571,7 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getEmail() {
-            return this.email;
+            return this.collection;
         }
 
     }
@@ -580,9 +580,12 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Entitlements implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Entitlements extends JSONEmptySkeleton<List<MultiValuedAttribute>>  {
 
-        private List<MultiValuedAttribute> entitlement = new ArrayList<>();
+        public Entitlements() {
+            super(new ArrayList<MultiValuedAttribute>());
+        }
 
         /**
          * Gets the value of the entitlement property.
@@ -605,7 +608,7 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getEntitlement() {
-            return this.entitlement;
+            return this.collection;
         }
 
     }
@@ -614,9 +617,12 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Groups implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Groups extends JSONEmptySkeleton<List<MultiValuedAttribute>>  {
 
-        private List<MultiValuedAttribute> group = new ArrayList<>();
+        public Groups() {
+            super(new ArrayList<MultiValuedAttribute>());
+        }
 
         /**
          * Gets the value of the group property.
@@ -639,7 +645,7 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getGroup() {
-            return this.group;
+            return this.collection;
         }
 
     }
@@ -648,9 +654,12 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Ims implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Ims extends JSONEmptySkeleton<List<MultiValuedAttribute>>  {
 
-        private List<MultiValuedAttribute> im = new ArrayList<>();
+        public Ims() {
+            super(new ArrayList<MultiValuedAttribute>());
+        }
 
         /**
          * Gets the value of the im property.
@@ -673,7 +682,7 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getIm() {
-            return this.im;
+            return this.collection;
         }
 
     }
@@ -682,9 +691,12 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class PhoneNumbers implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class PhoneNumbers extends JSONEmptySkeleton<List<MultiValuedAttribute>>   {
 
-        private List<MultiValuedAttribute> phoneNumber = new ArrayList<>();
+        public PhoneNumbers() {
+            super(new ArrayList<MultiValuedAttribute>());
+        }
 
         /**
          * Gets the value of the phoneNumber property.
@@ -707,7 +719,7 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getPhoneNumber() {
-            return this.phoneNumber;
+            return this.collection;
         }
 
     }
@@ -716,9 +728,13 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Photos implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Photos extends JSONEmptySkeleton<List<MultiValuedAttribute>>  {
 
-        private List<MultiValuedAttribute> photo = new ArrayList<>();
+
+        public Photos() {
+            super(new ArrayList<MultiValuedAttribute>());
+        }
 
         /**
          * Gets the value of the photo property.
@@ -741,7 +757,7 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getPhoto() {
-            return this.photo;
+            return this.collection;
         }
 
     }
@@ -750,9 +766,12 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Roles implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Roles extends JSONEmptySkeleton<List<MultiValuedAttribute>>  {
 
-        private List<MultiValuedAttribute> role = new ArrayList<>();
+        public Roles() {
+            super(new ArrayList<MultiValuedAttribute>());
+        }
 
         /**
          * Gets the value of the role property.
@@ -775,7 +794,7 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getRole() {
-            return this.role;
+            return this.collection;
         }
 
     }
@@ -784,9 +803,14 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class X509Certificates implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class X509Certificates extends JSONEmptySkeleton<List<MultiValuedAttribute>>  {
 
-        private List<MultiValuedAttribute> x509Certificate = new ArrayList<>();
+        public X509Certificates() {
+            super(new ArrayList<MultiValuedAttribute>());
+
+
+        }
 
         /**
          * Gets the value of the x509Certificate property.
@@ -809,9 +833,11 @@ public class User extends CoreResource {
          * {@link MultiValuedAttribute }
          */
         public List<MultiValuedAttribute> getX509Certificate() {
-            return this.x509Certificate;
+            return this.collection;
         }
-
     }
 
 }
+
+
+

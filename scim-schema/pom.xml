@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>scim-root</artifactId>
         <groupId>org.osiam.ng</groupId>
@@ -8,15 +8,18 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-  <artifactId>scim-schema</artifactId>
+    <artifactId>scim-schema</artifactId>
 
-  <packaging>jar</packaging>
+    <packaging>jar</packaging>
 
-  <name>scim-schema</name>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <name>scim-schema</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <build>
+        <testSourceDirectory>src/test/groovy</testSourceDirectory>
+    </build>
 
-  <dependencies>
-  </dependencies>
+    <dependencies>
+    </dependencies>
 </project>

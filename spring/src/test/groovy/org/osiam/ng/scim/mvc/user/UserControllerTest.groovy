@@ -81,32 +81,32 @@ class UserControllerTest extends Specification {
 
     private boolean validateUser(User result) {
         return result != user &&
-        user.password != null &&
-        result.password == null &&
-        result.active == user.active &&
-        result.addresses == user.addresses &&
-        result.any == user.any &&
-        result.displayName == user.displayName &&
-        result.emails == user.emails &&
-        result.entitlements == user.entitlements &&
-        result.groups == user.groups &&
-        result.ims == user.ims &&
-        result.locale == user.locale &&
-        result.name == user.name &&
-        result.nickName == user.nickName &&
-        result.phoneNumbers == user.phoneNumbers &&
-        result.photos == user.photos &&
-        result.preferredLanguage == user.preferredLanguage &&
-        result.profileUrl == user.profileUrl &&
-        result.roles == user.roles &&
-        result.timezone == user.timezone &&
-        result.title == user.title &&
-        result.userType == user.userType &&
-        result.x509Certificates == user.x509Certificates &&
-        result.userName == user.userName &&
-        result.id == user.id &&
-        result.externalId == user.externalId &&
-        result.meta == user.meta
+                user.password != null &&
+                result.password == null &&
+                result.active == user.active &&
+                result.addresses == user.addresses &&
+                result.any == user.any &&
+                result.displayName == user.displayName &&
+                result.emails == user.emails &&
+                result.entitlements == user.entitlements &&
+                result.groups == user.groups &&
+                result.ims == user.ims &&
+                result.locale == user.locale &&
+                result.name == user.name &&
+                result.nickName == user.nickName &&
+                result.phoneNumbers == user.phoneNumbers &&
+                result.photos == user.photos &&
+                result.preferredLanguage == user.preferredLanguage &&
+                result.profileUrl == user.profileUrl &&
+                result.roles == user.roles &&
+                result.timezone == user.timezone &&
+                result.title == user.title &&
+                result.userType == user.userType &&
+                result.x509Certificates == user.x509Certificates &&
+                result.userName == user.userName &&
+                result.id == user.id &&
+                result.externalId == user.externalId &&
+                result.meta == user.meta
     }
 
     def "should create the user and add the location header"() {
