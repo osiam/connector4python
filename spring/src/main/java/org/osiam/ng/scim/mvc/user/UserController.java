@@ -75,7 +75,7 @@ public class UserController {
         String requestUrl = request.getRequestURL().toString();
         URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, createdUser.getId());
         response.setHeader("Location", uri.toASCIIString());
-        return createdUser;
+        return new User.Builder(createdUser).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -89,6 +89,6 @@ public class UserController {
         String newLocation = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
         URI uri = new UriTemplate("{newLocation}/{internalId}").expand(newLocation, createdUser.getId());
         response.setHeader("Location", uri.toASCIIString());
-        return createdUser;
+        return new User.Builder(createdUser).build();
     }
 }
