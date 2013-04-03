@@ -43,7 +43,7 @@ public class UpdateResourceController {
                                  @RequestParam String name, @RequestParam String password, @RequestParam String access_token,
                                  @RequestParam String idForUpdate) throws ServletException, IOException, UserFriendlyException {
 
-        StringRequestEntity requestEntity = new StringRequestEntity(getJsonString(externalId, name, password),
+        StringRequestEntity requestEntity = new StringRequestEntity(AddResourceController.getJsonString(externalId, name, password),
                 "application/json", "UTF-8");
 
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
@@ -60,15 +60,10 @@ public class UpdateResourceController {
         if (put.getStatusCode() == 404) {
             throw new UserFriendlyException("404");
         }
-
         try {
-            JSONObject authResponse = new JSONObject(
-                    new JSONTokener(new InputStreamReader(put.getResponseBodyAsStream(), CHARSET)));
-            req.setAttribute("userResponse", authResponse.toString());
+            req.setAttribute("userResponse", put.getResponseBodyAsString());
             req.setAttribute("LocationHeader", put.getResponseHeader("Location"));
-        } catch (JSONException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        } finally {
+        } finally{
             put.releaseConnection();
         }
     }
@@ -80,13 +75,5 @@ public class UpdateResourceController {
 
         httpClient.executeMethod(put);
         return put;
-    }
-
-    private String getJsonString(String externalId, String name, String password) {
-        try {
-            return new JSONObject().put("externalId", externalId).put("userName", name).put("password", password).toString();
-        } catch (JSONException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
     }
 }

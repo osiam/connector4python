@@ -4,6 +4,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -43,7 +44,8 @@ public class AddResourceController {
                                  @RequestParam String name, @RequestParam String password, @RequestParam String access_token)
             throws ServletException, IOException, UserFriendlyException {
 
-        StringRequestEntity requestEntity = new StringRequestEntity(getJsonString(externalId, name, password),
+        String jsonString = getJsonString(externalId, name, password);
+        StringRequestEntity requestEntity = new StringRequestEntity(jsonString,
                 "application/json", "UTF-8");
 
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
@@ -57,18 +59,13 @@ public class AddResourceController {
     }
 
     private void readJsonFromBody(HttpServletRequest req, PostMethod post) throws IOException, UserFriendlyException {
-        if (post.getStatusCode() == 409) {
+        int statusCode = post.getStatusCode();
+        if (statusCode == 409) {
             throw new UserFriendlyException("409");
         }
-
         try {
-            JSONObject authResponse = new JSONObject(
-                    new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream(), CHARSET)));
-            req.setAttribute("userResponse", authResponse.toString());
+            req.setAttribute("userResponse", post.getResponseBodyAsString());
             req.setAttribute("LocationHeader", post.getResponseHeader("Location"));
-        } catch (JSONException e) {
-
-            throw new IllegalStateException(e.getMessage(), e);
         } finally {
             post.releaseConnection();
         }
@@ -83,8 +80,8 @@ public class AddResourceController {
         return post;
     }
 
-    private String getJsonString(String externalId, String name, String password) {
-            User user = new User.Builder(name).setPassword(password).setExternalId(externalId).build();
-            return new JSONObject(user).toString();
+    public static String getJsonString(String externalId, String name, String password) throws IOException {
+        User user = new User.Builder(name).setPassword(password).setExternalId(externalId).build();
+        return new ObjectMapper().writeValueAsString(user);
     }
 }

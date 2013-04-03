@@ -54,23 +54,4 @@ class UpdateResourceControllerSpec extends Specification {
         def e = thrown(UserFriendlyException)
         e.toString() == "Error Code: 404<br>Message: User doesn't exists and can't be updated"
     }
-
-    def "should wrap json exception to IllegalStateException"() {
-        given:
-        servletRequest.getScheme() >> "http"
-        servletRequest.getServerName() >> "localhost"
-        String jsonString = "{\"userName\":\"userName\",\"password\":\"password\",\"externalId\":\"externalId\""
-
-        when:
-        updateResourceController.updateResource(servletRequest, "externalId", "userName", "password", "access_token", "idForUpdate")
-
-        then:
-        1 * httpClient.executeMethod({PutMethod put ->
-            put.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
-            put.responseStream = new ByteArrayInputStream(jsonString.getBytes())
-        })
-        IllegalStateException e = thrown()
-        e.message == "Expected a ',' or '}' at character 70"
-        e.cause.class == JSONException.class
-    }
 }

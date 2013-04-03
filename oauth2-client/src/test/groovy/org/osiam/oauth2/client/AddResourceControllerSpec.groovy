@@ -57,21 +57,10 @@ class AddResourceControllerSpec extends Specification {
         e.toString() == "Error Code: 409<br>Message: User already exists and can't be created"
     }
 
-    def "should wrap json exception to IllegalStateException"() {
-        given:
-        String jsonString = "{\"userName\":\"userName\",\"password\":\"password\",\"externalId\":\"externalId\""
-
+    def "should generate valid JSON String"() {
         when:
-        addResourceController.createResource(servletRequest, "externalId", "userName", "password", "access_token")
-
+        def result = addResourceController.getJsonString("externalid", "name", "password")
         then:
-        1 * httpClient.executeMethod({ PostMethod post ->
-            post.statusLine = Mock(org.apache.commons.httpclient.StatusLine)
-            post.responseStream = new ByteArrayInputStream(jsonString.getBytes())
-        })
-
-        IllegalStateException e = thrown()
-        e.message == "Expected a ',' or '}' at character 70"
-        e.cause.class == JSONException.class
+        result == '{"schemas":["urn:scim:schemas:core:1.0"],"externalId":"externalid","userName":"name","password":"password"}'
     }
 }
