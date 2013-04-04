@@ -124,7 +124,7 @@ class UserTest extends Specification {
         user.meta == builder.meta
     }
 
-    def "should clone an user without its password and null empty lists"() {
+    def "should ignore password on output"() {
         given:
         User user = new User.Builder("test").setActive(true)
                 .setAddresses(new User.Addresses())
@@ -154,31 +154,116 @@ class UserTest extends Specification {
         then:
         clonedUser.password == null
 
-        clonedUser.active == user.active
-        clonedUser.addresses == null
-        clonedUser.any == user.any
-        clonedUser.displayName == user.displayName
-        clonedUser.emails == null
-        clonedUser.entitlements == null
-        clonedUser.groups == null
-        clonedUser.ims == null
-        clonedUser.locale == user.locale
-        clonedUser.name == user.name
-        clonedUser.nickName == user.nickName
-        clonedUser.phoneNumbers == null
-        clonedUser.photos == null
-        clonedUser.preferredLanguage == user.preferredLanguage
-        clonedUser.profileUrl == user.profileUrl
-        clonedUser.roles == null
         clonedUser.timezone == user.timezone
         clonedUser.title == user.title
         clonedUser.userType == user.userType
-        clonedUser.x509Certificates == null
         clonedUser.userName == user.userName
         clonedUser.id == user.id
         clonedUser.externalId == user.externalId
         clonedUser.meta == user.meta
+        clonedUser.active == user.active
+        clonedUser.any == user.any
+        clonedUser.displayName == user.displayName
+        clonedUser.locale == user.locale
+        clonedUser.name == user.name
+        clonedUser.nickName == user.nickName
+        clonedUser.preferredLanguage == user.preferredLanguage
+        clonedUser.profileUrl == user.profileUrl
     }
+
+    def "should null empty lists for pretty output"() {
+        given:
+        User user = new User.Builder("test").setActive(true)
+                .setAddresses(new User.Addresses())
+                .setAny(["ha"] as Set)
+                .setDisplayName("display")
+                .setEmails(new User.Emails())
+                .setEntitlements(new User.Entitlements())
+                .setGroups(new User.Groups())
+                .setIms(new User.Ims())
+                .setLocale("locale")
+                .setName(new Name.Builder().build())
+                .setNickName("nickname")
+                .setPassword("password")
+                .setPhoneNumbers(new User.PhoneNumbers())
+                .setPhotos(new User.Photos())
+                .setPreferredLanguage("prefereedLanguage")
+                .setProfileUrl("profileUrl")
+                .setRoles(new User.Roles())
+                .setTimezone("time")
+                .setTitle("title")
+                .setUserType("userType")
+                .setX509Certificates(new User.X509Certificates())
+                .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
+                .build()
+        when:
+        User clonedUser = User.Builder.generateForOuput(user)
+        then:
+        clonedUser.addresses == null
+        clonedUser.emails == null
+        clonedUser.entitlements == null
+        clonedUser.groups == null
+        clonedUser.ims == null
+        clonedUser.phoneNumbers == null
+        clonedUser.photos == null
+        clonedUser.roles == null
+        clonedUser.x509Certificates == null
+    }
+
+    def "should copy lists from origin user"() {
+        given:
+        def address = new Address.Builder().build()
+        def generalAttribute = new MultiValuedAttribute.Builder().build()
+
+        User user = new User.Builder("test").setActive(true)
+                .setAddresses(new User.Addresses())
+                .setAny(["ha"] as Set)
+                .setDisplayName("display")
+                .setEmails(new User.Emails())
+                .setEntitlements(new User.Entitlements())
+                .setGroups(new User.Groups())
+                .setIms(new User.Ims())
+                .setLocale("locale")
+                .setName(new Name.Builder().build())
+                .setNickName("nickname")
+                .setPassword("password")
+                .setPhoneNumbers(new User.PhoneNumbers())
+                .setPhotos(new User.Photos())
+                .setPreferredLanguage("prefereedLanguage")
+                .setProfileUrl("profileUrl")
+                .setRoles(new User.Roles())
+                .setTimezone("time")
+                .setTitle("title")
+                .setUserType("userType")
+                .setX509Certificates(new User.X509Certificates())
+                .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
+                .build()
+
+        user.addresses.address.add(address)
+        user.emails.email.add(generalAttribute)
+        user.entitlements.entitlement.add(generalAttribute)
+        user.groups.group.add(generalAttribute)
+        user.ims.im.add(generalAttribute)
+        user.phoneNumbers.phoneNumber.add(generalAttribute)
+        user.photos.photo.add(generalAttribute)
+        user.roles.role.add(generalAttribute)
+        user.x509Certificates.x509Certificate.add(generalAttribute)
+
+        when:
+        User clonedUser = User.Builder.generateForOuput(user)
+        then:
+        clonedUser.addresses.address.get(0) == address
+        clonedUser.emails.email.get(0) == generalAttribute
+        clonedUser.entitlements.entitlement.get(0) == generalAttribute
+        clonedUser.groups.group.get(0) == generalAttribute
+        clonedUser.ims.im.get(0) == generalAttribute
+        clonedUser.phoneNumbers.phoneNumber.get(0) == generalAttribute
+        clonedUser.photos.photo.get(0) == generalAttribute
+        clonedUser.roles.role.get(0) == generalAttribute
+        clonedUser.x509Certificates.x509Certificate.get(0) == generalAttribute
+
+    }
+
 
     def "should be able to enrich addresses, emails, entitlements, groups, phone-numbers, photos, roles and certificates"() {
         given:

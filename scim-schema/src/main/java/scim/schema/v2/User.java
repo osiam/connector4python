@@ -157,7 +157,7 @@ public class User extends CoreResource {
             builder.entitlements = user.entitlements == null ? null : (user.entitlements.getEntitlement().isEmpty() ? null : user.entitlements);;
             builder.roles = user.roles == null ? null : (user.roles.getRole().isEmpty() ? null : user.roles);;
             builder.x509Certificates = user.x509Certificates == null ? null : (user.x509Certificates.getX509Certificate().isEmpty() ? null : user.x509Certificates);;
-            builder.any = user.any == null ? null : (user.any.isEmpty() ? null : user.any);;
+            builder.any = user.any;
             builder.schemas = user.schemas;
             return builder.build();
         }

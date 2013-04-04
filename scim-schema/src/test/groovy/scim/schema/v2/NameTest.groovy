@@ -45,4 +45,11 @@ class NameTest extends Specification {
         name.honorificPrefix == builder.honorificPrefix;
         name.honorificSuffix == builder.honorificSuffix;
     }
+
+    def "should be able to be initialized with empty constructor for json serializing"() {
+        when:
+        def name = new Name()
+        then:
+        name
+    }
 }
