@@ -80,14 +80,14 @@ public class SetUserFields {
         SetUserListFields setUserListFields = new SetUserListFields(entity);
         SetUserSingleFields setUserSingleFields = new SetUserSingleFields(entity);
 
-        for (String key : userFields.keySet()) {
-            Field field = userFields.get(key);
+        for (Map.Entry<String, Field> e : userFields.entrySet()) {
+            Field field = userFields.get(e.getKey());
             field.setAccessible(true);
-            if (!READ_ONLY_FIELD_SET.contains(key)) {
+            if (!READ_ONLY_FIELD_SET.contains(e.getKey())) {
                 Object userValue = field.get(user);
-                UserLists attributes = UserLists.fromString.get(key);
+                UserLists attributes = UserLists.fromString.get(e.getKey());
                 if (attributes == null) {
-                    setUserSingleFields.updateSingleField(user, entityFields.get(key), userValue, key);
+                    setUserSingleFields.updateSingleField(user, entityFields.get(e.getKey()), userValue, e.getKey());
                 } else {
                     setUserListFields.updateListFields(userValue, attributes);
                 }

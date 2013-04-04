@@ -31,8 +31,6 @@ public class UpdateResourceController {
 
     private HttpClient httpClient;
 
-    private static final Charset CHARSET = Charset.forName("UTF-8");
-
 
     public UpdateResourceController() {
         this.httpClient = new HttpClient();

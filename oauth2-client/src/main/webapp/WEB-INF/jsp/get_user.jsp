@@ -28,11 +28,15 @@
 
 <t:generic_page_template>
     <h2>Get User Resource:</h2>
+
     <h3>To get an user click on the buttons with the weird names; Pan Galactic Gargle Blaster, anyone?</h3>
+
     <form method="post">
-        <input id="hidden_access" type="hidden" name="access_token" value="${access_token} " />
+        <input id="hidden_access" type="hidden" name="access_token" value="${access_token} "/>
         <c:forEach var="u" items="${userIds}">
+            <p>
                 <input type="submit" formaction="/oauth2-client/resource" name="username" value="${u}"/>
+            </p>
         </c:forEach>
     </form>
 </t:generic_page_template>

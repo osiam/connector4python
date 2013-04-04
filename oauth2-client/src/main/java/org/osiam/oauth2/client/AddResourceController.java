@@ -1,20 +1,14 @@
 package org.osiam.oauth2.client;
 
-import com.sun.org.apache.bcel.internal.classfile.ConstantString;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.osiam.oauth2.client.exceptions.UserFriendlyException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import scim.schema.v2.Constants;
 import scim.schema.v2.Name;
 import scim.schema.v2.User;
@@ -22,11 +16,8 @@ import scim.schema.v2.User;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -132,13 +123,13 @@ public class AddResourceController {
     private void setAttributeAndCastUser(HttpServletRequest req, PostMethod post) throws IOException {
         String response = post.getResponseBodyAsString();
 
-        setUserId(req, response);
+        setUserId(response);
         req.setAttribute("userResponse", response);
         req.setAttribute("LocationHeader", post.getResponseHeader("Location"));
 
     }
 
-    private void setUserId(HttpServletRequest req, String response) throws IOException {
+    private void setUserId(String response) throws IOException {
         if (response != null) {
             User user = new ObjectMapper().readValue(response, User.class);
             CRUDRedirectController.userIds.add(user.getId());
