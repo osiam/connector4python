@@ -55,7 +55,7 @@ class UserTest extends Specification {
         def schemas = ["urn:wtf", "urn:hajo"] as Set
         User oldUser = new User.Builder("username").setSchemas(schemas).build()
         when:
-        User user = new User.Builder(oldUser).build();
+        User user = User.Builder.generateForOuput(oldUser);
         then:
         user.schemas == oldUser.schemas
 
@@ -124,7 +124,7 @@ class UserTest extends Specification {
         user.meta == builder.meta
     }
 
-    def "should clone an user without its password"() {
+    def "should clone an user without its password and null empty lists"() {
         given:
         User user = new User.Builder("test").setActive(true)
                 .setAddresses(new User.Addresses())
@@ -150,30 +150,30 @@ class UserTest extends Specification {
                 .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
                 .build()
         when:
-        User clonedUser = new User.Builder(user).build()
+        User clonedUser = User.Builder.generateForOuput(user)
         then:
         clonedUser.password == null
 
         clonedUser.active == user.active
-        clonedUser.addresses == user.addresses
+        clonedUser.addresses == null
         clonedUser.any == user.any
         clonedUser.displayName == user.displayName
-        clonedUser.emails == user.emails
-        clonedUser.entitlements == user.entitlements
-        clonedUser.groups == user.groups
-        clonedUser.ims == user.ims
+        clonedUser.emails == null
+        clonedUser.entitlements == null
+        clonedUser.groups == null
+        clonedUser.ims == null
         clonedUser.locale == user.locale
         clonedUser.name == user.name
         clonedUser.nickName == user.nickName
-        clonedUser.phoneNumbers == user.phoneNumbers
-        clonedUser.photos == user.photos
+        clonedUser.phoneNumbers == null
+        clonedUser.photos == null
         clonedUser.preferredLanguage == user.preferredLanguage
         clonedUser.profileUrl == user.profileUrl
-        clonedUser.roles == user.roles
+        clonedUser.roles == null
         clonedUser.timezone == user.timezone
         clonedUser.title == user.title
         clonedUser.userType == user.userType
-        clonedUser.x509Certificates == user.x509Certificates
+        clonedUser.x509Certificates == null
         clonedUser.userName == user.userName
         clonedUser.id == user.id
         clonedUser.externalId == user.externalId
