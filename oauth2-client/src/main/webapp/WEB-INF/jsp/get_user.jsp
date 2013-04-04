@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   ~ Copyright (C) 2013 tarent AG
   ~
@@ -24,12 +23,16 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <t:generic_page_template>
-<h1>Error: <%= request.getParameter("error") %>
-</h1>
-
-<p>Error Description: <%= request.getParameter("error_description") %>
-</p>
+    <h2>Get User Resource:</h2>
+    <h3>To get an user click on the buttons with the weird names; Pan Galactic Gargle Blaster, anyone?</h3>
+    <form method="post">
+        <input id="hidden_access" type="hidden" name="access_token" value="${access_token} " />
+        <c:forEach var="u" items="${userIds}">
+                <input type="submit" formaction="/oauth2-client/resource" name="username" value="${u}"/>
+        </c:forEach>
+    </form>
 </t:generic_page_template>

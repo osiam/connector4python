@@ -11,8 +11,10 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.osiam.oauth2.client.exceptions.UserFriendlyException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import scim.schema.v2.Constants;
 import scim.schema.v2.Name;
 import scim.schema.v2.User;
@@ -39,14 +41,12 @@ public class AddResourceController {
 
     private HttpClient httpClient;
 
-    private static final Charset CHARSET = Charset.forName("UTF-8");
-
 
     public AddResourceController() {
         this.httpClient = new HttpClient();
     }
 
-    @RequestMapping("/crud/createResource")
+    @RequestMapping("/createResource")
     public String createResource(HttpServletRequest req,
                                  @RequestParam String schema,
                                  @RequestParam String user_name,
@@ -110,6 +110,7 @@ public class AddResourceController {
         PostMethod post = executePostMethod(requestEntity, url);
 
         readJsonFromBody(req, post);
+        req.setAttribute("access_token", access_token);
 
         return "user";
     }
@@ -121,10 +122,26 @@ public class AddResourceController {
         }
 
         try {
-            req.setAttribute("userResponse", post.getResponseBodyAsString());
-            req.setAttribute("LocationHeader", post.getResponseHeader("Location"));
+
+            setAttributeAndCastUser(req, post);
         } finally {
             post.releaseConnection();
+        }
+    }
+
+    private void setAttributeAndCastUser(HttpServletRequest req, PostMethod post) throws IOException {
+        String response = post.getResponseBodyAsString();
+
+        setUserId(req, response);
+        req.setAttribute("userResponse", response);
+        req.setAttribute("LocationHeader", post.getResponseHeader("Location"));
+
+    }
+
+    private void setUserId(HttpServletRequest req, String response) throws IOException {
+        if (response != null) {
+            User user = new ObjectMapper().readValue(response, User.class);
+            CRUDRedirectController.userIds.add(user.getId());
         }
     }
 
@@ -193,8 +210,10 @@ public class AddResourceController {
     }
 
     private static Set<String> getSchemas(String schema) {
+        if (schema == null)
+            return Constants.CORE_SCHEMAS;
         String[] schemas = schema.split(",");
-        if (schemas.length > 0)
+        if (schemas.length > 0 && schemas[0] != "")
             return new HashSet<>(Arrays.asList(schemas));
         else
             return Constants.CORE_SCHEMAS;

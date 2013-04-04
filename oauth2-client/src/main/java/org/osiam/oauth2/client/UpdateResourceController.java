@@ -104,6 +104,7 @@ public class UpdateResourceController {
         PutMethod put = executePutMethod(requestEntity, url);
 
         readJsonFromBody(req, put);
+        req.setAttribute("access_token", access_token);
 
         return "user";
     }
@@ -113,7 +114,8 @@ public class UpdateResourceController {
             throw new UserFriendlyException(String.valueOf(put.getStatusCode()));
         }
         try {
-            req.setAttribute("userResponse", put.getResponseBodyAsString());
+            String response = put.getResponseBodyAsString();
+            req.setAttribute("userResponse", response);
             req.setAttribute("LocationHeader", put.getResponseHeader("Location"));
         } finally {
             put.releaseConnection();

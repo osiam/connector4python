@@ -39,7 +39,7 @@ public class AuthCodeController {
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String clientId = "testClient";
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":8080/oauth2-client/accessToken";
-        String url = environment + "/authorization-server/oauth/authorize?response_type=code&scope=GET%20POST%20PUT&state=haha&" +
+        String url = environment + "/authorization-server/oauth/authorize?response_type=code&scope=GET%20POST%20PUT%20PATCH&state=haha&" +
                 "client_id=" + clientId + "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8");
         return "redirect:" + url;
     }

@@ -1,16 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jtodea
-  Date: 26.03.13
-  Time: 11:10
-  To change this template use File | Settings | File Templates.
---%>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page isErrorPage="true" %>
-<html>
-<head>
-    <title>Error Page</title>
-</head>
-<body>
-    <p><%=exception.toString()%> </p>
-</body>
-</html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
+<t:generic_page_template>
+    <p>${exception.message} </p>
+</t:generic_page_template>

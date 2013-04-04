@@ -21,16 +21,14 @@
   ~ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   --%>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Oauth2 Client</title>
-</head>
-<body>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
+<t:generic_page_template>
     <h2>Add/Update User Resource:</h2>
     <form method="post">
-        <input id="hidden_access_token" type="hidden" name="access_token" value="<%= request.getParameter("access_token") %>" />
+        <input id="hidden_access_token" type="hidden" name="access_token" value="${access_token}" />
         <label>Schema (comma separated):<br><input id="schema" name="schema" type="text" value="urn:scim:schemas:core:1.0"></label><br>
         <label>Username:<br><input id="user_name" name="user_name" type="text"></label><br>
         <label>Firstname:<br><input id="firstname" name="firstname" type="text" value="Arthur"></label><br>
@@ -59,8 +57,6 @@
         <label>Any (comma separated):<br><input id="any" name="any" type="text"></label><br>
 
         <label>ID for Update:<br><input id="idForUpdate" name="idForUpdate" type="text"></label><br>
-        <input type="submit" formaction="createResource" value="Add Resource" />
-        <input type="submit" formaction="updateResource" value="Update Resource" />
-    </form>
-</body>
-</html>
+        <input type="submit" formaction="/oauth2-client/createResource" value="Add Resource" />
+        <input type="submit" formaction="/oauth2-client/updateResource" value="Update Resource" />
+</t:generic_page_template>

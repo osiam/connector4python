@@ -20,7 +20,7 @@ class AddResourceControllerSpec extends Specification {
 
     def servletRequest = Mock(HttpServletRequest)
     def httpClient = Mock(HttpClient)
-    def jsonString = "{\"userName\":\"userName\",\"password\":\"password\",\"externalId\":\"externalId\"}"
+    def jsonString = '{"id":"ef25ece4-8a02-4cb0-bdcf-d8be3e5134ab","schemas":["urn:scim:schemas:core:1.0"],"userName":"unionsionldjskla","name":{"formatted":"Arthur Dent","familyName":"Dent","givenName":"Arthur"},"displayName":"Doesn\'t like to speak to birds anymore ...","nickName":"Arthi","profileUrl":"http://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy","userType":"A hapless Englishman","preferredLanguage":"Vogon","locale":"vo","timezone":"UTC -42 +23 / 5"}'
 
     def setup() {
         servletRequest.getScheme() >> "http"
@@ -30,6 +30,128 @@ class AddResourceControllerSpec extends Specification {
 
 
     AddResourceController addResourceController = new AddResourceController(httpClient: httpClient)
+
+    def "should set user id"(){
+        given:
+        def idSize = CRUDRedirectController.userIds.size()
+        when:
+        addResourceController.setUserId(servletRequest, jsonString)
+        then:
+        CRUDRedirectController.userIds.size() == idSize + 1
+
+    }
+
+    def "should not set user id when response is null"(){
+        given:
+        def idSize = CRUDRedirectController.userIds.size()
+        when:
+        addResourceController.setUserId(servletRequest, null)
+        then:
+        CRUDRedirectController.userIds.size() == idSize
+
+
+    }
+
+    def "should not set name when no first nor lastname got submitted"(){
+        when:
+        def result = AddResourceController.getJsonString(
+                "schema",
+                "user_name",
+                null,
+                null,
+                "displayname",
+                "nickname",
+                "profileurl",
+                "title",
+                "usertype",
+                "preferredlanguage",
+                "locale",
+                "timezone",
+                //timezone
+                "password",
+                "emails",
+                "phonenumbers",
+                "ims",
+                "photos",
+                "addresses",
+                "groups",
+                "entitlements",
+                "roles",
+                "x509",
+                "any",
+        )
+
+        then:
+        result == '{"schemas":["schema"],"userName":"user_name","displayName":"displayname","nickName":"nickname","profileUrl":"profileurl","title":"title","userType":"usertype","preferredLanguage":"preferredlanguage","locale":"locale","timezone":"timezone","password":"password"}'
+    }
+
+    def "should return scim.schema.v2.Constants schema when no schema got submitted"(){
+        when:
+        def result = AddResourceController.getJsonString(
+                null,
+                "user_name",
+                null,
+                null,
+                "displayname",
+                "nickname",
+                "profileurl",
+                "title",
+                "usertype",
+                "preferredlanguage",
+                "locale",
+                "timezone",
+                //timezone
+                "password",
+                "emails",
+                "phonenumbers",
+                "ims",
+                "photos",
+                "addresses",
+                "groups",
+                "entitlements",
+                "roles",
+                "x509",
+                "any",
+        )
+
+        then:
+        result == '{"schemas":["urn:scim:schemas:core:1.0"],"userName":"user_name","displayName":"displayname","nickName":"nickname","profileUrl":"profileurl","title":"title","userType":"usertype","preferredLanguage":"preferredlanguage","locale":"locale","timezone":"timezone","password":"password"}'
+    }
+
+    def "should return scim.schema.v2.Constants schema when empty schema got submitted"(){
+        when:
+        def result = AddResourceController.getJsonString(
+                "",
+                "user_name",
+                null,
+                null,
+                "displayname",
+                "nickname",
+                "profileurl",
+                "title",
+                "usertype",
+                "preferredlanguage",
+                "locale",
+                "timezone",
+                //timezone
+                "password",
+                "emails",
+                "phonenumbers",
+                "ims",
+                "photos",
+                "addresses",
+                "groups",
+                "entitlements",
+                "roles",
+                "x509",
+                "any",
+        )
+
+        then:
+        result == '{"schemas":["urn:scim:schemas:core:1.0"],"userName":"user_name","displayName":"displayname","nickName":"nickname","profileUrl":"profileurl","title":"title","userType":"usertype","preferredLanguage":"preferredlanguage","locale":"locale","timezone":"timezone","password":"password"}'
+    }
+
+
 
 
     def "should be able to create a user resource"() {

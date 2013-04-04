@@ -23,36 +23,33 @@
 
 package org.osiam.oauth2.client;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.osiam.oauth2.client.exceptions.UserFriendlyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import scim.schema.v2.User;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jtodea
- * Date: 22.03.13
- * Time: 11:21
- * To change this template use File | Settings | File Templates.
- */
 @Controller
 @RequestMapping("/crud")
 public class CRUDRedirectController {
+    public static Set<String> userIds = new ConcurrentSkipListSet<>();
+    static {
+        userIds.add("CEF9452E-00A9-4CEC-A086-D171374FFBEF");
+    }
 
-    @RequestMapping("/user")
-    public String redirectToCreateUpdateUser() {
+    @RequestMapping("/user/put")
+    public String redirectToCreateUpdateUser(HttpServletRequest request) {
+        request.setAttribute("access_token", request.getParameter("access_token"));
         return "create_update_user";
     }
+
+    @RequestMapping("/user/get")
+    public String redirectToGetUser(HttpServletRequest request) {
+        request.setAttribute("access_token", request.getParameter("access_token"));
+        request.setAttribute("userIds", userIds);
+        return "get_user";
+    }
+
 
 }

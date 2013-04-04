@@ -20,26 +20,16 @@
   ~ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
   ~ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   --%>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Oauth2 Client</title>
-</head>
-<body>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
+<t:generic_page_template>
     <h2>Parameters:</h2>
-    <p>ClientId: <%= request.getAttribute("client_id") %></p>
-    <p>Client secret: <%= request.getAttribute("client_secret") %></p>
-    <p>Redirect Uri: <%= request.getAttribute("redirect_uri") %></p>
-    <p>Auth code: <%= request.getAttribute("code") %></p>
+    <p>ClientId: ${client_id} </p>
+    <p>Client secret: ${client_secret} </p>
+    <p>Redirect Uri: ${redirect_uri} </p>
+    <p>Auth code: ${code}</p>
     <p>Authorization-Server response:</p>
-    <p><%= request.getAttribute("response") %></p>
-    <h2>Get User Resource:</h2>
-    <form method="post">
-        <input id="hidden_access" type="hidden" name="access_token" value="<%= request.getAttribute("access_token") %>" />
-        <label>Username:<br><input id="username" name="username" type="text"></label><br>
-        <input type="submit" formaction="resource" value="Get Resource"/>
-    </form>
-    <a href="crud/user?access_token=<%= request.getAttribute("access_token") %>">moep!</a>
-</body>
-</html>
+    <p>${response}</p>
+</t:generic_page_template>

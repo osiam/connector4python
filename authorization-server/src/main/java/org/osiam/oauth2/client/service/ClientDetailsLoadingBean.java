@@ -76,6 +76,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
                 scopes.add("GET");
                 scopes.add("POST");
                 scopes.add("PUT");
+                scopes.add("PATCH");
                 return scopes;
             }
 

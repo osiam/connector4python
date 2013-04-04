@@ -20,15 +20,9 @@
   ~ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
   ~ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   --%>
-
-<html>
-    <head>
-        <title>Oauth2 Client</title>
-    </head>
-    <body>
-        <h1>Oauth2 Client!</h1>
-        <form action="authcode" method="get">
-            <input type="submit" value="Start"/>
-        </form>
-    </body>
-</html>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<t:generic_page_template>
+    <h2>Hi,</h2>
+    <p>press Get Access Token to start the show ...</p>
+</t:generic_page_template>
