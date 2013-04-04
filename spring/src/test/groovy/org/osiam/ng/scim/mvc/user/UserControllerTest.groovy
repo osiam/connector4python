@@ -79,34 +79,35 @@ class UserControllerTest extends Specification {
 
     }
 
-    private boolean validateUser(User result) {
-        return result != user &&
-                user.password != null &&
-                result.password == null &&
-                result.active == user.active &&
-                result.addresses == user.addresses &&
-                result.any == user.any &&
-                result.displayName == user.displayName &&
-                result.emails == user.emails &&
-                result.entitlements == user.entitlements &&
-                result.groups == user.groups &&
-                result.ims == user.ims &&
-                result.locale == user.locale &&
-                result.name == user.name &&
-                result.nickName == user.nickName &&
-                result.phoneNumbers == user.phoneNumbers &&
-                result.photos == user.photos &&
-                result.preferredLanguage == user.preferredLanguage &&
-                result.profileUrl == user.profileUrl &&
-                result.roles == user.roles &&
-                result.timezone == user.timezone &&
-                result.title == user.title &&
-                result.userType == user.userType &&
-                result.x509Certificates == user.x509Certificates &&
-                result.userName == user.userName &&
-                result.id == user.id &&
-                result.externalId == user.externalId &&
-                result.meta == user.meta
+    def validateUser(User result) {
+        assert result != user
+        assert user.password != null
+        assert result.password == null
+        assert result.active == user.active
+        assert result.addresses == null
+        assert result.any == user.any
+        assert result.displayName == user.displayName
+        assert result.emails == null
+        assert result.entitlements == null
+        assert result.groups == null
+        assert result.ims == null
+        assert result.locale == user.locale
+        assert result.name == user.name
+        assert result.nickName == user.nickName
+        assert result.phoneNumbers == null
+        assert result.photos == null
+        assert result.preferredLanguage == user.preferredLanguage
+        assert result.profileUrl == user.profileUrl
+        assert result.roles == null
+        assert result.timezone == user.timezone
+        assert result.title == user.title
+        assert result.userType == user.userType
+        assert result.x509Certificates == null
+        assert result.userName == user.userName
+        assert result.id == user.id
+        assert result.externalId == user.externalId
+        assert result.meta == user.meta
+        true
     }
 
     def "should create the user and add the location header"() {
