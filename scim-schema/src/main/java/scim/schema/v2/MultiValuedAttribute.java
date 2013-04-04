@@ -23,9 +23,12 @@
 
 package scim.schema.v2;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 /**
  * Java class for multiValuedAttribute complex type.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class MultiValuedAttribute {
 
     private final Object value;

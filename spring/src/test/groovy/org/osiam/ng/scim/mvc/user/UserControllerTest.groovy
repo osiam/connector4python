@@ -24,15 +24,22 @@
 package org.osiam.ng.scim.mvc.user
 
 import org.osiam.ng.scim.dao.SCIMUserProvisioning
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.ResponseStatus
 import scim.schema.v2.Address
 import scim.schema.v2.Meta
 import scim.schema.v2.Name
 import scim.schema.v2.User
+import spock.lang.Ignore
 import spock.lang.Specification
 import sun.security.ssl.KeyManagerFactoryImpl
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import java.lang.reflect.Method
 
 class UserControllerTest extends Specification {
 
@@ -75,9 +82,64 @@ class UserControllerTest extends Specification {
         then:
         1 * provisioning.getById("one") >> user
         validateUser(result)
+    }
 
+    def "should contain a method to GET a user"(){
+        given:
+           Method method = UserController.class.getDeclaredMethod("getUser", String)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        then:
+        mapping.value() == ["/{id}"]
+        mapping.method() == [RequestMethod.GET]
+        body
+        //@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 
     }
+
+    def "should contain a method to POST a user"(){
+        given:
+        Method method = UserController.class.getDeclaredMethod("createUser", User, HttpServletRequest, HttpServletResponse)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        ResponseStatus defaultStatus = method.getAnnotation(ResponseStatus)
+        then:
+        mapping.method() == [RequestMethod.POST]
+        body
+        defaultStatus.value() == HttpStatus.CREATED
+    }
+
+    def "should contain a method to PUT a user"(){
+        given:
+        //createUser(@RequestBody User user,HttpServletRequest request, HttpServletResponse response)
+        Method method = UserController.class.getDeclaredMethod("updateUser",String, User, HttpServletRequest, HttpServletResponse)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        ResponseStatus defaultStatus = method.getAnnotation(ResponseStatus)
+        then:
+        mapping.method() == [RequestMethod.PUT]
+        body
+        defaultStatus.value() == HttpStatus.OK
+    }
+
+    @Ignore
+    def "should contain a method to PATCH a user"(){
+        given:
+        Method method = UserController.class.getDeclaredMethod("getUser", String)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        ResponseStatus defaultStatus = method.getAnnotation(ResponseStatus)
+        then:
+        mapping.method() == [RequestMethod.PUT]
+        body
+        defaultStatus.value() == HttpStatus.OK
+    }
+
+
 
     def validateUser(User result) {
         assert result != user
@@ -121,6 +183,18 @@ class UserControllerTest extends Specification {
         then:
         1 * provisioning.createUser(user) >> user
         1 * httpServletResponse.setHeader("Location", uri.toASCIIString())
+        validateUser(result)
+    }
+
+    def "should replace an user and set location header"() {
+        given:
+        def id = UUID.randomUUID().toString()
+        when:
+        def result = underTest.updateUser(id, user, httpServletRequest, httpServletResponse)
+        then:
+        1 * provisioning.replaceUser(id, user) >> user
+        1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
+        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/id")
         validateUser(result)
     }
 

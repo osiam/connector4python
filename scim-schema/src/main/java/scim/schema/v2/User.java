@@ -129,11 +129,12 @@ public class User extends CoreResource {
         /**
          * This class is for generating the output of an User. It does not copy the password and it checks for empty
          * lists; if a list is empty it will be nulled so that json-mapping will ignore it.
+         *
          * @param user
          * @return
          */
-        public static User generateForOuput(User user){
-           Builder builder = new Builder(user.userName) ;
+        public static User generateForOuput(User user) {
+            Builder builder = new Builder(user.userName);
             builder.id = user.id;
             builder.meta = user.meta;
             builder.externalId = user.externalId;
@@ -149,14 +150,21 @@ public class User extends CoreResource {
             builder.active = user.active;
             // null lists when empty
             builder.emails = user.emails == null ? null : (user.emails.getEmail().isEmpty() ? null : user.emails);
-            builder.phoneNumbers = user.phoneNumbers == null ? null : (user.phoneNumbers.getPhoneNumber().isEmpty() ? null : user.phoneNumbers);;
-            builder.ims = user.ims == null ? null : (user.ims.getIm().isEmpty() ? null : user.ims);;
-            builder.photos = user.photos == null ? null : (user.photos.getPhoto().isEmpty() ? null : user.photos);;
-            builder.addresses = user.addresses == null ? null : (user.addresses.getAddress().isEmpty() ? null : user.addresses);;
-            builder.groups = user.groups == null ? null : (user.groups.getGroup().isEmpty() ? null : user.groups);;
-            builder.entitlements = user.entitlements == null ? null : (user.entitlements.getEntitlement().isEmpty() ? null : user.entitlements);;
-            builder.roles = user.roles == null ? null : (user.roles.getRole().isEmpty() ? null : user.roles);;
-            builder.x509Certificates = user.x509Certificates == null ? null : (user.x509Certificates.getX509Certificate().isEmpty() ? null : user.x509Certificates);;
+            builder.phoneNumbers = user.phoneNumbers == null ? null : (user.phoneNumbers.getPhoneNumber().isEmpty() ? null : user.phoneNumbers);
+            ;
+            builder.ims = user.ims == null ? null : (user.ims.getIm().isEmpty() ? null : user.ims);
+            ;
+            builder.photos = user.photos == null ? null : (user.photos.getPhoto().isEmpty() ? null : user.photos);
+            ;
+            builder.addresses = user.addresses == null ? null : (user.addresses.getAddress().isEmpty() ? null : user.addresses);
+            ;
+            builder.groups = user.groups == null ? null : (user.groups.getGroup().isEmpty() ? null : user.groups);
+            ;
+            builder.entitlements = user.entitlements == null ? null : (user.entitlements.getEntitlement().isEmpty() ? null : user.entitlements);
+            ;
+            builder.roles = user.roles == null ? null : (user.roles.getRole().isEmpty() ? null : user.roles);
+            ;
+            builder.x509Certificates = user.x509Certificates == null ? null : (user.x509Certificates.getX509Certificate().isEmpty() ? null : user.x509Certificates);
             builder.any = user.any;
             builder.schemas = user.schemas;
             return builder.build();
@@ -509,12 +517,11 @@ public class User extends CoreResource {
     }
 
 
-
-
     /**
      * Java class for anonymous complex type.
      */
-    public static class Addresses implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Addresses implements UserFields {
 
         private List<Address> address = new ArrayList<>();
 
@@ -545,11 +552,14 @@ public class User extends CoreResource {
     }
 
 
-    public static interface UserFields{}
+    public static interface UserFields {
+    }
+
     /**
      * Java class for anonymous complex type.
      */
-    public static class Emails implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Emails implements UserFields {
 
         private List<MultiValuedAttribute> email = new ArrayList<>();
 
@@ -583,7 +593,8 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Entitlements implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Entitlements implements UserFields {
 
         private List<MultiValuedAttribute> entitlement = new ArrayList<>();
 
@@ -617,7 +628,8 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Groups implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Groups implements UserFields {
 
         private List<MultiValuedAttribute> group = new ArrayList<>();
 
@@ -651,7 +663,8 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Ims implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Ims implements UserFields {
 
         private List<MultiValuedAttribute> im = new ArrayList<>();
 
@@ -685,7 +698,8 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class PhoneNumbers implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class PhoneNumbers implements UserFields {
 
         private List<MultiValuedAttribute> phoneNumber = new ArrayList<>();
 
@@ -719,7 +733,8 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Photos implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Photos implements UserFields {
 
         private List<MultiValuedAttribute> photo = new ArrayList<>();
 
@@ -753,7 +768,8 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class Roles implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Roles implements UserFields {
 
         private List<MultiValuedAttribute> role = new ArrayList<>();
 
@@ -787,7 +803,8 @@ public class User extends CoreResource {
     /**
      * Java class for anonymous complex type.
      */
-    public static class X509Certificates implements UserFields{
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class X509Certificates implements UserFields {
 
         private List<MultiValuedAttribute> x509Certificate = new ArrayList<>();
 

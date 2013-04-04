@@ -31,7 +31,8 @@ import scim.schema.v2.User;
  */
 public interface SCIMUserProvisioning {
     /**
-     * This method returns a SCIM user.
+     * This method returns a SCIM user, it is used for GET calls.
+     *
      * <p/>
      * It must throw an ResourceNotFoundException if no user got found.
      *
@@ -44,7 +45,7 @@ public interface SCIMUserProvisioning {
 
 
     /**
-     * This method creates a user.
+     * This method creates a user, it is used for POST calls.
      *
      * @param user A user representation which should be created
      * @return the created user representation
@@ -54,7 +55,7 @@ public interface SCIMUserProvisioning {
     User createUser(User user);
 
     /**
-     * This method updates an user.
+     * This method replaces an user, it is used for PUT calls.
      *
      * @param id,   the external identifier of an user
      * @param user, an user representation which should be created
@@ -63,4 +64,15 @@ public interface SCIMUserProvisioning {
      *          if no user with the given id got found
      */
     User replaceUser(String id, User user);
+
+    /**
+     * This method updates an user, it is used for PATCH calls.
+     *
+     * @param id,   the external identifier of an user
+     * @param user, an user representation which should be created
+     * @return the updated user
+     * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
+     *          if no user with the given id got found
+     */
+    User updateUser(String id, User user);
 }
