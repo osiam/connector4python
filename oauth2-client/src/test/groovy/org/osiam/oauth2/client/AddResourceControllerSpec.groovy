@@ -35,7 +35,7 @@ class AddResourceControllerSpec extends Specification {
         given:
         def idSize = CRUDRedirectController.userIds.size()
         when:
-        addResourceController.setUserId(servletRequest, jsonString)
+        addResourceController.setUserId(jsonString)
         then:
         CRUDRedirectController.userIds.size() == idSize + 1
 
@@ -45,7 +45,7 @@ class AddResourceControllerSpec extends Specification {
         given:
         def idSize = CRUDRedirectController.userIds.size()
         when:
-        addResourceController.setUserId(servletRequest, null)
+        addResourceController.setUserId(null)
         then:
         CRUDRedirectController.userIds.size() == idSize
 
