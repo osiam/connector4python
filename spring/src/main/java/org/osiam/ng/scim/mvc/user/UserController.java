@@ -70,7 +70,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public User createUser(@RequestBody User user,HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public User createUser(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         User createdUser = scimUserProvisioning.createUser(user);
         String requestUrl = request.getRequestURL().toString();
         URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, createdUser.getId());
@@ -81,9 +81,9 @@ public class UserController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public User updateUser(@PathVariable final String id,
-                           @RequestBody User user,
-                           HttpServletRequest request, HttpServletResponse response) {
+    public User replace(@PathVariable final String id,
+                        @RequestBody User user,
+                        HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.replaceUser(id, user);
         String requestUrl = request.getRequestURL().toString();
         //TODO may obsolete because internal id doesn't change ...
@@ -92,5 +92,18 @@ public class UserController {
         response.setHeader("Location", uri.toASCIIString());
         return User.Builder.generateForOuput(createdUser);
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public User update(@PathVariable final String id,
+                       @RequestBody User user,
+                       HttpServletRequest request, HttpServletResponse response) {
+        User createdUser = scimUserProvisioning.updateUser(id, user);
+        String requestUrl = request.getRequestURL().toString();
+        response.setHeader("Location", requestUrl);
+        return User.Builder.generateForOuput(createdUser);
+    }
+
 
 }

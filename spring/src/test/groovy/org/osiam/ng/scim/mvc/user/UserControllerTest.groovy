@@ -29,13 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
-import scim.schema.v2.Address
 import scim.schema.v2.Meta
 import scim.schema.v2.Name
 import scim.schema.v2.User
 import spock.lang.Ignore
 import spock.lang.Specification
-import sun.security.ssl.KeyManagerFactoryImpl
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -114,7 +112,7 @@ class UserControllerTest extends Specification {
     def "should contain a method to PUT a user"(){
         given:
         //createUser(@RequestBody User user,HttpServletRequest request, HttpServletResponse response)
-        Method method = UserController.class.getDeclaredMethod("updateUser",String, User, HttpServletRequest, HttpServletResponse)
+        Method method = UserController.class.getDeclaredMethod("replace",String, User, HttpServletRequest, HttpServletResponse)
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
@@ -125,16 +123,15 @@ class UserControllerTest extends Specification {
         defaultStatus.value() == HttpStatus.OK
     }
 
-    @Ignore
     def "should contain a method to PATCH a user"(){
         given:
-        Method method = UserController.class.getDeclaredMethod("getUser", String)
+        Method method = UserController.class.getDeclaredMethod("update", String, User, HttpServletRequest, HttpServletResponse)
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
         ResponseStatus defaultStatus = method.getAnnotation(ResponseStatus)
         then:
-        mapping.method() == [RequestMethod.PUT]
+        mapping.method() == [RequestMethod.PATCH]
         body
         defaultStatus.value() == HttpStatus.OK
     }
@@ -190,7 +187,7 @@ class UserControllerTest extends Specification {
         given:
         def id = UUID.randomUUID().toString()
         when:
-        def result = underTest.updateUser(id, user, httpServletRequest, httpServletResponse)
+        def result = underTest.replace(id, user, httpServletRequest, httpServletResponse)
         then:
         1 * provisioning.replaceUser(id, user) >> user
         1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
@@ -202,11 +199,12 @@ class UserControllerTest extends Specification {
         given:
         def id = UUID.randomUUID().toString()
         when:
-        def result = underTest.updateUser(id, user, httpServletRequest, httpServletResponse)
+        def result = underTest.update(id, user, httpServletRequest, httpServletResponse)
         then:
-        1 * provisioning.replaceUser(id, user) >> user
+        1 * provisioning.updateUser(id, user) >> user
         1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
-        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/id")
+        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/yo")
         validateUser(result)
     }
+
 }
