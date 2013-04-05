@@ -77,11 +77,12 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should wrap IllegalAccessEsception to an IllegalState"() {
         given:
-        def scimUser = new User.Builder("test").build()
+        SetUserFields setUserFields = Mock(SetUserFields)
+
         when:
-        scimUserProvisioningBean.replaceUser("1234", scimUser)
+        scimUserProvisioningBean.setUserFieldsWrapException(setUserFields);
         then:
-        1 * userDao.getById("1234") >> {throw new IllegalAccessException("blubb")}
+        1 * setUserFields.setFields() >> {throw new IllegalAccessException("Blubb")}
         def e = thrown(IllegalStateException)
         e.message == "This should not happen."
 
