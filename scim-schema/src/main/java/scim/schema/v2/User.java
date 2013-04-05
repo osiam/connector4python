@@ -126,6 +126,11 @@ public class User extends CoreResource {
             this.userName = userName;
         }
 
+        public Builder() {
+            this.userName = null;
+        }
+
+
         /**
          * This class is for generating the output of an User. It does not copy the password and it checks for empty
          * lists; if a list is empty it will be nulled so that json-mapping will ignore it.

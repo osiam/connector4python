@@ -26,6 +26,15 @@ package scim.schema.v2
 import spock.lang.Specification
 
 class MetaTest extends Specification {
+
+    def "should contain empty constructor for json serializing"() {
+        when:
+        def meta = new Meta()
+        then:
+        meta
+    }
+
+
     def "should be able to create without explicit created, last modified"() {
         given:
         def oldSysTime = System.currentTimeMillis()
@@ -65,7 +74,7 @@ class MetaTest extends Specification {
         def meta = new Meta.Builder()
                 .setLocation("dunno")
                 .setVersion("version??")
-                .setAttributes(new Meta.Attributes())
+                .setAttributes(new HashSet<String>())
                 .build();
         then:
         meta.location == "dunno"
@@ -74,15 +83,16 @@ class MetaTest extends Specification {
     }
 
     def "attributes should should be ebale to get enriched"() {
-        when:
+        given:
         def meta = new Meta.Builder()
                 .setLocation("dunno")
                 .setVersion("version??")
-                .setAttributes(new Meta.Attributes())
                 .build();
-        meta.getAttributes().attribute.add(new MultiValuedAttribute.Builder().build())
+
+        when:
+        meta.getAttributes().add("hallo")
         then:
-        meta.getAttributes().attribute.size() == 1
+        meta.getAttributes().size() == 1
 
     }
 }

@@ -42,6 +42,15 @@ class UserTest extends Specification {
         user.schemas == Constants.CORE_SCHEMAS;
     }
 
+    def "user should be able to create an user without name for PATCH"() {
+        when:
+        def user = new User.Builder().build()
+        then:
+        user.schemas == Constants.CORE_SCHEMAS;
+        user.name == null
+    }
+
+
     def "user should be able to contain schemas"(){
         def schemas = ["urn:wtf", "urn:hajo"] as Set
         when:

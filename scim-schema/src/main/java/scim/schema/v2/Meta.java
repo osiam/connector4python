@@ -23,22 +23,28 @@
 
 package scim.schema.v2;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.ArrayList;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
  * Java class for meta complex type.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Meta {
 
-    private final Date created;
-    private final Date lastModified;
-    private final String location;
-    private final String version;
-    private final Meta.Attributes attributes;
+    private Date created;
+    private Date lastModified;
+    private String location;
+    private String version;
+    private Set<String> attributes;
+
+    //JSon Serializing ...
+    public Meta() { }
+
 
     private Meta(Builder builder) {
         this.created = builder.created;
@@ -53,7 +59,7 @@ public class Meta {
         private final Date lastModified;
         private String location;
         private String version;
-        private Meta.Attributes attributes;
+        private Set<String> attributes = new HashSet<>();
 
         /**
          * Will set created, as well as lastModified to System.currentTime
@@ -75,8 +81,8 @@ public class Meta {
          * Will set created to given value and lastModified to System.currentTime
          */
         public Builder(Date created, Date lastModified){
-            this.created = new Date(created.getTime());
-            this.lastModified = new Date(lastModified.getTime());
+            this.created = created;
+            this.lastModified = lastModified;
         }
 
         public Builder setLocation(String location) {
@@ -89,7 +95,7 @@ public class Meta {
             return this;
         }
 
-        public Builder setAttributes(Attributes attributes) {
+        public Builder setAttributes(Set<String> attributes) {
             this.attributes = attributes;
             return this;
         }
@@ -126,15 +132,7 @@ public class Meta {
     }
 
 
-    /**
-     * Gets the value of the attributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Meta.Attributes }
-     *     
-     */
-    public Meta.Attributes getAttributes() {
+    public Set<String> getAttributes() {
         return attributes;
     }
 
@@ -146,39 +144,5 @@ public class Meta {
         return new Date(lastModified.getTime());
     }
 
-    /**
-     * Java class for anonymous complex type.
-     */
-    public static class Attributes {
-
-        private List<MultiValuedAttribute> attribute = new ArrayList<>();
-
-        /**
-         * Gets the value of the attribute property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the attribute property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getAttribute().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         * 
-         * 
-         */
-        public List<MultiValuedAttribute> getAttribute() {
-            return this.attribute;
-        }
-
-    }
 
 }
