@@ -68,12 +68,18 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Override
     public User replaceUser(String id, User user) {
+
+        UserEntity entity = userDao.getById(id);
+        SetUserFields setUserFields = new SetUserFields(user, entity, SetUserFields.Mode.POST);
+        setUserFieldsWrapException(setUserFields);
+
+        userDao.update(entity);
+        return entity.toScim();
+    }
+
+    private void setUserFieldsWrapException(SetUserFields setUserFields) {
         try {
-            UserEntity entity = userDao.getById(id);
-            SetUserFields setUserFields = new SetUserFields(user, entity);
             setUserFields.setFields();
-            userDao.update(entity);
-            return entity.toScim();
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("This should not happen.");
         }
@@ -81,6 +87,10 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Override
     public User updateUser(String id, User user) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        UserEntity entity = userDao.getById(id);
+        SetUserFields setUserFields = new SetUserFields(user, entity, SetUserFields.Mode.PATCH);
+        setUserFieldsWrapException(setUserFields);
+        userDao.update(entity);
+        return entity.toScim();
     }
 }

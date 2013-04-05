@@ -62,7 +62,7 @@ class SetUserFieldsTest extends Specification {
                 .build()
 
         def entity = new UserEntity()
-        def underTest = new SetUserFields(scimUser, entity)
+        def underTest = new SetUserFields(scimUser, entity, SetUserFields.Mode.POST)
         when:
         underTest.setFields()
 
@@ -93,5 +93,47 @@ class SetUserFieldsTest extends Specification {
         scimUser.phoneNumbers.phoneNumber.size() == entity.phoneNumbers.size()
         scimUser.photos.photo.size() == entity.photos.size()
     }
+
+    def "should delete meta parameter when in PATCh mode"(){
+        given:
+        def meta = new Meta.Builder(null, null).setAttributes(["displayName"] as Set).build()
+
+        def user = new User.Builder("Harald").setMeta(meta).build()
+
+        UserEntity entity = createEntityWithInternalId()
+        entity.setUsername("hach")
+        entity.setDisplayName("display it")
+        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH)
+        when:
+        underTest.setFields()
+        then:
+        entity.username == "Harald"
+        entity.displayName == null
+    }
+
+    private UserEntity createEntityWithInternalId() {
+        def entity = new UserEntity()
+        entity.internalId = UUID.randomUUID()
+        entity
+    }
+
+
+    def "should not delete meta parameter when they're required"(){
+        given:
+        def meta = new Meta.Builder(null, null).setAttributes(["userName"] as Set).build()
+
+        def user = new User.Builder().setMeta(meta).build()
+
+        UserEntity entity = createEntityWithInternalId()
+        entity.setUsername("hach")
+        entity.setDisplayName("display it")
+        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH)
+        when:
+        underTest.setFields()
+        then:
+        entity.username == "hach"
+    }
+
+
 
 }

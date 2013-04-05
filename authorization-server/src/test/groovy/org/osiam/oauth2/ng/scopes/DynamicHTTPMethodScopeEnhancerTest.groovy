@@ -28,7 +28,7 @@ import org.springframework.security.access.SecurityConfig
 import org.springframework.security.oauth2.provider.vote.ScopeVoter
 import org.springframework.security.web.FilterInvocation
 import spock.lang.Specification
-import sun.net.httpserver.Request
+
 
 import javax.servlet.http.HttpServletRequest
 
