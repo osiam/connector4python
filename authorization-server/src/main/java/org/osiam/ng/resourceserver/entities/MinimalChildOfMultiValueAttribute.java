@@ -23,52 +23,9 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import scim.schema.v2.MultiValuedAttribute;
+public interface MinimalChildOfMultiValueAttribute {
+    String getValue();
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+    void setValue(String value);
 
-/**
- * Entitlements Entity
- */
-@Entity(name = "scim_entitlements")
-public class EntitlementsEntity implements MinimalChildOfMultiValueAttribute {
-
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @Column
-    private String value;
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public MultiValuedAttribute toScim() {
-        return new MultiValuedAttribute.Builder().
-                setValue(getValue()).
-                build();
-    }
-
-    public static EntitlementsEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        EntitlementsEntity entitlementsEntity = new EntitlementsEntity();
-        entitlementsEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
-        return entitlementsEntity;
-    }
 }

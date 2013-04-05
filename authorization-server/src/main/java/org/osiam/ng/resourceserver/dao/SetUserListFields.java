@@ -28,8 +28,8 @@ import scim.schema.v2.Address;
 import scim.schema.v2.MultiValuedAttribute;
 import scim.schema.v2.User;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.Collection;
 
 public class SetUserListFields {
 
@@ -40,90 +40,52 @@ public class SetUserListFields {
         this.entity = entity;
     }
 
-    public void updateListFields(Object userValue, SetUserFields.UserLists attributes) {
+    @SuppressWarnings("unchecked")
+    public void updateListFields(Object userValue, SetUserFields.UserLists attributes, Field field) {
         switch (attributes) {
-            case EMAILS:
-                setEmails(userValue);
-                break;
-            case ENTITLEMENTS:
-                setEntitlements(userValue);
-                break;
             case ADDRESSES:
                 setAddresses(userValue);
                 break;
-            case IMS:
-                setIMS(userValue);
-                break;
-            case PHONENUMBERS:
-                setPhoneNumbers(userValue);
-                break;
-            case PHOTOS:
-                setPhotos(userValue);
-                break;
-            case ROLES:
-                setRoles(userValue);
-                break;
-            case X509:
-                setX509(userValue);
-                break;
+        }
+        try {
+            updateMultiValueList(userValue, attributes, field);
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
         }
     }
 
-    void setX509(Object userValue) {
-        entity.getX509Certificates().clear();
-        if (userValue != null) {
-            for (MultiValuedAttribute m : User.X509Certificates.class.cast(userValue).getX509Certificate()) {
-                X509CertificateEntity fromScim = X509CertificateEntity.fromScim(m);
-                fromScim.setUser(entity);
-                entity.getX509Certificates().add(fromScim);
+    private void updateMultiValueList(Object userValue, SetUserFields.UserLists attributes, Field field) throws IllegalAccessException, InstantiationException {
+        if (userValue instanceof User.ContainsListOfMultiValue) {
+            field.setAccessible(true);
+            Object o = field.get(entity);
+            Class<?> clazz = attributes.getClazz();
+            User.ContainsListOfMultiValue listOfMultiValue = (User.ContainsListOfMultiValue) userValue;
+            if (o instanceof Collection) {
+                replaceCompleteList((Collection<Object>) o, clazz, listOfMultiValue);
             }
         }
     }
 
-    void setRoles(Object userValue) {
-        entity.getRoles().clear();
-        if (userValue != null) {
-            for (MultiValuedAttribute m : User.Roles.class.cast(userValue).getRole()) {
-                RolesEntity fromScim = RolesEntity.fromScim(m);
-                entity.getRoles().add(fromScim);
-            }
+    private void replaceCompleteList(Collection<Object> targetList, Class<?> clazz, User.ContainsListOfMultiValue listOfMultiValue) throws InstantiationException, IllegalAccessException {
+        targetList.clear();
+        for (MultiValuedAttribute m : listOfMultiValue.values()) {
+            addSingleObject(clazz, targetList, m);
         }
     }
 
-    void setPhotos(Object userValue) {
-        entity.getPhotos().clear();
-        if (userValue != null) {
-            for (MultiValuedAttribute m : User.Photos.class.cast(userValue).getPhoto()) {
-                PhotoEntity fromScim = PhotoEntity.fromScim(m);
-                fromScim.setUser(entity);
-                entity.getPhotos().add(fromScim);
-            }
+    private void addSingleObject(Class<?> clazz, Collection<Object> collection, MultiValuedAttribute m) throws InstantiationException, IllegalAccessException {
+        Object target = clazz.newInstance();
+        if (target instanceof MinimalChildOfMultiValueAttribute) {
+            ((MinimalChildOfMultiValueAttribute) target).setValue(String.valueOf(m.getValue()));
         }
+        if (target instanceof ChildOfMultiValueAttributeWithType) {
+            ((ChildOfMultiValueAttributeWithType) target).setType(m.getType());
+        }
+        if (target instanceof FullChildOfMultiValueAttribute)
+            ((FullChildOfMultiValueAttribute) target).setPrimary(m.isPrimary() != null ? m.isPrimary() : false);
+        collection.add(target);
     }
 
-    void setPhoneNumbers(Object userValue) {
-        entity.getPhoneNumbers().clear();
-        if (userValue != null) {
-
-            for (MultiValuedAttribute m : User.PhoneNumbers.class.cast(userValue).getPhoneNumber()) {
-                PhoneNumberEntity fromScim = PhoneNumberEntity.fromScim(m);
-                fromScim.setUser(entity);
-                entity.getPhoneNumbers().add(fromScim);
-            }
-        }
-    }
-
-    void setIMS(Object userValue) {
-        entity.getIms().clear();
-        if (userValue != null) {
-            for (MultiValuedAttribute m : User.Ims.class.cast(userValue).getIm()) {
-                ImEntity fromScim = ImEntity.fromScim(m);
-                fromScim.setUser(entity);
-                entity.getIms().add(fromScim);
-            }
-
-        }
-    }
 
     void setAddresses(Object userValue) {
         entity.getAddresses().clear();
@@ -132,28 +94,6 @@ public class SetUserListFields {
                 AddressEntity fromScim = AddressEntity.fromScim(m);
                 fromScim.setUser(entity);
                 entity.getAddresses().add(fromScim);
-            }
-        }
-    }
-
-    void setEntitlements(Object userValue) {
-        entity.getEntitlements().clear();
-        if (userValue != null) {
-            for (MultiValuedAttribute m : User.Entitlements.class.cast(userValue).getEntitlement()) {
-                EntitlementsEntity entitlement = EntitlementsEntity.fromScim(m);
-                entity.getEntitlements().add(entitlement);
-            }
-        }
-    }
-
-    void setEmails(Object userValue) {
-        entity.getEmails().clear();
-        if (userValue != null) {
-
-            for (MultiValuedAttribute m : User.Emails.class.cast(userValue).getEmail()) {
-                EmailEntity email = EmailEntity.fromScim(m);
-                email.setUser(entity);
-                entity.getEmails().add(email);
             }
         }
     }

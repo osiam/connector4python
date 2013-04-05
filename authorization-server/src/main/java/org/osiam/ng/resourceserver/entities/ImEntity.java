@@ -35,7 +35,7 @@ import javax.persistence.*;
  * Instant messaging Entity
  */
 @Entity(name = "scim_im")
-public class ImEntity {
+public class ImEntity implements MinimalChildOfMultiValueAttribute {
 
     @Id
     @GeneratedValue

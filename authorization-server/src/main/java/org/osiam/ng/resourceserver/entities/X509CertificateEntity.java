@@ -35,7 +35,7 @@ import javax.persistence.*;
  * X509 Certificates Entity
  */
 @Entity(name = "scim_certificate")
-public class X509CertificateEntity {
+public class X509CertificateEntity implements MinimalChildOfMultiValueAttribute {
 
     @Id
     @GeneratedValue

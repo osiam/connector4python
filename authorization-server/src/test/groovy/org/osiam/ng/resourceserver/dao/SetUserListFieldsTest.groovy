@@ -39,7 +39,7 @@ class SetUserListFieldsTest extends Specification {
         def addresses = new User.Addresses()
         addresses.address.add(new Address.Builder().setDisplay("haha").build())
         def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().build())
+        emails.email.add(new MultiValuedAttribute.Builder().setPrimary(true).build())
         emails.email.add(new MultiValuedAttribute.Builder().build())
 
         def entitlements = new User.Entitlements()
@@ -71,16 +71,28 @@ class SetUserListFieldsTest extends Specification {
                 .build()
 
         def entity = new UserEntity()
+        entity.getX509Certificates()
+        entity.getAddresses()
+        entity.getEmails()
+        entity.getEntitlements()
+        entity.getIms()
+        entity.getPhoneNumbers()
+        entity.getPhotos()
+        entity.getRoles()
+
         def underTest = new SetUserListFields(entity)
+        def aha = new SetUserFields(null, null, SetUserFields.Mode.POST).getFieldsAsNormalizedMap(UserEntity)
+
+
         when:
-        underTest.updateListFields(addresses, SetUserFields.UserLists.ADDRESSES)
-        underTest.updateListFields(emails, SetUserFields.UserLists.EMAILS)
-        underTest.updateListFields(entitlements, SetUserFields.UserLists.ENTITLEMENTS)
-        underTest.updateListFields(ims, SetUserFields.UserLists.IMS)
-        underTest.updateListFields(numbers, SetUserFields.UserLists.PHONENUMBERS)
-        underTest.updateListFields(photos, SetUserFields.UserLists.PHOTOS)
-        underTest.updateListFields(roles, SetUserFields.UserLists.ROLES)
-        underTest.updateListFields(certificates, SetUserFields.UserLists.X509)
+        underTest.updateListFields(addresses, SetUserFields.UserLists.ADDRESSES, aha.get("addresses"))
+        underTest.updateListFields(emails, SetUserFields.UserLists.EMAILS, aha.get("emails"))
+        underTest.updateListFields(entitlements, SetUserFields.UserLists.ENTITLEMENTS,aha.get("entitlements"))
+        underTest.updateListFields(ims, SetUserFields.UserLists.IMS,aha.get("ims"))
+        underTest.updateListFields(numbers, SetUserFields.UserLists.PHONENUMBERS,aha.get("phonenumbers"))
+        underTest.updateListFields(photos, SetUserFields.UserLists.PHOTOS,aha.get("photos"))
+        underTest.updateListFields(roles, SetUserFields.UserLists.ROLES,aha.get("roles"))
+        underTest.updateListFields(certificates, SetUserFields.UserLists.X509,aha.get("x509certificates"))
 
 
         then:
@@ -99,15 +111,25 @@ class SetUserListFieldsTest extends Specification {
 
         def entity = new UserEntity()
         def underTest = new SetUserListFields(entity)
+        def aha = new SetUserFields(null, null, SetUserFields.Mode.POST).getFieldsAsNormalizedMap(UserEntity)
+        entity.getX509Certificates()
+        entity.getAddresses()
+        entity.getEmails()
+        entity.getEntitlements()
+        entity.getIms()
+        entity.getPhoneNumbers()
+        entity.getPhotos()
+        entity.getRoles()
         when:
-        underTest.updateListFields(null, SetUserFields.UserLists.ADDRESSES)
-        underTest.updateListFields(null, SetUserFields.UserLists.EMAILS)
-        underTest.updateListFields(null, SetUserFields.UserLists.ENTITLEMENTS)
-        underTest.updateListFields(null, SetUserFields.UserLists.IMS)
-        underTest.updateListFields(null, SetUserFields.UserLists.PHONENUMBERS)
-        underTest.updateListFields(null, SetUserFields.UserLists.PHOTOS)
-        underTest.updateListFields(null, SetUserFields.UserLists.ROLES)
-        underTest.updateListFields(null, SetUserFields.UserLists.X509)
+        underTest.updateListFields(null, SetUserFields.UserLists.ADDRESSES, aha.get("addresses"))
+        underTest.updateListFields(null, SetUserFields.UserLists.EMAILS, aha.get("emails"))
+        underTest.updateListFields(null, SetUserFields.UserLists.ENTITLEMENTS,aha.get("entitlements"))
+        underTest.updateListFields(null, SetUserFields.UserLists.IMS,aha.get("ims"))
+        underTest.updateListFields(null, SetUserFields.UserLists.PHONENUMBERS,aha.get("phonenumbers"))
+        underTest.updateListFields(null, SetUserFields.UserLists.PHOTOS,aha.get("photos"))
+        underTest.updateListFields(null, SetUserFields.UserLists.ROLES,aha.get("roles"))
+        underTest.updateListFields(null, SetUserFields.UserLists.X509,aha.get("x509certificates"))
+
 
 
         then:

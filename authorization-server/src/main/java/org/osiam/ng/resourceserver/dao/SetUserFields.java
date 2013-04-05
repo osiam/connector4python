@@ -23,7 +23,7 @@
 
 package org.osiam.ng.resourceserver.dao;
 
-import org.osiam.ng.resourceserver.entities.UserEntity;
+import org.osiam.ng.resourceserver.entities.*;
 import scim.schema.v2.User;
 
 import java.lang.reflect.Field;
@@ -53,19 +53,21 @@ public class SetUserFields {
     }
 
     public enum UserLists {
-        EMAILS("emails"),
-        IMS("ims"),
-        PHONENUMBERS("phonenumbers"),
-        PHOTOS("photos"),
+        EMAILS("emails", EmailEntity.class),
+        IMS("ims", ImEntity.class),
+        PHONENUMBERS("phonenumbers", PhoneNumberEntity.class),
+        PHOTOS("photos", PhotoEntity.class),
 
-        ENTITLEMENTS("entitlements"),
-        ROLES("roles"),
-        X509("x509certificates"),
-        ADDRESSES("addresses");
+        ENTITLEMENTS("entitlements", EntitlementsEntity.class),
+        ROLES("roles", RolesEntity.class),
+        X509("x509certificates", X509CertificateEntity.class),
+        ADDRESSES("addresses", MinimalChildOfMultiValueAttribute.class);
 
         private final String isUserClass;
+        private final Class<? extends MinimalChildOfMultiValueAttribute> clazz;
 
-        UserLists(String isUserClass) {
+        UserLists(String isUserClass, Class<? extends MinimalChildOfMultiValueAttribute> clazz) {
+            this.clazz = clazz;
             this.isUserClass = isUserClass;
         }
 
@@ -74,6 +76,10 @@ public class SetUserFields {
         static {
             for (UserLists d : values())
                 fromString.put(d.isUserClass, d);
+        }
+
+        public Class<? extends MinimalChildOfMultiValueAttribute> getClazz() {
+            return clazz;
         }
     }
 
@@ -99,7 +105,7 @@ public class SetUserFields {
                 if (attributes == null) {
                     setUserSingleFields.updateSingleField(user, entityFields.get(e.getKey()), userValue, e.getKey());
                 } else {
-                    setUserListFields.updateListFields(userValue, attributes);
+                    setUserListFields.updateListFields(userValue, attributes, entityFields.get(e.getKey()));
                 }
             }
         }
