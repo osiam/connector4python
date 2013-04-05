@@ -23,6 +23,7 @@
 
 package scim.schema.v2;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.*;
@@ -156,19 +157,12 @@ public class User extends CoreResource {
             // null lists when empty
             builder.emails = user.emails == null ? null : (user.emails.getEmail().isEmpty() ? null : user.emails);
             builder.phoneNumbers = user.phoneNumbers == null ? null : (user.phoneNumbers.getPhoneNumber().isEmpty() ? null : user.phoneNumbers);
-            ;
             builder.ims = user.ims == null ? null : (user.ims.getIm().isEmpty() ? null : user.ims);
-            ;
             builder.photos = user.photos == null ? null : (user.photos.getPhoto().isEmpty() ? null : user.photos);
-            ;
             builder.addresses = user.addresses == null ? null : (user.addresses.getAddress().isEmpty() ? null : user.addresses);
-            ;
             builder.groups = user.groups == null ? null : (user.groups.getGroup().isEmpty() ? null : user.groups);
-            ;
             builder.entitlements = user.entitlements == null ? null : (user.entitlements.getEntitlement().isEmpty() ? null : user.entitlements);
-            ;
             builder.roles = user.roles == null ? null : (user.roles.getRole().isEmpty() ? null : user.roles);
-            ;
             builder.x509Certificates = user.x509Certificates == null ? null : (user.x509Certificates.getX509Certificate().isEmpty() ? null : user.x509Certificates);
             builder.any = user.any;
             builder.schemas = user.schemas;
@@ -526,7 +520,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Addresses implements UserFields {
+    public static class Addresses implements NeedToBeReplacedCompletly{
 
         private List<Address> address = new ArrayList<>();
 
@@ -557,14 +551,16 @@ public class User extends CoreResource {
     }
 
 
-    public static interface UserFields {
+    public static interface ContainsListOfMultiValue {
+        @JsonIgnore
+        public Collection<MultiValuedAttribute> values();
     }
 
     /**
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Emails implements UserFields {
+    public static class Emails implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> email = new ArrayList<>();
 
@@ -592,6 +588,10 @@ public class User extends CoreResource {
             return this.email;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return email;
+        }
     }
 
 
@@ -599,7 +599,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Entitlements implements UserFields {
+    public static class Entitlements implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> entitlement = new ArrayList<>();
 
@@ -627,6 +627,10 @@ public class User extends CoreResource {
             return this.entitlement;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return  entitlement;
+        }
     }
 
 
@@ -634,7 +638,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Groups implements UserFields {
+    public static class Groups implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> group = new ArrayList<>();
 
@@ -662,6 +666,10 @@ public class User extends CoreResource {
             return this.group;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return group;
+        }
     }
 
 
@@ -669,7 +677,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Ims implements UserFields {
+    public static class Ims implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> im = new ArrayList<>();
 
@@ -697,6 +705,10 @@ public class User extends CoreResource {
             return this.im;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return im;
+        }
     }
 
 
@@ -704,7 +716,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class PhoneNumbers implements UserFields {
+    public static class PhoneNumbers implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> phoneNumber = new ArrayList<>();
 
@@ -732,6 +744,10 @@ public class User extends CoreResource {
             return this.phoneNumber;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return phoneNumber;
+        }
     }
 
 
@@ -739,7 +755,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Photos implements UserFields {
+    public static class Photos implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> photo = new ArrayList<>();
 
@@ -767,6 +783,10 @@ public class User extends CoreResource {
             return this.photo;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return photo;
+        }
     }
 
 
@@ -774,7 +794,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Roles implements UserFields {
+    public static class Roles implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> role = new ArrayList<>();
 
@@ -802,6 +822,10 @@ public class User extends CoreResource {
             return this.role;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return role;
+        }
     }
 
 
@@ -809,7 +833,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class X509Certificates implements UserFields {
+    public static class X509Certificates implements ContainsListOfMultiValue {
 
         private List<MultiValuedAttribute> x509Certificate = new ArrayList<>();
 
@@ -837,6 +861,10 @@ public class User extends CoreResource {
             return this.x509Certificate;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return x509Certificate;
+        }
     }
 
 }
