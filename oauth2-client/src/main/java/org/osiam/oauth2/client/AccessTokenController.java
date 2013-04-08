@@ -24,10 +24,14 @@
 package org.osiam.oauth2.client;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -39,7 +43,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
@@ -47,21 +54,17 @@ import java.util.logging.Logger;
 public class AccessTokenController {
 
     private static final String PARAM_CODE = "code";
-
     private static final Charset CHARSET = Charset.forName("UTF-8");
-
-    private final Logger logger = Logger.getLogger(AccessTokenController.class.getName());
-
-    private HttpClient httpClient;
-
     private static final String CLIENT_ID = "testClient";
     private static final String CLIENT_SECRET = "secret";
+    private final Logger logger = Logger.getLogger(AccessTokenController.class.getName());
+
 
     public AccessTokenController() {
-        this.httpClient = new HttpClient();
+
     }
 
-    @RequestMapping(value = "access_denied", params = { "error", "error_description" })
+    @RequestMapping(value = "access_denied", params = {"error", "error_description"})
     public String accessDenied(@RequestParam String error, @RequestParam String error_description) {
         logger.info(error + " is " + error_description);
         return "error";
@@ -82,10 +85,11 @@ public class AccessTokenController {
 
     private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req)
             throws IOException {
-        PostMethod post = new PostMethod();
-        addPostMethodParameter(post, code, tokenUrl, combined, redirectUri);
-        httpClient.executeMethod(post);
-        addJsonResponseToHttpRequest(post, req);
+        HttpPost post = new HttpPost(tokenUrl);
+
+        addPostMethodParameter(post, code, combined, redirectUri);
+        HttpResponse response = new DefaultHttpClient().execute(post);
+        addJsonResponseToHttpRequest(response, req);
         req.setAttribute(PARAM_CODE, code);
         req.setAttribute("redirect_uri", redirectUri);
     }
@@ -95,26 +99,25 @@ public class AccessTokenController {
         req.setAttribute("client_secret", clientSecret);
     }
 
-    private void addJsonResponseToHttpRequest(PostMethod post, HttpServletRequest req) throws IOException {
+    private void addJsonResponseToHttpRequest(HttpResponse post, HttpServletRequest req) throws IOException {
         try {
-            JSONObject authResponse = new JSONObject(
-                    new JSONTokener(new InputStreamReader(post.getResponseBodyAsStream(), CHARSET)));
+            InputStreamReader inputStreamReader = new InputStreamReader(post.getEntity().getContent(), CHARSET);
+            JSONObject authResponse = new JSONObject(new JSONTokener(inputStreamReader));
             req.setAttribute("access_token", authResponse.get("access_token"));
             req.setAttribute("response", authResponse.toString());
         } catch (JSONException e) {
             throw new IllegalStateException(e.getMessage(), e);
-        } finally {
-            post.releaseConnection();
         }
     }
 
-    private void addPostMethodParameter(PostMethod post, String code, String tokenUrl, String combined,
-            String redirectUri) throws URIException {
-        post.setURI(new URI(tokenUrl, false));
+    private void addPostMethodParameter(HttpEntityEnclosingRequestBase post, String code, String combined,
+                                        String redirectUri) throws UnsupportedEncodingException {
         String encoding = new String(Base64.encodeBase64(combined.getBytes(CHARSET)), CHARSET);
-        post.addRequestHeader("Authorization", "Basic " + encoding);
-        post.addParameter(PARAM_CODE, code);
-        post.addParameter("grant_type", "authorization_code");
-        post.addParameter("redirect_uri", redirectUri);
+        post.addHeader("Authorization", "Basic " + encoding);
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        nameValuePairs.add(new BasicNameValuePair(PARAM_CODE,code));
+        nameValuePairs.add(new BasicNameValuePair("grant_type", "authorization_code"));
+        nameValuePairs.add(new BasicNameValuePair("redirect_uri", redirectUri));
+        post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
     }
 }

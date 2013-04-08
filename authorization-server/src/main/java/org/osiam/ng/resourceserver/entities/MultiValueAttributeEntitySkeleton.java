@@ -23,60 +23,26 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import scim.schema.v2.MultiValuedAttribute;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.*;
-
-/**
- * Photos Entity
- */
-@Entity(name = "scim_photo")
-public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
-
-    @Column
-    private String type;
-
-    @ManyToOne
-    private UserEntity user;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttribute{
+    @Id
+    protected String value;
+
+
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public MultiValuedAttribute toScim() {
-        return new MultiValuedAttribute.Builder().
-                setType(getType()).
-                setValue(getValue()).
-                build();
-    }
-
-    public static PhotoEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        PhotoEntity photoEntity = new PhotoEntity();
-        photoEntity.setType(multiValuedAttribute.getType());
-        photoEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
-        return photoEntity;
     }
 }

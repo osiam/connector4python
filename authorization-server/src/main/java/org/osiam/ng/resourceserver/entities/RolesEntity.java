@@ -26,42 +26,16 @@ package org.osiam.ng.resourceserver.entities;
 import org.springframework.security.core.GrantedAuthority;
 import scim.schema.v2.MultiValuedAttribute;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 /**
  * Roles Entity
  */
 @Entity(name = "scim_roles")
-public class RolesEntity implements ChildOfMultiValueAttribute, GrantedAuthority{
+public class RolesEntity extends MultiValueAttributeEntitySkeleton implements GrantedAuthority{
 
     private static final long serialVersionUID = 1546546513218916131L;
 
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @Column
-    private String value;
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     @Override
     public String getAuthority() {

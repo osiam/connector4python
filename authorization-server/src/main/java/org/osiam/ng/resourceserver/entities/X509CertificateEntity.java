@@ -25,45 +25,19 @@ package org.osiam.ng.resourceserver.entities;
 
 import scim.schema.v2.MultiValuedAttribute;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
  * X509 Certificates Entity
  */
 @Entity(name = "scim_certificate")
-public class X509CertificateEntity implements ChildOfMultiValueAttribute {
-
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @Column
-    private String value;
+public class X509CertificateEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttribute {
 
     @ManyToOne
     private UserEntity user;
 
 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     public UserEntity getUser() {
         return user;

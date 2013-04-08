@@ -1,15 +1,15 @@
 package org.osiam.oauth2.client;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
+
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.osiam.oauth2.client.exceptions.UserFriendlyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import scim.schema.v2.Constants;
+import scim.schema.v2.Meta;
 import scim.schema.v2.Name;
 import scim.schema.v2.User;
 
@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.osiam.oauth2.client.CRUDListController.KnownMultiValueAttributeLists.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,119 +32,49 @@ import java.util.Set;
 @Controller
 public class AddResourceController {
 
-    private HttpClient httpClient;
+    private GetResponseAndCast getResponseAndCast;
 
 
     public AddResourceController() {
-        this.httpClient = new HttpClient();
     }
 
-    @RequestMapping("/createResource")
-    public String createResource(HttpServletRequest req,
-                                 @RequestParam String schema,
-                                 @RequestParam String user_name,
-                                 @RequestParam String firstname,
-                                 @RequestParam String lastname,
-                                 @RequestParam String displayname,
-                                 @RequestParam String nickname,
-                                 @RequestParam String profileurl,
-                                 @RequestParam String title,
-                                 @RequestParam String usertype,
-                                 @RequestParam String preferredlanguage,
-                                 @RequestParam String locale,
-                                 @RequestParam String timezone,
-                                 //@RequestParam String timezone
-                                 @RequestParam String password,
-                                 @RequestParam String emails,
-                                 @RequestParam String phonenumbers,
-                                 @RequestParam String ims,
-                                 @RequestParam String photos,
-                                 @RequestParam String addresses,
-                                 @RequestParam String groups,
-                                 @RequestParam String entitlements,
-                                 @RequestParam String roles,
-                                 @RequestParam String x509,
-                                 @RequestParam String any,
-                                 @RequestParam String access_token)
-            throws ServletException, IOException, UserFriendlyException {
-
-        String jsonString = getJsonString(
-                schema,
-                user_name,
-                firstname,
-                lastname,
-                displayname,
-                nickname,
-                profileurl,
-                title,
-                usertype,
-                preferredlanguage,
-                locale,
-                timezone,
-                //timezone
-                password,
-                emails,
-                phonenumbers,
-                ims,
-                photos,
-                addresses,
-                groups,
-                entitlements,
-                roles,
-                x509,
-                any
-        );
-        StringRequestEntity requestEntity = new StringRequestEntity(jsonString,
-                "application/json", "UTF-8");
-
-        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String url = environment + "/authorization-server/User/" + "?access_token=" + access_token;
-
-        PostMethod post = executePostMethod(requestEntity, url);
-
-        readJsonFromBody(req, post);
-        req.setAttribute("access_token", access_token);
-
-        return "user";
-    }
-
-    private void readJsonFromBody(HttpServletRequest req, PostMethod post) throws IOException, UserFriendlyException {
-
-        if (post.getStatusCode() > 399) {
-            throw new UserFriendlyException(String.valueOf(post.getStatusCode()));
+    public static String getJsonStringPatch(
+            String schema,
+            String user_name,
+            String firstname,
+            String lastname,
+            String displayname,
+            String nickname,
+            String profileurl,
+            String title,
+            String usertype,
+            String preferredlanguage,
+            String locale,
+            String timezone,
+            String password,
+            Set<String> metaAttribues) throws IOException {
+        Meta meta = null;
+        if (metaAttribues != null && !metaAttribues.isEmpty()) {
+            meta = new Meta.Builder().setAttributes(metaAttribues).build();
         }
 
-        try {
 
-            setAttributeAndCastUser(req, post);
-        } finally {
-            post.releaseConnection();
-        }
-    }
-
-    private void setAttributeAndCastUser(HttpServletRequest req, PostMethod post) throws IOException {
-        String response = post.getResponseBodyAsString();
-
-        setUserId(response);
-        req.setAttribute("userResponse", response);
-        req.setAttribute("LocationHeader", post.getResponseHeader("Location"));
-
-    }
-
-    private void setUserId(String response) throws IOException {
-        if (response != null) {
-            User user = new ObjectMapper().readValue(response, User.class);
-            CRUDRedirectController.userIds.add(user.getId());
-        }
-    }
-
-    private PostMethod executePostMethod(StringRequestEntity requestEntity, String url) throws IOException {
-        PostMethod post = new PostMethod();
-        post.setURI(new URI(url, false));
-        post.setRequestEntity(requestEntity);
-
-        httpClient.executeMethod(post);
-        return post;
+        User user = getPreFilledBuilder(user_name, firstname, lastname, displayname, nickname, profileurl, title,
+                usertype, preferredlanguage, locale, timezone, password)
+                .setEmails(EMAIL.<User.Emails>getSet().getEmail().isEmpty() ? null : EMAIL.<User.Emails>getSet())
+                .setPhoneNumbers(PHONE.<User.PhoneNumbers>getSet().getPhoneNumber().isEmpty() ? null : PHONE.<User.PhoneNumbers>getSet())
+                .setIms(IM.<User.Ims>getSet().getIm().isEmpty() ? null : IM.<User.Ims>getSet())
+                .setPhotos(PHOTO.<User.Photos>getSet().getPhoto().isEmpty() ? null : PHOTO.<User.Photos>getSet())
+                .setAddresses(getAddresses())
+                .setGroups(GROUP.<User.Groups>getSet())
+                .setEntitlements(ENTITLEMENT.<User.Entitlements>getSet().getEntitlement().isEmpty() ? null : ENTITLEMENT.<User.Entitlements>getSet())
+                .setRoles(ROLE.<User.Roles>getSet().getRole().isEmpty() ? null : ROLE.<User.Roles>getSet())
+                .setX509Certificates(X509.<User.X509Certificates>getSet().getX509Certificate().isEmpty() ? null : X509.<User.X509Certificates>getSet())
+                .setAny(null)
+                .setSchemas(getSchemas(schema))
+                .setMeta(meta)
+                .build();
+        return new ObjectMapper().writeValueAsString(user);
     }
 
     public static String getJsonString(
@@ -159,21 +91,30 @@ public class AddResourceController {
             String locale,
             String timezone,
             //String timezone
-            String password,
-            String emails,
-            String phonenumbers,
-            String ims,
-            String photos,
-            String addresses,
-            String groups,
-            String entitlements,
-            String roles,
-            String x509,
-            String any
+            String password
     ) throws IOException {
 
 
-        User user = new User.Builder(user_name)
+        User user = getPreFilledBuilder(user_name, firstname, lastname, displayname, nickname, profileurl, title,
+                usertype, preferredlanguage, locale, timezone, password)
+                .setEmails(EMAIL.<User.Emails>getSet())
+                .setPhoneNumbers(PHONE.<User.PhoneNumbers>getSet())
+                .setIms(IM.<User.Ims>getSet())
+                .setPhotos(PHOTO.<User.Photos>getSet())
+                .setAddresses(getAddresses())
+                .setGroups(GROUP.<User.Groups>getSet())
+                .setEntitlements(ENTITLEMENT.<User.Entitlements>getSet())
+                .setRoles(ROLE.<User.Roles>getSet())
+                .setX509Certificates(X509.<User.X509Certificates>getSet())
+                .setAny(null)
+                .setSchemas(getSchemas(schema))
+
+                .build();
+        return new ObjectMapper().writeValueAsString(user);
+    }
+
+    private static User.Builder getPreFilledBuilder(String user_name, String firstname, String lastname, String displayname, String nickname, String profileurl, String title, String usertype, String preferredlanguage, String locale, String timezone, String password) {
+        return new User.Builder(user_name)
                 .setPassword(password)
                 .setName(getName(firstname, lastname))
                 .setDisplayName(displayname)
@@ -183,21 +124,7 @@ public class AddResourceController {
                 .setUserType(usertype)
                 .setPreferredLanguage(preferredlanguage)
                 .setLocale(locale)
-                .setTimezone(timezone)
-                .setEmails(getEmails(emails))
-                .setPhoneNumbers(getPhoneNumbers(phonenumbers))
-                .setIms(getIms(ims))
-                .setPhotos(getPhotos(photos))
-                .setAddresses(getAddresses(addresses))
-                .setGroups(getGroups(groups))
-                .setEntitlements(getEntitlements(entitlements))
-                .setRoles(getRoles(roles))
-                .setX509Certificates(getX509(x509))
-                .setAny(getAny(any))
-                .setSchemas(getSchemas(schema))
-
-                .build();
-        return new ObjectMapper().writeValueAsString(user);
+                .setTimezone(timezone);
     }
 
     private static Set<String> getSchemas(String schema) {
@@ -220,43 +147,54 @@ public class AddResourceController {
                 .build();
     }
 
-    private static Set<Object> getAny(String any) {
+    private static User.Addresses getAddresses() {
         return null;  //To change body of created methods use File | Settings | File Templates.
     }
 
-    private static User.X509Certificates getX509(String x509) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+    @RequestMapping("/createResource")
+    public String createResource(HttpServletRequest req,
+                                 @RequestParam String schema,
+                                 @RequestParam String user_name,
+                                 @RequestParam String firstname,
+                                 @RequestParam String lastname,
+                                 @RequestParam String displayname,
+                                 @RequestParam String nickname,
+                                 @RequestParam String profileurl,
+                                 @RequestParam String title,
+                                 @RequestParam String usertype,
+                                 @RequestParam String preferredlanguage,
+                                 @RequestParam String locale,
+                                 @RequestParam String timezone,
+                                 //@RequestParam String timezone
+                                 @RequestParam String password,
+                                 @RequestParam String access_token)
+            throws ServletException, IOException, UserFriendlyException {
+
+        String jsonString = getJsonString(
+                schema,
+                user_name,
+                firstname,
+                lastname,
+                displayname,
+                nickname,
+                profileurl,
+                title,
+                usertype,
+                preferredlanguage,
+                locale,
+                timezone,
+                //timezone
+                password
+        );
+
+        getResponseAndCast = new GetResponseAndCast(new DefaultHttpClient());
+        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
+        String url = environment + "/authorization-server/User/" + "?access_token=" + access_token;
+        HttpPost request = new HttpPost(url);
+        getResponseAndCast.getResponseAndSetAccessToken(req, access_token, jsonString, request);
+
+        return "user";
     }
 
-    private static User.Roles getRoles(String roles) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
 
-    private static User.Entitlements getEntitlements(String entitlements) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private static User.Groups getGroups(String groups) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private static User.Addresses getAddresses(String addresses) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private static User.Photos getPhotos(String photos) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private static User.Ims getIms(String ims) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private static User.PhoneNumbers getPhoneNumbers(String phonenumbers) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private static User.Emails getEmails(String emails) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
 }

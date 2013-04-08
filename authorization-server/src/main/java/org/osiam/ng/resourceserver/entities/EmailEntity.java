@@ -27,22 +27,13 @@ import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
  * Email Entity
  */
 @Entity(name = "scim_email")
-public class EmailEntity implements ChildOfMultiValueAttributeWithTypeAndPrimary {
-
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @Column
-    private String value;
+public class EmailEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithTypeAndPrimary {
 
     @Column
     private String type;
@@ -52,24 +43,6 @@ public class EmailEntity implements ChildOfMultiValueAttributeWithTypeAndPrimary
 
     @ManyToOne(optional = false)
     private UserEntity user;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     @Override
     public String getType() {

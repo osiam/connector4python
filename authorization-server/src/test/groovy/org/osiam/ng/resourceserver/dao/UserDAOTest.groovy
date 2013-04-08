@@ -23,13 +23,14 @@
 
 package org.osiam.ng.resourceserver.dao
 
+import org.osiam.ng.resourceserver.entities.ImEntity
 import org.osiam.ng.resourceserver.entities.UserEntity
-import org.osiam.ng.scim.exceptions.ResourceExistsException
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException
+import org.springframework.security.authentication.encoding.BasePasswordEncoder
 import org.springframework.security.authentication.encoding.PasswordEncoder
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder
 import spock.lang.Specification
 
-import javax.persistence.EntityExistsException
 import javax.persistence.EntityManager
 import javax.persistence.Query
 
@@ -40,6 +41,14 @@ class UserDAOTest extends Specification {
 
     def setup() {
         underTest.setEm(em)
+        userEntity.roles >> new HashSet<>()
+        userEntity.addresses >> new HashSet<>()
+        userEntity.phoneNumbers >> new HashSet<>()
+        userEntity.photos >> new HashSet<>()
+        userEntity.entitlements >> new HashSet<>()
+        userEntity.emails >> new HashSet<>()
+        userEntity.x509Certificates >> new HashSet<>()
+        userEntity.ims >> new HashSet<>()
     }
 
     def "should get user by internal id"() {
@@ -116,10 +125,36 @@ class UserDAOTest extends Specification {
 
     }
 
-    def "should be able to update user"(){
+    def "should set password hash when users password is not hashed"(){
+        given:
+        def passwordEncoder = Mock(PasswordEncoder)
+        underTest.setPasswordEncoder(passwordEncoder)
+        def id = UUID.randomUUID()
+
         when:
         underTest.update(userEntity)
         then:
+        1 * userEntity.password >> "password"
+        1 * userEntity.internalId >> id
+
         1* em.merge(userEntity)
+        1 * passwordEncoder.encodePassword("password", id) >> "moep"
+    }
+
+    def "should not set password hash when users password is hashed"(){
+        given:
+        def passwordEncoder = Mock(PasswordEncoder)
+        def password = new ShaPasswordEncoder(512).encodePassword("password", null)
+        underTest.setPasswordEncoder(passwordEncoder)
+        def id = UUID.randomUUID()
+
+        when:
+        underTest.update(userEntity)
+        then:
+        1 * userEntity.password >> password
+        1 * userEntity.internalId >> id
+
+        1* em.merge(userEntity)
+        0 * passwordEncoder.encodePassword("password", id) >> "moep"
     }
 }

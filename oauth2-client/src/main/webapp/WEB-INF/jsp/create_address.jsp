@@ -26,12 +26,14 @@
 
 
 <t:generic_page_template>
-    <h2>Add/Update User Resource:</h2>
-
+    <h2>Add a multi value attribute for ${used_for}</h2>
     <form method="post">
-        <t:lot_of_fields/>
-        <p><label>ID for Update:<input id="idForUpdate" name="idForUpdate" type="text"></label></p>
-        <input type="submit" formaction="/oauth2-client/createResource" value="Add Resource" />
-        <input type="submit" formaction="/oauth2-client/updateResource" value="Update Resource" />
-    </form>
+        <input id="hidden_multivalue_used_for" type="hidden" name="multivalue_type" value="${used_for}" />
+        <input id="hidden_access_token" type="hidden" name="access_token" value="${access_token}" />
+        <label>Value (used everywhere): <input id="value" name="value" type="text" value="${value}"></label>
+        <label>Type (used in photo, phone, im): <input id="type" name="schema" type="text" value="${type}"></label>
+        <label>Primary (used in email): <input id="primary" name="primary" type="checkbox" value="${primary}"></label>
+        <label>Display (will be used in groups (not implemented, yet): <input id="display" name="display" type="text" value="*weird gesticulation* there's no such field."></label>
+        <label>Delete: <input id="delete" name="delete" type="checkbox" value="false"></label>
+        <input type="submit" formaction="/oauth2-client/addMultiValueAttribute" value="Update Resource" />
 </t:generic_page_template>

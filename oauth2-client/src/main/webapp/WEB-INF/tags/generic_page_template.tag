@@ -39,9 +39,10 @@
 <div class="menu" id="page_header">
     <ul class="menuUl">
         <li class="menuli"><a class="menuLink" href="/oauth2-client/authcode">Get Access Token</a></li>
-        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/get?access_token=${access_token}">Get an user</a></li>
-        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/put?access_token=${access_token}">Add an user</a></li>
-        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/put?access_token=${access_token}">Update an user</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/get?access_token=${access_token}">GET USER</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/put?access_token=${access_token}">PUT USER</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/put?access_token=${access_token}">POST USER</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/patch?access_token=${access_token}">PATCH USER</a></li>
     </ul>
 </div>
 <div id="body">

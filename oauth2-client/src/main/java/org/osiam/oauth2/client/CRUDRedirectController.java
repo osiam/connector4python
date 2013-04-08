@@ -44,6 +44,12 @@ public class CRUDRedirectController {
         return "create_update_user";
     }
 
+    @RequestMapping("/user/patch")
+    public String redirectToPatchUser(HttpServletRequest request) {
+        request.setAttribute("access_token", request.getParameter("access_token"));
+        return "patch_user";
+    }
+
     @RequestMapping("/user/get")
     public String redirectToGetUser(HttpServletRequest request) {
         request.setAttribute("access_token", request.getParameter("access_token"));

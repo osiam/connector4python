@@ -23,15 +23,15 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-
 <t:generic_page_template>
-    <h2>Add/Update User Resource:</h2>
-
+    <h2>Add a multi value attribute for ${used_for}</h2>
     <form method="post">
-        <t:lot_of_fields/>
-        <p><label>ID for Update:<input id="idForUpdate" name="idForUpdate" type="text"></label></p>
-        <input type="submit" formaction="/oauth2-client/createResource" value="Add Resource" />
-        <input type="submit" formaction="/oauth2-client/updateResource" value="Update Resource" />
-    </form>
+        <input id="hidden_used_for" type="hidden" name="used_for" value="${used_for}" />
+        <input id="hidden_access_token" type="hidden" name="access_token" value="${access_token}" />
+        <p><label>Value (used everywhere): <input id="value" name="value" type="text" value="${value}"></label></p>
+        <p><label>Type (used in photo, phone, im): <input id="type" name="schema" type="text" value="${type}"></label></p>
+        <p><label>Primary (used in email): <input id="primary" name="primary" type="checkbox" value="${primary}"></label></p>
+        <p><label>Display (will be used in groups (not implemented, yet): <input id="display" name="display" type="text" value="*weird gesticulation* there's no such field."></label></p>
+        <p><label>Delete: <input id="delete" name="delete" type="checkbox" value="false"></label></p>
+        <input type="submit" formaction="/oauth2-client/addListAttribute" value="Update Resource" />
 </t:generic_page_template>

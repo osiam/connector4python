@@ -27,46 +27,19 @@ import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
  * Phone Numbers Entity
  */
 @Entity(name = "scim_phoneNumber")
-public class PhoneNumberEntity implements ChildOfMultiValueAttributeWithType {
-
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @Column
-    private String value;
+public class PhoneNumberEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
 
     @Column
     private String type;
 
     @ManyToOne
     private UserEntity user;
-
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     public String getType() {
         return type;

@@ -15,8 +15,7 @@ CREATE TABLE database_scheme_version(
 --
 
 CREATE TABLE scim_certificate (
-    id bigint NOT NULL,
-    value character varying(255),
+    value character varying(255) PRIMARY KEY ,
     user_id bigint
 );
 
@@ -28,10 +27,9 @@ CREATE TABLE scim_certificate (
 --
 
 CREATE TABLE scim_email (
-    id bigint NOT NULL,
     postgresql_does_not_like_primary boolean,
     type character varying(255),
-    value character varying(255),
+    value character varying(255) PRIMARY KEY,
     user_id bigint
 );
 
@@ -78,8 +76,7 @@ CREATE TABLE scim_enterprise (
 --
 
 CREATE TABLE scim_entitlements (
-    id bigint NOT NULL,
-    value character varying(255)
+    value character varying(255) PRIMARY KEY
 );
 
 
@@ -113,9 +110,8 @@ CREATE TABLE scim_group (
 --
 
 CREATE TABLE scim_im (
-    id bigint NOT NULL,
     type character varying(255),
-    value character varying(255),
+    value character varying(255) PRIMARY KEY,
     user_id bigint
 );
 
@@ -183,9 +179,8 @@ CREATE TABLE scim_name (
 --
 
 CREATE TABLE scim_phonenumber (
-    id bigint NOT NULL,
     type character varying(255),
-    value character varying(255),
+    value character varying(255) PRIMARY KEY,
     user_id bigint
 );
 
@@ -197,9 +192,8 @@ CREATE TABLE scim_phonenumber (
 --
 
 CREATE TABLE scim_photo (
-    id bigint NOT NULL,
     type character varying(255),
-    value character varying(255),
+    value character varying(255) PRIMARY KEY,
     user_id bigint
 );
 
@@ -211,8 +205,7 @@ CREATE TABLE scim_photo (
 --
 
 CREATE TABLE scim_roles (
-    id bigint NOT NULL,
-    value character varying(255)
+    value character varying(255) PRIMARY KEY
 );
 
 
@@ -271,7 +264,7 @@ CREATE TABLE scim_user_scim_address (
 
 CREATE TABLE scim_user_scim_entitlements (
     scim_user_id bigint NOT NULL,
-    entitlements_id bigint NOT NULL
+    entitlements_value varchar(254) NOT NULL
 );
 
 
@@ -295,7 +288,7 @@ CREATE TABLE scim_user_scim_group (
 
 CREATE TABLE scim_user_scim_roles (
     scim_user_id bigint NOT NULL,
-    roles_id bigint NOT NULL
+    roles_value varchar(254) NOT NULL
 );
 
 
@@ -311,134 +304,12 @@ SELECT pg_catalog.setval('hibernate_sequence', 3, false);
 INSERT INTO database_scheme_version (version) values (0.02);
 
 
---
--- Data for Name: scim_certificate; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_email; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_enterprise; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_entitlements; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_group_scim_member; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_group; Type: TABLE DATA; Schema: public;
---
-
-
-
---
--- Data for Name: scim_im; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_manager; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_member; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_meta; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_name; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_phonenumber; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_photo; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_roles; Type: TABLE DATA; Schema: public; 
---
-
-INSERT INTO scim_roles (id, value) values (2, 'USER');
-
---
--- Data for Name: scim_user; Type: TABLE DATA; Schema: public; 
---
+INSERT INTO scim_roles (value) values ('USER');
 
 INSERT INTO scim_user (id, internalId, externalid, password, username) VALUES (1, 'CEF9452E-00A9-4CEC-A086-D171374FFBEF', 'marissa', 'cbae73fac0893291c4792ef19d158a589402288b35cb18fb8406e951b9d95f6b8b06a3526ffebe96ae0d91c04ae615a7fe2af362763db386ccbf3b55c29ae800', 'marissa');
 
---
--- Data for Name: scim_user_scim_address; Type: TABLE DATA; Schema: public; 
---
 
-
-
---
--- Data for Name: scim_user_scim_entitlements; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_user_scim_group; Type: TABLE DATA; Schema: public; 
---
-
-
-
---
--- Data for Name: scim_user_scim_roles; Type: TABLE DATA; Schema: public; 
---
-
-INSERT INTO scim_user_scim_roles (scim_user_id , roles_id) values (1, 2);
-
---
--- Name: scim_certificate_pkey; Type: CONSTRAINT; Schema: public;  
---
-
-ALTER TABLE ONLY scim_certificate
-    ADD CONSTRAINT scim_certificate_pkey PRIMARY KEY (id);
-
-
---
--- Name: scim_email_pkey; Type: CONSTRAINT; Schema: public;  
---
-
-ALTER TABLE ONLY scim_email
-    ADD CONSTRAINT scim_email_pkey PRIMARY KEY (id);
+INSERT INTO scim_user_scim_roles (scim_user_id , roles_value) values (1, 'USER');
 
 
 --
@@ -448,19 +319,6 @@ ALTER TABLE ONLY scim_email
 ALTER TABLE ONLY scim_enterprise
     ADD CONSTRAINT scim_enterprise_pkey PRIMARY KEY (id);
 
-
---
--- Name: scim_entitlements_pkey; Type: CONSTRAINT; Schema: public;  
---
-
-ALTER TABLE ONLY scim_entitlements
-    ADD CONSTRAINT scim_entitlements_pkey PRIMARY KEY (id);
-
-
-
---
--- Name: scim_address_pkey; Type: CONSTRAINT; Schema: public;
---
 
 ALTER TABLE ONLY scim_address
     ADD CONSTRAINT scim_address_pkey PRIMARY KEY (id);
@@ -476,13 +334,6 @@ ALTER TABLE ONLY scim_group
 
 
 --
--- Name: scim_im_pkey; Type: CONSTRAINT; Schema: public;  
---
-
-ALTER TABLE ONLY scim_im
-    ADD CONSTRAINT scim_im_pkey PRIMARY KEY (id);
-
-
 --
 -- Name: scim_manager_pkey; Type: CONSTRAINT; Schema: public;  
 --
@@ -514,29 +365,6 @@ ALTER TABLE ONLY scim_meta
 ALTER TABLE ONLY scim_name
     ADD CONSTRAINT scim_name_pkey PRIMARY KEY (id);
 
-
---
--- Name: scim_phonenumber_pkey; Type: CONSTRAINT; Schema: public;  
---
-
-ALTER TABLE ONLY scim_phonenumber
-    ADD CONSTRAINT scim_phonenumber_pkey PRIMARY KEY (id);
-
-
---
--- Name: scim_photo_pkey; Type: CONSTRAINT; Schema: public;  
---
-
-ALTER TABLE ONLY scim_photo
-    ADD CONSTRAINT scim_photo_pkey PRIMARY KEY (id);
-
-
---
--- Name: scim_roles_pkey; Type: CONSTRAINT; Schema: public;  
---
-
-ALTER TABLE ONLY scim_roles
-    ADD CONSTRAINT scim_roles_pkey PRIMARY KEY (id);
 
 
 --
@@ -571,7 +399,7 @@ ALTER TABLE ONLY scim_user_scim_entitlements
 --
 
 ALTER TABLE ONLY scim_user_scim_entitlements
-    ADD CONSTRAINT fk2d3225884aa1835b FOREIGN KEY (entitlements_id) REFERENCES scim_entitlements(id);
+    ADD CONSTRAINT fk2d3225884aa1835b FOREIGN KEY (entitlements_value) REFERENCES scim_entitlements(value);
 
 
 --
@@ -638,7 +466,7 @@ ALTER TABLE ONLY scim_user_scim_roles
 --
 
 ALTER TABLE ONLY scim_user_scim_roles
-    ADD CONSTRAINT fk70e4b45ba7c830bf FOREIGN KEY (roles_id) REFERENCES scim_roles(id);
+    ADD CONSTRAINT fk70e4b45ba7c830bf FOREIGN KEY (roles_value) REFERENCES scim_roles(value);
 
 
 

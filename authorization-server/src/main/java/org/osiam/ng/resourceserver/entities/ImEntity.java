@@ -27,22 +27,14 @@ import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
  * Instant messaging Entity
  */
 @Entity(name = "scim_im")
-public class ImEntity implements ChildOfMultiValueAttributeWithType {
+public class ImEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
 
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @Column
-    private String value;
 
     @Column
     private String type;
@@ -51,22 +43,6 @@ public class ImEntity implements ChildOfMultiValueAttributeWithType {
     private UserEntity user;
 
 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     public String getType() {
         return type;
