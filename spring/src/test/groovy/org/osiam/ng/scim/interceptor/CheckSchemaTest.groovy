@@ -46,7 +46,7 @@ class CheckSchemaTest extends Specification {
 
     }
 
-    def "should do nothing when args doesn't contain user"() {
+    def "should do nothing when args doesn't contain scim.schema.v2.User"() {
         given:
         joint.args >> ["haha"]
         when:
