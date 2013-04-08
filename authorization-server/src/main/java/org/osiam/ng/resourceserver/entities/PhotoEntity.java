@@ -35,7 +35,7 @@ import javax.persistence.*;
  * Photos Entity
  */
 @Entity(name = "scim_photo")
-public class PhotoEntity implements MinimalChildOfMultiValueAttribute {
+public class PhotoEntity implements ChildOfMultiValueAttributeWithType {
 
     @Id
     @GeneratedValue

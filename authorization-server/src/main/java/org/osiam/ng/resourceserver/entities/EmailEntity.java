@@ -35,7 +35,7 @@ import javax.persistence.*;
  * Email Entity
  */
 @Entity(name = "scim_email")
-public class EmailEntity implements FullChildOfMultiValueAttribute {
+public class EmailEntity implements ChildOfMultiValueAttributeWithTypeAndPrimary {
 
     @Id
     @GeneratedValue

@@ -35,7 +35,7 @@ import javax.persistence.*;
  * Phone Numbers Entity
  */
 @Entity(name = "scim_phoneNumber")
-public class PhoneNumberEntity implements MinimalChildOfMultiValueAttribute {
+public class PhoneNumberEntity implements ChildOfMultiValueAttributeWithType {
 
     @Id
     @GeneratedValue

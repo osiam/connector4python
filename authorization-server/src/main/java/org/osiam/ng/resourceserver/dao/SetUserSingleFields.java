@@ -59,7 +59,7 @@ public class SetUserSingleFields {
         }
 
     }
-
+    //TODO generalize
     private void setNamesValueIfNotNull(User user) {
         entity.getName().setFamilyName(user.getName().getFamilyName() != null ?
                 user.getName().getFamilyName() : entity.getName().getFamilyName());

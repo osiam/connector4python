@@ -61,12 +61,12 @@ public class SetUserFields {
         ENTITLEMENTS("entitlements", EntitlementsEntity.class),
         ROLES("roles", RolesEntity.class),
         X509("x509certificates", X509CertificateEntity.class),
-        ADDRESSES("addresses", MinimalChildOfMultiValueAttribute.class);
+        ADDRESSES("addresses", ChildOfMultiValueAttribute.class);
 
         private final String isUserClass;
-        private final Class<? extends MinimalChildOfMultiValueAttribute> clazz;
+        private final Class<? extends ChildOfMultiValueAttribute> clazz;
 
-        UserLists(String isUserClass, Class<? extends MinimalChildOfMultiValueAttribute> clazz) {
+        UserLists(String isUserClass, Class<? extends ChildOfMultiValueAttribute> clazz) {
             this.clazz = clazz;
             this.isUserClass = isUserClass;
         }
@@ -78,7 +78,7 @@ public class SetUserFields {
                 fromString.put(d.isUserClass, d);
         }
 
-        public Class<? extends MinimalChildOfMultiValueAttribute> getClazz() {
+        public Class<? extends ChildOfMultiValueAttribute> getClazz() {
             return clazz;
         }
     }
@@ -92,7 +92,7 @@ public class SetUserFields {
     public void setFields() throws IllegalAccessException {
         Map<String, Field> userFields = getFieldsAsNormalizedMap(user.getClass());
         Map<String, Field> entityFields = getFieldsAsNormalizedMap(entity.getClass());
-        SetUserListFields setUserListFields = new SetUserListFields(entity);
+        SetUserListFields setUserListFields = new SetUserListFields(entity, mode);
         SetUserSingleFields setUserSingleFields = new SetUserSingleFields(entity, mode);
         Set<String> doNotUpdateThem = deleteAttributes(entityFields, setUserSingleFields);
 

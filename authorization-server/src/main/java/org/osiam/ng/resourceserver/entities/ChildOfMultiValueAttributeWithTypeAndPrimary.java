@@ -23,7 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-public interface FullChildOfMultiValueAttribute extends ChildOfMultiValueAttributeWithType{
+public interface ChildOfMultiValueAttributeWithTypeAndPrimary extends ChildOfMultiValueAttributeWithType{
 
     boolean isPrimary();
 

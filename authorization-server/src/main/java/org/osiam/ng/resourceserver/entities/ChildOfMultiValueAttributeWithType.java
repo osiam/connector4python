@@ -23,7 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-public interface ChildOfMultiValueAttributeWithType extends MinimalChildOfMultiValueAttribute {
+public interface ChildOfMultiValueAttributeWithType extends ChildOfMultiValueAttribute {
     String getType();
 
     void setType(String type);

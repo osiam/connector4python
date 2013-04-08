@@ -551,10 +551,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Roles entityRolesToScim(Set<RolesEntity> rolesEntities) {
-        if (rolesEntities == null) {
-            return null;
-        }
-
         User.Roles roles = new User.Roles();
         for (RolesEntity rolesEntity : rolesEntities) {
             roles.getRole().add(rolesEntity.toScim());
@@ -563,10 +559,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Photos entityPhotosToScim(Set<PhotoEntity> photoEntities) {
-        if (photoEntities == null) {
-            return null;
-        }
-
         User.Photos photos = new User.Photos();
         for (PhotoEntity photoEntity : photoEntities) {
             photos.getPhoto().add(photoEntity.toScim());
@@ -575,10 +567,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.PhoneNumbers entityPhonenumbersToScim(Set<PhoneNumberEntity> phoneNumberEntities) {
-        if (phoneNumberEntities == null) {
-            return null;
-        }
-
         User.PhoneNumbers phoneNumbers = new User.PhoneNumbers();
         for (PhoneNumberEntity phoneNumberEntity : phoneNumberEntities) {
             phoneNumbers.getPhoneNumber().add(phoneNumberEntity.toScim());
@@ -587,10 +575,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Ims entityImsToScim(Set<ImEntity> imEntities) {
-        if (imEntities == null) {
-            return null;
-        }
-
         User.Ims ims = new User.Ims();
         for (ImEntity imEntity : imEntities) {
             ims.getIm().add(imEntity.toScim());
@@ -599,10 +583,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Groups entityGroupsToScim(Set<GroupEntity> groupEntities) {
-        if (groupEntities == null) {
-            return null;
-        }
-
         User.Groups groups = new User.Groups();
         for (GroupEntity groupEntity : groupEntities) {
             groups.getGroup().add(groupEntity.toScim());
@@ -612,10 +592,6 @@ public class UserEntity implements UserDetails {
 
 
     private User.Entitlements entityEntitlementsToScim(Set<EntitlementsEntity> entitlementsEntities) {
-        if (entitlements == null) {
-            return null;
-        }
-
         User.Entitlements entitlements = new User.Entitlements();
         for (EntitlementsEntity entitlementsEntity : entitlementsEntities) {
             entitlements.getEntitlement().add(entitlementsEntity.toScim());
@@ -624,9 +600,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Emails entityEmailToScim(Set<EmailEntity> emailEntities) {
-        if (emailEntities == null) {
-            return null;
-        }
         User.Emails emails = new User.Emails();
         for (EmailEntity emailEntity : emailEntities) {
             emails.getEmail().add(emailEntity.toScim());
@@ -646,8 +619,6 @@ public class UserEntity implements UserDetails {
     }
 
     private User.Addresses entityAddressToScim(Set<AddressEntity> addressEntities) {
-        if (addressEntities == null)
-            return null;
         User.Addresses addresses = new User.Addresses();
         for (AddressEntity addressEntity : addressEntities) {
             addresses.getAddress().add(addressEntity.toScim());

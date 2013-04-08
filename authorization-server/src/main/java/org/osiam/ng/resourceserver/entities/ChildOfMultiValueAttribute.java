@@ -23,7 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-public interface MinimalChildOfMultiValueAttribute {
+public interface ChildOfMultiValueAttribute {
     String getValue();
 
     void setValue(String value);

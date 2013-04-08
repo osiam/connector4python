@@ -35,7 +35,7 @@ import javax.persistence.Id;
  * Roles Entity
  */
 @Entity(name = "scim_roles")
-public class RolesEntity implements MinimalChildOfMultiValueAttribute, GrantedAuthority{
+public class RolesEntity implements ChildOfMultiValueAttribute, GrantedAuthority{
 
     private static final long serialVersionUID = 1546546513218916131L;
 

@@ -34,7 +34,7 @@ import javax.persistence.Id;
  * Entitlements Entity
  */
 @Entity(name = "scim_entitlements")
-public class EntitlementsEntity implements MinimalChildOfMultiValueAttribute {
+public class EntitlementsEntity implements ChildOfMultiValueAttribute {
 
     @Id
     @GeneratedValue
