@@ -31,11 +31,14 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class MultiValuedAttribute {
 
-    private final Object value;
-    private final String display;
-    private final Boolean primary;
-    private final String type;
-    private final String operation;
+    private Object value;
+    private String display;
+    private Boolean primary;
+    private String type;
+    private String operation;
+
+    //JSON Serializing
+    public MultiValuedAttribute(){}
 
     protected MultiValuedAttribute(Builder builder) {
         this.value = builder.value;

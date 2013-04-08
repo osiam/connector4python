@@ -29,7 +29,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 /**
  * Java class for name complex type.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Name {
 
     private String formatted;
