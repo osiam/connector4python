@@ -38,14 +38,6 @@ class PhoneNumberEntitySpec extends Specification {
     PhoneNumberEntity phoneNumberEntity = new PhoneNumberEntity()
     def userEntity = Mock(UserEntity)
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        phoneNumberEntity.setId(123456)
-
-        then:
-        phoneNumberEntity.getId() == 123456
-    }
-
     def "setter and getter for the value should be present"() {
         when:
         phoneNumberEntity.setValue("555-555-555")

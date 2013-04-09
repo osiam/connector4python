@@ -38,14 +38,6 @@ class RolesEntitySpec extends Specification {
 
     RolesEntity rolesEntity = new RolesEntity()
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        rolesEntity.setId(123456)
-
-        then:
-        rolesEntity.getId() == 123456
-    }
-
     def "setter and getter for the value should be present"(){
         when:
         rolesEntity.setValue("someValue")

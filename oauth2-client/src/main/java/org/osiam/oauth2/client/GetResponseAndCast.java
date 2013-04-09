@@ -29,6 +29,8 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.osiam.oauth2.client.exceptions.UserFriendlyException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import scim.schema.v2.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,14 +38,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+
+@Component
 public class GetResponseAndCast {
 
 
-    private final HttpClient httpClient;
-
-    public GetResponseAndCast(HttpClient httpClient) {
-        this.httpClient = httpClient;
-    }
+    @Autowired
+    private GenerateClient generateClient;
 
     public void getResponseAndSetAccessToken(HttpServletRequest req, String access_token, String jsonString, HttpEntityEnclosingRequestBase request) throws IOException, UserFriendlyException {
         HttpResponse response = getHttpResponse(jsonString, request);
@@ -56,14 +57,10 @@ public class GetResponseAndCast {
         StringEntity input = new StringEntity(jsonString);
         input.setContentType("application/json");
         request.setEntity(input);
-        return httpClient.execute(request);
+        return generateClient.getClient().execute(request);
     }
 
     private void readJsonFromBody(HttpServletRequest req, HttpResponse post) throws IOException, UserFriendlyException {
-
-//        if (post.getStatusLine().getStatusCode() > 399) {
-//            throw new UserFriendlyException(String.valueOf(post.getStatusLine().getStatusCode()));
-//        }
         setAttributeAndCastUser(req, post);
     }
 
@@ -77,16 +74,13 @@ public class GetResponseAndCast {
     private String setUserId(InputStream response) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         String bla = inputStreamToString(response);
-        if (response != null) {
-            try {
-                User user = objectMapper.readValue(bla, User.class);
-                CRUDRedirectController.userIds.add(user.getId());
-                return objectMapper.writeValueAsString(user);
-            } catch (Exception e) {
-                return bla;
-            }
+        try {
+            User user = objectMapper.readValue(bla, User.class);
+            CRUDRedirectController.userIds.add(user.getId());
+            return objectMapper.writeValueAsString(user);
+        } catch (Exception e) {
+            return bla;
         }
-        return bla;
     }
 
     private String inputStreamToString(InputStream response) throws IOException {

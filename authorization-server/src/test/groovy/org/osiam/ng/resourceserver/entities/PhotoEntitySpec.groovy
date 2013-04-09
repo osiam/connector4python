@@ -38,13 +38,6 @@ class PhotoEntitySpec extends Specification {
     PhotoEntity photoEntity = new PhotoEntity()
     def userEntity = Mock(UserEntity)
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        photoEntity.setId(123456)
-
-        then:
-        photoEntity.getId() == 123456
-    }
 
     def "setter and getter for the value should be present"() {
         when:

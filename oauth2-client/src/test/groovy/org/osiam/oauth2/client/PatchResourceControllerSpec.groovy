@@ -4,10 +4,21 @@ import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
 
-class UpdateResourceControllerSpec extends Specification {
+/**
+ * Created with IntelliJ IDEA.
+ * User: jtodea
+ * Date: 26.03.13
+ * Time: 10:11
+ * To change this template use File | Settings | File Templates.
+ */
+class PatchResourceControllerSpec extends Specification {
+
     def getResponseAndCast = Mock(GetResponseAndCast)
     HttpServletRequest servletRequest = Mock(HttpServletRequest)
-    UpdateResourceController updateResourceController = new UpdateResourceController(getResponeAndCast: getResponseAndCast)
+
+
+
+    def updateResourceController = new PatchResourceController(getResponseAndCast: getResponseAndCast)
 
 
     def "should be able to update a user resource"() {
@@ -28,7 +39,8 @@ class UpdateResourceControllerSpec extends Specification {
                 //timezone
                 "password",
                 "access_token",
-                "idForUpdate"
+                "idForUpdate",
+                "one,two"
         )
 
         then:
@@ -36,6 +48,20 @@ class UpdateResourceControllerSpec extends Specification {
         1 * servletRequest.getScheme()
         1 * servletRequest.getServerName()
 
+    }
+
+    def "should ignore attributes when empty"() {
+        when:
+        def result = updateResourceController.generateAttributesToDelete("")
+        then:
+        !result
+    }
+
+    def "should ignore attributes when null"() {
+        when:
+        def result = updateResourceController.generateAttributesToDelete(null)
+        then:
+        !result
     }
 
 }

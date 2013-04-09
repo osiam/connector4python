@@ -37,14 +37,6 @@ class EntitlementsEntitySpec extends Specification {
 
     EntitlementsEntity entitlementsEntity = new EntitlementsEntity()
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        entitlementsEntity.setId(123456)
-
-        then:
-        entitlementsEntity.getId() == 123456
-    }
-
     def "setter and getter for the value should be present"(){
         when:
         entitlementsEntity.setValue("someValue")

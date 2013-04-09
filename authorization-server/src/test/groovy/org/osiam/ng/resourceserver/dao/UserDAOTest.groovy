@@ -23,10 +23,9 @@
 
 package org.osiam.ng.resourceserver.dao
 
-import org.osiam.ng.resourceserver.entities.ImEntity
+import org.osiam.ng.resourceserver.entities.RolesEntity
 import org.osiam.ng.resourceserver.entities.UserEntity
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException
-import org.springframework.security.authentication.encoding.BasePasswordEncoder
 import org.springframework.security.authentication.encoding.PasswordEncoder
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder
 import spock.lang.Specification
@@ -41,7 +40,7 @@ class UserDAOTest extends Specification {
 
     def setup() {
         underTest.setEm(em)
-        userEntity.roles >> new HashSet<>()
+        userEntity.roles >> new HashSet<>(Arrays.asList(new RolesEntity(value: "test"), new RolesEntity()))
         userEntity.addresses >> new HashSet<>()
         userEntity.phoneNumbers >> new HashSet<>()
         userEntity.photos >> new HashSet<>()
@@ -125,6 +124,23 @@ class UserDAOTest extends Specification {
 
     }
 
+    def "should validate if multivalue entity is present on update"(){
+        given:
+        def passwordEncoder = Mock(PasswordEncoder)
+        underTest.setPasswordEncoder(passwordEncoder)
+        def id = UUID.randomUUID()
+
+        when:
+        underTest.update(userEntity)
+        then:
+        1 * userEntity.password >> "password"
+        1 * userEntity.internalId >> id
+        1 * em.find(RolesEntity, "test") >> Mock(RolesEntity)
+        1* em.merge(userEntity)
+        1 * passwordEncoder.encodePassword("password", id) >> "moep"
+    }
+
+
     def "should set password hash when users password is not hashed"(){
         given:
         def passwordEncoder = Mock(PasswordEncoder)
@@ -136,6 +152,7 @@ class UserDAOTest extends Specification {
         then:
         1 * userEntity.password >> "password"
         1 * userEntity.internalId >> id
+        1 * em.find(RolesEntity, null)
 
         1* em.merge(userEntity)
         1 * passwordEncoder.encodePassword("password", id) >> "moep"
@@ -152,9 +169,9 @@ class UserDAOTest extends Specification {
         underTest.update(userEntity)
         then:
         1 * userEntity.password >> password
-        1 * userEntity.internalId >> id
-
-        1* em.merge(userEntity)
+        0 * userEntity.internalId >> id
         0 * passwordEncoder.encodePassword("password", id) >> "moep"
+        1* em.merge(userEntity)
+
     }
 }

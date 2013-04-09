@@ -38,14 +38,6 @@ class EmailEntitySpec extends Specification {
     EmailEntity emailEntity = new EmailEntity()
     def userEntity = Mock(UserEntity)
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        emailEntity.setId(123456)
-
-        then:
-        emailEntity.getId() == 123456
-    }
-
     def "setter and getter for the email should be present"() {
         when:
         emailEntity.setValue("work@high.tech")
@@ -88,6 +80,8 @@ class EmailEntitySpec extends Specification {
         multivalue.isPrimary() == emailEntity.primary
     }
 
+
+
     def "mapping from scim should be present"() {
         given:
         MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
@@ -101,5 +95,20 @@ class EmailEntitySpec extends Specification {
 
         then:
         result != null
+    }
+
+    def "mapping from scim should set primary to false when null"() {
+        given:
+        MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
+                setPrimary(null).
+                setType("type").
+                setValue("value").
+                build()
+
+        when:
+        def result = EmailEntity.fromScim(multiValuedAttribute)
+
+        then:
+        !result.primary
     }
 }

@@ -38,14 +38,6 @@ class X509CertificateEntitySpec extends Specification {
     X509CertificateEntity certificateEntity = new X509CertificateEntity()
     def userEntity = Mock(UserEntity)
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        certificateEntity.setId(123456)
-
-        then:
-        certificateEntity.getId() == 123456
-    }
-
     def "setter and getter for the value should be present"(){
         when:
         certificateEntity.setValue("someValue")

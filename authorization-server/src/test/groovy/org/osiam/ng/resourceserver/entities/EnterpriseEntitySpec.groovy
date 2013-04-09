@@ -108,4 +108,20 @@ class EnterpriseEntitySpec extends Specification {
         enterprise.manager == enterpriseEntity.manager
         enterprise.organization == enterpriseEntity.organization
     }
+
+    def "should map manager if present"() {
+        given:
+        enterpriseEntity.setManager(new ManagerEntity())
+        when:
+        def enterprise = enterpriseEntity.toScim()
+
+        then:
+        enterprise.costCenter == enterpriseEntity.costCenter
+        enterprise.department == enterpriseEntity.department
+        enterprise.division == enterpriseEntity.division
+        enterprise.employeeNumber == enterpriseEntity.employeeNumber
+
+        enterprise.organization == enterpriseEntity.organization
+        enterprise.manager
+    }
 }

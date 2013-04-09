@@ -38,14 +38,6 @@ class ImsEntitySpec extends Specification {
     ImEntity imsEntity = new ImEntity()
     def userEntity = Mock(UserEntity)
 
-    def "setter and getter for the Id should be present"() {
-        when:
-        imsEntity.setId(123456)
-
-        then:
-        imsEntity.getId() == 123456
-    }
-
     def "setter and getter for the value should be present"() {
         when:
         imsEntity.setValue("someone@googlemail.com")

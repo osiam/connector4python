@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.dao
 
+import org.osiam.ng.resourceserver.entities.NameEntity
 import org.osiam.ng.resourceserver.entities.UserEntity
 import scim.schema.v2.Name
 import scim.schema.v2.User
@@ -84,8 +85,97 @@ class SetUserSingleFieldsTest extends Specification {
         then:
         scimUser.displayName == entity.displayName
         scimUser.name.familyName == entity.name.familyName
-
     }
+
+    def "should update parts of a complex field when in patch mode"() {
+        given:
+        def scimUser = new User.Builder("test")
+                .setDisplayName("display")
+                .setName(new Name.Builder()
+                .setFamilyName("Prefect")
+                .setHonorificPrefix("prefix")
+                .setHonorificSuffix("suffix")
+                .build()).build()
+
+        def entity = new UserEntity()
+        entity.setName(new NameEntity())
+        def underTest = new SetUserSingleFields(entity, SetUserFields.Mode.PATCH)
+        def aha = new SetUserFields(null, null, mode).getFieldsAsNormalizedMap(UserEntity)
+
+        when:
+        underTest.updateSingleField(scimUser, aha.get("displayname"), scimUser.displayName, "displayname")
+        underTest.updateSingleField(scimUser, aha.get("name"), scimUser.getName(), "name")
+        then:
+        scimUser.displayName == entity.displayName
+        scimUser.name.familyName == entity.name.familyName
+        null == entity.name.formatted
+        null == entity.name.givenName
+        scimUser.name.honorificPrefix == entity.name.honorificPrefix
+        scimUser.name.honorificSuffix == entity.name.honorificSuffix
+        scimUser.name.middleName == entity.name.middleName
+    }
+
+    def "should update all parts of a complex field"() {
+        given:
+        def scimUser = new User.Builder("test")
+                .setName(new Name.Builder()
+                .setFamilyName("Prefect")
+                .setFormatted("formated")
+                .setGivenName("given")
+                .setHonorificPrefix("prefix")
+                .setHonorificSuffix("suffix")
+                .setMiddleName("middle")
+                .build()).build()
+
+        def entity = new UserEntity()
+        entity.setName(new NameEntity())
+        def underTest = new SetUserSingleFields(entity, SetUserFields.Mode.PATCH)
+        def aha = new SetUserFields(null, null, mode).getFieldsAsNormalizedMap(UserEntity)
+
+        when:
+        underTest.updateSingleField(scimUser, aha.get("displayname"), scimUser.displayName, "displayname")
+        underTest.updateSingleField(scimUser, aha.get("name"), scimUser.getName(), "name")
+        then:
+        scimUser.displayName == entity.displayName
+        scimUser.name.familyName == entity.name.familyName
+        scimUser.name.formatted == entity.name.formatted
+        scimUser.name.givenName == entity.name.givenName
+        scimUser.name.honorificPrefix == entity.name.honorificPrefix
+        scimUser.name.honorificSuffix == entity.name.honorificSuffix
+        scimUser.name.middleName == entity.name.middleName
+    }
+
+    def "should insert new name object when the one hold by entity is null"() {
+        given:
+        def scimUser = new User.Builder("test")
+                .setName(new Name.Builder()
+                .setFamilyName("Prefect")
+                .setFormatted("formated")
+                .setGivenName("given")
+                .setHonorificPrefix("prefix")
+                .setHonorificSuffix("suffix")
+                .setMiddleName("middle")
+                .build()).build()
+
+        def entity = new UserEntity()
+        entity.setName(null)
+        def underTest = new SetUserSingleFields(entity, SetUserFields.Mode.PATCH)
+        def aha = new SetUserFields(null, null, mode).getFieldsAsNormalizedMap(UserEntity)
+
+        when:
+        underTest.updateSingleField(scimUser, aha.get("displayname"), scimUser.displayName, "displayname")
+        underTest.updateSingleField(scimUser, aha.get("name"), scimUser.getName(), "name")
+        then:
+        scimUser.displayName == entity.displayName
+        scimUser.name.familyName == entity.name.familyName
+        scimUser.name.formatted == entity.name.formatted
+        scimUser.name.givenName == entity.name.givenName
+        scimUser.name.honorificPrefix == entity.name.honorificPrefix
+        scimUser.name.honorificSuffix == entity.name.honorificSuffix
+        scimUser.name.middleName == entity.name.middleName
+    }
+
+
 
     def "should update a given password of an entity"() {
         given:

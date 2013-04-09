@@ -25,8 +25,8 @@ package org.osiam.oauth2.client;
 
 
 import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.osiam.oauth2.client.exceptions.UserFriendlyException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,19 +34,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jtodea
- * Date: 26.03.13
- * Time: 09:32
- * To change this template use File | Settings | File Templates.
- */
+import static org.osiam.oauth2.client.UpdateResourceController.createEnvAndInvokeHttpCall;
+
 @Controller
 public class PatchResourceController {
+
+    @Autowired
+    private GetResponseAndCast getResponseAndCast;
 
 
     @RequestMapping("/patchResource")
@@ -66,14 +66,11 @@ public class PatchResourceController {
                                  @RequestParam String password,
                                  @RequestParam String access_token,
                                  @RequestParam String idForUpdate,
-                                 @RequestParam String delete) throws ServletException, IOException, UserFriendlyException {
+                                 @RequestParam String delete) throws ServletException, IOException, UserFriendlyException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
-        Set<String> attributesToDelete = null;
-        if (delete != null && !delete.isEmpty()) {
-            attributesToDelete = new HashSet<>(Arrays.asList(delete.split(",")));
-        }
+        Set<String> attributesToDelete = generateAttributesToDelete(delete);
 
-        String jsonString = AddResourceController.getJsonStringPatch(
+        String jsonString = JsonStringGenerator.getJsonStringPatch(
                 schema,
                 user_name,
                 firstname,
@@ -89,11 +86,14 @@ public class PatchResourceController {
                 password,
                 attributesToDelete
         );
+        Constructor<HttpPatch> constructor = HttpPatch.class.getConstructor(String.class);
+        return createEnvAndInvokeHttpCall(getResponseAndCast,req, access_token, idForUpdate, jsonString, constructor);
+    }
 
-        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String url = environment + "/authorization-server/User/" + idForUpdate + "?access_token=" + access_token;
-        HttpPatch httpPatch = new HttpPatch(url);
-        new GetResponseAndCast(new DefaultHttpClient()).getResponseAndSetAccessToken(req, access_token, jsonString, httpPatch);
-        return "user";
+    private Set<String> generateAttributesToDelete(String delete) {
+        Set<String> attributesToDelete = null;
+        if (delete != null && !delete.isEmpty()) {
+            attributesToDelete = new HashSet<>(Arrays.asList(delete.split(",")));
+        } return attributesToDelete;
     }
 }

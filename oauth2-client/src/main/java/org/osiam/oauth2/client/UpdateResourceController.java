@@ -1,10 +1,10 @@
 package org.osiam.oauth2.client;
 
 
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.osiam.oauth2.client.exceptions.UserFriendlyException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,8 +25,8 @@ import java.io.IOException;
 @Controller
 public class UpdateResourceController {
 
-
-
+    @Autowired
+    private GetResponseAndCast getResponeAndCast;
 
     @RequestMapping("/updateResource")
     public String updateResource(HttpServletRequest req,
@@ -43,9 +45,9 @@ public class UpdateResourceController {
                                  //@RequestParam String timezone
                                  @RequestParam String password,
                                  @RequestParam String access_token,
-                                 @RequestParam String idForUpdate) throws ServletException, IOException, UserFriendlyException {
+                                 @RequestParam String idForUpdate) throws ServletException, IOException, UserFriendlyException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
 
-        String jsonString = AddResourceController.getJsonString(
+        String jsonString = JsonStringGenerator.getJsonString(
                 schema,
                 user_name,
                 firstname,
@@ -60,11 +62,15 @@ public class UpdateResourceController {
                 timezone,
                 password
         );
+        Constructor<HttpPut> constructor = HttpPut.class.getConstructor(String.class);
+        return createEnvAndInvokeHttpCall(getResponeAndCast,req, access_token, idForUpdate, jsonString, constructor);
+    }
 
+    static String createEnvAndInvokeHttpCall(GetResponseAndCast getResponeAndCast, HttpServletRequest req, String access_token, String idForUpdate, String jsonString, Constructor<? extends HttpEntityEnclosingRequestBase> constructor) throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException, UserFriendlyException {
         String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
         String url = environment + "/authorization-server/User/" + idForUpdate + "?access_token=" + access_token;
-        HttpPut httpPut = new HttpPut(url);
-        new GetResponseAndCast(new DefaultHttpClient()).getResponseAndSetAccessToken(req, access_token, jsonString, httpPut);
+        HttpEntityEnclosingRequestBase httpPut = constructor.newInstance(url);
+        getResponeAndCast.getResponseAndSetAccessToken(req, access_token, jsonString, httpPut);
         return "user";
     }
 }

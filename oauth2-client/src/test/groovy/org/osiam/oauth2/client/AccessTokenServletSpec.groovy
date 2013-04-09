@@ -39,14 +39,16 @@ class AccessTokenServletSpec extends Specification {
     def httpClient = Mock(HttpClient)
     def requestDispatcher = Mock(RequestDispatcher)
 
-    AccessTokenController accessTokenServlet = new AccessTokenController(httpClient: httpClient)
+
 
     String jsonString = "{\"scope\":\"ROLE_USER READ\",\"expires_in\":1336,\"token_type\":\"bearer\",\"access_token\":\"a06db533-841f-4047-85f8-1e42b216b65d\"}"
-    String combined = "testClient:secret"
-    String encoding = new String(Base64.encodeBase64(combined.getBytes()))
+
+
     def response = Mock(HttpResponse)
     def entity = Mock(HttpEntity)
+    GenerateClient generateClient = Mock(GenerateClient)
 
+    AccessTokenController accessTokenServlet = new AccessTokenController(generateClient: generateClient)
 
     def "should execute request with auth code to obtain access token"() {
         given:
@@ -60,6 +62,7 @@ class AccessTokenServletSpec extends Specification {
         def result = accessTokenServlet.doGet(httpRequest)
 
         then:
+        1 * generateClient.getClient() >> httpClient
         1 * httpClient.execute(_) >> response
         1 * response.entity >> entity
         1 * entity.content >> new ByteArrayInputStream(jsonString.getBytes())
@@ -92,6 +95,7 @@ class AccessTokenServletSpec extends Specification {
         accessTokenServlet.doGet(httpRequest)
 
         then:
+        1 * generateClient.getClient() >> httpClient
         1 * httpClient.execute(_) >> response
         1 * response.entity >> entity
         1 * entity.content >> new ByteArrayInputStream(jsonString.getBytes())

@@ -71,4 +71,14 @@ class ManagerEntitySpec extends Specification {
         then:
         manager != null
     }
+
+    def "should return manager id if it is not null"() {
+        given:
+        managerEntity.setManagerId(UUID.randomUUID())
+        when:
+        def manager = managerEntity.toScim()
+
+        then:
+        manager.managerId == managerEntity.getManagerId().toString()
+    }
 }

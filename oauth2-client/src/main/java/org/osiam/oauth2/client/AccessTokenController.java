@@ -35,6 +35,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,6 +59,8 @@ public class AccessTokenController {
     private static final String CLIENT_ID = "testClient";
     private static final String CLIENT_SECRET = "secret";
     private final Logger logger = Logger.getLogger(AccessTokenController.class.getName());
+    @Autowired
+    private GenerateClient generateClient;
 
 
     public AccessTokenController() {
@@ -88,7 +91,8 @@ public class AccessTokenController {
         HttpPost post = new HttpPost(tokenUrl);
 
         addPostMethodParameter(post, code, combined, redirectUri);
-        HttpResponse response = new DefaultHttpClient().execute(post);
+        HttpClient defaultHttpClient = generateClient.getClient();
+        HttpResponse response = defaultHttpClient.execute(post);
         addJsonResponseToHttpRequest(response, req);
         req.setAttribute(PARAM_CODE, code);
         req.setAttribute("redirect_uri", redirectUri);

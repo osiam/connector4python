@@ -110,7 +110,7 @@ public class UserDAO {
     public void update(UserEntity entity) {
         //not hashed ...
         String password = entity.getPassword();
-        if (password.length() != 64){
+        if (password.length() != 128){
             entity.setPassword(passwordEncoder.encodePassword(password, entity.getInternalId()));
         }
         findExistingMultiValueAttributes(entity);
