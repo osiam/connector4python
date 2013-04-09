@@ -26,25 +26,6 @@ class AddResourceControllerSpec extends Specification {
 
 
 
-//    def "should set user id"() {
-//        given:
-//        def idSize = CRUDRedirectController.userIds.size()
-//        when:
-//        addResourceController.setUserId(jsonString)
-//        then:
-//        CRUDRedirectController.userIds.size() == idSize + 1
-//
-//    }
-//
-//    def "should not set user id when response is null"() {
-//        given:
-//        def idSize = CRUDRedirectController.userIds.size()
-//        when:
-//        addResourceController.setUserId(null)
-//        then:
-//        CRUDRedirectController.userIds.size() == idSize
-//
-    //}
 
 
 
