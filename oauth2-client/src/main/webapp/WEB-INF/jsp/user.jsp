@@ -10,9 +10,7 @@
 
 
 <t:generic_page_template>
-    <h2>Created/Updated User:</h2>
-
-    <p>User: ${userResponse}</p>
-
     <p>Location Header: ${LocationHeader}</p>
+    <h2>Response</h2>
+    <p>${userResponse}</p>
 </t:generic_page_template>
