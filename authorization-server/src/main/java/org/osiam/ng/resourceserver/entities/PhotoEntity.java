@@ -36,14 +36,10 @@ import javax.persistence.ManyToOne;
 public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
 
     @Column
-    private
-    String
-            type;
+    private String type;
 
     @ManyToOne
-    private
-    UserEntity
-            user;
+    private UserEntity user;
 
 
     public String getValue() {
@@ -51,8 +47,7 @@ public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements Ch
     }
 
     public void setValue(String value) {
-        this.value =
-                value;
+        this.value = value;
     }
 
     public String getType() {
@@ -60,8 +55,7 @@ public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements Ch
     }
 
     public void setType(String type) {
-        this.type =
-                type;
+        this.type = type;
     }
 
     public UserEntity getUser() {
@@ -69,8 +63,7 @@ public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements Ch
     }
 
     public void setUser(UserEntity user) {
-        this.user =
-                user;
+        this.user = user;
     }
 
     public MultiValuedAttribute toScim() {
@@ -81,9 +74,7 @@ public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements Ch
     }
 
     public static PhotoEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        PhotoEntity
-                photoEntity =
-                new PhotoEntity();
+        PhotoEntity photoEntity = new PhotoEntity();
         photoEntity.setType(multiValuedAttribute.getType());
         photoEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return photoEntity;

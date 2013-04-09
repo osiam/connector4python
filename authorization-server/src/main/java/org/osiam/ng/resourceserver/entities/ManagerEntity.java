@@ -43,27 +43,20 @@ public class ManagerEntity {
 
     @Id
     @GeneratedValue
-    private
-    long
-            id;
+    private long id;
 
     @Column
-    private
-    UUID
-            managerId;
+    private UUID managerId;
 
     @Column
-    private
-    String
-            displayName;
+    private String displayName;
 
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id =
-                id;
+        this.id = id;
     }
 
     public UUID getManagerId() {
@@ -71,8 +64,7 @@ public class ManagerEntity {
     }
 
     public void setManagerId(UUID managerId) {
-        this.managerId =
-                managerId;
+        this.managerId = managerId;
     }
 
     public String getDisplayName() {
@@ -80,14 +72,10 @@ public class ManagerEntity {
     }
 
     public void setDisplayName(String displayName) {
-        this.displayName =
-                displayName;
+        this.displayName = displayName;
     }
 
     public Manager toScim() {
-        return new Manager(getManagerId() !=
-                null ?
-                getManagerId().toString() :
-                null, getDisplayName());
+        return new Manager(getManagerId() != null ? getManagerId().toString() : null, getDisplayName());
     }
 }

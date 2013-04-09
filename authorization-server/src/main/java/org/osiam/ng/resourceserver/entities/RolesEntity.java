@@ -34,16 +34,12 @@ import javax.persistence.Entity;
 @Entity(name = "scim_roles")
 public class RolesEntity extends MultiValueAttributeEntitySkeleton implements GrantedAuthority {
 
-    private static final
-    long
-            serialVersionUID =
-            1546546513218916131L;
+    private static final long serialVersionUID = 1546546513218916131L;
 
 
     @Override
     public String getAuthority() {
-        return "ROLE_" +
-                value;
+        return "ROLE_" + value;
     }
 
     public MultiValuedAttribute toScim() {
@@ -53,9 +49,7 @@ public class RolesEntity extends MultiValueAttributeEntitySkeleton implements Gr
     }
 
     public static RolesEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        RolesEntity
-                rolesEntity =
-                new RolesEntity();
+        RolesEntity rolesEntity = new RolesEntity();
         rolesEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return rolesEntity;
     }

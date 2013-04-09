@@ -43,18 +43,12 @@ import java.util.Map;
 @SessionAttributes("authorizationRequest")
 public class AccessConfirmationController {
 
-    private
-    ClientDetailsService
-            clientDetailsService;
+    private ClientDetailsService clientDetailsService;
 
     @RequestMapping("/oauth/confirm_access")
     public ModelAndView getAccessConfirmation(Map<String, Object> model) {
-        AuthorizationRequest
-                clientAuth =
-                (AuthorizationRequest) model.remove("authorizationRequest");
-        ClientDetails
-                client =
-                clientDetailsService.loadClientByClientId(clientAuth.getClientId());
+        AuthorizationRequest clientAuth = (AuthorizationRequest) model.remove("authorizationRequest");
+        ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());
         model.put("auth_request", clientAuth);
         model.put("client", client);
         //TODO save access_confirmation
@@ -71,7 +65,6 @@ public class AccessConfirmationController {
 
     @Inject
     public void setClientDetailsService(ClientDetailsService clientDetailsService) {
-        this.clientDetailsService =
-                clientDetailsService;
+        this.clientDetailsService = clientDetailsService;
     }
 }

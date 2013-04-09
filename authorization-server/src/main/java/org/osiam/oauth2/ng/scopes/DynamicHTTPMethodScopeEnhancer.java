@@ -42,17 +42,11 @@ import java.util.Set;
  */
 public class DynamicHTTPMethodScopeEnhancer implements AccessDecisionVoter<Object> {
 
-    private final
-    ConfigAttribute
-            dynamic =
-            new SecurityConfig("SCOPE_DYNAMIC");
-    private final
-    AccessDecisionVoter<Object>
-            basedOnVoter;
+    private final ConfigAttribute dynamic = new SecurityConfig("SCOPE_DYNAMIC");
+    private final AccessDecisionVoter<Object> basedOnVoter;
 
     public DynamicHTTPMethodScopeEnhancer(final AccessDecisionVoter<Object> basedOnVoter) {
-        this.basedOnVoter =
-                basedOnVoter;
+        this.basedOnVoter = basedOnVoter;
     }
 
 
@@ -67,35 +61,22 @@ public class DynamicHTTPMethodScopeEnhancer implements AccessDecisionVoter<Objec
     }
 
     @Override
-    public int vote(final Authentication authentication,
-                    final Object object,
-                    final Collection<ConfigAttribute> attributes) {
-        Set<ConfigAttribute>
-                dynamicConfigs =
-                ifScopeDynamicAddMethodScope(object, attributes);
+    public int vote(final Authentication authentication, final Object object, final Collection<ConfigAttribute> attributes) {
+        Set<ConfigAttribute> dynamicConfigs = ifScopeDynamicAddMethodScope(object, attributes);
         return basedOnVoter.vote(authentication, object, dynamicConfigs);
     }
 
-    private Set<ConfigAttribute> ifScopeDynamicAddMethodScope(final Object object,
-                                                              final Collection<ConfigAttribute> attributes) {
-        Set<ConfigAttribute>
-                dynamicConfigs =
-                new HashSet<>(attributes);
-        if (object instanceof FilterInvocation &&
-                dynamicConfigs.remove(dynamic)) {
+    private Set<ConfigAttribute> ifScopeDynamicAddMethodScope(final Object object, final Collection<ConfigAttribute> attributes) {
+        Set<ConfigAttribute> dynamicConfigs = new HashSet<>(attributes);
+        if (object instanceof FilterInvocation && dynamicConfigs.remove(dynamic)) {
             addMethodScope(object, dynamicConfigs);
         }
         return dynamicConfigs;
     }
 
-    private void addMethodScope(final Object object,
-                                final Set<ConfigAttribute> dynamicConfigs) {
-        final
-        FilterInvocation
-                f =
-                (FilterInvocation) object;
-        dynamicConfigs.add(new SecurityConfig("SCOPE_" +
-                f.getRequest().getMethod().toUpperCase()));
+    private void addMethodScope(final Object object, final Set<ConfigAttribute> dynamicConfigs) {
+        final FilterInvocation f = (FilterInvocation) object;
+        dynamicConfigs.add(new SecurityConfig("SCOPE_" + f.getRequest().getMethod().toUpperCase()));
     }
 }
 

@@ -36,19 +36,13 @@ import javax.persistence.ManyToOne;
 public class EmailEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithTypeAndPrimary {
 
     @Column
-    private
-    String
-            type;
+    private String type;
 
     @Column(name = "postgresql_does_not_like_primary")
-    private
-    boolean
-            primary;
+    private boolean primary;
 
     @ManyToOne(optional = false)
-    private
-    UserEntity
-            user;
+    private UserEntity user;
 
     @Override
     public String getType() {
@@ -57,8 +51,7 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ch
 
     @Override
     public void setType(String type) {
-        this.type =
-                type;
+        this.type = type;
     }
 
     @Override
@@ -68,8 +61,7 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ch
 
     @Override
     public void setPrimary(boolean primary) {
-        this.primary =
-                primary;
+        this.primary = primary;
     }
 
     public UserEntity getUser() {
@@ -77,8 +69,7 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ch
     }
 
     public void setUser(UserEntity user) {
-        this.user =
-                user;
+        this.user = user;
     }
 
     public MultiValuedAttribute toScim() {
@@ -90,15 +81,10 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ch
     }
 
     public static EmailEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        EmailEntity
-                emailEntity =
-                new EmailEntity();
+        EmailEntity emailEntity = new EmailEntity();
         emailEntity.setType(multiValuedAttribute.getType());
         emailEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
-        emailEntity.setPrimary((multiValuedAttribute.isPrimary() ==
-                null ?
-                false :
-                multiValuedAttribute.isPrimary()));
+        emailEntity.setPrimary((multiValuedAttribute.isPrimary() == null ? false : multiValuedAttribute.isPrimary()));
         return emailEntity;
     }
 }

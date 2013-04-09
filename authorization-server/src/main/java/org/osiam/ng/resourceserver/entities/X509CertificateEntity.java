@@ -35,9 +35,7 @@ import javax.persistence.ManyToOne;
 public class X509CertificateEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttribute {
 
     @ManyToOne
-    private
-    UserEntity
-            user;
+    private UserEntity user;
 
 
     public UserEntity getUser() {
@@ -45,8 +43,7 @@ public class X509CertificateEntity extends MultiValueAttributeEntitySkeleton imp
     }
 
     public void setUser(UserEntity user) {
-        this.user =
-                user;
+        this.user = user;
     }
 
     public MultiValuedAttribute toScim() {
@@ -56,9 +53,7 @@ public class X509CertificateEntity extends MultiValueAttributeEntitySkeleton imp
     }
 
     public static X509CertificateEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        X509CertificateEntity
-                x509CertificateEntity =
-                new X509CertificateEntity();
+        X509CertificateEntity x509CertificateEntity = new X509CertificateEntity();
         x509CertificateEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return x509CertificateEntity;
     }

@@ -44,24 +44,18 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
 
     @Inject
-    private
-    UserDAO
-            userDao;
+    private UserDAO userDao;
 
 
     @Override
     public User getById(String id) {
-        UserEntity
-                userEntity =
-                userDao.getById(id);
+        UserEntity userEntity = userDao.getById(id);
         return userEntity.toScim();
     }
 
     @Override
     public User createUser(User user) {
-        UserEntity
-                userEntity =
-                UserEntity.fromScim(user);
+        UserEntity userEntity = UserEntity.fromScim(user);
         userEntity.setInternalId(UUID.randomUUID());
         try {
             userDao.createUser(userEntity);
@@ -77,12 +71,8 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     @Override
     public User replaceUser(String id, User user) {
 
-        UserEntity
-                entity =
-                userDao.getById(id);
-        SetUserFields
-                setUserFields =
-                new SetUserFields(user, entity, SetUserFields.Mode.POST);
+        UserEntity entity = userDao.getById(id);
+        SetUserFields setUserFields = new SetUserFields(user, entity, SetUserFields.Mode.POST);
         setUserFieldsWrapException(setUserFields);
 
         userDao.update(entity);
@@ -99,12 +89,8 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Override
     public User updateUser(String id, User user) {
-        UserEntity
-                entity =
-                userDao.getById(id);
-        SetUserFields
-                setUserFields =
-                new SetUserFields(user, entity, SetUserFields.Mode.PATCH);
+        UserEntity entity = userDao.getById(id);
+        SetUserFields setUserFields = new SetUserFields(user, entity, SetUserFields.Mode.PATCH);
         setUserFieldsWrapException(setUserFields);
         userDao.update(entity);
         return entity.toScim();

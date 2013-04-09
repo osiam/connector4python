@@ -33,9 +33,7 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttribute {
     @Id
-    protected
-    String
-            value;
+    protected String value;
 
 
     @Override
@@ -45,7 +43,6 @@ public abstract class MultiValueAttributeEntitySkeleton implements ChildOfMultiV
 
     @Override
     public void setValue(String value) {
-        this.value =
-                value;
+        this.value = value;
     }
 }

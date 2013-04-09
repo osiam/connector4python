@@ -53,38 +53,20 @@ import java.util.logging.Logger;
 @RequestMapping("/accessToken")
 public class AccessTokenController {
 
-    private static final
-    String
-            PARAM_CODE =
-            "code";
-    private static final
-    Charset
-            CHARSET =
-            Charset.forName("UTF-8");
-    private static final
-    String
-            CLIENT_ID =
-            "testClient";
-    private static final
-    String
-            CLIENT_SECRET =
-            "secret";
-    private final
-    Logger
-            logger =
-            Logger.getLogger(AccessTokenController.class.getName());
+    private static final String PARAM_CODE = "code";
+    private static final Charset CHARSET = Charset.forName("UTF-8");
+    private static final String CLIENT_ID = "testClient";
+    private static final String CLIENT_SECRET = "secret";
+    private final Logger logger = Logger.getLogger(AccessTokenController.class.getName());
     @Autowired
-    private
-    GenerateClient
-            generateClient;
+    private GenerateClient generateClient;
 
 
     public AccessTokenController() {
 
     }
 
-    @RequestMapping(value = "access_denied", params = {"error",
-            "error_description"})
+    @RequestMapping(value = "access_denied", params = {"error", "error_description"})
     public String accessDenied(@RequestParam String error, @RequestParam String error_description) {
         logger.info(error +
                 " is " +
@@ -95,49 +77,31 @@ public class AccessTokenController {
 
     @RequestMapping(params = PARAM_CODE)
     public String doGet(HttpServletRequest req) throws ServletException, IOException {
-        String
-                code =
-                req.getParameter(PARAM_CODE);
-        String
-                environment =
-                req.getScheme() +
-                        "://" +
-                        req.getServerName() +
-                        ":8080";
-        String
-                tokenUrl =
-                environment +
-                        "/authorization-server/oauth/token";
-        String
-                combined =
-                CLIENT_ID +
-                        ":" +
-                        CLIENT_SECRET;
-        String
-                redirectUri =
-                req.getScheme() +
-                        "://" +
-                        req.getServerName() +
-                        ":8080" +
-                        "/oauth2-client/accessToken";
+        String code = req.getParameter(PARAM_CODE);
+        String environment = req.getScheme() +
+                "://" +
+                req.getServerName() +
+                ":8080";
+        String tokenUrl = environment + "/authorization-server/oauth/token";
+        String combined = CLIENT_ID +
+                ":" +
+                CLIENT_SECRET;
+        String redirectUri = req.getScheme() +
+                "://" +
+                req.getServerName() +
+                ":8080" +
+                "/oauth2-client/accessToken";
         sendAuthCode(code, tokenUrl, combined, redirectUri, req);
         addAttributesToHttpRequest(req, CLIENT_ID, CLIENT_SECRET);
         return "parameter";
     }
 
-    private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req)
-            throws IOException {
-        HttpPost
-                post =
-                new HttpPost(tokenUrl);
+    private void sendAuthCode(String code, String tokenUrl, String combined, String redirectUri, HttpServletRequest req) throws IOException {
+        HttpPost post = new HttpPost(tokenUrl);
 
         addPostMethodParameter(post, code, combined, redirectUri);
-        HttpClient
-                defaultHttpClient =
-                generateClient.getClient();
-        HttpResponse
-                response =
-                defaultHttpClient.execute(post);
+        HttpClient defaultHttpClient = generateClient.getClient();
+        HttpResponse response = defaultHttpClient.execute(post);
         addJsonResponseToHttpRequest(response, req);
         req.setAttribute(PARAM_CODE, code);
         req.setAttribute("redirect_uri", redirectUri);
@@ -150,12 +114,8 @@ public class AccessTokenController {
 
     private void addJsonResponseToHttpRequest(HttpResponse post, HttpServletRequest req) throws IOException {
         try {
-            InputStreamReader
-                    inputStreamReader =
-                    new InputStreamReader(post.getEntity().getContent(), CHARSET);
-            JSONObject
-                    authResponse =
-                    new JSONObject(new JSONTokener(inputStreamReader));
+            InputStreamReader inputStreamReader = new InputStreamReader(post.getEntity().getContent(), CHARSET);
+            JSONObject authResponse = new JSONObject(new JSONTokener(inputStreamReader));
             req.setAttribute("access_token", authResponse.get("access_token"));
             req.setAttribute("response", authResponse.toString());
         } catch (JSONException e) {
@@ -163,16 +123,10 @@ public class AccessTokenController {
         }
     }
 
-    private void addPostMethodParameter(HttpEntityEnclosingRequestBase post, String code, String combined,
-                                        String redirectUri) throws UnsupportedEncodingException {
-        String
-                encoding =
-                new String(Base64.encodeBase64(combined.getBytes(CHARSET)), CHARSET);
-        post.addHeader("Authorization", "Basic " +
-                encoding);
-        List<NameValuePair>
-                nameValuePairs =
-                new ArrayList<>();
+    private void addPostMethodParameter(HttpEntityEnclosingRequestBase post, String code, String combined, String redirectUri) throws UnsupportedEncodingException {
+        String encoding = new String(Base64.encodeBase64(combined.getBytes(CHARSET)), CHARSET);
+        post.addHeader("Authorization", "Basic " + encoding);
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
         nameValuePairs.add(new BasicNameValuePair(PARAM_CODE, code));
         nameValuePairs.add(new BasicNameValuePair("grant_type", "authorization_code"));
         nameValuePairs.add(new BasicNameValuePair("redirect_uri", redirectUri));

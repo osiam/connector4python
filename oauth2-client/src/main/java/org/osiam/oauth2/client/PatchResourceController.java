@@ -46,67 +46,24 @@ import static org.osiam.oauth2.client.UpdateResourceController.createEnvAndInvok
 public class PatchResourceController {
 
     @Autowired
-    private
-    GetResponseAndCast
-            getResponseAndCast;
+    private GetResponseAndCast getResponseAndCast;
 
 
     @RequestMapping("/patchResource")
-    public String updateResource(HttpServletRequest req,
-                                 @RequestParam String schema,
-                                 @RequestParam String user_name,
-                                 @RequestParam String firstname,
-                                 @RequestParam String lastname,
-                                 @RequestParam String displayname,
-                                 @RequestParam String nickname,
-                                 @RequestParam String profileurl,
-                                 @RequestParam String title,
-                                 @RequestParam String usertype,
-                                 @RequestParam String preferredlanguage,
-                                 @RequestParam String locale,
-                                 @RequestParam String timezone,
-                                 @RequestParam String password,
-                                 @RequestParam String access_token,
-                                 @RequestParam String idForUpdate,
-                                 @RequestParam String delete) throws ServletException, IOException, UserFriendlyException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public String updateResource(HttpServletRequest req, @RequestParam String schema, @RequestParam String user_name, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String displayname, @RequestParam String nickname, @RequestParam String profileurl, @RequestParam String title, @RequestParam String usertype, @RequestParam String preferredlanguage, @RequestParam String locale, @RequestParam String timezone, @RequestParam String password, @RequestParam String access_token, @RequestParam String idForUpdate, @RequestParam String delete) throws ServletException, IOException, UserFriendlyException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
-        Set<String>
-                attributesToDelete =
-                generateAttributesToDelete(delete);
+        Set<String> attributesToDelete = generateAttributesToDelete(delete);
 
-        String
-                jsonString =
-                JsonStringGenerator.getJsonStringPatch(
-                        schema,
-                        user_name,
-                        firstname,
-                        lastname,
-                        displayname,
-                        nickname,
-                        profileurl,
-                        title,
-                        usertype,
-                        preferredlanguage,
-                        locale,
-                        timezone,
-                        password,
-                        attributesToDelete
-                );
-        Constructor<HttpPatch>
-                constructor =
-                HttpPatch.class.getConstructor(String.class);
+        String jsonString =
+                JsonStringGenerator.getJsonStringPatch(schema, user_name, firstname, lastname, displayname, nickname, profileurl, title, usertype, preferredlanguage, locale, timezone, password, attributesToDelete);
+        Constructor<HttpPatch> constructor = HttpPatch.class.getConstructor(String.class);
         return createEnvAndInvokeHttpCall(getResponseAndCast, req, access_token, idForUpdate, jsonString, constructor);
     }
 
     private Set<String> generateAttributesToDelete(String delete) {
-        Set<String>
-                attributesToDelete =
-                null;
-        if (delete !=
-                null &&
-                !delete.isEmpty()) {
-            attributesToDelete =
-                    new HashSet<>(Arrays.asList(delete.split(",")));
+        Set<String> attributesToDelete = null;
+        if (delete != null && !delete.isEmpty()) {
+            attributesToDelete = new HashSet<>(Arrays.asList(delete.split(",")));
         }
         return attributesToDelete;
     }

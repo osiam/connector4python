@@ -50,10 +50,8 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Set<String> getResourceIds() {
-                Set<String>
-                        resources =
-                        new HashSet<>();
-//                resources.add("oauth2res");
+                Set<String> resources = new HashSet<>();
+                //                resources.add("oauth2res");
                 return resources;
             }
 
@@ -74,9 +72,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Set<String> getScope() {
-                Set<String>
-                        scopes =
-                        new HashSet<>();
+                Set<String> scopes = new HashSet<>();
                 scopes.add("GET");
                 scopes.add("POST");
                 scopes.add("PUT");
@@ -86,9 +82,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Set<String> getAuthorizedGrantTypes() {
-                Set<String>
-                        grants =
-                        new HashSet<>();
+                Set<String> grants = new HashSet<>();
                 grants.add("authorization_code");
                 grants.add("implicit");
                 grants.add("refresh-token");
@@ -98,19 +92,12 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
             @Override
             public Set<String> getRegisteredRedirectUri() {
 
-                return new HashSet<>(Arrays.asList("http://localhost:8080/oauth2-client/accessToken",
-                        "http://ong01-devel00.lan.tarent.de:8080/oauth2-client/accessToken",
-                        "http://ong01-devel01.lan.tarent.de:8080/oauth2-client/accessToken",
-                        "http://ong01-devel02.lan.tarent.de:8080/oauth2-client/accessToken",
-                        "http://ong01-systemtest.lan.tarent.de:8080/oauth2-client/accessToken",
-                        "http://ong00-systemtest:8080/oauth2-client/accessToken"));
+                return new HashSet<>(Arrays.asList("http://localhost:8080/oauth2-client/accessToken", "http://ong01-devel00.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong01-devel01.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong01-devel02.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong01-systemtest.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong00-systemtest:8080/oauth2-client/accessToken"));
             }
 
             @Override
             public Collection<GrantedAuthority> getAuthorities() {
-                Collection<GrantedAuthority>
-                        blubb =
-                        new ArrayList<>();
+                Collection<GrantedAuthority> blubb = new ArrayList<>();
                 return blubb;
 
             }

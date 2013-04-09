@@ -358,7 +358,7 @@ class UserPatchTest extends Specification {
         entity.name.honorificSuffix == "b"
     }
 
-    def "should ignore update when the complex attribute si read only"() {
+    def "should ignore update when the complex attribute is read only"() {
         given:
         def meta = new Meta.Builder(null, null).setAttributes(["id.test"] as Set).build()
         def user = new User.Builder().setMeta(meta).build()
@@ -380,6 +380,7 @@ class UserPatchTest extends Specification {
         user.getGroups().group.add(new MultiValuedAttribute.Builder().build())
         UserEntity entity = createEntityWithInternalId()
         entity.setUsername("username")
+
 
         when:
         bean.updateUser(id, user)

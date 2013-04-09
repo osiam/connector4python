@@ -48,14 +48,9 @@ public class CRUDListController {
         X509(new User.X509Certificates()),
         GROUP(new User.Groups());
 
-        private final
-        User.ContainsListOfMultiValue
-                set;
+        private final User.ContainsListOfMultiValue set;
 
-        private static
-        Map<String, KnownMultiValueAttributeLists>
-                fromString =
-                new HashMap<>();
+        private static Map<String, KnownMultiValueAttributeLists> fromString = new HashMap<>();
 
         static {
             for (KnownMultiValueAttributeLists k : values()) {
@@ -65,8 +60,7 @@ public class CRUDListController {
 
 
         private KnownMultiValueAttributeLists(User.ContainsListOfMultiValue set) {
-            this.set =
-                    set;
+            this.set = set;
         }
 
         public <T extends User.ContainsListOfMultiValue> T getSet() {
@@ -75,8 +69,7 @@ public class CRUDListController {
     }
 
     @RequestMapping("/createMultiValueAttribute")
-    public String redirectTo(HttpServletRequest req, @RequestParam String used_for, @RequestParam String access_token)
-            throws ServletException, IOException {
+    public String redirectTo(HttpServletRequest req, @RequestParam String used_for, @RequestParam String access_token) throws ServletException, IOException {
         req.setAttribute("access_token", access_token);
         req.setAttribute("used_for", used_for);
         if ("addresses".equals(used_for)) {
@@ -86,32 +79,17 @@ public class CRUDListController {
     }
 
     @RequestMapping("/addListAttribute")
-    public String addListAttribute(HttpServletRequest req)
-            throws ServletException, IOException {
-        String
-                access_token =
-                req.getParameter("access_token");
+    public String addListAttribute(HttpServletRequest req) throws ServletException, IOException {
+        String access_token = req.getParameter("access_token");
         req.setAttribute("access_token", access_token);
-        String
-                used_for =
-                req.getParameter("used_for");
+        String used_for = req.getParameter("used_for");
         req.setAttribute("used_for", used_for);
-        KnownMultiValueAttributeLists
-                k =
-                KnownMultiValueAttributeLists.fromString.get(used_for);
-        if (k !=
-                null) {
-            MultiValuedAttribute
-                    attribute =
-                    new MultiValuedAttribute.Builder()
-                            .setDisplay(req.getParameter("display"))
-                            .setOperation(Boolean.valueOf(req.getParameter("delete")) ==
-                                    true ?
-                                    "delete" :
-                                    null)
-                            .setPrimary(Boolean.valueOf(req.getParameter("primary")))
-                            .setType(req.getParameter("type"))
-                            .setValue(req.getParameter("value")).build();
+        KnownMultiValueAttributeLists k = KnownMultiValueAttributeLists.fromString.get(used_for);
+        if (k != null) {
+            MultiValuedAttribute attribute =
+                    new MultiValuedAttribute.Builder().setDisplay(req.getParameter("display")).setOperation(
+                            Boolean.valueOf(req.getParameter("delete")) == true ? "delete" :
+                                    null).setPrimary(Boolean.valueOf(req.getParameter("primary"))).setType(req.getParameter("type")).setValue(req.getParameter("value")).build();
             k.set.values().add(attribute);
         }
 

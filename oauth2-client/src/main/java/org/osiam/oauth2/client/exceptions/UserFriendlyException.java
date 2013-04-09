@@ -9,18 +9,12 @@ package org.osiam.oauth2.client.exceptions;
  */
 public class UserFriendlyException extends Exception {
 
-    private
-    String
-            errorCode;
+    private String errorCode;
 
-    private static final
-    long
-            serialVersionUID =
-            1L;
+    private static final long serialVersionUID = 1L;
 
     public UserFriendlyException(String errorCode) {
-        this.errorCode =
-                errorCode;
+        this.errorCode = errorCode;
     }
 
     public String toString() {
@@ -33,7 +27,6 @@ public class UserFriendlyException extends Exception {
                     errorCode +
                     "<br>Message: User doesn't exists and can't be updated");
         }
-        return "Error code:" +
-                errorCode;
+        return "Error code:" + errorCode;
     }
 }

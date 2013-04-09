@@ -34,19 +34,13 @@ import javax.persistence.PersistenceContext;
 public class DataBaseSchemeVersionValidator {
 
     @PersistenceContext
-    private
-    EntityManager
-            em;
+    private EntityManager em;
 
 
     @PostConstruct
     public void checkVersion() {
-        DBVersion
-                version =
-                em.find(DBVersion.class, DBVersion.DB_VERSION);
-        if (version ==
-                null ||
-                !Double.valueOf(version.version).equals(DBVersion.DB_VERSION)) {
+        DBVersion version = em.find(DBVersion.class, DBVersion.DB_VERSION);
+        if (version == null || !Double.valueOf(version.version).equals(DBVersion.DB_VERSION)) {
             throw new IllegalStateException("Database Scheme " +
                     DBVersion.DB_VERSION +
                     " not found. " +

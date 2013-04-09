@@ -38,9 +38,7 @@ import javax.inject.Inject;
 public class AuthenticationBean implements UserDetailsService {
 
     @Inject
-    private
-    UserDAO
-            userDAO;
+    private UserDAO userDAO;
 
     @Override
     public UserDetails loadUserByUsername(final String username) {
