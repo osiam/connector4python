@@ -1,3 +1,26 @@
+/*
+ * Copyright (C) 2013 tarent AG
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package org.osiam.oauth2.client
 
 import scim.schema.v2.MultiValuedAttribute
@@ -11,6 +34,16 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 class JsonStringGeneratorTest extends Specification {
+    def setup(){
+        CRUDListController.KnownMultiValueAttributeLists.EMAIL.set.values().clear()
+        CRUDListController.KnownMultiValueAttributeLists.ENTITLEMENT.set.values().clear()
+        CRUDListController.KnownMultiValueAttributeLists.GROUP.set.values().clear()
+        CRUDListController.KnownMultiValueAttributeLists.IM.set.values().clear()
+        CRUDListController.KnownMultiValueAttributeLists.PHONE.set.values().clear()
+        CRUDListController.KnownMultiValueAttributeLists.PHOTO.set.values().clear()
+        CRUDListController.KnownMultiValueAttributeLists.ROLE.set.values().clear()
+        CRUDListController.KnownMultiValueAttributeLists.X509.set.values().clear()
+    }
     def "should not set name when no first nor lastname got submitted"() {
         when:
         def result = JsonStringGenerator.getJsonString(
@@ -159,7 +192,7 @@ class JsonStringGeneratorTest extends Specification {
                 null
         )
         then:
-        result =='{"schemas":["schema"],"userName":"user_name","name":{"formatted":"firstname lastname","familyName":"lastname","givenName":"firstname"},"displayName":"displayname","nickName":"nickname","profileUrl":"profileurl","title":"title","userType":"usertype","preferredLanguage":"preferredlanguage","locale":"locale","timezone":"timezone","password":"password","emails":{"email":[{"value":"ha"}]},"phoneNumbers":{"phoneNumber":[{"value":"ha"}]},"ims":{"im":[{"value":"ha"}]},"photos":{"photo":[{"value":"ha"}]},"groups":{"group":[{"value":"ha"}]},"entitlements":{"entitlement":[{}]},"roles":{"role":[{"value":"ha"}]},"x509Certificates":{"x509Certificate":[{"value":"ha"}]}}'
+        result == '{"schemas":["schema"],"userName":"user_name","name":{"formatted":"firstname lastname","familyName":"lastname","givenName":"firstname"},"displayName":"displayname","nickName":"nickname","profileUrl":"profileurl","title":"title","userType":"usertype","preferredLanguage":"preferredlanguage","locale":"locale","timezone":"timezone","password":"password","emails":{"email":[{"value":"ha"}]},"phoneNumbers":{"phoneNumber":[{"value":"ha"}]},"ims":{"im":[{"value":"ha"}]},"photos":{"photo":[{"value":"ha"}]},"groups":{"group":[{"value":"ha"}]},"entitlements":{"entitlement":[{}]},"roles":{"role":[{"value":"ha"}]},"x509Certificates":{"x509Certificate":[{"value":"ha"}]}}'
 
     }
 

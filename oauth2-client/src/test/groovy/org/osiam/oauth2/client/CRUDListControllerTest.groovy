@@ -51,11 +51,11 @@ class CRUDListControllerTest extends Specification {
         def method = CRUDListController.getDeclaredMethod("redirectTo", HttpServletRequest, String, String)
         def annotation = method.getAnnotation(RequestMapping)
         when:
-        def result = underTest.redirectTo(request, "address", accessToken)
+        def result = underTest.redirectTo(request, "addresses", accessToken)
         then:
         annotation.value() == ["/createMultiValueAttribute"]
         1 * request.setAttribute("access_token", accessToken)
-        1 * request.setAttribute("used_for", "not address")
+        1 * request.setAttribute("used_for", "addresses")
         result == "create_address"
     }
 
