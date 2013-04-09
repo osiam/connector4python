@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.dao
 
+import org.osiam.ng.resourceserver.entities.EmailEntity
 import org.osiam.ng.resourceserver.entities.UserEntity
 import scim.schema.v2.Address
 import scim.schema.v2.MultiValuedAttribute
@@ -88,14 +89,36 @@ class SetUserListFieldsTest extends Specification {
 
 
         then:
-//        scimUser.x509Certificates.x509Certificate.size() == entity.x509Certificates.size()
-//        scimUser.roles.role.size() == entity.roles.size()
+        scimUser.x509Certificates.x509Certificate.size() == entity.x509Certificates.size()
+        scimUser.roles.role.size() == entity.roles.size()
         scimUser.entitlements.entitlement.size() == entity.entitlements.size()
-//        scimUser.ims.im.size() == entity.ims.size()
-//        scimUser.emails.email.size() == entity.emails.size()
-//        scimUser.addresses.address.size() == entity.addresses.size()
-//        scimUser.phoneNumbers.phoneNumber.size() == entity.phoneNumbers.size()
-//        scimUser.photos.photo.size() == entity.photos.size()
+        scimUser.ims.im.size() == entity.ims.size()
+        scimUser.emails.email.size() == entity.emails.size()
+        scimUser.addresses.address.size() == entity.addresses.size()
+        scimUser.phoneNumbers.phoneNumber.size() == entity.phoneNumbers.size()
+        scimUser.photos.photo.size() == entity.photos.size()
+    }
+
+    def "should fail silently if a user is trying to delete an unknown field"(){
+        given:
+
+        def entity = new UserEntity()
+        initializeSetsOfEntity(entity)
+        entity.getEmails().add(new EmailEntity(value: "there"))
+
+        def underTest = new SetUserListFields(entity, SetUserFields.Mode.PATCH)
+        def aha = new SetUserFields(null, null, SetUserFields.Mode.PATCH).getFieldsAsNormalizedMap(UserEntity)
+
+        def emails = new User.Emails()
+        emails.email.add(new MultiValuedAttribute.Builder().setOperation("delete").setValue("notThere").build())
+        emails.email.add(new MultiValuedAttribute.Builder().setOperation("delete").setValue("there").build())
+        when:
+        underTest.updateListFields(emails, SetUserFields.UserLists.EMAILS, aha.get("emails"))
+        then:
+        entity.getEmails().size() == 0
+
+
+
     }
 
     private void initializeSetsOfEntity(UserEntity entity) {

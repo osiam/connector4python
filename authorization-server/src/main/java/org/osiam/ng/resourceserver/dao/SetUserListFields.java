@@ -79,17 +79,17 @@ public class SetUserListFields {
     }
 
     private boolean notDeleted(MultiValuedAttribute m, Collection<Object> targetList) {
-        return !"delete".equals(m.getOperation()) || !seekAndDelete(m, targetList);
+        seekAndDelete(m, targetList);
+        return !"delete".equals(m.getOperation());
 
     }
 
-    private boolean seekAndDelete(MultiValuedAttribute m, Collection<Object> targetList) {
+    private void seekAndDelete(MultiValuedAttribute m, Collection<Object> targetList) {
         for (Object o : targetList) {
             if (deleteSingleAttribute(m, targetList, o)) {
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     private boolean deleteSingleAttribute(MultiValuedAttribute m, Collection<Object> targetList, Object o) {
