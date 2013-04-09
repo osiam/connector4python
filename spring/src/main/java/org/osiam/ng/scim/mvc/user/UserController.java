@@ -81,9 +81,7 @@ public class UserController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public User replace(@PathVariable final String id,
-                        @RequestBody User user,
-                        HttpServletRequest request, HttpServletResponse response) {
+    public User replace(@PathVariable final String id, @RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.replaceUser(id, user);
         String requestUrl = request.getRequestURL().toString();
         //TODO may obsolete because internal id doesn't change ...
@@ -96,9 +94,7 @@ public class UserController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public User update(@PathVariable final String id,
-                       @RequestBody User user,
-                       HttpServletRequest request, HttpServletResponse response) {
+    public User update(@PathVariable final String id, @RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.updateUser(id, user);
         String requestUrl = request.getRequestURL().toString();
         response.setHeader("Location", requestUrl);

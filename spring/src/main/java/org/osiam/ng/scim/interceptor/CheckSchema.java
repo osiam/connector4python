@@ -44,25 +44,27 @@ public class CheckSchema {
     @Before("controllerBean() && methodPointcut() ")
     public void checkUser(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
-        if (args != null){
+        if (args != null) {
             validateArguments(args);
         }
     }
 
     private void validateArguments(Object[] args) {
-        for (Object o : args){
-            if (o instanceof Resource){
+        for (Object o : args) {
+            if (o instanceof Resource) {
                 validateUser((Resource) o);
             }
         }
     }
 
     private void validateUser(Resource user) {
-        if (user.getSchemas() == null || user.getSchemas().isEmpty())
+        if (user.getSchemas() == null || user.getSchemas().isEmpty()) {
             throw new SchemaUnknownException();
-        for (String s : user.getSchemas()){
-            if (!Constants.CORE_SCHEMAS.contains(s))
+        }
+        for (String s : user.getSchemas()) {
+            if (!Constants.CORE_SCHEMAS.contains(s)) {
                 throw new SchemaUnknownException();
+            }
         }
     }
 }

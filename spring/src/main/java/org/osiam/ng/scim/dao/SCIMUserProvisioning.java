@@ -32,7 +32,7 @@ import scim.schema.v2.User;
 public interface SCIMUserProvisioning {
     /**
      * This method returns a SCIM user, it is used for GET calls.
-     *
+     * <p/>
      * <p/>
      * It must throw an ResourceNotFoundException if no user got found.
      *
