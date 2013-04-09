@@ -26,7 +26,9 @@ import java.lang.reflect.InvocationTargetException;
 public class UpdateResourceController {
 
     @Autowired
-    private GetResponseAndCast getResponeAndCast;
+    private
+    GetResponseAndCast
+            getResponeAndCast;
 
     @RequestMapping("/updateResource")
     public String updateResource(HttpServletRequest req,
@@ -47,29 +49,46 @@ public class UpdateResourceController {
                                  @RequestParam String access_token,
                                  @RequestParam String idForUpdate) throws ServletException, IOException, UserFriendlyException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
 
-        String jsonString = JsonStringGenerator.getJsonString(
-                schema,
-                user_name,
-                firstname,
-                lastname,
-                displayname,
-                nickname,
-                profileurl,
-                title,
-                usertype,
-                preferredlanguage,
-                locale,
-                timezone,
-                password
-        );
-        Constructor<HttpPut> constructor = HttpPut.class.getConstructor(String.class);
-        return createEnvAndInvokeHttpCall(getResponeAndCast,req, access_token, idForUpdate, jsonString, constructor);
+        String
+                jsonString =
+                JsonStringGenerator.getJsonString(
+                        schema,
+                        user_name,
+                        firstname,
+                        lastname,
+                        displayname,
+                        nickname,
+                        profileurl,
+                        title,
+                        usertype,
+                        preferredlanguage,
+                        locale,
+                        timezone,
+                        password
+                );
+        Constructor<HttpPut>
+                constructor =
+                HttpPut.class.getConstructor(String.class);
+        return createEnvAndInvokeHttpCall(getResponeAndCast, req, access_token, idForUpdate, jsonString, constructor);
     }
 
     static String createEnvAndInvokeHttpCall(GetResponseAndCast getResponeAndCast, HttpServletRequest req, String access_token, String idForUpdate, String jsonString, Constructor<? extends HttpEntityEnclosingRequestBase> constructor) throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException, UserFriendlyException {
-        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String url = environment + "/authorization-server/User/" + idForUpdate + "?access_token=" + access_token;
-        HttpEntityEnclosingRequestBase httpPut = constructor.newInstance(url);
+        String
+                environment =
+                req.getScheme() +
+                        "://" +
+                        req.getServerName() +
+                        ":8080";
+        String
+                url =
+                environment +
+                        "/authorization-server/User/" +
+                        idForUpdate +
+                        "?access_token=" +
+                        access_token;
+        HttpEntityEnclosingRequestBase
+                httpPut =
+                constructor.newInstance(url);
         getResponeAndCast.getResponseAndSetAccessToken(req, access_token, jsonString, httpPut);
         return "user";
     }

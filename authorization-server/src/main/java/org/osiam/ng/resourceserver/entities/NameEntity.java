@@ -38,32 +38,47 @@ public class NameEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private
+    long
+            id;
 
     @Column
-    private String formatted;
+    private
+    String
+            formatted;
 
     @Column
-    private String familyName;
+    private
+    String
+            familyName;
 
     @Column
-    private String givenName;
+    private
+    String
+            givenName;
 
     @Column
-    private String middleName;
+    private
+    String
+            middleName;
 
     @Column
-    private String honorificPrefix;
+    private
+    String
+            honorificPrefix;
 
     @Column
-    private String honorificSuffix;
+    private
+    String
+            honorificSuffix;
 
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id =
+                id;
     }
 
     public String getFormatted() {
@@ -71,7 +86,8 @@ public class NameEntity {
     }
 
     public void setFormatted(String formatted) {
-        this.formatted = formatted;
+        this.formatted =
+                formatted;
     }
 
     public String getFamilyName() {
@@ -79,7 +95,8 @@ public class NameEntity {
     }
 
     public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+        this.familyName =
+                familyName;
     }
 
     public String getGivenName() {
@@ -87,7 +104,8 @@ public class NameEntity {
     }
 
     public void setGivenName(String givenName) {
-        this.givenName = givenName;
+        this.givenName =
+                givenName;
     }
 
     public String getMiddleName() {
@@ -95,7 +113,8 @@ public class NameEntity {
     }
 
     public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+        this.middleName =
+                middleName;
     }
 
     public String getHonorificPrefix() {
@@ -103,7 +122,8 @@ public class NameEntity {
     }
 
     public void setHonorificPrefix(String honorificPrefix) {
-        this.honorificPrefix = honorificPrefix;
+        this.honorificPrefix =
+                honorificPrefix;
     }
 
     public String getHonorificSuffix() {
@@ -111,7 +131,8 @@ public class NameEntity {
     }
 
     public void setHonorificSuffix(String honorificSuffix) {
-        this.honorificSuffix = honorificSuffix;
+        this.honorificSuffix =
+                honorificSuffix;
     }
 
     public Name toScim() {
@@ -126,8 +147,11 @@ public class NameEntity {
     }
 
     public static NameEntity fromScim(Name name) {
-        NameEntity nameEntity = new NameEntity();
-        if (name != null) {
+        NameEntity
+                nameEntity =
+                new NameEntity();
+        if (name !=
+                null) {
             nameEntity.setFamilyName(name.getFamilyName());
             nameEntity.setFormatted(name.getFormatted());
             nameEntity.setGivenName(name.getGivenName());

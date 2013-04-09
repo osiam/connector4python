@@ -50,7 +50,9 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Set<String> getResourceIds() {
-                Set<String> resources = new HashSet<>();
+                Set<String>
+                        resources =
+                        new HashSet<>();
 //                resources.add("oauth2res");
                 return resources;
             }
@@ -72,7 +74,9 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Set<String> getScope() {
-                Set<String> scopes = new HashSet<>();
+                Set<String>
+                        scopes =
+                        new HashSet<>();
                 scopes.add("GET");
                 scopes.add("POST");
                 scopes.add("PUT");
@@ -82,7 +86,9 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Set<String> getAuthorizedGrantTypes() {
-                Set<String> grants = new HashSet<>();
+                Set<String>
+                        grants =
+                        new HashSet<>();
                 grants.add("authorization_code");
                 grants.add("implicit");
                 grants.add("refresh-token");
@@ -102,7 +108,9 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Collection<GrantedAuthority> getAuthorities() {
-                Collection<GrantedAuthority> blubb = new ArrayList<>();
+                Collection<GrantedAuthority>
+                        blubb =
+                        new ArrayList<>();
                 return blubb;
 
             }

@@ -29,7 +29,9 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.FilterInvocation;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This AccessDecisionVoter is based upon an other AccessDecisionVoter given in the constructor.
@@ -40,11 +42,17 @@ import java.util.*;
  */
 public class DynamicHTTPMethodScopeEnhancer implements AccessDecisionVoter<Object> {
 
-    private final ConfigAttribute dynamic = new SecurityConfig("SCOPE_DYNAMIC");
-    private final AccessDecisionVoter<Object> basedOnVoter;
+    private final
+    ConfigAttribute
+            dynamic =
+            new SecurityConfig("SCOPE_DYNAMIC");
+    private final
+    AccessDecisionVoter<Object>
+            basedOnVoter;
 
     public DynamicHTTPMethodScopeEnhancer(final AccessDecisionVoter<Object> basedOnVoter) {
-        this.basedOnVoter = basedOnVoter;
+        this.basedOnVoter =
+                basedOnVoter;
     }
 
 
@@ -62,14 +70,19 @@ public class DynamicHTTPMethodScopeEnhancer implements AccessDecisionVoter<Objec
     public int vote(final Authentication authentication,
                     final Object object,
                     final Collection<ConfigAttribute> attributes) {
-        Set<ConfigAttribute> dynamicConfigs = ifScopeDynamicAddMethodScope(object, attributes);
+        Set<ConfigAttribute>
+                dynamicConfigs =
+                ifScopeDynamicAddMethodScope(object, attributes);
         return basedOnVoter.vote(authentication, object, dynamicConfigs);
     }
 
     private Set<ConfigAttribute> ifScopeDynamicAddMethodScope(final Object object,
                                                               final Collection<ConfigAttribute> attributes) {
-        Set<ConfigAttribute> dynamicConfigs = new HashSet<>(attributes);
-        if (object instanceof FilterInvocation && dynamicConfigs.remove(dynamic)) {
+        Set<ConfigAttribute>
+                dynamicConfigs =
+                new HashSet<>(attributes);
+        if (object instanceof FilterInvocation &&
+                dynamicConfigs.remove(dynamic)) {
             addMethodScope(object, dynamicConfigs);
         }
         return dynamicConfigs;
@@ -77,8 +90,12 @@ public class DynamicHTTPMethodScopeEnhancer implements AccessDecisionVoter<Objec
 
     private void addMethodScope(final Object object,
                                 final Set<ConfigAttribute> dynamicConfigs) {
-        final FilterInvocation f = (FilterInvocation) object;
-        dynamicConfigs.add(new SecurityConfig("SCOPE_" + f.getRequest().getMethod().toUpperCase()));
+        final
+        FilterInvocation
+                f =
+                (FilterInvocation) object;
+        dynamicConfigs.add(new SecurityConfig("SCOPE_" +
+                f.getRequest().getMethod().toUpperCase()));
     }
 }
 

@@ -27,7 +27,7 @@ import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.*;
+import javax.persistence.ManyToOne;
 
 /**
  * Phone Numbers Entity
@@ -36,17 +36,22 @@ import javax.persistence.*;
 public class PhoneNumberEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
 
     @Column
-    private String type;
+    private
+    String
+            type;
 
     @ManyToOne
-    private UserEntity user;
+    private
+    UserEntity
+            user;
 
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type =
+                type;
     }
 
     public UserEntity getUser() {
@@ -54,7 +59,8 @@ public class PhoneNumberEntity extends MultiValueAttributeEntitySkeleton impleme
     }
 
     public void setUser(UserEntity user) {
-        this.user = user;
+        this.user =
+                user;
     }
 
     public MultiValuedAttribute toScim() {
@@ -65,7 +71,9 @@ public class PhoneNumberEntity extends MultiValueAttributeEntitySkeleton impleme
     }
 
     public static PhoneNumberEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        PhoneNumberEntity phoneNumberEntity = new PhoneNumberEntity();
+        PhoneNumberEntity
+                phoneNumberEntity =
+                new PhoneNumberEntity();
         phoneNumberEntity.setType(multiValuedAttribute.getType());
         phoneNumberEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return phoneNumberEntity;

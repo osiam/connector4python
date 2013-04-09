@@ -41,26 +41,37 @@ public class MetaEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private
+    long
+            id;
 
     @Column
-    private GregorianCalendar created;
+    private
+    GregorianCalendar
+            created;
 
     @Column
-    private GregorianCalendar lastModified;
+    private
+    GregorianCalendar
+            lastModified;
 
     @Column
-    private String location;
+    private
+    String
+            location;
 
     @Column
-    private String version;
+    private
+    String
+            version;
 
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id =
+                id;
     }
 
     public GregorianCalendar getCreated() {
@@ -68,7 +79,8 @@ public class MetaEntity {
     }
 
     public void setCreated(GregorianCalendar created) {
-        this.created = created;
+        this.created =
+                created;
     }
 
     public GregorianCalendar getLastModified() {
@@ -76,7 +88,8 @@ public class MetaEntity {
     }
 
     public void setLastModified(GregorianCalendar lastModified) {
-        this.lastModified = lastModified;
+        this.lastModified =
+                lastModified;
     }
 
     public String getLocation() {
@@ -84,7 +97,8 @@ public class MetaEntity {
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        this.location =
+                location;
     }
 
     public String getVersion() {
@@ -92,6 +106,7 @@ public class MetaEntity {
     }
 
     public void setVersion(String version) {
-        this.version = version;
+        this.version =
+                version;
     }
 }

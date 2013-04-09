@@ -37,26 +37,37 @@ public class GroupEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private
+    long
+            id;
 
     @Column
-    private UUID value;
+    private
+    UUID
+            value;
 
     @Column(nullable = false)
-    private String displayName;
+    private
+    String
+            displayName;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    private Set<MemberEntity> members;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private
+    Set<MemberEntity>
+            members;
 
     @Column(name = "additional")
-    private String any;
+    private
+    String
+            any;
 
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id =
+                id;
     }
 
     public UUID getValue() {
@@ -64,7 +75,8 @@ public class GroupEntity {
     }
 
     public void setValue(UUID value) {
-        this.value = value;
+        this.value =
+                value;
     }
 
     public String getDisplayName() {
@@ -72,7 +84,8 @@ public class GroupEntity {
     }
 
     public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+        this.displayName =
+                displayName;
     }
 
     public Set<MemberEntity> getMembers() {
@@ -80,7 +93,8 @@ public class GroupEntity {
     }
 
     public void setMembers(Set<MemberEntity> members) {
-        this.members = members;
+        this.members =
+                members;
     }
 
     public Object getAny() {
@@ -88,7 +102,8 @@ public class GroupEntity {
     }
 
     public void setAny(String any) {
-        this.any = any;
+        this.any =
+                any;
     }
 
     public MultiValuedAttribute toScim() {
@@ -99,7 +114,9 @@ public class GroupEntity {
     }
 
     public static GroupEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        GroupEntity groupEntity = new GroupEntity();
+        GroupEntity
+                groupEntity =
+                new GroupEntity();
         groupEntity.setDisplayName(multiValuedAttribute.getDisplay());
         groupEntity.setValue(UUID.fromString(multiValuedAttribute.getValue().toString()));
         return groupEntity;

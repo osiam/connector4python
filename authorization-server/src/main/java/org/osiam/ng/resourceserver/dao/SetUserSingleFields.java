@@ -31,48 +31,79 @@ import scim.schema.v2.User;
 import java.lang.reflect.Field;
 
 public class SetUserSingleFields {
-    private UserEntity entity;
-    private final SetUserFields.Mode mode;
+    private
+    UserEntity
+            entity;
+    private final
+    SetUserFields.Mode
+            mode;
 
     public SetUserSingleFields(UserEntity entity, SetUserFields.Mode mode) {
-        this.entity = entity;
-        this.mode = mode;
+        this.entity =
+                entity;
+        this.mode =
+                mode;
     }
 
     public void updateSingleField(User user, Field entityField, Object userValue, String key) throws IllegalAccessException {
-        if (mode == SetUserFields.Mode.PATCH && userValue == null)
+        if (mode ==
+                SetUserFields.Mode.PATCH &&
+                userValue ==
+                        null) {
             return;
+        }
         if (userValue instanceof Name) {
             setName(user);
         } else {
-            if (!(key == "password" && userValue != null && String.valueOf(userValue).isEmpty()))
+            if (!(key ==
+                    "password" &&
+                    userValue !=
+                            null &&
+                    String.valueOf(userValue).isEmpty())) {
                 updateSimpleField(entityField, userValue);
+            }
         }
     }
 
     private void setName(User user) {
-        if (mode == SetUserFields.Mode.POST || entity.getName() == null)
+        if (mode ==
+                SetUserFields.Mode.POST ||
+                entity.getName() ==
+                        null) {
             entity.setName(NameEntity.fromScim(user.getName()));
-        else {
+        } else {
             setNamesValueIfNotNull(user);
 
         }
 
     }
+
     //TODO generalize
     private void setNamesValueIfNotNull(User user) {
-        entity.getName().setFamilyName(user.getName().getFamilyName() != null ?
-                user.getName().getFamilyName() : entity.getName().getFamilyName());
-        entity.getName().setFormatted(user.getName().getFormatted() != null ?
-                user.getName().getFormatted() : entity.getName().getFormatted());
-        entity.getName().setGivenName(user.getName().getGivenName() != null ?
-                user.getName().getGivenName() : entity.getName().getGivenName());
-        entity.getName().setHonorificPrefix(user.getName().getHonorificPrefix() != null ?
-                user.getName().getHonorificPrefix() : entity.getName().getHonorificPrefix());
-        entity.getName().setHonorificSuffix(user.getName().getHonorificSuffix() != null ?
-                user.getName().getHonorificSuffix() : entity.getName().getHonorificSuffix());
-        entity.getName().setMiddleName(user.getName().getMiddleName() != null ?
-                user.getName().getMiddleName() : entity.getName().getMiddleName());
+        entity.getName().setFamilyName(user.getName().getFamilyName() !=
+                null ?
+                user.getName().getFamilyName() :
+                entity.getName().getFamilyName());
+        entity.getName().setFormatted(user.getName().getFormatted() !=
+                null ?
+                user.getName().getFormatted() :
+                entity.getName().getFormatted());
+        entity.getName().setGivenName(user.getName().getGivenName() !=
+                null ?
+                user.getName().getGivenName() :
+                entity.getName().getGivenName());
+        entity.getName().setHonorificPrefix(user.getName().getHonorificPrefix() !=
+                null ?
+                user.getName().getHonorificPrefix() :
+                entity.getName().getHonorificPrefix());
+        entity.getName().setHonorificSuffix(user.getName().getHonorificSuffix() !=
+                null ?
+                user.getName().getHonorificSuffix() :
+                entity.getName().getHonorificSuffix());
+        entity.getName().setMiddleName(user.getName().getMiddleName() !=
+                null ?
+                user.getName().getMiddleName() :
+                entity.getName().getMiddleName());
     }
 
     public void setEntityFieldToNull(Field entityField) throws IllegalAccessException {
@@ -80,7 +111,8 @@ public class SetUserSingleFields {
     }
 
     private void updateSimpleField(Field entityField, Object userValue) throws IllegalAccessException {
-        if (entityField != null) {
+        if (entityField !=
+                null) {
             entityField.setAccessible(true);
             entityField.set(entity, userValue);
         }

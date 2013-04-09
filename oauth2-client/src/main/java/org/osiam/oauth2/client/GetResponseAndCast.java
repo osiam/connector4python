@@ -24,7 +24,6 @@
 package org.osiam.oauth2.client;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -44,17 +43,23 @@ public class GetResponseAndCast {
 
 
     @Autowired
-    private GenerateClient generateClient;
+    private
+    GenerateClient
+            generateClient;
 
     public void getResponseAndSetAccessToken(HttpServletRequest req, String access_token, String jsonString, HttpEntityEnclosingRequestBase request) throws IOException, UserFriendlyException {
-        HttpResponse response = getHttpResponse(jsonString, request);
+        HttpResponse
+                response =
+                getHttpResponse(jsonString, request);
         readJsonFromBody(req, response);
         req.setAttribute("access_token", access_token);
     }
 
     private HttpResponse getHttpResponse(String jsonString, HttpEntityEnclosingRequestBase request) throws IOException {
         request.addHeader("accept", "application/json");
-        StringEntity input = new StringEntity(jsonString);
+        StringEntity
+                input =
+                new StringEntity(jsonString);
         input.setContentType("application/json");
         request.setEntity(input);
         return generateClient.getClient().execute(request);
@@ -65,17 +70,25 @@ public class GetResponseAndCast {
     }
 
     private void setAttributeAndCastUser(HttpServletRequest req, HttpResponse post) throws IOException {
-        String response = setUserId(post.getEntity().getContent());
+        String
+                response =
+                setUserId(post.getEntity().getContent());
         req.setAttribute("userResponse", response);
         req.setAttribute("LocationHeader", post.getFirstHeader("Location"));
 
     }
 
     private String setUserId(InputStream response) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String bla = inputStreamToString(response);
+        ObjectMapper
+                objectMapper =
+                new ObjectMapper();
+        String
+                bla =
+                inputStreamToString(response);
         try {
-            User user = objectMapper.readValue(bla, User.class);
+            User
+                    user =
+                    objectMapper.readValue(bla, User.class);
             CRUDRedirectController.userIds.add(user.getId());
             return objectMapper.writeValueAsString(user);
         } catch (Exception e) {
@@ -84,10 +97,18 @@ public class GetResponseAndCast {
     }
 
     private String inputStreamToString(InputStream response) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = response.read(buffer)) != -1) {
+        ByteArrayOutputStream
+                baos =
+                new ByteArrayOutputStream();
+        byte[]
+                buffer =
+                new byte[1024];
+        int
+                length;
+        while ((
+                length =
+                        response.read(buffer)) !=
+                -1) {
             baos.write(buffer, 0, length);
         }
         return new String(baos.toByteArray());

@@ -46,7 +46,9 @@ import static org.osiam.oauth2.client.UpdateResourceController.createEnvAndInvok
 public class PatchResourceController {
 
     @Autowired
-    private GetResponseAndCast getResponseAndCast;
+    private
+    GetResponseAndCast
+            getResponseAndCast;
 
 
     @RequestMapping("/patchResource")
@@ -68,32 +70,44 @@ public class PatchResourceController {
                                  @RequestParam String idForUpdate,
                                  @RequestParam String delete) throws ServletException, IOException, UserFriendlyException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
-        Set<String> attributesToDelete = generateAttributesToDelete(delete);
+        Set<String>
+                attributesToDelete =
+                generateAttributesToDelete(delete);
 
-        String jsonString = JsonStringGenerator.getJsonStringPatch(
-                schema,
-                user_name,
-                firstname,
-                lastname,
-                displayname,
-                nickname,
-                profileurl,
-                title,
-                usertype,
-                preferredlanguage,
-                locale,
-                timezone,
-                password,
-                attributesToDelete
-        );
-        Constructor<HttpPatch> constructor = HttpPatch.class.getConstructor(String.class);
-        return createEnvAndInvokeHttpCall(getResponseAndCast,req, access_token, idForUpdate, jsonString, constructor);
+        String
+                jsonString =
+                JsonStringGenerator.getJsonStringPatch(
+                        schema,
+                        user_name,
+                        firstname,
+                        lastname,
+                        displayname,
+                        nickname,
+                        profileurl,
+                        title,
+                        usertype,
+                        preferredlanguage,
+                        locale,
+                        timezone,
+                        password,
+                        attributesToDelete
+                );
+        Constructor<HttpPatch>
+                constructor =
+                HttpPatch.class.getConstructor(String.class);
+        return createEnvAndInvokeHttpCall(getResponseAndCast, req, access_token, idForUpdate, jsonString, constructor);
     }
 
     private Set<String> generateAttributesToDelete(String delete) {
-        Set<String> attributesToDelete = null;
-        if (delete != null && !delete.isEmpty()) {
-            attributesToDelete = new HashSet<>(Arrays.asList(delete.split(",")));
-        } return attributesToDelete;
+        Set<String>
+                attributesToDelete =
+                null;
+        if (delete !=
+                null &&
+                !delete.isEmpty()) {
+            attributesToDelete =
+                    new HashSet<>(Arrays.asList(delete.split(",")));
+        }
+        return attributesToDelete;
     }
 }

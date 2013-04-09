@@ -23,8 +23,9 @@ import java.io.IOException;
 public class AddResourceController {
 
     @Autowired
-    private GetResponseAndCast getResponseAndCast;
-
+    private
+    GetResponseAndCast
+            getResponseAndCast;
 
 
     public AddResourceController() {
@@ -49,23 +50,37 @@ public class AddResourceController {
                                  @RequestParam String access_token)
             throws ServletException, IOException, UserFriendlyException {
 
-        String jsonString = JsonStringGenerator.getJsonString(
-                schema,
-                user_name,
-                firstname,
-                lastname,
-                displayname,
-                nickname,
-                profileurl,
-                title,
-                usertype,
-                preferredlanguage,
-                locale,
-                timezone,
-                password);
-        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String url = environment + "/authorization-server/User/" + "?access_token=" + access_token;
-        HttpPost request = new HttpPost(url);
+        String
+                jsonString =
+                JsonStringGenerator.getJsonString(
+                        schema,
+                        user_name,
+                        firstname,
+                        lastname,
+                        displayname,
+                        nickname,
+                        profileurl,
+                        title,
+                        usertype,
+                        preferredlanguage,
+                        locale,
+                        timezone,
+                        password);
+        String
+                environment =
+                req.getScheme() +
+                        "://" +
+                        req.getServerName() +
+                        ":8080";
+        String
+                url =
+                environment +
+                        "/authorization-server/User/" +
+                        "?access_token=" +
+                        access_token;
+        HttpPost
+                request =
+                new HttpPost(url);
         getResponseAndCast.getResponseAndSetAccessToken(req, access_token, jsonString, request);
 
         return "user";

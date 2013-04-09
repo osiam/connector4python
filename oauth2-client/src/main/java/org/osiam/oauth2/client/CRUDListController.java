@@ -38,7 +38,7 @@ import java.util.Map;
 @Controller
 public class CRUDListController {
     public enum KnownMultiValueAttributeLists {
-//        ADDRESS(new User.Addresses().getAddress()),
+        //        ADDRESS(new User.Addresses().getAddress()),
         PHONE(new User.PhoneNumbers()),
         PHOTO(new User.Photos()),
         EMAIL(new User.Emails()),
@@ -48,21 +48,28 @@ public class CRUDListController {
         X509(new User.X509Certificates()),
         GROUP(new User.Groups());
 
-        private final User.ContainsListOfMultiValue set;
+        private final
+        User.ContainsListOfMultiValue
+                set;
 
-        private static Map<String, KnownMultiValueAttributeLists> fromString = new HashMap<>();
+        private static
+        Map<String, KnownMultiValueAttributeLists>
+                fromString =
+                new HashMap<>();
+
         static {
-            for (KnownMultiValueAttributeLists k : values()){
+            for (KnownMultiValueAttributeLists k : values()) {
                 fromString.put(k.name().toLowerCase(), k);
             }
         }
 
 
         private KnownMultiValueAttributeLists(User.ContainsListOfMultiValue set) {
-            this.set = set;
+            this.set =
+                    set;
         }
 
-        public <T extends  User.ContainsListOfMultiValue> T getSet() {
+        public <T extends User.ContainsListOfMultiValue> T getSet() {
             return (T) set;
         }
     }
@@ -72,32 +79,44 @@ public class CRUDListController {
             throws ServletException, IOException {
         req.setAttribute("access_token", access_token);
         req.setAttribute("used_for", used_for);
-        if ("addresses".equals(used_for))
+        if ("addresses".equals(used_for)) {
             return "create_address";
+        }
         return "create_multivalueattribute";
     }
 
     @RequestMapping("/addListAttribute")
     public String addListAttribute(HttpServletRequest req)
             throws ServletException, IOException {
-        String access_token = req.getParameter("access_token");
+        String
+                access_token =
+                req.getParameter("access_token");
         req.setAttribute("access_token", access_token);
-        String used_for = req.getParameter("used_for");
+        String
+                used_for =
+                req.getParameter("used_for");
         req.setAttribute("used_for", used_for);
-        KnownMultiValueAttributeLists k = KnownMultiValueAttributeLists.fromString.get(used_for);
-        if (k != null){
-            MultiValuedAttribute attribute = new MultiValuedAttribute.Builder()
-                    .setDisplay(req.getParameter("display"))
-                    .setOperation(Boolean.valueOf(req.getParameter("delete")) == true ? "delete":null)
-                    .setPrimary(Boolean.valueOf(req.getParameter("primary")))
-                    .setType(req.getParameter("type"))
-                    .setValue(req.getParameter("value")).build();
+        KnownMultiValueAttributeLists
+                k =
+                KnownMultiValueAttributeLists.fromString.get(used_for);
+        if (k !=
+                null) {
+            MultiValuedAttribute
+                    attribute =
+                    new MultiValuedAttribute.Builder()
+                            .setDisplay(req.getParameter("display"))
+                            .setOperation(Boolean.valueOf(req.getParameter("delete")) ==
+                                    true ?
+                                    "delete" :
+                                    null)
+                            .setPrimary(Boolean.valueOf(req.getParameter("primary")))
+                            .setType(req.getParameter("type"))
+                            .setValue(req.getParameter("value")).build();
             k.set.values().add(attribute);
         }
 
         return "create_update_user";
     }
-
 
 
 }

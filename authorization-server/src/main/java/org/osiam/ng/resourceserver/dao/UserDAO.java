@@ -40,20 +40,28 @@ import java.util.*;
 public class UserDAO {
 
     @Inject
-    private PasswordEncoder passwordEncoder;
+    private
+    PasswordEncoder
+            passwordEncoder;
     @PersistenceContext
-    private EntityManager em;
+    private
+    EntityManager
+            em;
 
     public void setEm(EntityManager em) {
-        this.em = em;
+        this.em =
+                em;
     }
 
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder =
+                passwordEncoder;
     }
 
     public void createUser(UserEntity userEntity) {
-        String hash = passwordEncoder.encodePassword(userEntity.getPassword(), userEntity.getInternalId());
+        String
+                hash =
+                passwordEncoder.encodePassword(userEntity.getPassword(), userEntity.getInternalId());
         findExistingMultiValueAttributes(userEntity);
         userEntity.setPassword(hash);
         em.persist(userEntity);
@@ -73,12 +81,19 @@ public class UserDAO {
 
     @SuppressWarnings("unchecked")
     private Set<?> replaceInstanceWithEntityInstance(Collection<?> roles, Class<?> clazz) {
-        Set<Object> result = new HashSet<>();
+        Set<Object>
+                result =
+                new HashSet<>();
         for (Object r : roles) {
-            MultiValueAttributeEntitySkeleton originValue = (MultiValueAttributeEntitySkeleton) r;
-            MultiValueAttributeEntitySkeleton entity = (MultiValueAttributeEntitySkeleton) em.find(r.getClass(),
-                    originValue.getValue());
-            if (entity != null) {
+            MultiValueAttributeEntitySkeleton
+                    originValue =
+                    (MultiValueAttributeEntitySkeleton) r;
+            MultiValueAttributeEntitySkeleton
+                    entity =
+                    (MultiValueAttributeEntitySkeleton) em.find(r.getClass(),
+                            originValue.getValue());
+            if (entity !=
+                    null) {
                 result.add(clazz.cast(entity));
             } else {
                 result.add(clazz.cast(originValue));
@@ -88,29 +103,40 @@ public class UserDAO {
     }
 
     public UserEntity getById(String id) {
-        Query query = em.createNamedQuery("getUserById");
+        Query
+                query =
+                em.createNamedQuery("getUserById");
         query.setParameter("internalId", UUID.fromString(id));
         return getSingleUserEntity(query, id);
     }
 
     public UserEntity getByUsername(String userName) {
-        Query query = em.createNamedQuery("getUserByUsername");
+        Query
+                query =
+                em.createNamedQuery("getUserByUsername");
         query.setParameter("username", userName);
         return getSingleUserEntity(query, userName);
     }
 
     private UserEntity getSingleUserEntity(Query query, String identifier) {
-        List result = query.getResultList();
+        List
+                result =
+                query.getResultList();
         if (result.isEmpty()) {
-            throw new ResourceNotFoundException("No user " + identifier + " found.");
+            throw new ResourceNotFoundException("No user " +
+                    identifier +
+                    " found.");
         }
         return (UserEntity) result.get(0);
     }
 
     public void update(UserEntity entity) {
         //not hashed ...
-        String password = entity.getPassword();
-        if (password.length() != 128){
+        String
+                password =
+                entity.getPassword();
+        if (password.length() !=
+                128) {
             entity.setPassword(passwordEncoder.encodePassword(password, entity.getInternalId()));
         }
         findExistingMultiValueAttributes(entity);

@@ -33,7 +33,11 @@ import java.util.concurrent.ConcurrentSkipListSet;
 @Controller
 @RequestMapping("/crud")
 public class CRUDRedirectController {
-    public static Set<String> userIds = new ConcurrentSkipListSet<>();
+    public static
+    Set<String>
+            userIds =
+            new ConcurrentSkipListSet<>();
+
     static {
         userIds.add("CEF9452E-00A9-4CEC-A086-D171374FFBEF");
     }

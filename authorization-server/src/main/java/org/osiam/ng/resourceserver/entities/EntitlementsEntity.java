@@ -40,7 +40,9 @@ public class EntitlementsEntity extends MultiValueAttributeEntitySkeleton {
     }
 
     public static EntitlementsEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        EntitlementsEntity entitlementsEntity = new EntitlementsEntity();
+        EntitlementsEntity
+                entitlementsEntity =
+                new EntitlementsEntity();
         entitlementsEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return entitlementsEntity;
     }

@@ -43,20 +43,27 @@ public class MemberEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private
+    long
+            id;
 
     @Column
-    private UUID value;
+    private
+    UUID
+            value;
 
     @Column
-    private String display;
+    private
+    String
+            display;
 
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id =
+                id;
     }
 
     public UUID getValue() {
@@ -64,7 +71,8 @@ public class MemberEntity {
     }
 
     public void setValue(UUID value) {
-        this.value = value;
+        this.value =
+                value;
     }
 
     public String getDisplay() {
@@ -72,7 +80,8 @@ public class MemberEntity {
     }
 
     public void setDisplay(String display) {
-        this.display = display;
+        this.display =
+                display;
     }
 
     public MultiValuedAttribute toScim() {

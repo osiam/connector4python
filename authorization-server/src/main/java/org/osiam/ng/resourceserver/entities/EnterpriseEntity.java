@@ -39,32 +39,47 @@ public class EnterpriseEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private
+    long
+            id;
 
     @Column
-    private String employeeNumber;
+    private
+    String
+            employeeNumber;
 
     @Column
-    private String costCenter;
+    private
+    String
+            costCenter;
 
     @Column
-    private String organization;
+    private
+    String
+            organization;
 
     @Column
-    private String division;
+    private
+    String
+            division;
 
     @Column
-    private String department;
+    private
+    String
+            department;
 
     @ManyToOne
-    private ManagerEntity manager;
+    private
+    ManagerEntity
+            manager;
 
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id =
+                id;
     }
 
     public String getEmployeeNumber() {
@@ -72,7 +87,8 @@ public class EnterpriseEntity {
     }
 
     public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
+        this.employeeNumber =
+                employeeNumber;
     }
 
     public String getCostCenter() {
@@ -80,7 +96,8 @@ public class EnterpriseEntity {
     }
 
     public void setCostCenter(String costCenter) {
-        this.costCenter = costCenter;
+        this.costCenter =
+                costCenter;
     }
 
     public String getOrganization() {
@@ -88,7 +105,8 @@ public class EnterpriseEntity {
     }
 
     public void setOrganization(String organization) {
-        this.organization = organization;
+        this.organization =
+                organization;
     }
 
     public String getDivision() {
@@ -96,7 +114,8 @@ public class EnterpriseEntity {
     }
 
     public void setDivision(String division) {
-        this.division = division;
+        this.division =
+                division;
     }
 
     public String getDepartment() {
@@ -104,7 +123,8 @@ public class EnterpriseEntity {
     }
 
     public void setDepartment(String department) {
-        this.department = department;
+        this.department =
+                department;
     }
 
     public ManagerEntity getManager() {
@@ -112,7 +132,8 @@ public class EnterpriseEntity {
     }
 
     public void setManager(ManagerEntity manager) {
-        this.manager = manager;
+        this.manager =
+                manager;
     }
 
     public Enterprise toScim() {
@@ -121,7 +142,10 @@ public class EnterpriseEntity {
                 setDepartment(getDepartment()).
                 setDivision(getDivision()).
                 setEmployeeNumber(getEmployeeNumber()).
-                setManager(getManager() !=null ? getManager().toScim() : null).
+                setManager(getManager() !=
+                        null ?
+                        getManager().toScim() :
+                        null).
                 setOrganization(getOrganization()).
                 build();
     }

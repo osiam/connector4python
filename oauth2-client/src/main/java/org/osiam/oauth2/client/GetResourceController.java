@@ -23,14 +23,13 @@
 
 package org.osiam.oauth2.client;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @Controller
 public class GetResourceController {
@@ -38,8 +37,20 @@ public class GetResourceController {
     @RequestMapping("/resource")
     public String redirectToResourceServer(HttpServletRequest req, @RequestParam String access_token, @RequestParam String username)
             throws ServletException, IOException {
-        String environment = req.getScheme() + "://" + req.getServerName() + ":8080";
-        String url = environment + "/authorization-server/User/"+ username + "?access_token=" + access_token;
-        return "redirect:" + url;
+        String
+                environment =
+                req.getScheme() +
+                        "://" +
+                        req.getServerName() +
+                        ":8080";
+        String
+                url =
+                environment +
+                        "/authorization-server/User/" +
+                        username +
+                        "?access_token=" +
+                        access_token;
+        return "redirect:" +
+                url;
     }
 }

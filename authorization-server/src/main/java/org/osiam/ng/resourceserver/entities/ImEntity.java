@@ -27,7 +27,7 @@ import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.*;
+import javax.persistence.ManyToOne;
 
 /**
  * Instant messaging Entity
@@ -37,11 +37,14 @@ public class ImEntity extends MultiValueAttributeEntitySkeleton implements Child
 
 
     @Column
-    private String type;
+    private
+    String
+            type;
 
     @ManyToOne
-    private UserEntity user;
-
+    private
+    UserEntity
+            user;
 
 
     public String getType() {
@@ -49,7 +52,8 @@ public class ImEntity extends MultiValueAttributeEntitySkeleton implements Child
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type =
+                type;
     }
 
     public UserEntity getUser() {
@@ -57,7 +61,8 @@ public class ImEntity extends MultiValueAttributeEntitySkeleton implements Child
     }
 
     public void setUser(UserEntity user) {
-        this.user = user;
+        this.user =
+                user;
     }
 
     public MultiValuedAttribute toScim() {
@@ -68,7 +73,9 @@ public class ImEntity extends MultiValueAttributeEntitySkeleton implements Child
     }
 
     public static ImEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        ImEntity imEntity = new ImEntity();
+        ImEntity
+                imEntity =
+                new ImEntity();
         imEntity.setType(multiValuedAttribute.getType());
         imEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         return imEntity;

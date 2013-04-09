@@ -35,34 +35,54 @@ public class AddressEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private
+    long
+            id;
 
     @Column
-    private String type;
+    private
+    String
+            type;
 
     @Column
-    private String formatted;
+    private
+    String
+            formatted;
 
     @Column
-    private String streetAddress;
+    private
+    String
+            streetAddress;
 
     @Column
-    private String locality;
+    private
+    String
+            locality;
 
     @Column
-    private String region;
+    private
+    String
+            region;
 
     @Column
-    private String postalCode;
+    private
+    String
+            postalCode;
 
     @Column
-    private String country;
+    private
+    String
+            country;
 
     @Column(name = "postgresql_does_not_like_primary")
-    private boolean primary;
+    private
+    boolean
+            primary;
 
     @ManyToOne
-    private UserEntity user;
+    private
+    UserEntity
+            user;
 
 
     public long getId() {
@@ -70,7 +90,8 @@ public class AddressEntity {
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id =
+                id;
     }
 
     public boolean isPrimary() {
@@ -78,7 +99,8 @@ public class AddressEntity {
     }
 
     public void setPrimary(boolean primary) {
-        this.primary = primary;
+        this.primary =
+                primary;
     }
 
     public String getType() {
@@ -86,7 +108,8 @@ public class AddressEntity {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type =
+                type;
     }
 
     public String getFormatted() {
@@ -94,7 +117,8 @@ public class AddressEntity {
     }
 
     public void setFormatted(String formatted) {
-        this.formatted = formatted;
+        this.formatted =
+                formatted;
     }
 
     public String getStreetAddress() {
@@ -102,7 +126,8 @@ public class AddressEntity {
     }
 
     public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
+        this.streetAddress =
+                streetAddress;
     }
 
     public String getLocality() {
@@ -110,7 +135,8 @@ public class AddressEntity {
     }
 
     public void setLocality(String locality) {
-        this.locality = locality;
+        this.locality =
+                locality;
     }
 
     public String getRegion() {
@@ -118,7 +144,8 @@ public class AddressEntity {
     }
 
     public void setRegion(String region) {
-        this.region = region;
+        this.region =
+                region;
     }
 
     public String getPostalCode() {
@@ -126,7 +153,8 @@ public class AddressEntity {
     }
 
     public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+        this.postalCode =
+                postalCode;
     }
 
     public String getCountry() {
@@ -134,7 +162,8 @@ public class AddressEntity {
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.country =
+                country;
     }
 
     public UserEntity getUser() {
@@ -142,7 +171,8 @@ public class AddressEntity {
     }
 
     public void setUser(UserEntity user) {
-        this.user = user;
+        this.user =
+                user;
     }
 
     public Address toScim() {
@@ -157,12 +187,17 @@ public class AddressEntity {
     }
 
     public static AddressEntity fromScim(Address address) {
-        AddressEntity addressEntity = new AddressEntity();
+        AddressEntity
+                addressEntity =
+                new AddressEntity();
         addressEntity.setCountry(address.getCountry());
         addressEntity.setFormatted(address.getFormatted());
         addressEntity.setLocality(address.getLocality());
         addressEntity.setPostalCode(address.getPostalCode());
-        addressEntity.setPrimary((address.isPrimary() == null? false : address.isPrimary()));
+        addressEntity.setPrimary((address.isPrimary() ==
+                null ?
+                false :
+                address.isPrimary()));
         addressEntity.setRegion(address.getRegion());
         addressEntity.setStreetAddress(address.getStreetAddress());
         addressEntity.setType(address.getType());
