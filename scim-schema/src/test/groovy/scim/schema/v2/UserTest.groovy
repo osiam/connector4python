@@ -51,7 +51,7 @@ class UserTest extends Specification {
     }
 
 
-    def "user should be able to contain schemas"(){
+    def "user should be able to contain schemas"() {
         def schemas = ["urn:wtf", "urn:hajo"] as Set
         when:
         User user = new User.Builder("username").setSchemas(schemas).build()
@@ -60,7 +60,7 @@ class UserTest extends Specification {
 
     }
 
-    def "user should clone schemas"(){
+    def "user should clone schemas"() {
         def schemas = ["urn:wtf", "urn:hajo"] as Set
         User oldUser = new User.Builder("username").setSchemas(schemas).build()
         when:
@@ -317,9 +317,91 @@ class UserTest extends Specification {
         user.roles.role.get(0) == generalAttribute
         then:
         user.x509Certificates.x509Certificate.get(0) == generalAttribute
-
-
     }
+
+    def "Emails class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.Emails()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.email == result
+    }
+
+    def "Entitlements class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.Entitlements()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.entitlement == result
+    }
+
+    def "Groups class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.Groups()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.group == result
+    }
+
+    def "IMs class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.Ims()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.im == result
+    }
+
+    def "Phonenumbers class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.PhoneNumbers()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.phoneNumber == result
+    }
+
+    def "Photos class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.Photos()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.photo == result
+    }
+
+    def "Roles class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.Roles()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.role == result
+    }
+
+    def "X509 class should be inherited from ContainsListOfMultiValue and contain values class"() {
+        given:
+        def underTest = new User.X509Certificates()
+        when:
+        def result = underTest.values()
+        then:
+        underTest instanceof User.ContainsListOfMultiValue
+        underTest.x509Certificate == result
+    }
+
+
+
+
 
 
 }

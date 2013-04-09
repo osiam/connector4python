@@ -44,4 +44,11 @@ class MultiValuedAttributeTest extends Specification {
         mva.type == builder.type
         mva.operation == builder.operation
     }
+
+    def "should contain an empty constructor for json"() {
+        when:
+        def result = new MultiValuedAttribute()
+        then:
+        result
+    }
 }
