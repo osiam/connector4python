@@ -23,6 +23,7 @@
 
 package org.osiam.ng.scim.exceptions;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,17 +57,18 @@ public class HandleException extends ResponseEntityExceptionHandler {
         return HttpStatus.CONFLICT;
     }
 
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
     static class Error {
-        private String code;
+        private String error_code;
         private String description;
 
         public Error(String name, String message) {
-            this.code = name;
+            this.error_code = name;
             this.description = message;
         }
 
-        public String getCode() {
-            return code;
+        public String getError_code() {
+            return error_code;
         }
 
         public String getDescription() {
