@@ -69,4 +69,19 @@ class CRUDRedirectControllerTest extends Specification {
         1 * request.getParameter("access_token") >> "abc"
         1 * request.setAttribute("access_token", "abc")
     }
+
+    def "should contain /crud/user/patch patching an user"() {
+        given:
+        def mapping = CRUDRedirectController.class.getDeclaredMethod("redirectToPatchUser", HttpServletRequest)
+                .getAnnotation(RequestMapping)
+        when:
+        def result = underTest.redirectToPatchUser(request)
+
+        then:
+        result == "patch_user"
+        mapping.value() == ["/user/patch"]
+        1 * request.getParameter("access_token") >> "abc"
+        1 * request.setAttribute("access_token", "abc")
+    }
+
 }

@@ -37,37 +37,6 @@ import java.util.Map;
 
 @Controller
 public class CRUDListController {
-    public enum KnownMultiValueAttributeLists {
-        //        ADDRESS(new User.Addresses().getAddress()),
-        PHONE(new User.PhoneNumbers()),
-        PHOTO(new User.Photos()),
-        EMAIL(new User.Emails()),
-        IM(new User.Ims()),
-        ENTITLEMENT(new User.Entitlements()),
-        ROLE(new User.Roles()),
-        X509(new User.X509Certificates()),
-        GROUP(new User.Groups());
-
-        private final User.ContainsListOfMultiValue set;
-
-        private static Map<String, KnownMultiValueAttributeLists> fromString = new HashMap<>();
-
-        static {
-            for (KnownMultiValueAttributeLists k : values()) {
-                fromString.put(k.name().toLowerCase(), k);
-            }
-        }
-
-
-        private KnownMultiValueAttributeLists(User.ContainsListOfMultiValue set) {
-            this.set = set;
-        }
-
-        public <T extends User.ContainsListOfMultiValue> T getSet() {
-            return (T) set;
-        }
-    }
-
     @RequestMapping("/createMultiValueAttribute")
     public String redirectTo(HttpServletRequest req, @RequestParam String used_for, @RequestParam String access_token) throws ServletException, IOException {
         req.setAttribute("access_token", access_token);
@@ -84,16 +53,54 @@ public class CRUDListController {
         req.setAttribute("access_token", access_token);
         String used_for = req.getParameter("used_for");
         req.setAttribute("used_for", used_for);
-        KnownMultiValueAttributeLists k = KnownMultiValueAttributeLists.fromString.get(used_for);
+        KnownMultiValueAttributeLists k = KnownMultiValueAttributeLists.getFromString(used_for.toLowerCase().trim());
         if (k != null) {
-            MultiValuedAttribute attribute =
-                    new MultiValuedAttribute.Builder().setDisplay(req.getParameter("display")).setOperation(
-                            Boolean.valueOf(req.getParameter("delete")) == true ? "delete" :
-                                    null).setPrimary(Boolean.valueOf(req.getParameter("primary"))).setType(req.getParameter("type")).setValue(req.getParameter("value")).build();
+            MultiValuedAttribute attribute = new MultiValuedAttribute.Builder().setDisplay(req.getParameter("display")).
+                    setOperation(getDelete(req))
+                    .setPrimary(Boolean.valueOf(req.getParameter("primary")))
+                    .setType(req.getParameter("type")).setValue(req.getParameter("value")).build();
             k.set.values().add(attribute);
         }
 
         return "create_update_user";
+    }
+
+    private String getDelete(HttpServletRequest req) {
+        return Boolean.valueOf(req.getParameter("delete")) == true ? "delete" : null;
+    }
+
+    public enum KnownMultiValueAttributeLists {
+        //        ADDRESS(new User.Addresses().getAddress()),
+        PHONE(new User.PhoneNumbers()),
+        PHOTO(new User.Photos()),
+        EMAIL(new User.Emails()),
+        IM(new User.Ims()),
+        ENTITLEMENT(new User.Entitlements()),
+        ROLE(new User.Roles()),
+        X509(new User.X509Certificates()),
+        GROUP(new User.Groups());
+        private static final Map<String, KnownMultiValueAttributeLists> fromString = new HashMap<>();
+
+        public static KnownMultiValueAttributeLists getFromString(String from){
+            return fromString.get(from);
+        }
+
+        static {
+            for (KnownMultiValueAttributeLists k : values()) {
+                fromString.put(k.name().toLowerCase(), k);
+            }
+        }
+
+        private final User.ContainsListOfMultiValue set;
+
+
+        private KnownMultiValueAttributeLists(User.ContainsListOfMultiValue set) {
+            this.set = set;
+        }
+
+        public <T extends User.ContainsListOfMultiValue> T getSet() {
+            return (T) set;
+        }
     }
 
 
