@@ -31,19 +31,46 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @ControllerAdvice
 public class HandleException extends ResponseEntityExceptionHandler {
+    private static final Logger LOGGER = Logger.getLogger(HandleException.class.getName());
 
-    @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
+    @ExceptionHandler(value = {RuntimeException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = ex.getMessage();
-        HttpStatus status = HttpStatus.CONFLICT;
+        LOGGER.log(Level.WARNING, "An exception occurred", ex);
+        HttpStatus status = setStatus(ex);
+        Error error = new Error(status.name(), ex.getMessage());
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+    }
+
+    private HttpStatus setStatus(RuntimeException ex) {
         if (ex instanceof ResourceNotFoundException) {
-            status = HttpStatus.NOT_FOUND;
+            return HttpStatus.NOT_FOUND;
         }
         if (ex instanceof SchemaUnknownException) {
-            status = HttpStatus.I_AM_A_TEAPOT;
+            return HttpStatus.I_AM_A_TEAPOT;
         }
-        return handleExceptionInternal(ex, status.name() + ": " + bodyOfResponse, new HttpHeaders(), status, request);
+        return HttpStatus.CONFLICT;
+    }
+
+    static class Error {
+        private String code;
+        private String description;
+
+        public Error(String name, String message) {
+            this.code = name;
+            this.description = message;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 }
