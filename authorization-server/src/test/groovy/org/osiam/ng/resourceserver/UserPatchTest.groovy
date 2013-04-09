@@ -108,7 +108,6 @@ class UserPatchTest extends Specification {
         entity.getPhoneNumbers().empty
         entity.getPhotos().empty
         entity.getRoles().empty
-
     }
 
 
