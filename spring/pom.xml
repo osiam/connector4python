@@ -21,13 +21,12 @@
   ~ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>scim-root</artifactId>
         <groupId>org.osiam.ng</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>scim</artifactId>
@@ -99,7 +98,7 @@
         <dependency>
             <groupId>org.osiam.ng</groupId>
             <artifactId>scim-schema</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
