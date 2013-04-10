@@ -15,7 +15,7 @@ in the authorization-server folder.
 
 If you want to run the authorization-server in a embedded tomcat instance run
 ```sh
- mvn tomcat7:run
+ mvn jetty:run
 ```
 
 To deploy the authorization-server into a running Tomcat copy the "authorization-server.war" into the webapp folder in your Tomcat installation.
@@ -46,6 +46,31 @@ The client credentials are as well hardcoded:
  * redirect_uri=http://localhost:8080/oauth2-client/accessToken
 
 This will change very soon.
+
+The database configuration is done via properties file named
+
+ db-config.properties
+
+which looks like
+
+```
+db.driver=org.postgresql.Driver
+db.url=jdbc:postgresql://$your_url:$port/$your_database
+db.username=$your_username
+db.password=$your_password
+```
+
+this config file must lie within the classpath.
+
+For tomcat you have to edit the
+
+shared.loader
+
+property under
+
+$your_tomcat_dir/conf/catalina.properties
+
+to point to a correct folder.
 
 
 ### Usage
