@@ -29,8 +29,8 @@ import scim.schema.v2.Name
 import scim.schema.v2.User
 import spock.lang.Specification
 
-class SetUserSingleFieldsTest extends Specification {
-    def mode = SetUserFields.Mode.POST
+class EntityFieldWrapperTest extends Specification {
+    def mode = GenericSCIMToEntityWrapper.Mode.POST
 
     def "should not update a single field of an entity when value is null and mode is patch"() {
         given:
@@ -41,8 +41,8 @@ class SetUserSingleFieldsTest extends Specification {
 
         def entity = new UserEntity()
         entity.setDisplayName("Not Null")
-        def mode = SetUserFields.Mode.PATCH
-        def underTest = new SetUserSingleFields(entity, mode)
+        def mode = GenericSCIMToEntityWrapper.Mode.PATCH
+        def underTest = new EntityFieldWrapper(entity, mode)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
 
         when:
@@ -56,8 +56,8 @@ class SetUserSingleFieldsTest extends Specification {
         given:
         def entity = new UserEntity()
         entity.setDisplayName("Not Null")
-        def mode = SetUserFields.Mode.PATCH
-        def underTest = new SetUserSingleFields(entity, mode)
+        def mode = GenericSCIMToEntityWrapper.Mode.PATCH
+        def underTest = new EntityFieldWrapper(entity, mode)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
 
         when:
@@ -76,7 +76,7 @@ class SetUserSingleFieldsTest extends Specification {
                 .build()
 
         def entity = new UserEntity()
-        def underTest = new SetUserSingleFields(entity, mode)
+        def underTest = new EntityFieldWrapper(entity, mode)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
 
         when:
@@ -99,7 +99,7 @@ class SetUserSingleFieldsTest extends Specification {
 
         def entity = new UserEntity()
         entity.setName(new NameEntity())
-        def underTest = new SetUserSingleFields(entity, SetUserFields.Mode.PATCH)
+        def underTest = new EntityFieldWrapper(entity, GenericSCIMToEntityWrapper.Mode.PATCH)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
 
         when:
@@ -129,7 +129,7 @@ class SetUserSingleFieldsTest extends Specification {
 
         def entity = new UserEntity()
         entity.setName(new NameEntity())
-        def underTest = new SetUserSingleFields(entity, SetUserFields.Mode.PATCH)
+        def underTest = new EntityFieldWrapper(entity, GenericSCIMToEntityWrapper.Mode.PATCH)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
 
         when:
@@ -159,7 +159,7 @@ class SetUserSingleFieldsTest extends Specification {
 
         def entity = new UserEntity()
         entity.setName(null)
-        def underTest = new SetUserSingleFields(entity, SetUserFields.Mode.PATCH)
+        def underTest = new EntityFieldWrapper(entity, GenericSCIMToEntityWrapper.Mode.PATCH)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
 
         when:
@@ -185,7 +185,7 @@ class SetUserSingleFieldsTest extends Specification {
 
         def entity = new UserEntity()
         entity.setPassword("nicht hallo")
-        def underTest = new SetUserSingleFields(entity, mode)
+        def underTest = new EntityFieldWrapper(entity, mode)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
         when:
         underTest.updateSingleField(aha.get("password"), scimUser.password, "password")
@@ -197,7 +197,7 @@ class SetUserSingleFieldsTest extends Specification {
         given:
         def scimUser = new User.Builder("test").setPassword("a").build()
         def entity = new UserEntity()
-        def underTest = new SetUserSingleFields(entity, mode)
+        def underTest = new EntityFieldWrapper(entity, mode)
         when:
         underTest.updateSimpleField(null, scimUser)
         then:
@@ -212,7 +212,7 @@ class SetUserSingleFieldsTest extends Specification {
 
         def entity = new UserEntity()
         entity.setPassword("nicht hallo")
-        def underTest = new SetUserSingleFields(entity, mode)
+        def underTest = new EntityFieldWrapper(entity, mode)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
         when:
         underTest.updateSingleField(aha.get("password"), scimUser.password, "password")

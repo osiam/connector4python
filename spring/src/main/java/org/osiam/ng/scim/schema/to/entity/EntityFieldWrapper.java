@@ -27,19 +27,19 @@ import scim.schema.v2.Name;
 
 import java.lang.reflect.Field;
 
-public class SetUserSingleFields {
-    private final SetUserFields.Mode mode;
+public class EntityFieldWrapper {
+    private final GenericSCIMToEntityWrapper.Mode mode;
     private final SetComplexType setComplexType;
     private Object entity;
 
-    public SetUserSingleFields(Object entity, SetUserFields.Mode mode) {
+    public EntityFieldWrapper(Object entity, GenericSCIMToEntityWrapper.Mode mode) {
         this.entity = entity;
         this.mode = mode;
         setComplexType = new SetComplexType(mode, entity);
     }
 
     public void updateSingleField(Field entityField, Object userValue, String key) throws IllegalAccessException, InstantiationException {
-        if (mode == SetUserFields.Mode.PATCH && userValue == null) {
+        if (mode == GenericSCIMToEntityWrapper.Mode.PATCH && userValue == null) {
             return;
         }
         if (userValue instanceof Name) {

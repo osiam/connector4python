@@ -64,7 +64,7 @@ class FakeSCIMEntities implements SCIMEntities {
     }
 }
 
-class SetUserFieldsTest extends Specification {
+class GenericSCIMToEntityWrapperTest extends Specification {
 
     def "should set an entity to given user attributes"() {
         given:
@@ -97,7 +97,7 @@ class SetUserFieldsTest extends Specification {
                 .build()
 
         def entity = new UserEntity()
-        def underTest = new SetUserFields(scimUser, entity, SetUserFields.Mode.POST, FakeSCIMEntities.ENTITIES)
+        def underTest = new GenericSCIMToEntityWrapper(scimUser, entity, GenericSCIMToEntityWrapper.Mode.POST, FakeSCIMEntities.ENTITIES)
         when:
         underTest.setFields()
 
@@ -138,7 +138,7 @@ class SetUserFieldsTest extends Specification {
         UserEntity entity = createEntityWithInternalId()
         entity.setUsername("hach")
         entity.setDisplayName("display it")
-        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH, FakeSCIMEntities.ENTITIES)
+        def underTest = new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, FakeSCIMEntities.ENTITIES)
         when:
         underTest.setFields()
         then:
@@ -162,7 +162,7 @@ class SetUserFieldsTest extends Specification {
         UserEntity entity = createEntityWithInternalId()
         entity.setUsername("hach")
         entity.setDisplayName("display it")
-        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH, FakeSCIMEntities.ENTITIES)
+        def underTest = new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, FakeSCIMEntities.ENTITIES)
         when:
         underTest.setFields()
         then:
@@ -202,7 +202,7 @@ class SetUserFieldsTest extends Specification {
         def entity = createEntityWithInternalId()
         addListsToEntity(entity)
         entity.getEmails().add(new EmailEntity(value: "email2", type: "work", primary: false))
-        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH, FakeSCIMEntities.ENTITIES)
+        def underTest = new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, FakeSCIMEntities.ENTITIES)
 
         when:
         underTest.setFields()
@@ -241,7 +241,7 @@ class SetUserFieldsTest extends Specification {
         name.setMiddleName('(")(°v°)(")')
         entity.setName(name)
         entity.setUsername("username")
-        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH, FakeSCIMEntities.ENTITIES)
+        def underTest = new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, FakeSCIMEntities.ENTITIES)
 
         when:
         underTest.setFields()
@@ -268,7 +268,7 @@ class SetUserFieldsTest extends Specification {
         name.setMiddleName('(")(°v°)(")')
         entity.setName(name)
         entity.setUsername("username")
-        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH, FakeSCIMEntities.ENTITIES)
+        def underTest = new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, FakeSCIMEntities.ENTITIES)
         when:
         underTest.setFields()
         then:
@@ -286,7 +286,7 @@ class SetUserFieldsTest extends Specification {
         def user = new User.Builder().setMeta(meta).build()
         UserEntity entity = createEntityWithInternalId()
         entity.setUsername("haha")
-        def underTest = new SetUserFields(user, entity, SetUserFields.Mode.PATCH, FakeSCIMEntities.ENTITIES)
+        def underTest = new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, FakeSCIMEntities.ENTITIES)
 
         when:
         underTest.setFields()

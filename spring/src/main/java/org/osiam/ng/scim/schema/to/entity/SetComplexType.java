@@ -28,10 +28,10 @@ import java.util.Map;
 
 public class SetComplexType {
 
-    private final SetUserFields.Mode mode;
+    private final GenericSCIMToEntityWrapper.Mode mode;
     private final Object entity;
 
-    public SetComplexType(SetUserFields.Mode mode, Object entity) {
+    public SetComplexType(GenericSCIMToEntityWrapper.Mode mode, Object entity) {
 
         this.mode = mode;
         this.entity = entity;
@@ -39,10 +39,10 @@ public class SetComplexType {
 
     void setComplexType(Field entityField, Object value) throws IllegalAccessException, InstantiationException {
         Object target = getOrCreateComplexType(entityField);
-        SetUserSingleFields setUserSingleFields = new SetUserSingleFields(target, mode);
+        EntityFieldWrapper entityFieldWrapper = new EntityFieldWrapper(target, mode);
         GetFieldsOfInputAndTarget getFieldsOfInputAndTarget =
                 new GetFieldsOfInputAndTarget(value.getClass(), entityField.getType());
-        setValuesOfComplexType(value, getFieldsOfInputAndTarget, setUserSingleFields);
+        setValuesOfComplexType(value, getFieldsOfInputAndTarget, entityFieldWrapper);
         entityField.set(entity, target);
     }
 
@@ -55,17 +55,17 @@ public class SetComplexType {
         return target;
     }
 
-    private void setValuesOfComplexType(Object value, GetFieldsOfInputAndTarget getFieldsOfInputAndTarget, SetUserSingleFields setUserSingleFields) throws IllegalAccessException, InstantiationException {
+    private void setValuesOfComplexType(Object value, GetFieldsOfInputAndTarget getFieldsOfInputAndTarget, EntityFieldWrapper entityFieldWrapper) throws IllegalAccessException, InstantiationException {
         for (Map.Entry<String, Field> i : getFieldsOfInputAndTarget.getInputFields().entrySet()) {
-            setValueOfComplexType(value, getFieldsOfInputAndTarget, setUserSingleFields, i);
+            setValueOfComplexType(value, getFieldsOfInputAndTarget, entityFieldWrapper, i);
         }
     }
 
-    private void setValueOfComplexType(Object value, GetFieldsOfInputAndTarget getFieldsOfInputAndTarget, SetUserSingleFields setUserSingleFields, Map.Entry<String, Field> i) throws IllegalAccessException, InstantiationException {
+    private void setValueOfComplexType(Object value, GetFieldsOfInputAndTarget getFieldsOfInputAndTarget, EntityFieldWrapper entityFieldWrapper, Map.Entry<String, Field> i) throws IllegalAccessException, InstantiationException {
         Field f = getFieldsOfInputAndTarget.getTargetFields().get(i.getKey());
         i.getValue().setAccessible(true);
         Object userValue = i.getValue().get(value);
-        setUserSingleFields.updateSingleField(f, userValue, i.getKey());
+        entityFieldWrapper.updateSingleField(f, userValue, i.getKey());
     }
 
 

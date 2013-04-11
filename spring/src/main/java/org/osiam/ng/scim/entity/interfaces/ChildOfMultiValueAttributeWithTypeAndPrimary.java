@@ -23,6 +23,10 @@
 
 package org.osiam.ng.scim.entity.interfaces;
 
+/**
+ * Means that an Entity is expressed by an MultiValuedAttribute in SCIM and has also a type and primary field.
+ *
+ */
 public interface ChildOfMultiValueAttributeWithTypeAndPrimary extends ChildOfMultiValueAttributeWithType {
 
     boolean isPrimary();

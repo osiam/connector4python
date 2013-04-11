@@ -23,9 +23,20 @@
 
 package org.osiam.ng.scim.entity.interfaces;
 
+/**
+ * Means that an Entity is expressed by an MultiValuedAttribute in SCIM and has also a type.
+ */
 public interface ChildOfMultiValueAttributeWithType extends ChildOfMultiValueAttribute {
+    /**
+     * The type of a multi value attribute (e.q. home, work)
+     *
+     * @return String containing the value of the type or null if not set
+     */
     String getType();
 
+    /**
+     * Sets the type of a multi value attribute (e.q. home, work)
+     */
     void setType(String type);
 
 

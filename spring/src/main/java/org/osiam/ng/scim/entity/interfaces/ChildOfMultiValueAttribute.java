@@ -23,9 +23,22 @@
 
 package org.osiam.ng.scim.entity.interfaces;
 
+/**
+ * Means that an Entity is expressed by an MultiValuedAttribute in SCIM.
+ * <p/>
+ * It must have at least the methods get- and setValue
+ */
 public interface ChildOfMultiValueAttribute {
+    /**
+     * Returns the value of a multi value attribute, in lists this value is also used as a key.
+     *
+     * @return the value of a multi value attribute
+     */
     String getValue();
 
+    /**
+     * Sets the value of a multi value attribute, in lists this value is also used as a key.
+     */
     void setValue(String value);
 
 }

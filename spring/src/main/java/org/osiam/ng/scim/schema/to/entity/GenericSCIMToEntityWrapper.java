@@ -26,48 +26,44 @@ package org.osiam.ng.scim.schema.to.entity;
 import scim.schema.v2.User;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * This class has the purpose to update fields from a ScimUser to an entity class.
+ * This class has the purpose to make it easier to write own provisiong classes with the purpose to map SCIM Classes to
+ * Entity-Classes.
  * <p/>
- * It will have to modes: one is PUT and the second will be PATCH.
+ * How ever this class is in a very early state and not very stable -- therefor you have to follow some rules:
  * <p/>
- * This class should be generalized and in the SCIM project to make it easier to create SCIM-Provisioning-Classes
+ * 1. the names of the fields in your entity must be equal to the names used in the ScimSchema
+ * 2. if your Entity is an implementation of a multi value object it must implement ChildOfMultiValueAttribute
+ * 3. the lists of your entity must be initialized
  */
-public class SetUserFields {
+public class GenericSCIMToEntityWrapper {
 
 
-    private Object entity;
-    private User user;
+    static final String[] READ_ONLY_FIELDS = {"id", "meta", "groups"};
+    static final Set<String> READ_ONLY_FIELD_SET = new HashSet<>(Arrays.asList(READ_ONLY_FIELDS));
+    static final Set<String> NOT_DELETABLE = new HashSet<>(Arrays.asList("username"));
     private final Mode mode;
     private final SCIMEntities scimEntities;
+    private Object entity;
+    private User user;
 
-    public SetUserFields(User user, Object entity, Mode mode, SCIMEntities scimEntities) {
+    public GenericSCIMToEntityWrapper(User user, Object entity, Mode mode, SCIMEntities scimEntities) {
         this.user = user;
         this.entity = entity;
         this.mode = mode;
         this.scimEntities = scimEntities;
     }
 
-    public enum Mode {
-        PATCH, POST
-    }
-
-    static final String[] READ_ONLY_FIELDS = {"id", "meta", "groups"};
-
-    static final Set<String> READ_ONLY_FIELD_SET = new HashSet<>(Arrays.asList(READ_ONLY_FIELDS));
-
-    static final Set<String> NOT_DELETABLE = new HashSet<>(Arrays.asList("username"));
-
     public void setFields() throws IllegalAccessException, InstantiationException {
-        //        Map<String, Field> userFields = getFieldsOfInputAndTarget.getFieldsAsNormalizedMap(user.getClass());
-        //Map<String, Field> entityFields = getFieldsOfInputAndTarget.getFieldsAsNormalizedMap(entity.getClass());
-
         GetFieldsOfInputAndTarget fields = new GetFieldsOfInputAndTarget(user.getClass(), entity.getClass());
-        SetUserListFields setUserListFields = new SetUserListFields(entity, mode);
-        SetUserSingleFields setUserSingleFields = new SetUserSingleFields(entity, mode);
-        Set<String> doNotUpdateThem = deleteAttributes(fields.getTargetFields(), setUserSingleFields);
+        EntityListFieldWrapper entityListFieldWrapper = new EntityListFieldWrapper(entity, mode);
+        EntityFieldWrapper entityFieldWrapper = new EntityFieldWrapper(entity, mode);
+        Set<String> doNotUpdateThem = deleteAttributes(fields.getTargetFields(), entityFieldWrapper);
 
         for (Map.Entry<String, Field> e : fields.getInputFields().entrySet()) {
             Field field = fields.getInputFields().get(e.getKey());
@@ -76,43 +72,48 @@ public class SetUserFields {
                 Object userValue = field.get(user);
                 SCIMEntities.Entity attributes = scimEntities.fromString(e.getKey());
                 if (attributes == null) {
-                    setUserSingleFields.updateSingleField(fields.getTargetFields().get(e.getKey()), userValue, e.getKey());
+                    entityFieldWrapper
+                            .updateSingleField(fields.getTargetFields().get(e.getKey()), userValue, e.getKey());
                 } else {
-                    setUserListFields.set(userValue, attributes, fields.getTargetFields().get(e.getKey()));
+                    entityListFieldWrapper.set(userValue, attributes, fields.getTargetFields().get(e.getKey()));
                 }
             }
         }
     }
 
-    private Set<String> deleteAttributes(Map<String, Field> entityFields, SetUserSingleFields setUserSingleFields) throws IllegalAccessException {
+    private Set<String> deleteAttributes(Map<String, Field> entityFields, EntityFieldWrapper entityFieldWrapper)
+            throws IllegalAccessException {
         Set<String> doNotUpdateThem = new HashSet<>();
         if (mode == Mode.PATCH && user.getMeta() != null) {
             for (String s : user.getMeta().getAttributes()) {
                 String key = s.toLowerCase();
                 if (!NOT_DELETABLE.contains(key) && !READ_ONLY_FIELD_SET.contains(key)) {
-                    deleteAttribute(entityFields, setUserSingleFields, doNotUpdateThem, key);
+                    deleteAttribute(entityFields, entityFieldWrapper, doNotUpdateThem, key);
                 }
             }
         }
         return doNotUpdateThem;
     }
 
-    private void deleteAttribute(Map<String, Field> entityFields, SetUserSingleFields setUserSingleFields, Set<String> doNotUpdateThem, String key) throws IllegalAccessException {
+    private void deleteAttribute(Map<String, Field> entityFields, EntityFieldWrapper entityFieldWrapper,
+                                 Set<String> doNotUpdateThem, String key) throws IllegalAccessException {
         //may use pattern instead ..
         if (key.contains(".")) {
             deletePartsOfAComplexAttribute(entityFields, doNotUpdateThem, key);
         } else {
-            deleteSimpleAttribute(entityFields, setUserSingleFields, doNotUpdateThem, key);
+            deleteSimpleAttribute(entityFields, entityFieldWrapper, doNotUpdateThem, key);
         }
     }
 
-    private void deleteSimpleAttribute(Map<String, Field> entityFields, SetUserSingleFields setUserSingleFields, Set<String> doNotUpdateThem, String key) throws IllegalAccessException {
+    private void deleteSimpleAttribute(Map<String, Field> entityFields, EntityFieldWrapper entityFieldWrapper,
+                                       Set<String> doNotUpdateThem, String key) throws IllegalAccessException {
         Field entityField = entityFields.get(key);
-        setUserSingleFields.setEntityFieldToNull(entityField);
+        entityFieldWrapper.setEntityFieldToNull(entityField);
         doNotUpdateThem.add(key);
     }
 
-    private void deletePartsOfAComplexAttribute(Map<String, Field> entityFields, Set<String> doNotUpdateThem, String key) throws IllegalAccessException {
+    private void deletePartsOfAComplexAttribute(Map<String, Field> entityFields, Set<String> doNotUpdateThem,
+                                                String key) throws IllegalAccessException {
         String[] complexMethod = key.split("\\.");
 
         int lastElement = complexMethod.length - 1;
@@ -129,6 +130,10 @@ public class SetUserFields {
         doNotUpdateThem.add(complexMethod[0]);
     }
 
+    public enum Mode {
+        PATCH, POST
+    }
+
     private class GetComplexEntityFields {
         private Map<String, Field> entityFields;
         private String key;
@@ -139,7 +144,6 @@ public class SetUserFields {
             this.key = key;
             this.lastObjectOfField = lastObjectOfField;
         }
-
 
         public GetComplexEntityFields invoke() throws IllegalAccessException {
             Field field = entityFields.get(key);
