@@ -1,0 +1,80 @@
+/*
+ * Copyright (C) 2013 tarent AG
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+package org.osiam.ng.scim.entities;
+
+import scim.schema.v2.MultiValuedAttribute;
+
+import java.util.UUID;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: jtodea
+ * Date: 15.03.13
+ * Time: 14:24
+ * To change this template use File | Settings | File Templates.
+ */
+
+public class MemberEntity {
+
+    
+    
+    private long id;
+
+    
+    private UUID value;
+
+    
+    private String display;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public UUID getValue() {
+        return value;
+    }
+
+    public void setValue(UUID value) {
+        this.value = value;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
+    }
+
+    public MultiValuedAttribute toScim() {
+        return new MultiValuedAttribute.Builder().
+                setDisplay(getDisplay()).
+                setValue(getValue()).
+                build();
+    }
+}

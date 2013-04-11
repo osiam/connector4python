@@ -23,5 +23,8 @@
 
 package scim.schema.v2;
 
-public interface NeedToBeReplacedCompletly {
+import java.util.Collection;
+
+public interface NeedToBeReplacedCompletely {
+    public Collection<?> values();
 }

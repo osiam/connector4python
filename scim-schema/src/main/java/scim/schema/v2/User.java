@@ -520,7 +520,7 @@ public class User extends CoreResource {
      * Java class for anonymous complex type.
      */
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Addresses implements NeedToBeReplacedCompletly{
+    public static class Addresses implements NeedToBeReplacedCompletely {
 
         private List<Address> address = new ArrayList<>();
 
@@ -548,6 +548,10 @@ public class User extends CoreResource {
             return this.address;
         }
 
+        @Override
+        public Collection<?> values() {
+            return this.address;
+        }
     }
 
 
