@@ -2,8 +2,7 @@ package org.osiam.ng.resourceserver.dao
 
 import org.osiam.ng.resourceserver.entities.UserEntity
 import org.osiam.ng.scim.exceptions.ResourceExistsException
-import scim.schema.v2.Meta
-import scim.schema.v2.Name
+import org.osiam.ng.scim.schema.to.entity.SetUserFields
 import scim.schema.v2.User
 import spock.lang.Specification
 

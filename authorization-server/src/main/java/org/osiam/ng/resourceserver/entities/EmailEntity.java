@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttributeWithTypeAndPrimary;
 import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.Column;

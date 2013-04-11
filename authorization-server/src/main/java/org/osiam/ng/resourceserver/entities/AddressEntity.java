@@ -59,7 +59,7 @@ public class AddressEntity {
     private String country;
 
     @Column(name = "postgresql_does_not_like_primary")
-    private boolean primary;
+    private Boolean primary;
 
     @ManyToOne
     private UserEntity user;

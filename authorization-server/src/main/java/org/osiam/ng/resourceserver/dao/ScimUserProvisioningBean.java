@@ -26,6 +26,7 @@ package org.osiam.ng.resourceserver.dao;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
+import org.osiam.ng.scim.schema.to.entity.SetUserFields;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
@@ -45,7 +46,6 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
 
     @Inject
     private UserDAO userDao;
-
 
     @Override
     public User getById(String id) {
@@ -67,12 +67,12 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
         return userEntity.toScim();
     }
 
-
     @Override
     public User replaceUser(String id, User user) {
 
         UserEntity entity = userDao.getById(id);
-        SetUserFields setUserFields = new SetUserFields(user, entity, SetUserFields.Mode.POST);
+        SetUserFields setUserFields =
+                new SetUserFields(user, entity, SetUserFields.Mode.POST, UserSCIMEntities.ENTITIES);
         setUserFieldsWrapException(setUserFields);
 
         userDao.update(entity);
@@ -82,15 +82,16 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     private void setUserFieldsWrapException(SetUserFields setUserFields) {
         try {
             setUserFields.setFields();
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException("This should not happen.");
+        } catch (IllegalAccessException | InstantiationException e) {
+            throw new IllegalStateException("This should not happen.", e);
         }
     }
 
     @Override
     public User updateUser(String id, User user) {
         UserEntity entity = userDao.getById(id);
-        SetUserFields setUserFields = new SetUserFields(user, entity, SetUserFields.Mode.PATCH);
+        SetUserFields setUserFields =
+                new SetUserFields(user, entity, SetUserFields.Mode.PATCH, UserSCIMEntities.ENTITIES);
         setUserFieldsWrapException(setUserFields);
         userDao.update(entity);
         return entity.toScim();

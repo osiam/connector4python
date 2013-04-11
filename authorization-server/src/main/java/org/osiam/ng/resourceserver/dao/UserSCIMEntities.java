@@ -21,41 +21,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver.entities;
+package org.osiam.ng.resourceserver.dao;
 
-import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
-import scim.schema.v2.MultiValuedAttribute;
+import org.osiam.ng.resourceserver.entities.*;
+import org.osiam.ng.scim.schema.to.entity.SCIMEntities;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * X509 Certificates Entity
- */
-@Entity(name = "scim_certificate")
-public class X509CertificateEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttribute {
+public class UserSCIMEntities implements SCIMEntities {
+    public static final UserSCIMEntities ENTITIES = new UserSCIMEntities();
+    private Map<String, Entity> fromString = new HashMap<>();
 
-    @ManyToOne
-    private UserEntity user;
-
-
-    public UserEntity getUser() {
-        return user;
+    private UserSCIMEntities() {
+        putEntity("emails", EmailEntity.class, true);
+        putEntity("ims", ImEntity.class, true);
+        putEntity("phonenumbers", PhoneNumberEntity.class, true);
+        putEntity("photos", PhotoEntity.class, true);
+        putEntity("entitlements", EntitlementsEntity.class, true);
+        putEntity("roles", RolesEntity.class, true);
+        putEntity("x509certificates", X509CertificateEntity.class, true);
+        putEntity("addresses", AddressEntity.class, false);
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    private void putEntity(String key, Class<?> clazz, boolean multiValue) {
+        fromString.put(key, new Entity(clazz, multiValue));
     }
 
-    public MultiValuedAttribute toScim() {
-        return new MultiValuedAttribute.Builder().
-                setValue(getValue()).
-                build();
-    }
-
-    public static X509CertificateEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
-        X509CertificateEntity x509CertificateEntity = new X509CertificateEntity();
-        x509CertificateEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
-        return x509CertificateEntity;
+    @Override
+    public Entity fromString(String key) {
+        return fromString.get(key);
     }
 }

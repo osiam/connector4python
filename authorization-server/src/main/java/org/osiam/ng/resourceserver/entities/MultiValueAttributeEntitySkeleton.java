@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
