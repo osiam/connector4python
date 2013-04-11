@@ -2,7 +2,7 @@ package org.osiam.ng.resourceserver.dao
 
 import org.osiam.ng.resourceserver.entities.UserEntity
 import org.osiam.ng.scim.exceptions.ResourceExistsException
-import org.osiam.ng.scim.schema.to.entity.SetUserFields
+import org.osiam.ng.scim.schema.to.entity.GenericSCIMToEntityWrapper
 import scim.schema.v2.User
 import spock.lang.Specification
 
@@ -76,7 +76,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should wrap IllegalAccessEsception to an IllegalState"() {
         given:
-        SetUserFields setUserFields = Mock(SetUserFields)
+        GenericSCIMToEntityWrapper setUserFields = Mock(GenericSCIMToEntityWrapper)
 
         when:
         scimUserProvisioningBean.setUserFieldsWrapException(setUserFields);

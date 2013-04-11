@@ -26,7 +26,7 @@ package org.osiam.ng.resourceserver.dao;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
-import org.osiam.ng.scim.schema.to.entity.SetUserFields;
+import org.osiam.ng.scim.schema.to.entity.GenericSCIMToEntityWrapper;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
@@ -71,17 +71,17 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     public User replaceUser(String id, User user) {
 
         UserEntity entity = userDao.getById(id);
-        SetUserFields setUserFields =
-                new SetUserFields(user, entity, SetUserFields.Mode.POST, UserSCIMEntities.ENTITIES);
-        setUserFieldsWrapException(setUserFields);
+        GenericSCIMToEntityWrapper genericSCIMToEntityWrapper =
+                new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.POST, UserSCIMEntities.ENTITIES);
+        setUserFieldsWrapException(genericSCIMToEntityWrapper);
 
         userDao.update(entity);
         return entity.toScim();
     }
 
-    private void setUserFieldsWrapException(SetUserFields setUserFields) {
+    private void setUserFieldsWrapException(GenericSCIMToEntityWrapper genericSCIMToEntityWrapper) {
         try {
-            setUserFields.setFields();
+            genericSCIMToEntityWrapper.setFields();
         } catch (IllegalAccessException | InstantiationException e) {
             throw new IllegalStateException("This should not happen.", e);
         }
@@ -90,9 +90,9 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     @Override
     public User updateUser(String id, User user) {
         UserEntity entity = userDao.getById(id);
-        SetUserFields setUserFields =
-                new SetUserFields(user, entity, SetUserFields.Mode.PATCH, UserSCIMEntities.ENTITIES);
-        setUserFieldsWrapException(setUserFields);
+        GenericSCIMToEntityWrapper genericSCIMToEntityWrapper =
+                new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, UserSCIMEntities.ENTITIES);
+        setUserFieldsWrapException(genericSCIMToEntityWrapper);
         userDao.update(entity);
         return entity.toScim();
     }
