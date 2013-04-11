@@ -75,4 +75,6 @@ public interface SCIMUserProvisioning {
      *          if no user with the given id got found
      */
     User updateUser(String id, User user);
+
+    void deleteUser(String id);
 }

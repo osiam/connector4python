@@ -190,8 +190,8 @@ class UserControllerTest extends Specification {
         def result = underTest.replace(id, user, httpServletRequest, httpServletResponse)
         then:
         1 * provisioning.replaceUser(id, user) >> user
-        1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
-        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/id")
+        1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/"+id)
+        1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/"+id)
         validateUser(result)
     }
 

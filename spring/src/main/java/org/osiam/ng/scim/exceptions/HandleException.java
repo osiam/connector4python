@@ -43,7 +43,7 @@ public class HandleException extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         LOGGER.log(Level.WARNING, "An exception occurred", ex);
         HttpStatus status = setStatus(ex);
-        Error error = new Error(status.name(), ex.getMessage());
+        JsonErrorResult error = new JsonErrorResult(status.name(), ex.getMessage());
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
@@ -58,11 +58,11 @@ public class HandleException extends ResponseEntityExceptionHandler {
     }
 
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    static class Error {
+    static class JsonErrorResult {
         private String error_code;
         private String description;
 
-        public Error(String name, String message) {
+        public JsonErrorResult(String name, String message) {
             this.error_code = name;
             this.description = message;
         }

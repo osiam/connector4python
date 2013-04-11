@@ -84,10 +84,7 @@ public class UserController {
     public User replace(@PathVariable final String id, @RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
         User createdUser = scimUserProvisioning.replaceUser(id, user);
         String requestUrl = request.getRequestURL().toString();
-        //TODO may obsolete because internal id doesn't change ...
-        String newLocation = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
-        URI uri = new UriTemplate("{newLocation}/{internalId}").expand(newLocation, createdUser.getId());
-        response.setHeader("Location", uri.toASCIIString());
+        response.setHeader("Location", requestUrl);
         return User.Builder.generateForOuput(createdUser);
     }
 
@@ -100,6 +97,15 @@ public class UserController {
         response.setHeader("Location", requestUrl);
         return User.Builder.generateForOuput(createdUser);
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable final String id, HttpServletRequest request, HttpServletResponse response) {
+        scimUserProvisioning.deleteUser(id);
+        String requestUrl = request.getRequestURL().toString();
+        response.setHeader("Location", requestUrl);
+    }
+
 
 
 }

@@ -33,7 +33,7 @@ class HandleExceptionTest extends Specification {
 
     def "exception result should contain a code and a description"() {
         when:
-        def errorResult = new HandleException.Error("hacja", "unso")
+        def errorResult = new HandleException.JsonErrorResult("hacja", "unso")
         then:
         errorResult.error_code == "hacja"
         errorResult.description == "unso"
@@ -44,8 +44,8 @@ class HandleExceptionTest extends Specification {
         def result = underTest.handleConflict(new NullPointerException("Dunno"), request)
         then:
         result.getStatusCode() == HttpStatus.CONFLICT
-        (result.getBody() as HandleException.Error).error_code == HttpStatus.CONFLICT.name()
-        (result.getBody() as HandleException.Error).description == "Dunno"
+        (result.getBody() as HandleException.JsonErrorResult).error_code == HttpStatus.CONFLICT.name()
+        (result.getBody() as HandleException.JsonErrorResult).description == "Dunno"
     }
 
     def "should set status to ResourceNotFound when org.osiam.ng.scim.exceptions.ResourceNotFoundException occurs"() {
@@ -53,8 +53,8 @@ class HandleExceptionTest extends Specification {
         def result = underTest.handleConflict(new ResourceNotFoundException("Dunno"), request)
         then:
         result.getStatusCode() == HttpStatus.NOT_FOUND
-        (result.getBody() as HandleException.Error).error_code == HttpStatus.NOT_FOUND.name()
-        (result.getBody() as HandleException.Error).description == "Dunno"
+        (result.getBody() as HandleException.JsonErrorResult).error_code == HttpStatus.NOT_FOUND.name()
+        (result.getBody() as HandleException.JsonErrorResult).description == "Dunno"
     }
 
     def "should set status to I_AM_A_TEAPOT when org.osiam.ng.scim.exceptions.SchemaUnknownException occurs"() {
@@ -62,8 +62,8 @@ class HandleExceptionTest extends Specification {
         def result = underTest.handleConflict(new SchemaUnknownException(), request)
         then:
         result.getStatusCode() == HttpStatus.I_AM_A_TEAPOT
-        (result.getBody() as HandleException.Error).error_code == HttpStatus.I_AM_A_TEAPOT.name()
-        (result.getBody() as HandleException.Error).description == "Delivered schema is unknown."
+        (result.getBody() as HandleException.JsonErrorResult).error_code == HttpStatus.I_AM_A_TEAPOT.name()
+        (result.getBody() as HandleException.JsonErrorResult).description == "Delivered schema is unknown."
     }
 
 
