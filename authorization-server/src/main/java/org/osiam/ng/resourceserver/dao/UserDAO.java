@@ -61,14 +61,23 @@ public class UserDAO {
 
     //TODO ugly!!! is there a jpa solution for it?
     @SuppressWarnings("unchecked")
-    private void findExistingMultiValueAttributes(UserEntity userEntity) {
-        userEntity.setRoles((Set<RolesEntity>) replaceInstanceWithEntityInstance(userEntity.getRoles(), RolesEntity.class));
-        userEntity.setEmails((Set<EmailEntity>) replaceInstanceWithEntityInstance(userEntity.getEmails(), EmailEntity.class));
-        userEntity.setEntitlements((Set<EntitlementsEntity>) replaceInstanceWithEntityInstance(userEntity.getEntitlements(), EntitlementsEntity.class));
-        userEntity.setIms((Set<ImEntity>) replaceInstanceWithEntityInstance(userEntity.getIms(), ImEntity.class));
-        userEntity.setPhotos((Set<PhotoEntity>) replaceInstanceWithEntityInstance(userEntity.getPhotos(), PhotoEntity.class));
-        userEntity.setPhoneNumbers((Set<PhoneNumberEntity>) replaceInstanceWithEntityInstance(userEntity.getPhoneNumbers(), PhoneNumberEntity.class));
-        userEntity.setX509Certificates((Set<X509CertificateEntity>) replaceInstanceWithEntityInstance(userEntity.getX509Certificates(), X509CertificateEntity.class));
+    private void findExistingMultiValueAttributes(UserEntity user) {
+        user.setRoles(
+                (Set<RolesEntity>) replaceInstanceWithEntityInstance(user.getRoles(), RolesEntity.class));
+        user.setEmails(
+                (Set<EmailEntity>) replaceInstanceWithEntityInstance(user.getEmails(), EmailEntity.class));
+        user.setEntitlements(
+                (Set<EntitlementsEntity>) replaceInstanceWithEntityInstance(user.getEntitlements(),
+                        EntitlementsEntity.class));
+        user.setIms((Set<ImEntity>) replaceInstanceWithEntityInstance(user.getIms(), ImEntity.class));
+        user.setPhotos(
+                (Set<PhotoEntity>) replaceInstanceWithEntityInstance(user.getPhotos(), PhotoEntity.class));
+        user.setPhoneNumbers(
+                (Set<PhoneNumberEntity>) replaceInstanceWithEntityInstance(user.getPhoneNumbers(),
+                        PhoneNumberEntity.class));
+        user.setX509Certificates(
+                (Set<X509CertificateEntity>) replaceInstanceWithEntityInstance(user.getX509Certificates(),
+                        X509CertificateEntity.class));
     }
 
     @SuppressWarnings("unchecked")
@@ -102,9 +111,7 @@ public class UserDAO {
     private UserEntity getSingleUserEntity(Query query, String identifier) {
         List result = query.getResultList();
         if (result.isEmpty()) {
-            throw new ResourceNotFoundException("No user " +
-                    identifier +
-                    " found.");
+            throw new ResourceNotFoundException("Resource " + identifier + " not found.");
         }
         return (UserEntity) result.get(0);
     }
@@ -117,5 +124,11 @@ public class UserDAO {
         }
         findExistingMultiValueAttributes(entity);
         em.merge(entity);
+    }
+
+    public void delete(String id) {
+        UserEntity userEntity = getById(id);
+        em.remove(userEntity);
+
     }
 }

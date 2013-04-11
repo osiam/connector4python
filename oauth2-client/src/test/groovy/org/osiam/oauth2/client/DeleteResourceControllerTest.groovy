@@ -21,34 +21,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.oauth2.client.service
+package org.osiam.oauth2.client
 
 import spock.lang.Specification
 
-class ClientDetailsLoadingBeanTest extends Specification {
-    def underTest = new ClientDetailsLoadingBean()
+import javax.servlet.http.HttpServletRequest
 
-    def "should return one fake client"(){
+class DeleteResourceControllerTest extends Specification {
+    def getResponseAndCast = Mock(GetResponseAndCast)
+    HttpServletRequest servletRequest = Mock(HttpServletRequest)
+
+
+
+    def underTest = new DeleteResourceController(getResponseAndCast: getResponseAndCast)
+
+
+    def "should be able to delete a user resource"() {
         when:
-        def result = underTest.loadClientByClientId("client!")
+        underTest.delete(servletRequest,"id", "access_token")
+
         then:
-        result.clientId == "client!"
-        result.isScoped()
-        result.isSecretRequired()
-        result.getAccessTokenValiditySeconds() == 1337
-        result.getRefreshTokenValiditySeconds() == 1337
-
-        result.getScope().contains("GET")
-        result.getScope().contains("POST")
-        result.getScope().contains("PUT")
-        result.getScope().contains("DELETE")
-        result.getResourceIds().size() == 0
-        result.getAuthorizedGrantTypes().size() == 3
-        result.getRegisteredRedirectUri().size() > 1
-        !result.getAuthorities()
-        !result.getAdditionalInformation()
-        result.getClientSecret() == "secret"
-
+        1 * getResponseAndCast.getResponseAndSetAccessToken(servletRequest, "access_token", _, _)
+        1 * servletRequest.getScheme()
+        1 * servletRequest.getServerName()
 
     }
 }

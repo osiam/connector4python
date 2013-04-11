@@ -84,4 +84,19 @@ class CRUDRedirectControllerTest extends Specification {
         1 * request.setAttribute("access_token", "abc")
     }
 
+    def "should contain /crud/user/delete deleting an user"() {
+        given:
+        def mapping = CRUDRedirectController.class.getDeclaredMethod("redirectToDeleteUser", HttpServletRequest)
+                .getAnnotation(RequestMapping)
+        when:
+        def result = underTest.redirectToDeleteUser(request)
+
+        then:
+        result == "delete_user"
+        mapping.value() == ["/user/delete"]
+        1 * request.getParameter("access_token") >> "abc"
+        1 * request.setAttribute("access_token", "abc")
+    }
+
+
 }

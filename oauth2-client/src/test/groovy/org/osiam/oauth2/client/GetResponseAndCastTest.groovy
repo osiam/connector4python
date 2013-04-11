@@ -26,6 +26,7 @@ package org.osiam.oauth2.client
 import org.apache.http.Header
 import org.apache.http.HttpEntity
 import org.apache.http.HttpResponse
+import org.apache.http.StatusLine
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase
 import org.apache.http.message.BasicHeader
@@ -55,6 +56,7 @@ class GetResponseAndCastTest extends Specification {
         client.execute(_) >> response
         response.getEntity() >> entity
         entity.getContent() >> userStream
+        response.getStatusLine() >> Mock(StatusLine)
     }
 
 

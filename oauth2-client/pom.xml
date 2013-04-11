@@ -125,6 +125,10 @@
                             <extraClasspath>../example/</extraClasspath>
                         </contextHandler>
                     </contextHandlers>
+                        <stopPort>9966</stopPort>
+                        <stopKey>jetty-stop</stopKey>
+                        <scanIntervalSeconds>10</scanIntervalSeconds>
+
                 </configuration>
             </plugin>
         </plugins>

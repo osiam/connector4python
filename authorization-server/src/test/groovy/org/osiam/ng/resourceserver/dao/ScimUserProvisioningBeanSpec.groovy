@@ -84,6 +84,14 @@ class ScimUserProvisioningBeanSpec extends Specification {
         1 * setUserFields.setFields() >> {throw new IllegalAccessException("Blubb")}
         def e = thrown(IllegalStateException)
         e.message == "This should not happen."
+    }
 
+    def "should call dao delete on delete"(){
+        given:
+        def id = UUID.randomUUID().toString()
+        when:
+        scimUserProvisioningBean.deleteUser(id)
+        then:
+        1 * userDao.delete(id)
     }
 }

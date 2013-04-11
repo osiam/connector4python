@@ -47,4 +47,7 @@ public abstract class MultiValueAttributeEntitySkeleton implements ChildOfMultiV
     public void setValue(String value) {
         this.value = value;
     }
+
+
+
 }

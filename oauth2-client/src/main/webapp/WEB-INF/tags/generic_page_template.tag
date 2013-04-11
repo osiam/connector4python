@@ -43,6 +43,7 @@
         <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/put?access_token=${access_token}">PUT USER</a></li>
         <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/put?access_token=${access_token}">POST USER</a></li>
         <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/patch?access_token=${access_token}">PATCH USER</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/delete?access_token=${access_token}">DELETE USER</a></li>
     </ul>
 </div>
 <div id="body">

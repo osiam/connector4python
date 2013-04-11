@@ -76,7 +76,7 @@ class UserDAOTest extends Specification {
         1 * query.setParameter("internalId", internalId)
         1 * query.getResultList() >> queryResults
         def e = thrown(ResourceNotFoundException)
-        e.message == "No user " + internalId.toString() + " found."
+        e.message == "Resource " + internalId.toString() + " not found."
     }
 
     def "should throw an exception when no user got found by name"(){
@@ -90,7 +90,7 @@ class UserDAOTest extends Specification {
         1 * query.setParameter("username", "name")
         1 * query.getResultList() >> queryResults
         def e = thrown(ResourceNotFoundException)
-        e.message == "No user name found."
+        e.message == "Resource name not found."
 
     }
 
@@ -172,6 +172,21 @@ class UserDAOTest extends Specification {
         0 * userEntity.internalId >> id
         0 * passwordEncoder.encodePassword("password", id) >> "moep"
         1* em.merge(userEntity)
+
+    }
+
+    def "should first get an user than delete it"(){
+        given:
+        def query = Mock(Query)
+        def queryResults = [new UserEntity()]
+        def id = UUID.randomUUID().toString()
+        when:
+        underTest.delete(id)
+        then:
+        1 * em.createNamedQuery("getUserById") >> query
+        1 * query.setParameter("internalId", UUID.fromString(id))
+        1 * query.getResultList() >> queryResults
+        1 * em.remove(queryResults.first())
 
     }
 }

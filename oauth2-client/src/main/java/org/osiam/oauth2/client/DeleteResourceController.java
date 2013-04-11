@@ -23,34 +23,38 @@
 
 package org.osiam.oauth2.client;
 
+
+import org.apache.http.client.methods.HttpDelete;
+import org.osiam.oauth2.client.exceptions.UserFriendlyException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.URLEncoder;
+import java.lang.reflect.InvocationTargetException;
+
+import static org.osiam.oauth2.client.UpdateResourceController.createUrl;
 
 @Controller
-public class AuthCodeController {
+public class DeleteResourceController {
 
-    @RequestMapping("/authcode")
-    public String redirectTogetAuthCode(HttpServletRequest req) throws ServletException, IOException {
-        String environment = req.getScheme() +
-                "://" +
-                req.getServerName() +
-                ":8080";
-        String clientId = "testClient";
-        String redirectUri = req.getScheme() +
-                "://" +
-                req.getServerName() +
-                ":8080/oauth2-client/accessToken";
-        String url = environment +
-                "/authorization-server/oauth/authorize?response_type=code&scope=GET%20POST%20PUT%20PATCH%20DELETE&state=haha&" +
-                "client_id=" +
-                clientId +
-                "&redirect_uri=" +
-                URLEncoder.encode(redirectUri, "UTF-8");
-        return "redirect:" + url;
+    @Autowired
+    private GetResponseAndCast getResponseAndCast;
+
+    @RequestMapping(value = "/resource/delete/{id}")
+    public String delete(HttpServletRequest req, @PathVariable String id, @RequestParam String access_token)
+            throws ServletException, IOException, UserFriendlyException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        HttpDelete httpDelete = new HttpDelete(createUrl(req, access_token, id));
+        CRUDRedirectController.userIds.remove(id);
+        CRUDRedirectController.invalidUserIds.add(id);
+        req.setAttribute("invalidUserIds", CRUDRedirectController.invalidUserIds);
+        getResponseAndCast.getResponseAndSetAccessToken(req, access_token, null, httpDelete);
+        return "user";
     }
+
 }

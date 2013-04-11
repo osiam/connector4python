@@ -88,7 +88,7 @@ public class UserEntity implements UserDetails {
     private Set<PhotoEntity> photos;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<AddressEntity> addresses;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<GroupEntity> groups;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<EntitlementsEntity> entitlements;

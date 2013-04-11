@@ -96,4 +96,10 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
         userDao.update(entity);
         return entity.toScim();
     }
+
+    @Override
+    public void deleteUser(String id) {
+
+        userDao.delete(id);
+    }
 }

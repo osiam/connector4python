@@ -36,8 +36,11 @@ public class CRUDRedirectController {
     public static Set<String> userIds = new ConcurrentSkipListSet<>();
 
     static {
+        //hard -coded- marissa
         userIds.add("CEF9452E-00A9-4CEC-A086-D171374FFBEF");
     }
+
+    public static Set<String> invalidUserIds = new ConcurrentSkipListSet<>();
 
     @RequestMapping("/user/put")
     public String redirectToCreateUpdateUser(HttpServletRequest request) {
@@ -53,9 +56,21 @@ public class CRUDRedirectController {
 
     @RequestMapping("/user/get")
     public String redirectToGetUser(HttpServletRequest request) {
+        setAccessTokenAndKnownUserIds(request);
+        return "get_user";
+    }
+
+    private void setAccessTokenAndKnownUserIds(HttpServletRequest request) {
         request.setAttribute("access_token", request.getParameter("access_token"));
         request.setAttribute("userIds", userIds);
-        return "get_user";
+        request.setAttribute("invalidUserIds", invalidUserIds);
+    }
+
+    @RequestMapping("/user/delete")
+    public String redirectToDeleteUser(HttpServletRequest request) {
+        setAccessTokenAndKnownUserIds(request);
+
+        return "delete_user";
     }
 
 

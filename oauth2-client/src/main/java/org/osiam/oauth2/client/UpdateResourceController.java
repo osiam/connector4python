@@ -40,17 +40,21 @@ public class UpdateResourceController {
     }
 
     static String createEnvAndInvokeHttpCall(GetResponseAndCast getResponeAndCast, HttpServletRequest req, String access_token, String idForUpdate, String jsonString, Constructor<? extends HttpEntityEnclosingRequestBase> constructor) throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException, UserFriendlyException {
+        String url = createUrl(req, access_token, idForUpdate);
+        HttpEntityEnclosingRequestBase httpPut = constructor.newInstance(url);
+        getResponeAndCast.getResponseAndSetAccessToken(req, access_token, jsonString, httpPut);
+        return "user";
+    }
+
+    static String createUrl(HttpServletRequest req, String access_token, String idForUpdate) {
         String environment = req.getScheme() +
                 "://" +
                 req.getServerName() +
                 ":8080";
-        String url = environment +
+        return environment +
                 "/authorization-server/User/" +
                 idForUpdate +
                 "?access_token=" +
-                access_token;
-        HttpEntityEnclosingRequestBase httpPut = constructor.newInstance(url);
-        getResponeAndCast.getResponseAndSetAccessToken(req, access_token, jsonString, httpPut);
-        return "user";
+                access_token.trim();
     }
 }
