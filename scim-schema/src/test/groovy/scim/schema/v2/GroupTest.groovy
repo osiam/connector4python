@@ -33,7 +33,6 @@ class GroupTest extends Specification {
         def group = builder.build()
 
         then:
-        group.any == builder.any
         group.displayName == builder.displayName
         group.members == builder.members
     }
@@ -46,5 +45,26 @@ class GroupTest extends Specification {
 
         then:
         group.members.member.size() == 1
+    }
+
+    def "members should be a must exist implementation"() {
+        given:
+        def group = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object()).build()
+
+        when:
+        group.members.member.add(new MultiValuedAttribute.Builder().build())
+
+        then:
+        group.members.values() == group.members.member
+        group.members instanceof ContainsListOfMultiValue.MustExist
+
+    }
+
+
+    def "should contain empty public constructor for json serializing"() {
+        when:
+        def result = new Group()
+        then:
+        result
     }
 }

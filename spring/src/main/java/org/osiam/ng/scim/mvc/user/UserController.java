@@ -100,10 +100,8 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable final String id, HttpServletRequest request, HttpServletResponse response) {
+    public void delete(@PathVariable final String id) {
         scimUserProvisioning.deleteUser(id);
-        String requestUrl = request.getRequestURL().toString();
-        response.setHeader("Location", requestUrl);
     }
 
 

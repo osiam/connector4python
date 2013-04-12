@@ -325,7 +325,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.email == result
     }
 
@@ -335,7 +335,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.entitlement == result
     }
 
@@ -345,7 +345,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.group == result
     }
 
@@ -355,7 +355,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.im == result
     }
 
@@ -365,7 +365,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.phoneNumber == result
     }
 
@@ -375,7 +375,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.photo == result
     }
 
@@ -385,7 +385,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.role == result
     }
 
@@ -395,7 +395,7 @@ class UserTest extends Specification {
         when:
         def result = underTest.values()
         then:
-        underTest instanceof User.ContainsListOfMultiValue
+        underTest instanceof ContainsListOfMultiValue
         underTest.x509Certificate == result
     }
 

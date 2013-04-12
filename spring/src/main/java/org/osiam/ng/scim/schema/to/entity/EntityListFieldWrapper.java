@@ -26,9 +26,9 @@ package org.osiam.ng.scim.schema.to.entity;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttributeWithType;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttributeWithTypeAndPrimary;
+import scim.schema.v2.ContainsListOfMultiValue;
 import scim.schema.v2.MultiValuedAttribute;
 import scim.schema.v2.NeedToBeReplacedCompletely;
-import scim.schema.v2.User;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -71,10 +71,10 @@ public class EntityListFieldWrapper {
 
     @SuppressWarnings("unchecked")
     private void updateMultiValueList(Object userValue, SCIMEntities.Entity attributes, Field field) throws IllegalAccessException, InstantiationException {
-        if (userValue instanceof User.ContainsListOfMultiValue) {
+        if (userValue instanceof ContainsListOfMultiValue) {
             Object o = getFieldObject(field);
             Class<?> clazz = attributes.getClazz();
-            User.ContainsListOfMultiValue listOfMultiValue = (User.ContainsListOfMultiValue) userValue;
+            ContainsListOfMultiValue listOfMultiValue = (ContainsListOfMultiValue) userValue;
             updateList((Collection<Object>) o, clazz, listOfMultiValue);
         }
     }
@@ -84,7 +84,7 @@ public class EntityListFieldWrapper {
         return field.get(entity);
     }
 
-    private void updateList(Collection<Object> targetList, Class<?> clazz, User.ContainsListOfMultiValue listOfMultiValue) throws InstantiationException, IllegalAccessException {
+    private void updateList(Collection<Object> targetList, Class<?> clazz, ContainsListOfMultiValue listOfMultiValue) throws InstantiationException, IllegalAccessException {
         clearIfNotInPatchMode(targetList);
         for (MultiValuedAttribute m : listOfMultiValue.values()) {
             if (notDeleted(m, targetList)) {

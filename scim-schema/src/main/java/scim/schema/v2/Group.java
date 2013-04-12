@@ -23,24 +23,29 @@
 
 package scim.schema.v2;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.*;
 
 
 /**
  * Java class for Group complex type.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Group extends CoreResource{
 
-    private final String displayName;
-    private final Group.Members members;
-    private final Object any;
+    private String displayName;
+    private Group.Members members;
+
+    //JSON Serializing
+    public Group(){}
+
 
     public Group(Builder builder) {
         super(builder);
         this.displayName = builder.displayName;
         this.members = builder.members;
-        this.any = builder.any;
+//        this.id = builder.id;
 
     }
 
@@ -49,6 +54,19 @@ public class Group extends CoreResource{
         protected String displayName;
         protected Group.Members members;
         protected Object any;
+
+        public Builder(){}
+
+        public Builder(Group group) {
+            Builder builder = new Builder();
+            builder.id = group.id;
+            builder.meta = group.meta;
+            builder.externalId = group.externalId;
+            builder.displayName = group.displayName;
+            builder.members = group.members;
+
+
+        }
 
         public Builder setDisplayName(String displayName) {
             this.displayName = displayName;
@@ -99,23 +117,12 @@ public class Group extends CoreResource{
     }
 
     /**
-     * Gets the value of the any property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getAny() {
-        return any;
-    }
-
-    /**
      * Java class for anonymous complex type.
      */
-    public static class Members {
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    public static class Members implements ContainsListOfMultiValue.MustExist{
 
-        protected List<MultiValuedAttribute> member = new ArrayList<>();;
+        protected Set<MultiValuedAttribute> member = new HashSet<>();;
 
         /**
          * Gets the value of the member property.
@@ -139,10 +146,14 @@ public class Group extends CoreResource{
          * 
          * 
          */
-        public List<MultiValuedAttribute> getMember() {
+        public Set<MultiValuedAttribute> getMember() {
             return this.member;
         }
 
+        @Override
+        public Collection<MultiValuedAttribute> values() {
+            return this.member;
+        }
     }
 
 }

@@ -23,7 +23,6 @@
 
 package scim.schema.v2;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.*;
@@ -554,11 +553,6 @@ public class User extends CoreResource {
         }
     }
 
-
-    public static interface ContainsListOfMultiValue {
-        @JsonIgnore
-        public Collection<MultiValuedAttribute> values();
-    }
 
     /**
      * Java class for anonymous complex type.

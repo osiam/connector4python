@@ -109,6 +109,26 @@ class UserControllerTest extends Specification {
         defaultStatus.value() == HttpStatus.CREATED
     }
 
+    def "should contain a method to DELETE a user"(){
+        given:
+        Method method = UserController.class.getDeclaredMethod("delete", String)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseStatus defaultStatus = method.getAnnotation(ResponseStatus)
+        then:
+        mapping.method() == [RequestMethod.DELETE]
+        defaultStatus.value() == HttpStatus.OK
+    }
+
+    def "should call provisioning on DELETE"(){
+        when:
+        underTest.delete("id")
+        then:
+        1 * provisioning.deleteUser("id")
+    }
+
+
+
     def "should contain a method to PUT a user"(){
         given:
         //createUser(@RequestBody User user,HttpServletRequest request, HttpServletResponse response)
