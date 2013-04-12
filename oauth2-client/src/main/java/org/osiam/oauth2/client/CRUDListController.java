@@ -26,6 +26,7 @@ package org.osiam.oauth2.client;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import scim.schema.v2.ContainsListOfMultiValue;
 import scim.schema.v2.MultiValuedAttribute;
 import scim.schema.v2.User;
 
@@ -91,14 +92,14 @@ public class CRUDListController {
             }
         }
 
-        private final User.ContainsListOfMultiValue set;
+        private final ContainsListOfMultiValue set;
 
 
-        private KnownMultiValueAttributeLists(User.ContainsListOfMultiValue set) {
+        private KnownMultiValueAttributeLists(ContainsListOfMultiValue set) {
             this.set = set;
         }
 
-        public <T extends User.ContainsListOfMultiValue> T getSet() {
+        public <T extends ContainsListOfMultiValue> T getSet() {
             return (T) set;
         }
     }

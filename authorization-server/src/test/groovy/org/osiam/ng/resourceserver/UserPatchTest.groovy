@@ -1,6 +1,6 @@
 package org.osiam.ng.resourceserver
 
-import org.osiam.ng.resourceserver.dao.ScimUserProvisioningBean
+import org.osiam.ng.resourceserver.dao.SCIMUserProvisioningBean
 import org.osiam.ng.resourceserver.dao.UserDAO
 import org.osiam.ng.resourceserver.entities.AddressEntity
 import org.osiam.ng.resourceserver.entities.EmailEntity
@@ -18,13 +18,12 @@ import scim.schema.v2.Meta
 import scim.schema.v2.MultiValuedAttribute
 import scim.schema.v2.Name
 import scim.schema.v2.User
-import spock.lang.Ignore
 import spock.lang.Specification
 
 
 class UserPatchTest extends Specification {
     def userDao = Mock(UserDAO)
-    ScimUserProvisioningBean bean = new ScimUserProvisioningBean(userDao: userDao)
+    SCIMUserProvisioningBean bean = new SCIMUserProvisioningBean(userDao: userDao)
     def uId = UUID.randomUUID()
     def id = uId.toString()
 
@@ -234,7 +233,7 @@ class UserPatchTest extends Specification {
 
     private UserEntity createEntityWithInternalId() {
         def entity = new UserEntity()
-        entity.internalId = uId
+        entity.id = uId
         entity
     }
 
@@ -397,7 +396,7 @@ class UserPatchTest extends Specification {
         UserEntity entity = createEntityWithInternalId()
 
         entity.setUsername("username")
-        entity.groups.add(new GroupEntity())
+        entity.groups.add(new GroupEntity(id: UUID.randomUUID()))
 
         when:
         bean.updateUser(id, user)

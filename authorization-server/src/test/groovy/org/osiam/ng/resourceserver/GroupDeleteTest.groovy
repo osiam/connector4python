@@ -21,54 +21,50 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver.entities
 
+
+package org.osiam.ng.resourceserver
+
+import org.osiam.ng.resourceserver.dao.GroupDAO
+import org.osiam.ng.resourceserver.dao.SCIMGroupProvisioningBean
+import org.osiam.ng.resourceserver.entities.GroupEntity
+import org.osiam.ng.scim.exceptions.ResourceNotFoundException
 import spock.lang.Specification
 
-/**
- * Created with IntelliJ IDEA.
- * User: jtodea
- * Date: 15.03.13
- * Time: 15:23
- * To change this template use File | Settings | File Templates.
- */
-class MemberEntitySpec extends Specification {
+import javax.persistence.EntityManager
+import javax.persistence.Query
 
-    MemberEntity memberEntity = new MemberEntity()
+class GroupDeleteTest extends Specification {
+    EntityManager em = Mock(EntityManager)
+    def groupDao = new GroupDAO(em: em)
+    SCIMGroupProvisioningBean bean = new SCIMGroupProvisioningBean(groupDAO: groupDao)
+    def uId = UUID.randomUUID()
+    def id = uId.toString()
+    def query = Mock(Query)
 
-    def "setter and getter for the Id should be present"() {
+
+    def "should throw an org.osiam.ng.scim.exceptions.ResourceNotFoundException when trying to delete unknown user"() {
         when:
-        memberEntity.setId(123456)
-
+        bean.deleteGroup(id)
         then:
-        memberEntity.getId() == 123456
+        1 * em.createNamedQuery("getById") >> query
+        1 * query.getResultList() >> []
+        thrown(ResourceNotFoundException)
+
+
     }
 
-    def "setter and getter for the value should be present"() {
+    def "should not throw any Exception when trying to delete known user"() {
         given:
-        def value = UUID.randomUUID()
-
+        def entity = new GroupEntity()
         when:
-        memberEntity.setValue(value)
-
+        bean.deleteGroup(id)
         then:
-        memberEntity.getValue() == value
+        1 * em.createNamedQuery("getById") >> query
+        1 * query.getResultList() >> [entity]
+        1 * em.remove(entity)
+
     }
 
-    def "setter and getter for display should be present"() {
-        when:
-        memberEntity.setDisplay("John Do")
 
-        then:
-        memberEntity.getDisplay() == "John Do"
-    }
-
-    def "mapping to scim should be present"() {
-        when:
-        def multivalue = memberEntity.toScim()
-
-        then:
-        multivalue.value == memberEntity.value
-        multivalue.display == memberEntity.display
-    }
 }

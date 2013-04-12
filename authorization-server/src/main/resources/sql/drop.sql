@@ -4,7 +4,7 @@ DROP TABLE scim_certificate CASCADE;
 DROP TABLE scim_email CASCADE;
 DROP TABLE scim_enterprise CASCADE;
 DROP TABLE scim_entitlements CASCADE;
-DROP TABLE scim_group_scim_member CASCADE;
+DROP TABLE scim_group_internalidskeleton CASCADE;
 DROP TABLE scim_group CASCADE;
 DROP TABLE scim_address CASCADE;
 DROP TABLE scim_im CASCADE;

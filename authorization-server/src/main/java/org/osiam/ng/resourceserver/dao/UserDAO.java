@@ -34,15 +34,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.*;
+import java.util.logging.Level;
 
 @Repository
 @Transactional
-public class UserDAO {
+public class UserDAO extends GetInternalIdSkeleton{
 
     @Inject
     private PasswordEncoder passwordEncoder;
-    @PersistenceContext
-    private EntityManager em;
 
     public void setEm(EntityManager em) {
         this.em = em;
@@ -53,7 +52,7 @@ public class UserDAO {
     }
 
     public void createUser(UserEntity userEntity) {
-        String hash = passwordEncoder.encodePassword(userEntity.getPassword(), userEntity.getInternalId());
+        String hash = passwordEncoder.encodePassword(userEntity.getPassword(), userEntity.getId());
         findExistingMultiValueAttributes(userEntity);
         userEntity.setPassword(hash);
         em.persist(userEntity);
@@ -97,30 +96,26 @@ public class UserDAO {
     }
 
     public UserEntity getById(String id) {
-        Query query = em.createNamedQuery("getUserById");
-        query.setParameter("internalId", UUID.fromString(id));
-        return getSingleUserEntity(query, id);
+        try {
+            return getInternalIdSkeleton(id);
+        } catch (ClassCastException c) {
+            LOGGER.log(Level.WARNING, c.getMessage(), c);
+            throw new ResourceNotFoundException("Resource " + id + " is not an User.");
+        }
     }
 
     public UserEntity getByUsername(String userName) {
         Query query = em.createNamedQuery("getUserByUsername");
         query.setParameter("username", userName);
-        return getSingleUserEntity(query, userName);
+        return getSingleInternalIdSkeleton(query, userName);
     }
 
-    private UserEntity getSingleUserEntity(Query query, String identifier) {
-        List result = query.getResultList();
-        if (result.isEmpty()) {
-            throw new ResourceNotFoundException("Resource " + identifier + " not found.");
-        }
-        return (UserEntity) result.get(0);
-    }
 
     public void update(UserEntity entity) {
         //not hashed ...
         String password = entity.getPassword();
         if (password.length() != 128) {
-            entity.setPassword(passwordEncoder.encodePassword(password, entity.getInternalId()));
+            entity.setPassword(passwordEncoder.encodePassword(password, entity.getId()));
         }
         findExistingMultiValueAttributes(entity);
         em.merge(entity);

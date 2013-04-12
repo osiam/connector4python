@@ -19,8 +19,8 @@ class ScimUserProvisioningBeanSpec extends Specification {
     def userDao = Mock(UserDAO)
     def userEntity = Mock(UserEntity)
     def scimUser = Mock(User)
-    ScimUserProvisioningBean scimUserProvisioningBean =
-        new ScimUserProvisioningBean(userDao: userDao)
+    SCIMUserProvisioningBean scimUserProvisioningBean =
+        new SCIMUserProvisioningBean(userDao: userDao)
 
 
     def "should be possible to get an user by his id"() {
@@ -65,7 +65,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
         def internalId = UUID.randomUUID()
         def scimUser = new User.Builder("test").build()
         def entity = new UserEntity()
-        entity.setInternalId(internalId)
+        entity.setId(internalId)
 
         when:
         scimUserProvisioningBean.replaceUser(internalId.toString(), scimUser)

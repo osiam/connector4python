@@ -41,7 +41,7 @@ import java.util.UUID;
  * To change this template use File | Settings | File Templates.
  */
 @Service
-public class ScimUserProvisioningBean implements SCIMUserProvisioning {
+public class SCIMUserProvisioningBean implements SCIMUserProvisioning {
 
 
     @Inject
@@ -56,7 +56,7 @@ public class ScimUserProvisioningBean implements SCIMUserProvisioning {
     @Override
     public User createUser(User user) {
         UserEntity userEntity = UserEntity.fromScim(user);
-        userEntity.setInternalId(UUID.randomUUID());
+        userEntity.setId(UUID.randomUUID());
         try {
             userDao.createUser(userEntity);
         } catch (Exception e) {

@@ -23,46 +23,59 @@
 
 package org.osiam.ng.resourceserver
 
-import org.osiam.ng.resourceserver.dao.SCIMUserProvisioningBean
-import org.osiam.ng.resourceserver.dao.UserDAO
-import org.osiam.ng.resourceserver.entities.UserEntity
+import org.osiam.ng.resourceserver.dao.GroupDAO
+import org.osiam.ng.resourceserver.dao.SCIMGroupProvisioningBean
+import org.osiam.ng.resourceserver.entities.GroupEntity
+import org.osiam.ng.scim.exceptions.ResourceExistsException
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException
+import org.springframework.dao.DataIntegrityViolationException
+import scim.schema.v2.Group
+import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
 import javax.persistence.EntityManager
 import javax.persistence.Query
 
-class UserDeleteTest extends Specification {
+class GroupGetTest extends Specification {
     EntityManager em = Mock(EntityManager)
-    def userDao = new UserDAO(em: em)
-    SCIMUserProvisioningBean bean = new SCIMUserProvisioningBean(userDao: userDao)
-    def uId = UUID.randomUUID()
-    def id = uId.toString()
+    GroupDAO dao = new GroupDAO(em: em)
+    def underTest = new SCIMGroupProvisioningBean(groupDAO: dao)
+    def internalId = UUID.randomUUID()
     def query = Mock(Query)
 
 
-    def "should throw an org.osiam.ng.scim.exceptions.ResourceNotFoundException when trying to delete unknown user"() {
-        when:
-        bean.deleteUser(id)
-        then:
-        1 * em.createNamedQuery("getById") >> query
-        1 * query.getResultList() >> []
-        thrown(ResourceNotFoundException)
 
 
-    }
 
-    def "should not throw any Exception when trying to delete known user"() {
+
+    def "should abort when a member in group is not findable"() {
         given:
-        def entity = new UserEntity()
+        def queryResults = []
+
         when:
-        bean.deleteUser(id)
+        underTest.getById(internalId.toString())
         then:
         1 * em.createNamedQuery("getById") >> query
-        1 * query.getResultList() >> [entity]
-        1 * em.remove(entity)
+        1 * query.setParameter("id", internalId);
+        1 * query.getResultList() >> queryResults
+        def e = thrown(ResourceNotFoundException)
+        e.message == "Resource " + internalId.toString() + " not found."
 
     }
 
+
+    def "should get a group"() {
+        given:
+
+        def group = new Group.Builder().setId(internalId.toString()).build()
+        def queryResults = [GroupEntity.fromScim(group)]
+        when:
+        def result = underTest.getById(internalId.toString())
+        then:
+        1 * em.createNamedQuery("getById") >> query
+        1 * query.setParameter("id", internalId);
+        1 * query.getResultList() >> queryResults
+        result
+    }
 
 }

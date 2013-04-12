@@ -23,62 +23,73 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import org.hibernate.annotations.Type;
 import scim.schema.v2.MultiValuedAttribute;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jtodea
- * Date: 15.03.13
- * Time: 14:24
- * To change this template use File | Settings | File Templates.
- */
-@Entity(name = "scim_member")
-public class MemberEntity {
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@NamedQueries({@NamedQuery(name = "getById", query = "SELECT i FROM InternalIdSkeleton i WHERE i.id= :id")})
+public abstract class InternalIdSkeleton {
+
+    @Column
+    protected String displayName;
+
+
+    @Type(type = "pg-uuid")
+    @Column(unique = true, nullable = false)
+    protected UUID id;
 
     @Id
     @GeneratedValue
-    private long id;
+    protected long internal_id;
 
-    @Column
-    private UUID value;
+    @Column(unique = true)
+    protected String externalId;
 
-    @Column
-    private String display;
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public UUID getValue() {
-        return value;
+    public long getInternal_id() {
+        return internal_id;
     }
 
-    public void setValue(UUID value) {
-        this.value = value;
+    public void setInternal_id(long internal_id) {
+        this.internal_id = internal_id;
     }
 
-    public String getDisplay() {
-        return display;
+    /**
+     * @return the external id
+     */
+    public String getExternalId() {
+        return externalId;
     }
 
-    public void setDisplay(String display) {
-        this.display = display;
+    /**
+     * @param externalId the external id
+     */
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
-    public MultiValuedAttribute toScim() {
-        return new MultiValuedAttribute.Builder().
-                setDisplay(getDisplay()).
-                setValue(getValue()).
-                build();
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public MultiValuedAttribute toMultiValueScim() {
+        return new MultiValuedAttribute.Builder().setDisplay(displayName).setValue(id.toString()).build();
     }
 }

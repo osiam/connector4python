@@ -23,9 +23,14 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.Group;
 import scim.schema.v2.MultiValuedAttribute;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,53 +38,21 @@ import java.util.UUID;
  * Group Entity
  */
 @Entity(name = "scim_group")
-public class GroupEntity {
+public class GroupEntity extends InternalIdSkeleton {
 
-    @Id
-    @GeneratedValue
-    private long id;
 
-    @Column
-    private UUID value;
-
-    @Column(nullable = false)
-    private String displayName;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<MemberEntity> members;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<InternalIdSkeleton> members = new HashSet<>();
 
     @Column(name = "additional")
     private String any;
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public UUID getValue() {
-        return value;
-    }
-
-    public void setValue(UUID value) {
-        this.value = value;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public Set<MemberEntity> getMembers() {
+    public Set<InternalIdSkeleton> getMembers() {
         return members;
     }
 
-    public void setMembers(Set<MemberEntity> members) {
+    public void setMembers(Set<InternalIdSkeleton> members) {
         this.members = members;
     }
 
@@ -91,17 +64,43 @@ public class GroupEntity {
         this.any = any;
     }
 
-    public MultiValuedAttribute toScim() {
-        return new MultiValuedAttribute.Builder().
-                setDisplay(getDisplayName()).
-                setValue(getValue()).
-                build();
+    public Group toScim() {
+        return new Group.Builder().setDisplayName(getDisplayName()).setMembers(membersToScim())
+                .setExternalId(getExternalId()).setId(getId().toString()).build();
     }
 
-    public static GroupEntity fromScim(MultiValuedAttribute multiValuedAttribute) {
+    private Group.Members membersToScim() {
+        Group.Members members1 = new Group.Members();
+        for (InternalIdSkeleton i : members) {
+            members1.getMember().add(new MultiValuedAttribute.Builder().setValue(i.getId().toString())
+                    .setDisplay(i.getDisplayName()).build());
+        }
+        return members1;
+    }
+
+    public static GroupEntity fromScim(Group group) {
         GroupEntity groupEntity = new GroupEntity();
-        groupEntity.setDisplayName(multiValuedAttribute.getDisplay());
-        groupEntity.setValue(UUID.fromString(multiValuedAttribute.getValue().toString()));
+        groupEntity.setDisplayName(group.getDisplayName());
+        groupEntity.setId(group.getId() != null ? UUID.fromString(group.getId()) : UUID.randomUUID());
+        groupEntity.setExternalId(group.getExternalId());
+        groupEntity.setMembers(createMembers(group));
         return groupEntity;
+    }
+
+    private static Set<InternalIdSkeleton> createMembers(Group group) {
+        Set<InternalIdSkeleton> result = new HashSet<>();
+        if (group.getMembers() != null)
+            transferMultiValueAttributeToInternalIdSkeleton(group, result);
+
+        return result;
+    }
+
+    private static void transferMultiValueAttributeToInternalIdSkeleton(Group group, Set<InternalIdSkeleton> result) {
+        for (MultiValuedAttribute m : group.getMembers().getMember()) {
+            InternalIdSkeleton skeleton = new InternalIdSkeleton() {};
+            skeleton.setDisplayName(m.getDisplay());
+            skeleton.setId(UUID.fromString(String.valueOf(m.getValue())));
+            result.add(skeleton);
+        }
     }
 }

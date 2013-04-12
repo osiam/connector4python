@@ -23,7 +23,6 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import scim.schema.v2.Address;
@@ -35,31 +34,19 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * User Entity
  */
 @Entity(name = "scim_user")
-@NamedQueries({@NamedQuery(name = "getUserById", query = "SELECT u FROM scim_user u WHERE u.internalId = :internalId"),
-        @NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scim_user u WHERE u.userName = :username")})
-public class UserEntity implements UserDetails {
+@NamedQueries({@NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scim_user u WHERE u.userName = :username")})
+public class UserEntity extends InternalIdSkeleton implements UserDetails {
 
     private static final String MAPPING_NAME = "user";
-    @Id
-    @GeneratedValue
-    private long id;
-    @Type(type = "pg-uuid")
-    @Column(nullable = false, unique = true)
-    private UUID internalId;
-    @Column
-    private String externalId;
     @Column(nullable = false, unique = true)
     private String userName;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private NameEntity name;
-    @Column
-    private String displayName;
     @Column
     private String nickName;
     @Column
@@ -111,7 +98,6 @@ public class UserEntity implements UserDetails {
         userEntity.setEmails(scimEmailsToEntity(user.getEmails()));
         userEntity.setEntitlements(scimEntitlementsToEntity(user.getEntitlements()));
         userEntity.setExternalId(user.getExternalId());
-        userEntity.setGroups(scimUserGroupsToEntity(user.getGroups()));
         userEntity.setIms(scimImsToEntity(user.getIms()));
         userEntity.setLocale(user.getLocale());
         userEntity.setName(scimNameToEntity(user.getName()));
@@ -184,16 +170,6 @@ public class UserEntity implements UserDetails {
         return imEntities;
     }
 
-    private static Set<GroupEntity> scimUserGroupsToEntity(User.Groups groups) {
-        Set<GroupEntity> groupEntities = new HashSet<>();
-        if (groups != null) {
-            for (MultiValuedAttribute multiValuedAttribute : groups.getGroup()) {
-                groupEntities.add(GroupEntity.fromScim(multiValuedAttribute));
-            }
-        }
-        return groupEntities;
-    }
-
     private static Set<EntitlementsEntity> scimEntitlementsToEntity(User.Entitlements entitlements) {
         Set<EntitlementsEntity> entitlementsEntities = new HashSet<>();
         if (entitlements != null) {
@@ -236,42 +212,6 @@ public class UserEntity implements UserDetails {
     }
 
     /**
-     * @return the unique entity id
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * @param id the unique entity id
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public UUID getInternalId() {
-        return internalId;
-    }
-
-    public void setInternalId(UUID internalId) {
-        this.internalId = internalId;
-    }
-
-    /**
-     * @return the external id
-     */
-    public String getExternalId() {
-        return externalId;
-    }
-
-    /**
-     * @param externalId the external id
-     */
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
-
-    /**
      * @return the name entity
      */
     public NameEntity getName() {
@@ -283,20 +223,6 @@ public class UserEntity implements UserDetails {
      */
     public void setName(NameEntity name) {
         this.name = name;
-    }
-
-    /**
-     * @return the display name
-     */
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    /**
-     * @param displayName the display name
-     */
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     /**
@@ -653,7 +579,7 @@ public class UserEntity implements UserDetails {
                 setUserType(getUserType()).
                 setX509Certificates(entityX509CertificatesToScim(getX509Certificates())).
                 setExternalId(getExternalId()).
-                setId(getInternalId().toString()).
+                setId(getId().toString()).
                 build();
     }
 
@@ -700,7 +626,7 @@ public class UserEntity implements UserDetails {
     private User.Groups entityGroupsToScim(Set<GroupEntity> groupEntities) {
         User.Groups groups = new User.Groups();
         for (GroupEntity groupEntity : groupEntities) {
-            groups.getGroup().add(groupEntity.toScim());
+            groups.getGroup().add(groupEntity.toMultiValueScim());
         }
         return groups;
     }

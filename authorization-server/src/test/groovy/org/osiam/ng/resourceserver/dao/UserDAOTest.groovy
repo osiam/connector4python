@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.dao
 
+import org.osiam.ng.resourceserver.entities.GroupEntity
+import org.osiam.ng.resourceserver.entities.InternalIdSkeleton
 import org.osiam.ng.resourceserver.entities.RolesEntity
 import org.osiam.ng.resourceserver.entities.UserEntity
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException
@@ -54,14 +56,13 @@ class UserDAOTest extends Specification {
         given:
         def internalId = UUID.randomUUID()
         def query = Mock(Query)
-        def queryResults = [new UserEntity()]
+        def entity = new UserEntity()
         when:
         def result = underTest.getById(internalId.toString())
         then:
-        1 * em.createNamedQuery("getUserById") >> query
-        1 * query.setParameter("internalId", internalId)
-        1 * query.getResultList() >> queryResults
-        result == queryResults.get(0)
+        1 * em.createNamedQuery("getById") >> query
+        1 * query.getResultList() >> [entity]
+        result == entity
     }
 
     def "should throw an exception when no user got found by id"(){
@@ -72,8 +73,7 @@ class UserDAOTest extends Specification {
         when:
         underTest.getById(internalId.toString())
         then:
-        1 * em.createNamedQuery("getUserById") >> query
-        1 * query.setParameter("internalId", internalId)
+        1 * em.createNamedQuery("getById") >> query
         1 * query.getResultList() >> queryResults
         def e = thrown(ResourceNotFoundException)
         e.message == "Resource " + internalId.toString() + " not found."
@@ -118,7 +118,7 @@ class UserDAOTest extends Specification {
 
         then:
         1 * userEntity.password >> "password"
-        1 * userEntity.internalId >> id
+        1 * userEntity.id >> id
         1 * passwordEncoder.encodePassword("password", id) >> "moep"
         1 * em.persist(userEntity)
 
@@ -134,7 +134,7 @@ class UserDAOTest extends Specification {
         underTest.update(userEntity)
         then:
         1 * userEntity.password >> "password"
-        1 * userEntity.internalId >> id
+        1 * userEntity.id >> id
         1 * em.find(RolesEntity, "test") >> Mock(RolesEntity)
         1* em.merge(userEntity)
         1 * passwordEncoder.encodePassword("password", id) >> "moep"
@@ -151,7 +151,7 @@ class UserDAOTest extends Specification {
         underTest.update(userEntity)
         then:
         1 * userEntity.password >> "password"
-        1 * userEntity.internalId >> id
+        1 * userEntity.id >> id
         1 * em.find(RolesEntity, null)
 
         1* em.merge(userEntity)
@@ -169,7 +169,7 @@ class UserDAOTest extends Specification {
         underTest.update(userEntity)
         then:
         1 * userEntity.password >> password
-        0 * userEntity.internalId >> id
+        0 * userEntity.id >> id
         0 * passwordEncoder.encodePassword("password", id) >> "moep"
         1* em.merge(userEntity)
 
@@ -177,16 +177,29 @@ class UserDAOTest extends Specification {
 
     def "should first get an user than delete it"(){
         given:
-        def query = Mock(Query)
-        def queryResults = [new UserEntity()]
+        def entity = new UserEntity()
         def id = UUID.randomUUID().toString()
+        def query = Mock(Query)
         when:
         underTest.delete(id)
         then:
-        1 * em.createNamedQuery("getUserById") >> query
-        1 * query.setParameter("internalId", UUID.fromString(id))
-        1 * query.getResultList() >> queryResults
-        1 * em.remove(queryResults.first())
+        1 * em.createNamedQuery("getById") >> query
+        1 * query.getResultList() >> [entity]
+        1 * em.remove(entity)
 
+    }
+
+    def "should wrap class cast exception to ResourceNotFoundException"(){
+        given:
+        def id = UUID.randomUUID().toString()
+        def query = Mock(Query)
+
+        InternalIdSkeleton internalidSkeleton = new GroupEntity()
+        when:
+        underTest.getById(id)
+        then:
+        1 * em.createNamedQuery("getById") >> query
+        1 * query.getResultList() >> [internalidSkeleton]
+        thrown(ResourceNotFoundException)
     }
 }

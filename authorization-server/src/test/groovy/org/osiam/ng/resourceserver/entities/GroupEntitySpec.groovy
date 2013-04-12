@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities
 
+import org.junit.Ignore
+import scim.schema.v2.Group
 import scim.schema.v2.MultiValuedAttribute
 import spock.lang.Specification
 
@@ -38,22 +40,12 @@ class GroupEntitySpec extends Specification {
     GroupEntity groupEntity = new GroupEntity()
 
     def "setter and getter for the Id should be present"() {
+        def id = UUID.randomUUID()
         when:
-        groupEntity.setId(123456)
+        groupEntity.setId(id)
 
         then:
-        groupEntity.getId() == 123456
-    }
-
-    def "setter and getter for the externalId should be present"() {
-        given:
-        def value = UUID.randomUUID()
-
-        when:
-        groupEntity.setValue(value)
-
-        then:
-        groupEntity.getValue() == value
+        groupEntity.getId() == id
     }
 
     def "setter and getter for the display name should be present"() {
@@ -66,8 +58,8 @@ class GroupEntitySpec extends Specification {
 
     def "setter and getter for the member should be present"() {
         given:
-        def memberEntity = Mock(MemberEntity)
-        def members = [memberEntity] as Set<MemberEntity>
+        def memberEntity = Mock(InternalIdSkeleton)
+        def members = [memberEntity] as Set<InternalIdSkeleton>
 
 
         when:
@@ -86,23 +78,25 @@ class GroupEntitySpec extends Specification {
     }
 
     def "mapping to scim should be present"() {
+        groupEntity.setId(UUID.randomUUID())
         when:
         def multivalue = groupEntity.toScim()
 
         then:
-        multivalue.value == groupEntity.value
-        multivalue.display == groupEntity.displayName
+        multivalue.id == groupEntity.id.toString()
+        multivalue.displayName == groupEntity.displayName
     }
 
     def "mapping from scim should be present"() {
-        given:
-        MultiValuedAttribute multiValuedAttribute = new MultiValuedAttribute.Builder().
+        Group.Members members = new Group.Members()
+        members.member.add(new MultiValuedAttribute.Builder().
                 setValue(UUID.randomUUID().toString()).
                 setDisplay("display").
-                build()
+                build())
+        given:
+        Group group = new Group.Builder().setDisplayName("displayname").setMembers(members).setId(UUID.randomUUID().toString()).build()
         when:
-        def result = GroupEntity.fromScim(multiValuedAttribute)
-
+        def result = GroupEntity.fromScim(group)
         then:
         result != null
     }

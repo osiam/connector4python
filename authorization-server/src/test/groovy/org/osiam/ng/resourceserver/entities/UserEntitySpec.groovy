@@ -59,11 +59,12 @@ class UserEntitySpec extends Specification {
     }
 
     def "setter and getter for the Id should be present"() {
+        def id = UUID.randomUUID()
         when:
-        userEntity.setId(123456)
+        userEntity.setId(id)
 
         then:
-        userEntity.getId() == 123456
+        userEntity.getId() == id
     }
 
     def "setter and getter for the external Id should be present"() {
@@ -288,10 +289,10 @@ class UserEntitySpec extends Specification {
         def internalId = UUID.randomUUID()
 
         when:
-        userEntity.setInternalId(internalId)
+        userEntity.setId(internalId)
 
         then:
-        internalId == userEntity.getInternalId()
+        internalId == userEntity.getId()
     }
 
     def name = new NameEntity()
@@ -368,7 +369,7 @@ class UserEntitySpec extends Specification {
         given:
         def internalId = UUID.randomUUID()
 
-        userEntity.setInternalId(internalId)
+        userEntity.setId(internalId)
         userEntity.setActive(true)
         userEntity.setAddresses([Mock(AddressEntity)] as Set<AddressEntity>)
         userEntity.setAny(["stuff", "bro"] as Set<String>)
@@ -377,7 +378,6 @@ class UserEntitySpec extends Specification {
         userEntity.setEntitlements([Mock(EntitlementsEntity)] as Set<EntitlementsEntity>)
         userEntity.setExternalId("externalId")
         userEntity.setGroups([Mock(GroupEntity)] as Set<GroupEntity>)
-        userEntity.setId(123456)
         userEntity.setIms([Mock(ImEntity)] as Set<ImEntity>)
         userEntity.setLocale("locale")
         userEntity.setName(name)
@@ -394,6 +394,7 @@ class UserEntitySpec extends Specification {
         userEntity.setUserType("userType")
         userEntity.setX509Certificates([Mock(X509CertificateEntity)] as Set<X509CertificateEntity>)
         userEntity.setExternalId("externalId")
+        userEntity.setId(internalId)
 
         when:
         def user = userEntity.toScim()
@@ -437,7 +438,6 @@ class UserEntitySpec extends Specification {
         userEntity.setEntitlements([Mock(EntitlementsEntity)] as Set<EntitlementsEntity>)
         userEntity.setExternalId("externalId")
         userEntity.setGroups([Mock(GroupEntity)] as Set<GroupEntity>)
-        userEntity.setId(123456)
         userEntity.setIms([Mock(ImEntity)] as Set<ImEntity>)
         userEntity.setLocale("locale")
         userEntity.setName(null)
@@ -454,7 +454,7 @@ class UserEntitySpec extends Specification {
         userEntity.setUserType("userType")
         userEntity.setX509Certificates([Mock(X509CertificateEntity)] as Set<X509CertificateEntity>)
         userEntity.setExternalId("externalId")
-        userEntity.setInternalId(internalId)
+        userEntity.setId(internalId)
 
         when:
         def user = userEntity.toScim()
