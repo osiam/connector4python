@@ -58,12 +58,11 @@ public class Group extends CoreResource{
         public Builder(){}
 
         public Builder(Group group) {
-            Builder builder = new Builder();
-            builder.id = group.id;
-            builder.meta = group.meta;
-            builder.externalId = group.externalId;
-            builder.displayName = group.displayName;
-            builder.members = group.members;
+            id = group.id;
+            meta = group.meta;
+            externalId = group.externalId;
+            displayName = group.displayName;
+            members = group.members;
 
 
         }

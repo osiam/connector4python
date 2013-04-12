@@ -67,4 +67,21 @@ class GroupTest extends Specification {
         then:
         result
     }
+
+    def "should be able to clone a group"() {
+        given:
+        def group = new Group.Builder().
+                setDisplayName("display").
+                setMembers(new Group.Members()).
+                setAny(new Object()).
+                setId("id").build()
+        when:
+        def result  = new Group.Builder(group).build()
+
+        then:
+        group.displayName == result.displayName
+        group.members == result.members
+        group.id == result.id
+    }
+
 }
