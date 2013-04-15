@@ -71,6 +71,11 @@ public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> imple
     protected SCIMEntities getScimEntities() {
         return UserSCIMEntities.ENTITIES;
     }
+
+    @Override
+    public GenericSCIMToEntityWrapper.For getTarget() {
+        return GenericSCIMToEntityWrapper.For.USER;
+    }
 }
 
 

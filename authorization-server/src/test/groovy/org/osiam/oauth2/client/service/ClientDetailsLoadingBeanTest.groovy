@@ -39,7 +39,7 @@ class ClientDetailsLoadingBeanTest extends Specification {
         result.getRefreshTokenValiditySeconds() == 1337
 
         result.getScope().contains("GET")
-        result.getScope().contains("POST")
+        result.getScope().contains("PUT")
         result.getScope().contains("PUT")
         result.getScope().contains("DELETE")
         result.getResourceIds().size() == 0

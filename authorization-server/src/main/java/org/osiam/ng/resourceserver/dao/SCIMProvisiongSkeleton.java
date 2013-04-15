@@ -46,7 +46,8 @@ public abstract class SCIMProvisiongSkeleton<T extends Resource> implements SCIM
         InternalIdSkeleton entity = getDao().getById(id);
 
         GenericSCIMToEntityWrapper genericSCIMToEntityWrapper =
-                new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.POST, getScimEntities());
+                new GenericSCIMToEntityWrapper(getTarget(), user, entity, GenericSCIMToEntityWrapper.Mode.PUT,
+                        getScimEntities());
         setFieldsWrapException(genericSCIMToEntityWrapper);
 
         getDao().update(entity);
@@ -67,15 +68,16 @@ public abstract class SCIMProvisiongSkeleton<T extends Resource> implements SCIM
     public T update(String id, T user) {
         InternalIdSkeleton entity = getDao().getById(id);
         GenericSCIMToEntityWrapper genericSCIMToEntityWrapper =
-                new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, getScimEntities());
+                new GenericSCIMToEntityWrapper(getTarget(), user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, getScimEntities());
         setFieldsWrapException(genericSCIMToEntityWrapper);
-        getDao().update(entity);
-        return entity.toScim();
+        return getDao().update(entity).toScim();
     }
 
     @Override
     public void delete(String id) {
         getDao().delete(id);
     }
+
+    public abstract GenericSCIMToEntityWrapper.For getTarget();
 }
 

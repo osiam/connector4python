@@ -66,5 +66,10 @@ public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> imp
         return GroupSCIMEntities.ENTITIES;
     }
 
+    @Override
+    public GenericSCIMToEntityWrapper.For getTarget() {
+        return GenericSCIMToEntityWrapper.For.GROUP;
+    }
+
 
 }

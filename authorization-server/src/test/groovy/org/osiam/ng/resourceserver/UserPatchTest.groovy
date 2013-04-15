@@ -26,6 +26,13 @@ class UserPatchTest extends Specification {
     SCIMUserProvisioningBean bean = new SCIMUserProvisioningBean(userDao: userDao)
     def uId = UUID.randomUUID()
     def id = uId.toString()
+    def entity = createEntityWithInternalId()
+
+    def setup(){
+        userDao.update(_) >> entity
+    }
+
+
 
     def "should delete single attribute of a multi-value-attribute list"() {
         def emails = new User.Emails()
@@ -57,7 +64,7 @@ class UserPatchTest extends Specification {
                 .setX509Certificates(certificates)
                 .build()
 
-        def entity = createEntityWithInternalId()
+
         addListsToEntity(entity)
         entity.getEmails().add(new EmailEntity(value: "email2", type: "work", primary: false))
 
@@ -93,7 +100,7 @@ class UserPatchTest extends Specification {
                 .setMeta(meta)
                 .build()
 
-        def entity = createEntityWithInternalId()
+
         addListsToEntity(entity)
         when:
         bean.update(id, user)
@@ -140,7 +147,7 @@ class UserPatchTest extends Specification {
                 .setX509Certificates(certificates)
                 .build()
 
-        def entity = createEntityWithInternalId()
+
         addListsToEntity(entity)
         entity.getEmails().add(new EmailEntity(value: "email2", type: "work", primary: false))
 
@@ -180,7 +187,7 @@ class UserPatchTest extends Specification {
                 .setEmails(emails)
                 .build()
 
-        def entity = createEntityWithInternalId()
+
         addListsToEntity(entity)
 
         when:
@@ -201,7 +208,7 @@ class UserPatchTest extends Specification {
                 .setAddresses(addresses)
                 .build()
 
-        def entity = createEntityWithInternalId()
+
         entity.addresses.add(new AddressEntity(type: "dunno"))
         entity.addresses.add(new AddressEntity(type: "blubb"))
         addListsToEntity(entity)
@@ -221,14 +228,14 @@ class UserPatchTest extends Specification {
         given:
 
         def user = new User.Builder("username").setDisplayName("hallo").build()
-        UserEntity entity = createEntityWithInternalId()
+
         when:
         bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.username == "username"
         entity.displayName == "hallo"
-        1 * userDao.update(entity)
+        1 * userDao.update(entity) >> entity
     }
 
     private UserEntity createEntityWithInternalId() {
@@ -243,7 +250,7 @@ class UserPatchTest extends Specification {
         given:
         def meta = new Meta.Builder(null, null).setAttributes(["displayName"] as Set).build()
         def user = new User.Builder().setMeta(meta).build()
-        UserEntity entity = createEntityWithInternalId()
+
         entity.setUsername("username")
         entity.setDisplayName("display it")
         when:
@@ -252,7 +259,7 @@ class UserPatchTest extends Specification {
         1 * userDao.getById(id) >> entity
         entity.username == "username"
         entity.displayName == null
-        1 * userDao.update(entity)
+        1 * userDao.update(entity) >> entity
 
     }
 
@@ -260,7 +267,7 @@ class UserPatchTest extends Specification {
         given:
         def meta = new Meta.Builder(null, null).setAttributes(["userName"] as Set).build()
         def user = new User.Builder().setMeta(meta).build()
-        UserEntity entity = createEntityWithInternalId()
+
         entity.setUsername("username")
         when:
         bean.update(id, user)
@@ -274,7 +281,7 @@ class UserPatchTest extends Specification {
         def meta = new Meta.Builder(null, null).setAttributes(["displayName"] as Set).build()
 
         def user = new User.Builder("Harald").setMeta(meta).build()
-        UserEntity entity = createEntityWithInternalId()
+
         entity.setUsername("hach")
         entity.setDisplayName("display it")
         when:
@@ -283,7 +290,7 @@ class UserPatchTest extends Specification {
         1 * userDao.getById(id) >> entity
         entity.username == "Harald"
         entity.displayName == null
-        1 * userDao.update(entity)
+        1 * userDao.update(entity) >> entity
 
     }
 
@@ -292,7 +299,7 @@ class UserPatchTest extends Specification {
         def meta = new Meta.Builder(null, null).setAttributes(["displayName"] as Set).build()
 
         def user = new User.Builder().setDisplayName("don't display that").setMeta(meta).build()
-        UserEntity entity = createEntityWithInternalId()
+
         entity.setUsername("Harald")
         entity.setDisplayName("display it")
         when:
@@ -301,13 +308,13 @@ class UserPatchTest extends Specification {
         1 * userDao.getById(id) >> entity
         entity.username == "Harald"
         entity.displayName == null
-        1 * userDao.update(entity)
+        1 * userDao.update(entity) >> entity
     }
 
     def "should update parts of an complex attribute"() {
         given:
         def user = new User.Builder().setName(new Name.Builder().setMiddleName("FNORD").build()).build()
-        UserEntity entity = createEntityWithInternalId()
+
         def name = new NameEntity()
         name.setGivenName("Arthur")
         name.setFamilyName("Dent")
@@ -334,7 +341,7 @@ class UserPatchTest extends Specification {
         given:
         def meta = new Meta.Builder(null, null).setAttributes(["name.formatted"] as Set).build()
         def user = new User.Builder().setMeta(meta).build()
-        UserEntity entity = createEntityWithInternalId()
+
         def name = new NameEntity()
         name.setGivenName("Arthur")
         name.setFamilyName("Dent")
@@ -361,7 +368,7 @@ class UserPatchTest extends Specification {
         given:
         def meta = new Meta.Builder(null, null).setAttributes(["id.test"] as Set).build()
         def user = new User.Builder().setMeta(meta).build()
-        UserEntity entity = createEntityWithInternalId()
+
         entity.setUsername("haha")
 
         when:
@@ -377,7 +384,7 @@ class UserPatchTest extends Specification {
         given:
         def user = new User.Builder().setGroups(new User.Groups()).build()
         user.getGroups().group.add(new MultiValuedAttribute.Builder().build())
-        UserEntity entity = createEntityWithInternalId()
+
         entity.setUsername("username")
 
 
@@ -393,7 +400,7 @@ class UserPatchTest extends Specification {
         def attributes = ["groups"] as Set
         Meta meta = new Meta.Builder(null, null).setAttributes(attributes).build();
         def user = new User.Builder().setMeta(meta).build()
-        UserEntity entity = createEntityWithInternalId()
+
 
         entity.setUsername("username")
         entity.groups.add(new GroupEntity(id: UUID.randomUUID()))

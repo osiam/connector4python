@@ -74,7 +74,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
             public Set<String> getScope() {
                 Set<String> scopes = new HashSet<>();
                 scopes.add("GET");
-                scopes.add("POST");
+                scopes.add("PUT");
                 scopes.add("PUT");
                 scopes.add("PATCH");
                 scopes.add("DELETE");
