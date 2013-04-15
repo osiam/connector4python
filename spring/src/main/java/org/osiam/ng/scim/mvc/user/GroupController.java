@@ -29,7 +29,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriTemplate;
 import scim.schema.v2.Group;
-import scim.schema.v2.User;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -46,23 +45,41 @@ public class GroupController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Group createGroup(@RequestBody Group group, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Group createdGroup = scimGroupProvisioning.createGroup(group);
-        String requestUrl = request.getRequestURL().toString();
-        URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, createdGroup.getId());
-        response.setHeader("Location", uri.toASCIIString());
+    public Group create(@RequestBody Group group, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Group createdGroup = scimGroupProvisioning.create(group);
+        setLocationUriWithNewId(request, response, createdGroup.getId());
         return createdGroup;
+    }
+
+    private void setLocationUriWithNewId(HttpServletRequest request, HttpServletResponse response, String id) {
+        String requestUrl = request.getRequestURL().toString();
+        URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, id);
+        response.setHeader("Location", uri.toASCIIString());
+    }
+
+    private void setLocation(HttpServletRequest request, HttpServletResponse response) {
+        String requestUrl = request.getRequestURL().toString();
+        response.setHeader("Location", requestUrl);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Group getGroup(@PathVariable final String id) {
+    public Group get(@PathVariable final String id) {
         return scimGroupProvisioning.getById(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable final String id) {
-        scimGroupProvisioning.deleteGroup(id);
+        scimGroupProvisioning.delete(id);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Group replace(@PathVariable final String id, @RequestBody Group user, HttpServletRequest request, HttpServletResponse response) {
+        Group group = scimGroupProvisioning.replace(id, user);
+        setLocation(request, response);
+        return group;
     }
 }

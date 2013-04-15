@@ -29,52 +29,6 @@ import scim.schema.v2.User;
  * This interface has the purpose to get SCIM user out of and into a database, which must be provided by the using
  * application. Inside UserController
  */
-public interface SCIMUserProvisioning {
-    /**
-     * This method returns a SCIM user, it is used for GET calls.
-     * <p/>
-     * <p/>
-     * It must throw an ResourceNotFoundException if no user got found.
-     *
-     * @param id the external identifier of an user
-     * @return the found user
-     * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
-     *          if no user with the given id got found
-     */
-    User getById(String id);
+public interface SCIMUserProvisioning extends SCIMProvisioning<User> {
 
-
-    /**
-     * This method creates a user, it is used for POST calls.
-     *
-     * @param user A user representation which should be created
-     * @return the created user representation
-     * @throws org.osiam.ng.scim.exceptions.ResourceExistsException
-     *          if the resource already exists
-     */
-    User createUser(User user);
-
-    /**
-     * This method replaces an user, it is used for PUT calls.
-     *
-     * @param id,   the external identifier of an user
-     * @param user, an user representation which should be created
-     * @return the updated user
-     * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
-     *          if no user with the given id got found
-     */
-    User replaceUser(String id, User user);
-
-    /**
-     * This method updates an user, it is used for PATCH calls.
-     *
-     * @param id,   the external identifier of an user
-     * @param user, an user representation which should be created
-     * @return the updated user
-     * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
-     *          if no user with the given id got found
-     */
-    User updateUser(String id, User user);
-
-    void deleteUser(String id);
 }

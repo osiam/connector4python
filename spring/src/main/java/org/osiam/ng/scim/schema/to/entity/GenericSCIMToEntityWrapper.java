@@ -23,7 +23,7 @@
 
 package org.osiam.ng.scim.schema.to.entity;
 
-import scim.schema.v2.User;
+import scim.schema.v2.Resource;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -50,9 +50,9 @@ public class GenericSCIMToEntityWrapper {
     private final Mode mode;
     private final SCIMEntities scimEntities;
     private Object entity;
-    private User user;
+    private Resource user;
 
-    public GenericSCIMToEntityWrapper(User user, Object entity, Mode mode, SCIMEntities scimEntities) {
+    public GenericSCIMToEntityWrapper(Resource user, Object entity, Mode mode, SCIMEntities scimEntities) {
         this.user = user;
         this.entity = entity;
         this.mode = mode;

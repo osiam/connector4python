@@ -61,7 +61,8 @@ public class EntityListFieldWrapper {
         }
     }
 
-    private void updateListFields(Object userValue, SCIMEntities.Entity attributes, Field field) throws IllegalAccessException, InstantiationException {
+    private void updateListFields(Object userValue, SCIMEntities.Entity attributes, Field field)
+            throws IllegalAccessException, InstantiationException {
         if (!attributes.isMultiValue()) {
             setNeedToBeReplacedCompletely(userValue, field, attributes.getClazz());
         } else {
@@ -70,13 +71,12 @@ public class EntityListFieldWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    private void updateMultiValueList(Object userValue, SCIMEntities.Entity attributes, Field field) throws IllegalAccessException, InstantiationException {
-        if (userValue instanceof ContainsListOfMultiValue) {
-            Object o = getFieldObject(field);
-            Class<?> clazz = attributes.getClazz();
-            ContainsListOfMultiValue listOfMultiValue = (ContainsListOfMultiValue) userValue;
-            updateList((Collection<Object>) o, clazz, listOfMultiValue);
-        }
+    private void updateMultiValueList(Object userValue, SCIMEntities.Entity attributes, Field field)
+            throws IllegalAccessException, InstantiationException {
+        Object o = getFieldObject(field);
+        Class<?> clazz = attributes.getClazz();
+        ContainsListOfMultiValue listOfMultiValue = (ContainsListOfMultiValue) userValue;
+        updateList((Collection<Object>) o, clazz, listOfMultiValue);
     }
 
     private Object getFieldObject(Field field) throws IllegalAccessException {
@@ -84,8 +84,10 @@ public class EntityListFieldWrapper {
         return field.get(entity);
     }
 
-    private void updateList(Collection<Object> targetList, Class<?> clazz, ContainsListOfMultiValue listOfMultiValue) throws InstantiationException, IllegalAccessException {
+    private void updateList(Collection<Object> targetList, Class<?> clazz, ContainsListOfMultiValue listOfMultiValue)
+            throws InstantiationException, IllegalAccessException {
         clearIfNotInPatchMode(targetList);
+        if (listOfMultiValue == null) { return; }
         for (MultiValuedAttribute m : listOfMultiValue.values()) {
             if (notDeleted(m, targetList)) {
                 addSingleObject(clazz, targetList, m);
@@ -112,7 +114,8 @@ public class EntityListFieldWrapper {
         return valueAttribute.getValue() == m.getValue() && targetList.remove(o);
     }
 
-    private void addSingleObject(Class<?> clazz, Collection<Object> collection, MultiValuedAttribute m) throws InstantiationException, IllegalAccessException {
+    private void addSingleObject(Class<?> clazz, Collection<Object> collection, MultiValuedAttribute m)
+            throws InstantiationException, IllegalAccessException {
         Object target = createSingleObject(clazz, m);
         removeExistingValues(collection, m);
         collection.add(target);
@@ -131,13 +134,15 @@ public class EntityListFieldWrapper {
         }
     }
 
-    private boolean removeWhenValueExists(Collection<Object> collection, Object o, MultiValuedAttribute multiValuedAttribute) {
+    private boolean removeWhenValueExists(Collection<Object> collection, Object o,
+                                          MultiValuedAttribute multiValuedAttribute) {
         ChildOfMultiValueAttribute entityValue = (ChildOfMultiValueAttribute) o;
         boolean valueIsEqual = entityValue.getValue().equals(multiValuedAttribute.getValue());
         return valueIsEqual && collection.remove(o);
     }
 
-    private Object createSingleObject(Class<?> clazz, MultiValuedAttribute m) throws InstantiationException, IllegalAccessException {
+    private Object createSingleObject(Class<?> clazz, MultiValuedAttribute m)
+            throws InstantiationException, IllegalAccessException {
         Object target = clazz.newInstance();
 
         ((ChildOfMultiValueAttribute) target).setValue(String.valueOf(m.getValue()));
@@ -146,8 +151,8 @@ public class EntityListFieldWrapper {
             ((ChildOfMultiValueAttributeWithType) target).setType(m.getType());
         }
         if (target instanceof ChildOfMultiValueAttributeWithTypeAndPrimary) {
-            ((ChildOfMultiValueAttributeWithTypeAndPrimary) target).setPrimary(
-                    m.isPrimary() != null ? m.isPrimary() : false);
+            ((ChildOfMultiValueAttributeWithTypeAndPrimary) target)
+                    .setPrimary(m.isPrimary() != null ? m.isPrimary() : false);
         }
         return target;
     }
@@ -159,7 +164,8 @@ public class EntityListFieldWrapper {
     }
 
     @SuppressWarnings("unchecked")
-    void setNeedToBeReplacedCompletely(Object userValue, Field field, Class<?> clazz) throws IllegalAccessException, InstantiationException {
+    void setNeedToBeReplacedCompletely(Object userValue, Field field, Class<?> clazz)
+            throws IllegalAccessException, InstantiationException {
 
         Object object = getFieldObject(field);
         if (object != null) {
@@ -185,7 +191,8 @@ public class EntityListFieldWrapper {
         return result;
     }
 
-    private void setSingleField(Object o, GetFieldsOfInputAndTarget fields, EntityFieldWrapper entityFieldWrapper, Map.Entry<String, Field> e) throws IllegalAccessException, InstantiationException {
+    private void setSingleField(Object o, GetFieldsOfInputAndTarget fields, EntityFieldWrapper entityFieldWrapper,
+                                Map.Entry<String, Field> e) throws IllegalAccessException, InstantiationException {
         Field entityField = fields.getTargetFields().get(e.getKey());
         Field field = fields.getInputFields().get(e.getKey());
         field.setAccessible(true);

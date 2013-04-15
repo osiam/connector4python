@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import scim.schema.v2.Meta
 import scim.schema.v2.Name
 import scim.schema.v2.User
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
@@ -98,7 +97,7 @@ class UserControllerTest extends Specification {
 
     def "should contain a method to POST a user"(){
         given:
-        Method method = UserController.class.getDeclaredMethod("createUser", User, HttpServletRequest, HttpServletResponse)
+        Method method = UserController.class.getDeclaredMethod("create", User, HttpServletRequest, HttpServletResponse)
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
@@ -124,14 +123,14 @@ class UserControllerTest extends Specification {
         when:
         underTest.delete("id")
         then:
-        1 * provisioning.deleteUser("id")
+        1 * provisioning.delete("id")
     }
 
 
 
     def "should contain a method to PUT a user"(){
         given:
-        //createUser(@RequestBody User user,HttpServletRequest request, HttpServletResponse response)
+        //create(@RequestBody User user,HttpServletRequest request, HttpServletResponse response)
         Method method = UserController.class.getDeclaredMethod("replace",String, User, HttpServletRequest, HttpServletResponse)
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -195,10 +194,10 @@ class UserControllerTest extends Specification {
         def uri = new URI("http://host:port/deployment/User/id")
 
         when:
-        def result = underTest.createUser(user, httpServletRequest, httpServletResponse)
+        def result = underTest.create(user, httpServletRequest, httpServletResponse)
 
         then:
-        1 * provisioning.createUser(user) >> user
+        1 * provisioning.create(user) >> user
         1 * httpServletResponse.setHeader("Location", uri.toASCIIString())
         validateUser(result)
     }
@@ -209,7 +208,7 @@ class UserControllerTest extends Specification {
         when:
         def result = underTest.replace(id, user, httpServletRequest, httpServletResponse)
         then:
-        1 * provisioning.replaceUser(id, user) >> user
+        1 * provisioning.replace(id, user) >> user
         1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/"+id)
         1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/"+id)
         validateUser(result)
@@ -221,7 +220,7 @@ class UserControllerTest extends Specification {
         when:
         def result = underTest.update(id, user, httpServletRequest, httpServletResponse)
         then:
-        1 * provisioning.updateUser(id, user) >> user
+        1 * provisioning.update(id, user) >> user
         1 * httpServletRequest.getRequestURL() >> new StringBuffer("http://localhorst/horst/yo")
         1 * httpServletResponse.setHeader("Location", "http://localhorst/horst/yo")
         validateUser(result)

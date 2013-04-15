@@ -46,7 +46,7 @@ class GroupControllerTest extends Specification {
 
     def "should contain a method to POST a group"() {
         given:
-        Method method = GroupController.class.getDeclaredMethod("createGroup", Group, HttpServletRequest, HttpServletResponse)
+        Method method = GroupController.class.getDeclaredMethod("create", Group, HttpServletRequest, HttpServletResponse)
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
@@ -63,17 +63,17 @@ class GroupControllerTest extends Specification {
         def uri = new URI("http://host:port/deployment/User/" + group.id)
 
         when:
-        def result = underTest.createGroup(group, httpServletRequest, httpServletResponse)
+        def result = underTest.create(group, httpServletRequest, httpServletResponse)
 
         then:
-        1 * provisioning.createGroup(group) >> group
+        1 * provisioning.create(group) >> group
         1 * httpServletResponse.setHeader("Location", uri.toASCIIString())
         result == group
     }
 
     def "should contain a method to GET a group"() {
         given:
-        Method method = GroupController.class.getDeclaredMethod("getGroup", String)
+        Method method = GroupController.class.getDeclaredMethod("get", String)
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
@@ -85,7 +85,7 @@ class GroupControllerTest extends Specification {
 
     def "should call provisioning get on get call"() {
         when:
-        def result = underTest.getGroup("id")
+        def result = underTest.get("id")
         then:
         1 * provisioning.getById("id") >> group
         result == group
@@ -106,8 +106,35 @@ class GroupControllerTest extends Specification {
         when:
         underTest.delete("id")
         then:
-        1 * provisioning.deleteGroup("id")
+        1 * provisioning.delete("id")
 
+    }
+
+    def "should contain a method to PUT a group"(){
+        given:
+        Method method = GroupController.class.getDeclaredMethod("replace", String, Group, HttpServletRequest, HttpServletResponse)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        ResponseStatus defaultStatus = method.getAnnotation(ResponseStatus)
+        then:
+        mapping.method() == [RequestMethod.PUT]
+        body
+        defaultStatus.value() == HttpStatus.OK
+    }
+
+    def "should call provisioning on replace"(){
+        given:
+        def location = "http://host:port/deployment/Group/" + group.id
+        when:
+        def result = underTest.replace(group.id, group, httpServletRequest, httpServletResponse)
+
+        then:
+        1 * httpServletRequest.getRequestURL() >> new StringBuffer(location)
+        1 * provisioning.replace(group.id, group) >> group
+
+        1 * httpServletResponse.setHeader("Location", location)
+        result == group
     }
 
 

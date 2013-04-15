@@ -25,28 +25,10 @@ package org.osiam.ng.scim.dao;
 
 import scim.schema.v2.Group;
 
-public interface SCIMGroupProvisioning {
+/**
+ * This interface has the purpose to get SCIM group out of and into a database, which must be provided by the using
+ * application.
+ */
+public interface SCIMGroupProvisioning extends SCIMProvisioning<Group> {
 
-    /**
-     * This method creates a new group, it is used for POST calls.
-     *
-     * @param group the group to insert
-     * @return the actual created group
-     */
-    Group createGroup(Group group);
-
-    /**
-     * This method returns a SCIM group, it is used for GET calls.
-     * <p/>
-     * <p/>
-     * It must throw an ResourceNotFoundException if no user got found.
-     *
-     * @param id the external identifier of an group
-     * @return the found group
-     * @throws org.osiam.ng.scim.exceptions.ResourceNotFoundException
-     *          if no group with the given id got found
-     */
-    Group getById(String id);
-
-    void deleteGroup(String id);
 }

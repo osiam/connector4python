@@ -70,8 +70,8 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public User createUser(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User createdUser = scimUserProvisioning.createUser(user);
+    public User create(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        User createdUser = scimUserProvisioning.create(user);
         String requestUrl = request.getRequestURL().toString();
         URI uri = new UriTemplate("{requestUrl}{internalId}").expand(requestUrl, createdUser.getId());
         response.setHeader("Location", uri.toASCIIString());
@@ -82,7 +82,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public User replace(@PathVariable final String id, @RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
-        User createdUser = scimUserProvisioning.replaceUser(id, user);
+        User createdUser = scimUserProvisioning.replace(id, user);
+        return setLocationUriAndCreateUserForOutput(request, response, createdUser);
+    }
+
+    private User setLocationUriAndCreateUserForOutput(HttpServletRequest request, HttpServletResponse response,
+                                                      User createdUser) {
         String requestUrl = request.getRequestURL().toString();
         response.setHeader("Location", requestUrl);
         return User.Builder.generateForOuput(createdUser);
@@ -92,16 +97,14 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public User update(@PathVariable final String id, @RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
-        User createdUser = scimUserProvisioning.updateUser(id, user);
-        String requestUrl = request.getRequestURL().toString();
-        response.setHeader("Location", requestUrl);
-        return User.Builder.generateForOuput(createdUser);
+        User createdUser = scimUserProvisioning.update(id, user);
+        return setLocationUriAndCreateUserForOutput(request, response, createdUser);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable final String id) {
-        scimUserProvisioning.deleteUser(id);
+        scimUserProvisioning.delete(id);
     }
 
 
