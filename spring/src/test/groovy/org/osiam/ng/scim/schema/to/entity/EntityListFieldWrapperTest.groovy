@@ -40,7 +40,7 @@ import scim.schema.v2.User
 import spock.lang.Specification
 
 class EntityListFieldWrapperTest extends Specification {
-    def mode = GenericSCIMToEntityWrapper.Mode.POST
+    def mode = GenericSCIMToEntityWrapper.Mode.PUT
     def "should set entity lists"() {
         given:
         def any = new HashSet()

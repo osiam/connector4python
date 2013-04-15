@@ -26,6 +26,7 @@ package org.osiam.ng.scim.schema.to.entity;
 import scim.schema.v2.Name;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 public class EntityFieldWrapper {
     private final GenericSCIMToEntityWrapper.Mode mode;
@@ -52,11 +53,8 @@ public class EntityFieldWrapper {
     }
 
 
-    public void setEntityFieldToNull(Field entityField) throws IllegalAccessException {
-        updateSimpleField(entityField, null);
-    }
 
-    private void updateSimpleField(Field entityField, Object userValue) throws IllegalAccessException {
+    void updateSimpleField(Field entityField, Object userValue) throws IllegalAccessException {
         if (entityField != null) {
             entityField.setAccessible(true);
             entityField.set(entity, userValue);

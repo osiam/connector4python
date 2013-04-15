@@ -30,7 +30,7 @@ import scim.schema.v2.User
 import spock.lang.Specification
 
 class EntityFieldWrapperTest extends Specification {
-    def mode = GenericSCIMToEntityWrapper.Mode.POST
+    def mode = GenericSCIMToEntityWrapper.Mode.PUT
 
     def "should not update a single field of an entity when value is null and mode is patch"() {
         given:
@@ -51,22 +51,6 @@ class EntityFieldWrapperTest extends Specification {
         then:
         entity.displayName == "Not Null"
     }
-
-    def "should be able to delete a field"() {
-        given:
-        def entity = new UserEntity()
-        entity.setDisplayName("Not Null")
-        def mode = GenericSCIMToEntityWrapper.Mode.PATCH
-        def underTest = new EntityFieldWrapper(entity, mode)
-        def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
-
-        when:
-        underTest.setEntityFieldToNull(aha.get("displayname"))
-
-        then:
-        entity.displayName == null
-    }
-
 
     def "should update a single field of an entity with the given value"() {
         given:

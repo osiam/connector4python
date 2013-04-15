@@ -26,10 +26,7 @@ package org.osiam.ng.scim.schema.to.entity;
 import scim.schema.v2.Resource;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class has the purpose to make it easier to write own provisiong classes with the purpose to map SCIM Classes to
@@ -44,15 +41,14 @@ import java.util.Set;
 public class GenericSCIMToEntityWrapper {
 
 
-    static final String[] READ_ONLY_FIELDS = {"id", "meta", "groups"};
-    static final Set<String> READ_ONLY_FIELD_SET = new HashSet<>(Arrays.asList(READ_ONLY_FIELDS));
-    static final Set<String> NOT_DELETABLE = new HashSet<>(Arrays.asList("username"));
     private final Mode mode;
     private final SCIMEntities scimEntities;
+    private final For target;
     private Object entity;
     private Resource user;
 
-    public GenericSCIMToEntityWrapper(Resource user, Object entity, Mode mode, SCIMEntities scimEntities) {
+    public GenericSCIMToEntityWrapper(For target,Resource user, Object entity, Mode mode, SCIMEntities scimEntities) {
+        this.target = target;
         this.user = user;
         this.entity = entity;
         this.mode = mode;
@@ -68,7 +64,7 @@ public class GenericSCIMToEntityWrapper {
         for (Map.Entry<String, Field> e : fields.getInputFields().entrySet()) {
             Field field = fields.getInputFields().get(e.getKey());
             field.setAccessible(true);
-            if (!READ_ONLY_FIELD_SET.contains(e.getKey()) && !doNotUpdateThem.contains(e.getKey())) {
+            if (!target.READ_ONLY_FIELD_SET.contains(e.getKey()) && !doNotUpdateThem.contains(e.getKey())) {
                 Object userValue = field.get(user);
                 SCIMEntities.Entity attributes = scimEntities.fromString(e.getKey());
                 if (attributes == null) {
@@ -87,7 +83,7 @@ public class GenericSCIMToEntityWrapper {
         if (mode == Mode.PATCH && user.getMeta() != null) {
             for (String s : user.getMeta().getAttributes()) {
                 String key = s.toLowerCase();
-                if (!NOT_DELETABLE.contains(key) && !READ_ONLY_FIELD_SET.contains(key)) {
+                if (!target.NOT_DELETABLE.contains(key) && !target.READ_ONLY_FIELD_SET.contains(key)) {
                     deleteAttribute(entityFields, entityFieldWrapper, doNotUpdateThem, key);
                 }
             }
@@ -108,8 +104,19 @@ public class GenericSCIMToEntityWrapper {
     private void deleteSimpleAttribute(Map<String, Field> entityFields, EntityFieldWrapper entityFieldWrapper,
                                        Set<String> doNotUpdateThem, String key) throws IllegalAccessException {
         Field entityField = entityFields.get(key);
-        entityFieldWrapper.setEntityFieldToNull(entityField);
+        entityField.setAccessible(true);
+        if (scimEntities.fromString(key) != null) {
+
+            ((Collection) entityField.get(entity)).clear();
+        } else {
+            setEntityFieldToNull(entityFieldWrapper, entityField);
+        }
         doNotUpdateThem.add(key);
+    }
+
+    public void setEntityFieldToNull(EntityFieldWrapper entityFieldWrapper, Field entityField)
+            throws IllegalAccessException {
+        entityFieldWrapper.updateSimpleField(entityField, null);
     }
 
     private void deletePartsOfAComplexAttribute(Map<String, Field> entityFields, Set<String> doNotUpdateThem,
@@ -120,7 +127,7 @@ public class GenericSCIMToEntityWrapper {
         Object object = entity;
         GetComplexEntityFields lastEntityFields = null;
         for (int i = 0; i < lastElement; i++) {
-            if (READ_ONLY_FIELD_SET.contains(complexMethod[i])) {
+            if (target.READ_ONLY_FIELD_SET.contains(complexMethod[i])) {
                 return;
             }
             lastEntityFields = new GetComplexEntityFields(entityFields, complexMethod[i], object).invoke();
@@ -131,7 +138,21 @@ public class GenericSCIMToEntityWrapper {
     }
 
     public enum Mode {
-        PATCH, POST
+        PATCH, PUT
+    }
+
+    public enum For{
+        USER(new String[]{"id", "meta", "groups"}, new String[]{"username"}),
+
+        GROUP(new String[]{"id", "meta"}, new String[]{"displayname"});
+
+        final Set<String> READ_ONLY_FIELD_SET;
+        final Set<String> NOT_DELETABLE;
+
+        For(String[] readOnly, String[] notDeleteable) {
+            READ_ONLY_FIELD_SET = new HashSet<>(Arrays.asList(readOnly));
+            NOT_DELETABLE = new HashSet<>(Arrays.asList(notDeleteable));
+        }
     }
 
     private class GetComplexEntityFields {
