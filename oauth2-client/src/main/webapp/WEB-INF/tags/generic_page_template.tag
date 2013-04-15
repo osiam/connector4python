@@ -44,6 +44,12 @@
         <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/put?access_token=${access_token}">POST USER</a></li>
         <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/patch?access_token=${access_token}">PATCH USER</a></li>
         <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/user/delete?access_token=${access_token}">DELETE USER</a></li>
+        <!-- groups -->
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/group/get?access_token=${access_token}">GET GROUP</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/group/put?access_token=${access_token}">PUT GROUP</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/group/post?access_token=${access_token}">POST GROUP</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/group/patch?access_token=${access_token}">PATCH GROUP</a></li>
+        <li class="menuli"><a class="menuLink" href="/oauth2-client/crud/group/delete?access_token=${access_token}">DELETE GROUP</a></li>
     </ul>
 </div>
 <div id="body">

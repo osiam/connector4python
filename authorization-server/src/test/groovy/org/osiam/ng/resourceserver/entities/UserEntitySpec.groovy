@@ -543,4 +543,11 @@ class UserEntitySpec extends Specification {
         userEntity.getUserType() == "userType"
         userEntity.getExternalId() == "externalId"
     }
+
+    def "should contain internal_id for jpa"(){
+        when:
+        userEntity.setInternal_id(23)
+        then:
+        userEntity.getInternal_id() == 23
+    }
 }

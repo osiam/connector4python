@@ -29,9 +29,7 @@
     <h2>Add/Update User Resource:</h2>
 
     <form method="post">
-        <t:user_fields/>
-        <p><label>ID for Update:<input id="idForUpdate" name="idForUpdate" type="text"></label></p>
-        <input type="submit" formaction="/oauth2-client/createResource" value="Add Resource" />
-        <input type="submit" formaction="/oauth2-client/updateResource" value="Update Resource" />
+        <t:group_fields/>
+        <input type="submit" formaction="/oauth2-client/createGroup" value="Add Resource" />
     </form>
 </t:generic_page_template>

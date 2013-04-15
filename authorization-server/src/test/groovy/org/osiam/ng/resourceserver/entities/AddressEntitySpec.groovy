@@ -147,4 +147,21 @@ class AddressEntitySpec extends Specification {
         then:
         result != null
     }
+
+    def "should set primary to false when null"() {
+        given:
+        Address address =new Address.Builder().
+                setCountry("country").
+                setFormatted("formatted").
+                setLocality("locality").
+                setPostalCode("123456").
+                setRegion("region").
+                setStreetAddress("streetAddress").
+                build()
+        when:
+        def result = AddressEntity.fromScim(address)
+
+        then:
+        !result.isPrimary()
+    }
 }

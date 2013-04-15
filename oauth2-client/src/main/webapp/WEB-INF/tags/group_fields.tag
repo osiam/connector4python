@@ -21,17 +21,22 @@
   ~ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   --%>
 
-<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@tag description="A lot of scim fields ..." pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<input id="hidden_access_token" type="hidden" name="access_token" value="${access_token}"/>
+
+<p><label>Schema (comma separated):<br><input id="schema" name="schema" type="text"
+                                              value="urn:scim:schemas:core:1.0"></label></p>
+
+<p><label>Displayname:<input id="displayname" name="displayname" type="text"
+                             value="Doesn't like to speak to birds anymore ..."></label></p>
+
+<p><label>External ID:<input id="externalId" name="externalId" type="text" value=""></label></p>
+
+<h3>Member in group:</h3>
+<c:forEach var="u" items="${memberInGroup}">
+    <p>${u}</p>
+</c:forEach>
 
 
-<t:generic_page_template>
-    <h2>Add/Update User Resource:</h2>
-
-    <form method="post">
-        <t:user_fields/>
-        <p><label>ID for Update:<input id="idForUpdate" name="idForUpdate" type="text"></label></p>
-        <input type="submit" formaction="/oauth2-client/createResource" value="Add Resource" />
-        <input type="submit" formaction="/oauth2-client/updateResource" value="Update Resource" />
-    </form>
-</t:generic_page_template>

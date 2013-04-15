@@ -23,15 +23,20 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <t:generic_page_template>
-    <h2>Add/Update User Resource:</h2>
+    <h2>Get User Resource:</h2>
+
+    <h3>To get an user click on the buttons with the weird names; Pan Galactic Gargle Blaster, anyone?</h3>
 
     <form method="post">
-        <t:user_fields/>
-        <p><label>ID for Update:<input id="idForUpdate" name="idForUpdate" type="text"></label></p>
-        <input type="submit" formaction="/oauth2-client/createResource" value="Add Resource" />
-        <input type="submit" formaction="/oauth2-client/updateResource" value="Update Resource" />
-    </form>
+        <input id="hidden_access" type="hidden" name="access_token" value="${access_token} "/>
+        <c:forEach var="u" items="${groupIds}">
+            <p>
+                <input type="submit" formaction="/oauth2-client/resource" name="username" value="${u}"/>
+            </p>
+        </c:forEach>
+   </form>
 </t:generic_page_template>

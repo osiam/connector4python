@@ -41,6 +41,8 @@ public class CRUDRedirectController {
     }
 
     public static Set<String> invalidUserIds = new ConcurrentSkipListSet<>();
+    public static Set<String> groupIds = new ConcurrentSkipListSet<>();
+    public static Set<String> inValidGroupIds = new ConcurrentSkipListSet<>();
 
     @RequestMapping("/user/put")
     public String redirectToCreateUpdateUser(HttpServletRequest request) {
@@ -64,6 +66,8 @@ public class CRUDRedirectController {
         request.setAttribute("access_token", request.getParameter("access_token"));
         request.setAttribute("userIds", userIds);
         request.setAttribute("invalidUserIds", invalidUserIds);
+        request.setAttribute("groupIds", groupIds);
+        request.setAttribute("groupIds", inValidGroupIds);
     }
 
     @RequestMapping("/user/delete")
@@ -72,6 +76,38 @@ public class CRUDRedirectController {
 
         return "delete_user";
     }
+
+    @RequestMapping("/group/post")
+    public String redirectToCreateGroup(HttpServletRequest request) {
+        request.setAttribute("access_token", request.getParameter("access_token"));
+        return "create_group";
+    }
+
+    @RequestMapping("/group/put")
+    public String redirectToReplaceGroup(HttpServletRequest request) {
+        request.setAttribute("access_token", request.getParameter("access_token"));
+        return "replace_group";
+    }
+
+
+    @RequestMapping("/group/patch")
+    public String redirectToPatchGroup(HttpServletRequest request) {
+        request.setAttribute("access_token", request.getParameter("access_token"));
+        return "patch_group";
+    }
+
+    @RequestMapping("/group/get")
+    public String redirectToGetGroup(HttpServletRequest request) {
+        setAccessTokenAndKnownUserIds(request);
+        return "get_group";
+    }
+
+    @RequestMapping("/user/delete")
+    public String redirectToDeleteGroup(HttpServletRequest request) {
+        setAccessTokenAndKnownUserIds(request);
+        return "delete_group";
+    }
+
 
 
 }

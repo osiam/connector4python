@@ -52,6 +52,7 @@ class GroupPatchTest extends Specification {
         1 * groupDAO.getById(id) >> entity
         entity.members.size() == 1
         entity.members.first() instanceof UserEntity
+        1 * groupDAO.update(entity) >> entity
     }
 
     def "should delete a single user in members"() {
@@ -69,6 +70,7 @@ class GroupPatchTest extends Specification {
         1 * groupDAO.getById(id) >> entity
         entity.members.size() == 1
         entity.members.first() instanceof GroupEntity
+        1 * groupDAO.update(entity) >> entity
     }
 
 
@@ -91,6 +93,7 @@ class GroupPatchTest extends Specification {
         then:
         1 * groupDAO.getById(id) >> entity
         entity.members.empty
+        1 * groupDAO.update(entity) >> entity
     }
 
 

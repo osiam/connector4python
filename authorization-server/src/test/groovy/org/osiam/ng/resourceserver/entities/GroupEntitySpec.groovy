@@ -100,4 +100,19 @@ class GroupEntitySpec extends Specification {
         then:
         result != null
     }
+
+    def "members from scim should return null when toscim"() {
+        Group.Members members = new Group.Members()
+        members.member.add(new MultiValuedAttribute.Builder().
+                setValue(UUID.randomUUID().toString()).
+                setDisplay("display").
+                build())
+        given:
+        Group group = new Group.Builder().setDisplayName("displayname").setMembers(members).setId(UUID.randomUUID().toString()).build()
+        when:
+        def result = GroupEntity.fromScim(group)
+        then:
+        result != null
+        !result.members.first().toScim()
+    }
 }

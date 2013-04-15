@@ -29,7 +29,7 @@
     <h2>Patch User Resource:</h2>
 
     <form method="post">
-        <t:lot_of_fields/>
+        <t:user_fields/>
         <p><label>Complete Delete (comma separated):<input id="delete" name="delete" type="text"></label></p>
         <p><label>ID for Update:<input id="idForUpdate" name="idForUpdate" type="text"></label></p>
         <input type="submit" formaction="/oauth2-client/patchResource" value="Update Resource" />
