@@ -114,7 +114,7 @@ class UserDAOTest extends Specification {
         underTest.setPasswordEncoder(passwordEncoder)
         def id = UUID.randomUUID()
         when:
-        underTest.createUser(userEntity)
+        underTest.create(userEntity)
 
         then:
         1 * userEntity.password >> "password"

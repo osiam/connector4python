@@ -36,20 +36,27 @@ import java.util.logging.Level;
 
 @Repository
 @Transactional
-public class GroupDAO extends GetInternalIdSkeleton {
+public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupEntity>{
 
+    @Override
     public void create(GroupEntity group) {
+        findAndAddMembers(group);
+        em.persist(group);
+
+    }
+
+    private void findAndAddMembers(GroupEntity group) {
         Set<InternalIdSkeleton> skeletons = new HashSet<>(group.getMembers());
         for (InternalIdSkeleton i : skeletons) {
             InternalIdSkeleton skeleton = getInternalIdSkeleton(i.getId().toString());
             group.getMembers().remove(i);
             group.getMembers().add(skeleton);
         }
-        em.persist(group);
-
     }
 
-    public GroupEntity get(String id) {
+
+    @Override
+    public GroupEntity getById(String id) {
         try {
             return getInternalIdSkeleton(id);
         } catch (ClassCastException c) {
@@ -59,7 +66,12 @@ public class GroupDAO extends GetInternalIdSkeleton {
     }
 
     public void delete(String id) {
-        GroupEntity groupEntity = get(id);
+        GroupEntity groupEntity = getById(id);
         em.remove(groupEntity);
+    }
+
+    public GroupEntity update(GroupEntity entity) {
+        findAndAddMembers(entity);
+        return em.merge(entity);
     }
 }

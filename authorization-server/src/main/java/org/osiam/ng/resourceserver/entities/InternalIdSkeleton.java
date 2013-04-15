@@ -24,6 +24,7 @@
 package org.osiam.ng.resourceserver.entities;
 
 import org.hibernate.annotations.Type;
+import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.*;
@@ -32,7 +33,7 @@ import java.util.UUID;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamedQueries({@NamedQuery(name = "getById", query = "SELECT i FROM InternalIdSkeleton i WHERE i.id= :id")})
-public abstract class InternalIdSkeleton {
+public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
 
     @Column
     protected String displayName;
@@ -92,4 +93,17 @@ public abstract class InternalIdSkeleton {
     public MultiValuedAttribute toMultiValueScim() {
         return new MultiValuedAttribute.Builder().setDisplay(displayName).setValue(id.toString()).build();
     }
+
+    @Override
+    @Transient
+    public String getValue() {
+        return id.toString();
+    }
+
+    @Override
+    public void setValue(String value) {
+        id = UUID.fromString(value);
+    }
+
+    public abstract <T> T toScim();
 }

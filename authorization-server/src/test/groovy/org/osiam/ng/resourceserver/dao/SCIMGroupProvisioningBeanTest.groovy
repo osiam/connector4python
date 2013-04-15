@@ -23,15 +23,11 @@
 
 package org.osiam.ng.resourceserver.dao
 
-import org.hibernate.JDBCException
 import org.osiam.ng.resourceserver.entities.GroupEntity
 import org.osiam.ng.scim.exceptions.ResourceExistsException
 import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.orm.hibernate3.HibernateJdbcException
 import scim.schema.v2.Group
 import spock.lang.Specification
-
-import java.sql.SQLException
 
 class SCIMGroupProvisioningBeanTest extends Specification {
     def groupDao = Mock(GroupDAO)
@@ -43,7 +39,7 @@ class SCIMGroupProvisioningBeanTest extends Specification {
 
     def "should return with id enriched group on create"(){
         when:
-        def result = underTest.createGroup(group)
+        def result = underTest.create(group)
         then:
         result != group
         UUID.fromString(result.id)
@@ -51,7 +47,7 @@ class SCIMGroupProvisioningBeanTest extends Specification {
     }
     def "should call dao create on create"(){
         when:
-          underTest.createGroup(group)
+          underTest.create(group)
         then:
         1 * groupDao.create(_)
     }
@@ -62,7 +58,7 @@ class SCIMGroupProvisioningBeanTest extends Specification {
             throw new DataIntegrityViolationException("moep")
         }
         when:
-        underTest.createGroup(group)
+        underTest.create(group)
         then:
         def e = thrown(ResourceExistsException)
         e.message == "null already exists."
@@ -72,14 +68,14 @@ class SCIMGroupProvisioningBeanTest extends Specification {
         when:
         def result = underTest.getById("id")
         then:
-        1 * groupDao.get("id") >> entity
+        1 * groupDao.getById("id") >> entity
         1 * entity.toScim() >> group
         result == group
     }
 
     def "should call dao delete on delete"(){
         when:
-        underTest.deleteGroup("id")
+        underTest.delete("id")
         then:
         1 * groupDao.delete("id")
 

@@ -27,6 +27,7 @@ import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
 import org.osiam.ng.scim.schema.to.entity.GenericSCIMToEntityWrapper;
+import org.osiam.ng.scim.schema.to.entity.SCIMEntities;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
@@ -41,24 +42,23 @@ import java.util.UUID;
  * To change this template use File | Settings | File Templates.
  */
 @Service
-public class SCIMUserProvisioningBean implements SCIMUserProvisioning {
+public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> implements SCIMUserProvisioning {
 
 
     @Inject
     private UserDAO userDao;
 
     @Override
-    public User getById(String id) {
-        UserEntity userEntity = userDao.getById(id);
-        return userEntity.toScim();
+    protected GenericDAO getDao() {
+        return userDao;
     }
 
     @Override
-    public User createUser(User user) {
+    public User create(User user) {
         UserEntity userEntity = UserEntity.fromScim(user);
         userEntity.setId(UUID.randomUUID());
         try {
-            userDao.createUser(userEntity);
+            userDao.create(userEntity);
         } catch (Exception e) {
             throw new ResourceExistsException("The user with name " +
                     user.getUserName() +
@@ -68,38 +68,9 @@ public class SCIMUserProvisioningBean implements SCIMUserProvisioning {
     }
 
     @Override
-    public User replaceUser(String id, User user) {
-
-        UserEntity entity = userDao.getById(id);
-        GenericSCIMToEntityWrapper genericSCIMToEntityWrapper =
-                new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.POST, UserSCIMEntities.ENTITIES);
-        setUserFieldsWrapException(genericSCIMToEntityWrapper);
-
-        userDao.update(entity);
-        return entity.toScim();
-    }
-
-    private void setUserFieldsWrapException(GenericSCIMToEntityWrapper genericSCIMToEntityWrapper) {
-        try {
-            genericSCIMToEntityWrapper.setFields();
-        } catch (IllegalAccessException | InstantiationException e) {
-            throw new IllegalStateException("This should not happen.", e);
-        }
-    }
-
-    @Override
-    public User updateUser(String id, User user) {
-        UserEntity entity = userDao.getById(id);
-        GenericSCIMToEntityWrapper genericSCIMToEntityWrapper =
-                new GenericSCIMToEntityWrapper(user, entity, GenericSCIMToEntityWrapper.Mode.PATCH, UserSCIMEntities.ENTITIES);
-        setUserFieldsWrapException(genericSCIMToEntityWrapper);
-        userDao.update(entity);
-        return entity.toScim();
-    }
-
-    @Override
-    public void deleteUser(String id) {
-
-        userDao.delete(id);
+    protected SCIMEntities getScimEntities() {
+        return UserSCIMEntities.ENTITIES;
     }
 }
+
+

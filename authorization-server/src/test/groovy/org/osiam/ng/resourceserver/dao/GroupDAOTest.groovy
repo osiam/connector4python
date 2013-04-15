@@ -77,7 +77,7 @@ class GroupDAOTest extends Specification {
 
     def "should get a group"(){
         when:
-        def result = underTest.get(id)
+        def result = underTest.getById(id)
         then:
         1 * query.getResultList() >> [internalidSkeleton]
         result == internalidSkeleton
@@ -88,7 +88,7 @@ class GroupDAOTest extends Specification {
         given:
         internalidSkeleton = new UserEntity()
         when:
-        underTest.get(id)
+        underTest.getById(id)
         then:
         1 * query.getResultList() >> [internalidSkeleton]
         thrown(ResourceNotFoundException)

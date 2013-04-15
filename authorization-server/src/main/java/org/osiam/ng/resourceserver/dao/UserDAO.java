@@ -38,7 +38,7 @@ import java.util.logging.Level;
 
 @Repository
 @Transactional
-public class UserDAO extends GetInternalIdSkeleton{
+public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEntity> {
 
     @Inject
     private PasswordEncoder passwordEncoder;
@@ -51,7 +51,8 @@ public class UserDAO extends GetInternalIdSkeleton{
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUser(UserEntity userEntity) {
+    @Override
+    public void create(UserEntity userEntity) {
         String hash = passwordEncoder.encodePassword(userEntity.getPassword(), userEntity.getId());
         findExistingMultiValueAttributes(userEntity);
         userEntity.setPassword(hash);
@@ -95,6 +96,7 @@ public class UserDAO extends GetInternalIdSkeleton{
         return result;
     }
 
+    @Override
     public UserEntity getById(String id) {
         try {
             return getInternalIdSkeleton(id);
@@ -111,7 +113,8 @@ public class UserDAO extends GetInternalIdSkeleton{
     }
 
 
-    public void update(UserEntity entity) {
+    @Override
+    public UserEntity update(UserEntity entity) {
         //not hashed ...
         String password = entity.getPassword();
         if (password.length() != 128) {
@@ -119,8 +122,10 @@ public class UserDAO extends GetInternalIdSkeleton{
         }
         findExistingMultiValueAttributes(entity);
         em.merge(entity);
+        return entity;
     }
 
+    @Override
     public void delete(String id) {
         UserEntity userEntity = getById(id);
         em.remove(userEntity);

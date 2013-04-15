@@ -21,48 +21,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.osiam.ng.resourceserver
+package org.osiam.ng.resourceserver.dao
 
-import org.osiam.ng.resourceserver.dao.SCIMUserProvisioningBean
-import org.osiam.ng.resourceserver.dao.UserDAO
-import org.osiam.ng.resourceserver.entities.UserEntity
-import org.osiam.ng.scim.exceptions.ResourceNotFoundException
+import org.osiam.ng.resourceserver.entities.GroupEntity
 import spock.lang.Specification
 
-import javax.persistence.EntityManager
-import javax.persistence.Query
+class GroupSCIMEntitiesTest extends Specification {
 
-class UserDeleteTest extends Specification {
-    EntityManager em = Mock(EntityManager)
-    def userDao = new UserDAO(em: em)
-    SCIMUserProvisioningBean bean = new SCIMUserProvisioningBean(userDao: userDao)
-    def uId = UUID.randomUUID()
-    def id = uId.toString()
-    def query = Mock(Query)
-
-
-    def "should throw an org.osiam.ng.scim.exceptions.ResourceNotFoundException when trying to delete unknown user"() {
+    def "should contain members as a multivalue attribute list"(){
         when:
-        bean.delete(id)
+        def member = GroupSCIMEntities.ENTITIES.fromString("members")
         then:
-        1 * em.createNamedQuery("getById") >> query
-        1 * query.getResultList() >> []
-        thrown(ResourceNotFoundException)
-
-
+        member.multiValue
+        member.clazz == GroupEntity
     }
 
-    def "should not throw any Exception when trying to delete known user"() {
+    def "should be able to instantiate class"(){
         given:
-        def entity = new UserEntity()
+        def member = GroupSCIMEntities.ENTITIES.fromString("members")
         when:
-        bean.delete(id)
+        def result = member.getClazz().newInstance()
         then:
-        1 * em.createNamedQuery("getById") >> query
-        1 * query.getResultList() >> [entity]
-        1 * em.remove(entity)
+        result
 
     }
-
-
 }

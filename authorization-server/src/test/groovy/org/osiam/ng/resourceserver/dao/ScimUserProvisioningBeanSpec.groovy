@@ -40,7 +40,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
         def scimUser = new User.Builder("test").build()
 
         when:
-        def user = scimUserProvisioningBean.createUser(scimUser)
+        def user = scimUserProvisioningBean.create(scimUser)
 
         then:
         user.userName == "test"
@@ -49,11 +49,11 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should throw exception if user already exists"() {
         given:
-        userDao.createUser(_) >> {throw new Exception()}
+        userDao.create(_) >> {throw new Exception()}
         scimUser.getUserName() >> "Bäm"
 
         when:
-        scimUserProvisioningBean.createUser(scimUser)
+        scimUserProvisioningBean.create(scimUser)
 
         then:
         def e = thrown(ResourceExistsException)
@@ -68,7 +68,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
         entity.setId(internalId)
 
         when:
-        scimUserProvisioningBean.replaceUser(internalId.toString(), scimUser)
+        scimUserProvisioningBean.replace(internalId.toString(), scimUser)
         then:
         1 * userDao.getById(internalId.toString()) >> entity
         1 * userDao.update(entity)
@@ -79,18 +79,19 @@ class ScimUserProvisioningBeanSpec extends Specification {
         GenericSCIMToEntityWrapper setUserFields = Mock(GenericSCIMToEntityWrapper)
 
         when:
-        scimUserProvisioningBean.setUserFieldsWrapException(setUserFields);
+        scimUserProvisioningBean.setFieldsWrapException(setUserFields);
         then:
         1 * setUserFields.setFields() >> {throw new IllegalAccessException("Blubb")}
         def e = thrown(IllegalStateException)
         e.message == "This should not happen."
+
     }
 
     def "should call dao delete on delete"(){
         given:
         def id = UUID.randomUUID().toString()
         when:
-        scimUserProvisioningBean.deleteUser(id)
+        scimUserProvisioningBean.delete(id)
         then:
         1 * userDao.delete(id)
     }

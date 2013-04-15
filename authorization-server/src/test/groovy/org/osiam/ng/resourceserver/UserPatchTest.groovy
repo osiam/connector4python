@@ -62,7 +62,7 @@ class UserPatchTest extends Specification {
         entity.getEmails().add(new EmailEntity(value: "email2", type: "work", primary: false))
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.getX509Certificates().empty
@@ -96,7 +96,7 @@ class UserPatchTest extends Specification {
         def entity = createEntityWithInternalId()
         addListsToEntity(entity)
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.getX509Certificates().empty
@@ -145,7 +145,7 @@ class UserPatchTest extends Specification {
         entity.getEmails().add(new EmailEntity(value: "email2", type: "work", primary: false))
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.getX509Certificates().size() == 1
@@ -184,7 +184,7 @@ class UserPatchTest extends Specification {
         addListsToEntity(entity)
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.getEmails().size() == 1
@@ -207,7 +207,7 @@ class UserPatchTest extends Specification {
         addListsToEntity(entity)
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.getAddresses().size() == 2
@@ -223,7 +223,7 @@ class UserPatchTest extends Specification {
         def user = new User.Builder("username").setDisplayName("hallo").build()
         UserEntity entity = createEntityWithInternalId()
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.username == "username"
@@ -247,7 +247,7 @@ class UserPatchTest extends Specification {
         entity.setUsername("username")
         entity.setDisplayName("display it")
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.username == "username"
@@ -263,7 +263,7 @@ class UserPatchTest extends Specification {
         UserEntity entity = createEntityWithInternalId()
         entity.setUsername("username")
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.username == "username"
@@ -278,7 +278,7 @@ class UserPatchTest extends Specification {
         entity.setUsername("hach")
         entity.setDisplayName("display it")
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.username == "Harald"
@@ -296,7 +296,7 @@ class UserPatchTest extends Specification {
         entity.setUsername("Harald")
         entity.setDisplayName("display it")
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.username == "Harald"
@@ -319,7 +319,7 @@ class UserPatchTest extends Specification {
         entity.setUsername("username")
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.name.givenName == "Arthur"
@@ -346,7 +346,7 @@ class UserPatchTest extends Specification {
         entity.setUsername("username")
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.name.givenName == "Arthur"
@@ -365,7 +365,7 @@ class UserPatchTest extends Specification {
         entity.setUsername("haha")
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         //should be thrown if it would continue a read only field, because UUID has no field test ...
@@ -382,7 +382,7 @@ class UserPatchTest extends Specification {
 
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.groups == [] as Set
@@ -399,7 +399,7 @@ class UserPatchTest extends Specification {
         entity.groups.add(new GroupEntity(id: UUID.randomUUID()))
 
         when:
-        bean.updateUser(id, user)
+        bean.update(id, user)
         then:
         1 * userDao.getById(id) >> entity
         entity.groups.size() == 1

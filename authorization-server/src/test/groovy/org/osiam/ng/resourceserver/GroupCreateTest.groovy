@@ -29,7 +29,7 @@ class GroupCreateTest extends Specification {
         members.member.add(new MultiValuedAttribute.Builder().setValue(internalId.toString()).build())
         def group = new Group.Builder().setMembers(members).build()
         when:
-        underTest.createGroup(group)
+        underTest.create(group)
         then:
         1 * em.createNamedQuery("getById") >> query
         1 * query.setParameter("id", internalId);
@@ -47,7 +47,7 @@ class GroupCreateTest extends Specification {
         members.member.add(new MultiValuedAttribute.Builder().setValue(internalId.toString()).build())
         def group = new Group.Builder().setMembers(members).build()
         when:
-        underTest.createGroup(group)
+        underTest.create(group)
         then:
         1 * em.createNamedQuery("getById") >> query
         1 * query.setParameter("id", internalId);
@@ -65,7 +65,7 @@ class GroupCreateTest extends Specification {
         def group = new Group.Builder().setMembers(members).build()
         def queryResults = [GroupEntity.fromScim(group)]
         when:
-        def result = underTest.createGroup(group)
+        def result = underTest.create(group)
         then:
         1 * em.createNamedQuery("getById") >> query
         1 * query.setParameter("id", internalId);
@@ -77,7 +77,7 @@ class GroupCreateTest extends Specification {
         given:
         def group = new Group.Builder().build()
         when:
-        def result = underTest.createGroup(group)
+        def result = underTest.create(group)
         then:
         result.members.member.size() == 0
     }

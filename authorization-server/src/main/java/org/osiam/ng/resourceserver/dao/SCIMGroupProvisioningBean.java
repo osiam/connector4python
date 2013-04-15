@@ -26,6 +26,8 @@ package org.osiam.ng.resourceserver.dao;
 import org.osiam.ng.resourceserver.entities.GroupEntity;
 import org.osiam.ng.scim.dao.SCIMGroupProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
+import org.osiam.ng.scim.schema.to.entity.GenericSCIMToEntityWrapper;
+import org.osiam.ng.scim.schema.to.entity.SCIMEntities;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.Group;
@@ -36,13 +38,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
-public class SCIMGroupProvisioningBean implements SCIMGroupProvisioning {
+public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> implements SCIMGroupProvisioning {
     Logger logger = Logger.getLogger(SCIMGroupProvisioningBean.class.getName());
     @Inject
     private GroupDAO groupDAO;
 
     @Override
-    public Group createGroup(Group group) {
+    protected GenericDAO getDao() {
+        return groupDAO;
+    }
+
+    @Override
+    public Group create(Group group) {
         GroupEntity enrichedGroup = GroupEntity.fromScim(group);
         enrichedGroup.setId(UUID.randomUUID());
         try {
@@ -55,12 +62,9 @@ public class SCIMGroupProvisioningBean implements SCIMGroupProvisioning {
     }
 
     @Override
-    public Group getById(String id) {
-        return groupDAO.get(id).toScim();
+    protected SCIMEntities getScimEntities() {
+        return GroupSCIMEntities.ENTITIES;
     }
 
-    @Override
-    public void deleteGroup(String id) {
-        groupDAO.delete(id);
-    }
+
 }

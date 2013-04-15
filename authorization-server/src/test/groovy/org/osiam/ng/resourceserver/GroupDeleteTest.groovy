@@ -45,7 +45,7 @@ class GroupDeleteTest extends Specification {
 
     def "should throw an org.osiam.ng.scim.exceptions.ResourceNotFoundException when trying to delete unknown user"() {
         when:
-        bean.deleteGroup(id)
+        bean.delete(id)
         then:
         1 * em.createNamedQuery("getById") >> query
         1 * query.getResultList() >> []
@@ -58,7 +58,7 @@ class GroupDeleteTest extends Specification {
         given:
         def entity = new GroupEntity()
         when:
-        bean.deleteGroup(id)
+        bean.delete(id)
         then:
         1 * em.createNamedQuery("getById") >> query
         1 * query.getResultList() >> [entity]
