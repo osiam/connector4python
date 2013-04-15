@@ -96,8 +96,9 @@ public class EntityListFieldWrapper {
     }
 
     private boolean notDeleted(MultiValuedAttribute m, Collection<Object> targetList) {
-        seekAndDelete(m, targetList);
-        return !"delete".equals(m.getOperation());
+        boolean equals = "delete".equals(m.getOperation());
+        if (equals) { seekAndDelete(m, targetList); }
+        return !equals;
 
     }
 
@@ -111,7 +112,9 @@ public class EntityListFieldWrapper {
 
     private boolean deleteSingleAttribute(MultiValuedAttribute m, Collection<Object> targetList, Object o) {
         ChildOfMultiValueAttribute valueAttribute = (ChildOfMultiValueAttribute) o;
-        return valueAttribute.getValue() == m.getValue() && targetList.remove(o);
+        String value = valueAttribute.getValue().toUpperCase();
+        Object mValue = String.valueOf(m.getValue()).toUpperCase();
+        return mValue.equals(value) && targetList.remove(o);
     }
 
     private void addSingleObject(Class<?> clazz, Collection<Object> collection, MultiValuedAttribute m)

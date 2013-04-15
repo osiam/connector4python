@@ -82,4 +82,13 @@ public class GroupController {
         setLocation(request, response);
         return group;
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Group update(@PathVariable final String id, @RequestBody Group user, HttpServletRequest request, HttpServletResponse response) {
+        Group group = scimGroupProvisioning.update(id, user);
+        setLocation(request, response);
+        return group;
+    }
 }

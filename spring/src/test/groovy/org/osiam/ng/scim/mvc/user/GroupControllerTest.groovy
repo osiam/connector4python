@@ -137,5 +137,33 @@ class GroupControllerTest extends Specification {
         result == group
     }
 
+    def "should contain a method to PATCH a group"(){
+        given:
+        Method method = GroupController.class.getDeclaredMethod("update", String, Group, HttpServletRequest, HttpServletResponse)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        ResponseStatus defaultStatus = method.getAnnotation(ResponseStatus)
+        then:
+        mapping.method() == [RequestMethod.PATCH]
+        body
+        defaultStatus.value() == HttpStatus.OK
+    }
+
+    def "should call provisioning on update"(){
+        given:
+        def location = "http://host:port/deployment/Group/" + group.id
+        when:
+        def result = underTest.update(group.id, group, httpServletRequest, httpServletResponse)
+
+        then:
+        1 * httpServletRequest.getRequestURL() >> new StringBuffer(location)
+        1 * provisioning.update(group.id, group) >> group
+
+        1 * httpServletResponse.setHeader("Location", location)
+        result == group
+    }
+
+
 
 }
