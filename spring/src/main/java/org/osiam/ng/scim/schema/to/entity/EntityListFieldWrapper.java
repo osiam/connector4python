@@ -166,7 +166,6 @@ public class EntityListFieldWrapper {
     @SuppressWarnings("unchecked")
     void setNeedToBeReplacedCompletely(Object userValue, Field field, Class<?> clazz)
             throws IllegalAccessException, InstantiationException {
-
         Object object = getFieldObject(field);
         if (object != null) {
             Collection collection = (Collection) object;
