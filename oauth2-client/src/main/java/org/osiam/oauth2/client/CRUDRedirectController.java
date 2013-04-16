@@ -102,7 +102,7 @@ public class CRUDRedirectController {
         return "get_group";
     }
 
-    @RequestMapping("/user/delete")
+    @RequestMapping("/group/delete")
     public String redirectToDeleteGroup(HttpServletRequest request) {
         setAccessTokenAndKnownUserIds(request);
         return "delete_group";
