@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.CONFLICT)
 public class ResourceExistsException extends IllegalArgumentException {
+    private static final long serialVersionUID = 6005039154271572847L;
+
     public ResourceExistsException(String s) {
         super(s);
 

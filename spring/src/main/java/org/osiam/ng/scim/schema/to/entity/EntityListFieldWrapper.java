@@ -63,7 +63,7 @@ public class EntityListFieldWrapper {
 
     private void updateListFields(Object userValue, SCIMEntities.Entity attributes, Field field)
             throws IllegalAccessException, InstantiationException {
-        if (!attributes.isMultiValue()) {
+        if (attributes.isNotMultiValue()) {
             setNeedToBeReplacedCompletely(userValue, field, attributes.getClazz());
         } else {
             updateMultiValueList(userValue, attributes, field);

@@ -45,7 +45,7 @@ import java.net.URI;
  * <p/>
  * http://tools.ietf.org/html/draft-ietf-scim-api-00#section-3
  *
- * @Author phil
+ *
  */
 @Controller
 @RequestMapping(value = "/User")

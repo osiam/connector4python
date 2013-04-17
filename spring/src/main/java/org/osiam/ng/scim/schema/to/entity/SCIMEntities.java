@@ -41,8 +41,8 @@ public interface SCIMEntities {
             return clazz;
         }
 
-        public boolean isMultiValue() {
-            return isMultiValue;
+        public boolean isNotMultiValue() {
+            return !isMultiValue;
         }
     }
 

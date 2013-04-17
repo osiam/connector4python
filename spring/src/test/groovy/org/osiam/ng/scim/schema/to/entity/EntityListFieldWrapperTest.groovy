@@ -201,7 +201,7 @@ class EntityListFieldWrapperTest extends Specification {
     def "should wrap InstantiationException to IllegalStateException"(){
         given:
         def attr = Mock(SCIMEntities.Entity)
-        attr.isMultiValue() >> {throw new InstantiationException("moep")}
+        attr.isNotMultiValue() >> {throw new InstantiationException("moep")}
         def underTest = new EntityListFieldWrapper(null, GenericSCIMToEntityWrapper.Mode.PATCH)
         when:
         underTest.wrapExceptions("test", attr, null)
@@ -213,7 +213,7 @@ class EntityListFieldWrapperTest extends Specification {
     def "should wrap IllegalAccessException to IllegalStateException"(){
         given:
         def attr = Mock(SCIMEntities.Entity)
-        attr.isMultiValue() >> {throw new IllegalAccessException("moep")}
+        attr.isNotMultiValue() >> {throw new IllegalAccessException("moep")}
         def underTest = new EntityListFieldWrapper(null, GenericSCIMToEntityWrapper.Mode.PATCH)
         when:
         underTest.wrapExceptions("test", attr, null)
