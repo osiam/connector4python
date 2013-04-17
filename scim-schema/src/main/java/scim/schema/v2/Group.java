@@ -35,7 +35,7 @@ import java.util.*;
 public class Group extends CoreResource{
 
     private String displayName;
-    private Group.Members members;
+    protected Set<MultiValuedAttribute> members;
 
     //JSON Serializing
     public Group(){}
@@ -52,7 +52,7 @@ public class Group extends CoreResource{
     public static class Builder extends CoreResource.Builder{
 
         protected String displayName;
-        protected Group.Members members;
+        protected Set<MultiValuedAttribute> members = new HashSet<>();
         protected Object any;
 
         public Builder(){}
@@ -72,7 +72,7 @@ public class Group extends CoreResource{
             return this;
         }
 
-        public Builder setMembers(Members members) {
+        public Builder setMembers(Set<MultiValuedAttribute> members) {
             this.members = members;
             return this;
         }
@@ -102,57 +102,8 @@ public class Group extends CoreResource{
         return displayName;
     }
 
-
-    /**
-     * Gets the value of the members property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Group.Members }
-     *     
-     */
-    public Group.Members getMembers() {
+    public Set<MultiValuedAttribute> getMembers() {
         return members;
-    }
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Members implements ContainsListOfMultiValue.MustExist{
-
-        protected Set<MultiValuedAttribute> member = new HashSet<>();;
-
-        /**
-         * Gets the value of the member property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the member property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getMember().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         * 
-         * 
-         */
-        public Set<MultiValuedAttribute> getMember() {
-            return this.member;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return this.member;
-        }
     }
 
 }

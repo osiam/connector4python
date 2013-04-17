@@ -45,26 +45,18 @@ class UserControllerTest extends Specification {
     def httpServletRequest = Mock(HttpServletRequest)
     def httpServletResponse = Mock(HttpServletResponse)
     User user = new User.Builder("test").setActive(true)
-            .setAddresses(new User.Addresses())
+
             .setAny(["ha"] as Set)
             .setDisplayName("display")
-            .setEmails(new User.Emails())
-            .setEntitlements(new User.Entitlements())
-            .setGroups(new User.Groups())
-            .setIms(new User.Ims())
             .setLocale("locale")
             .setName(new Name.Builder().build())
             .setNickName("nickname")
             .setPassword("password")
-            .setPhoneNumbers(new User.PhoneNumbers())
-            .setPhotos(new User.Photos())
             .setPreferredLanguage("prefereedLanguage")
             .setProfileUrl("profileUrl")
-            .setRoles(new User.Roles())
             .setTimezone("time")
             .setTitle("title")
             .setUserType("userType")
-            .setX509Certificates(new User.X509Certificates())
             .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
             .build()
 
@@ -162,25 +154,25 @@ class UserControllerTest extends Specification {
         assert user.password != null
         assert result.password == null
         assert result.active == user.active
-        assert result.addresses == null
+        assert result.addresses.empty
         assert result.any == user.any
         assert result.displayName == user.displayName
-        assert result.emails == null
-        assert result.entitlements == null
-        assert result.groups == null
-        assert result.ims == null
+        assert result.emails.empty
+        assert result.entitlements.empty
+        assert result.groups.empty
+        assert result.ims.empty
         assert result.locale == user.locale
         assert result.name == user.name
         assert result.nickName == user.nickName
-        assert result.phoneNumbers == null
-        assert result.photos == null
+        assert result.phoneNumbers.empty
+        assert result.photos.empty
         assert result.preferredLanguage == user.preferredLanguage
         assert result.profileUrl == user.profileUrl
-        assert result.roles == null
+        assert result.roles.empty
         assert result.timezone == user.timezone
         assert result.title == user.title
         assert result.userType == user.userType
-        assert result.x509Certificates == null
+        assert result.x509Certificates.empty
         assert result.userName == user.userName
         assert result.id == user.id
         assert result.externalId == user.externalId

@@ -25,7 +25,10 @@ package scim.schema.v2;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -48,19 +51,18 @@ public class User extends CoreResource {
     private String timezone;
     private Boolean active;
     private String password;
-    private User.Emails emails;
-    private User.PhoneNumbers phoneNumbers;
-    private User.Ims ims;
-    private User.Photos photos;
-    private User.Addresses addresses;
-    private User.Groups groups;
-    private User.Entitlements entitlements;
-    private User.Roles roles;
-    private User.X509Certificates x509Certificates;
+    private List<MultiValuedAttribute> emails;
+    private List<MultiValuedAttribute> phoneNumbers;
+    private List<MultiValuedAttribute> ims;
+    private List<MultiValuedAttribute> photos;
+    private List<Address> addresses;
+    private List<MultiValuedAttribute> groups;
+    private List<MultiValuedAttribute> entitlements;
+    private List<MultiValuedAttribute> roles;
+    private List<MultiValuedAttribute> x509Certificates;
     private Set<Object> any;
 
     public User() {
-
     }
 
     private User(Builder builder) {
@@ -89,196 +91,6 @@ public class User extends CoreResource {
         this.x509Certificates = builder.x509Certificates;
         this.any = builder.any;
     }
-
-    public static class Builder extends CoreResource.Builder {
-        private final String userName;
-
-
-        private Name name;
-        private String displayName;
-        private String nickName;
-        private String profileUrl;
-        private String title;
-        private String userType;
-        private String preferredLanguage;
-        private String locale;
-        private String timezone;
-        private Boolean active;
-        private String password;
-
-        private User.Emails emails;
-        private User.PhoneNumbers phoneNumbers;
-        private User.Ims ims;
-        private User.Photos photos;
-        private User.Addresses addresses;
-        private User.Groups groups;
-        private User.Entitlements entitlements;
-        private User.Roles roles;
-        private User.X509Certificates x509Certificates;
-
-
-        private Set<Object> any;
-
-
-        public Builder(String userName) {
-            if (userName == null)
-                throw new IllegalArgumentException("userName must not be null.");
-            this.userName = userName;
-        }
-
-        public Builder() {
-            this.userName = null;
-        }
-
-
-        /**
-         * This class is for generating the output of an User. It does not copy the password and it checks for empty
-         * lists; if a list is empty it will be nulled so that json-mapping will ignore it.
-         *
-         * @param user
-         * @return
-         */
-        public static User generateForOuput(User user) {
-            Builder builder = new Builder(user.userName);
-            builder.id = user.id;
-            builder.meta = user.meta;
-            builder.externalId = user.externalId;
-            builder.name = user.name;
-            builder.displayName = user.displayName;
-            builder.nickName = user.nickName;
-            builder.profileUrl = user.profileUrl;
-            builder.title = user.title;
-            builder.userType = user.userType;
-            builder.preferredLanguage = user.preferredLanguage;
-            builder.locale = user.locale;
-            builder.timezone = user.timezone;
-            builder.active = user.active;
-            // null lists when empty
-            builder.emails = user.emails == null ? null : (user.emails.getEmail().isEmpty() ? null : user.emails);
-            builder.phoneNumbers = user.phoneNumbers == null ? null : (user.phoneNumbers.getPhoneNumber().isEmpty() ? null : user.phoneNumbers);
-            builder.ims = user.ims == null ? null : (user.ims.getIm().isEmpty() ? null : user.ims);
-            builder.photos = user.photos == null ? null : (user.photos.getPhoto().isEmpty() ? null : user.photos);
-            builder.addresses = user.addresses == null ? null : (user.addresses.getAddress().isEmpty() ? null : user.addresses);
-            builder.groups = user.groups == null ? null : (user.groups.getGroup().isEmpty() ? null : user.groups);
-            builder.entitlements = user.entitlements == null ? null : (user.entitlements.getEntitlement().isEmpty() ? null : user.entitlements);
-            builder.roles = user.roles == null ? null : (user.roles.getRole().isEmpty() ? null : user.roles);
-            builder.x509Certificates = user.x509Certificates == null ? null : (user.x509Certificates.getX509Certificate().isEmpty() ? null : user.x509Certificates);
-            builder.any = user.any;
-            builder.schemas = user.schemas;
-            return builder.build();
-        }
-
-        public Builder setName(Name name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder setDisplayName(String displayName) {
-            this.displayName = displayName;
-            return this;
-        }
-
-        public Builder setNickName(String nickName) {
-            this.nickName = nickName;
-            return this;
-        }
-
-        public Builder setProfileUrl(String profileUrl) {
-            this.profileUrl = profileUrl;
-            return this;
-        }
-
-        public Builder setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public Builder setUserType(String userType) {
-            this.userType = userType;
-            return this;
-        }
-
-        public Builder setPreferredLanguage(String preferredLanguage) {
-            this.preferredLanguage = preferredLanguage;
-            return this;
-        }
-
-        public Builder setLocale(String locale) {
-            this.locale = locale;
-            return this;
-        }
-
-        public Builder setTimezone(String timezone) {
-            this.timezone = timezone;
-            return this;
-        }
-
-        public Builder setActive(Boolean active) {
-            this.active = active;
-            return this;
-        }
-
-        public Builder setPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Builder setEmails(Emails emails) {
-            this.emails = emails;
-            return this;
-        }
-
-        public Builder setPhoneNumbers(PhoneNumbers phoneNumbers) {
-            this.phoneNumbers = phoneNumbers;
-            return this;
-        }
-
-        public Builder setIms(Ims ims) {
-            this.ims = ims;
-            return this;
-        }
-
-        public Builder setPhotos(Photos photos) {
-            this.photos = photos;
-            return this;
-        }
-
-        public Builder setAddresses(Addresses addresses) {
-            this.addresses = addresses;
-            return this;
-        }
-
-        public Builder setGroups(Groups groups) {
-            this.groups = groups;
-            return this;
-        }
-
-        public Builder setEntitlements(Entitlements entitlements) {
-            this.entitlements = entitlements;
-            return this;
-        }
-
-        public Builder setRoles(Roles roles) {
-            this.roles = roles;
-            return this;
-        }
-
-        public Builder setX509Certificates(X509Certificates x509Certificates) {
-            this.x509Certificates = x509Certificates;
-            return this;
-        }
-
-        public Builder setAny(Set<Object> any) {
-            this.any = any;
-            return this;
-        }
-
-        @Override
-        public User build() {
-            return new User(this);
-        }
-    }
-
 
     /**
      * Gets the value of the userName property.
@@ -400,93 +212,39 @@ public class User extends CoreResource {
         return password;
     }
 
-    /**
-     * Gets the value of the emails property.
-     *
-     * @return possible object is
-     *         {@link User.Emails }
-     */
-    public User.Emails getEmails() {
+    public List<MultiValuedAttribute> getEmails() {
         return emails;
     }
 
-    /**
-     * Gets the value of the phoneNumbers property.
-     *
-     * @return possible object is
-     *         {@link User.PhoneNumbers }
-     */
-    public User.PhoneNumbers getPhoneNumbers() {
+    public List<MultiValuedAttribute> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    /**
-     * Gets the value of the ims property.
-     *
-     * @return possible object is
-     *         {@link User.Ims }
-     */
-    public User.Ims getIms() {
+    public List<MultiValuedAttribute> getIms() {
         return ims;
     }
 
-    /**
-     * Gets the value of the photos property.
-     *
-     * @return possible object is
-     *         {@link User.Photos }
-     */
-    public User.Photos getPhotos() {
+    public List<MultiValuedAttribute> getPhotos() {
         return photos;
     }
 
-    /**
-     * Gets the value of the addresses property.
-     *
-     * @return possible object is
-     *         {@link User.Addresses }
-     */
-    public User.Addresses getAddresses() {
+    public List<Address> getAddresses() {
         return addresses;
     }
 
-    /**
-     * Gets the value of the groups property.
-     *
-     * @return possible object is
-     *         {@link User.Groups }
-     */
-    public User.Groups getGroups() {
+    public List<MultiValuedAttribute> getGroups() {
         return groups;
     }
 
-    /**
-     * Gets the value of the entitlements property.
-     *
-     * @return possible object is
-     *         {@link User.Entitlements }
-     */
-    public User.Entitlements getEntitlements() {
+    public List<MultiValuedAttribute> getEntitlements() {
         return entitlements;
     }
 
-    /**
-     * Gets the value of the roles property.
-     *
-     * @return possible object is
-     *         {@link User.Roles }
-     */
-    public User.Roles getRoles() {
+    public List<MultiValuedAttribute> getRoles() {
         return roles;
     }
 
-    /**
-     * Gets the value of the x509Certificates property.
-     *
-     * @return possible object is
-     *         {@link User.X509Certificates }
-     */
-    public User.X509Certificates getX509Certificates() {
+    public List<MultiValuedAttribute> getX509Certificates() {
         return x509Certificates;
     }
 
@@ -514,357 +272,187 @@ public class User extends CoreResource {
         return this.any;
     }
 
+    public static class Builder extends CoreResource.Builder {
+        private final String userName;
+        private Name name;
+        private String displayName;
+        private String nickName;
+        private String profileUrl;
+        private String title;
+        private String userType;
+        private String preferredLanguage;
+        private String locale;
+        private String timezone;
+        private Boolean active;
+        private String password;
+        private List<MultiValuedAttribute> emails = new ArrayList<>();
+        private List<MultiValuedAttribute> phoneNumbers = new ArrayList<>();
+        private List<MultiValuedAttribute> ims = new ArrayList<>();
+        private List<MultiValuedAttribute> photos = new ArrayList<>();
+        private List<Address> addresses = new ArrayList<>();
+        private List<MultiValuedAttribute> groups = new ArrayList<>();
+        private List<MultiValuedAttribute> entitlements = new ArrayList<>();
+        private List<MultiValuedAttribute> roles = new ArrayList<>();
+        private List<MultiValuedAttribute> x509Certificates = new ArrayList<>();
+        private Set<Object> any;
 
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Addresses implements NeedToBeReplacedCompletely {
 
-        private List<Address> address = new ArrayList<>();
+        public Builder(String userName) {
+            if (userName == null) { throw new IllegalArgumentException("userName must not be null."); }
+            this.userName = userName;
+        }
+
+        public Builder() {
+            this.userName = null;
+        }
 
         /**
-         * Gets the value of the address property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the address property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getAddress().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link Address }
+         * This class is for generating the output of an User. It does not copy the password and it checks for empty
+         * lists; if a list is empty it will be nulled so that json-mapping will ignore it.
+         *
+         * @param user
+         * @return
          */
-        public List<Address> getAddress() {
-            return this.address;
+        public static User generateForOuput(User user) {
+            Builder builder = new Builder(user.userName);
+            builder.id = user.id;
+            builder.meta = user.meta;
+            builder.externalId = user.externalId;
+            builder.name = user.name;
+            builder.displayName = user.displayName;
+            builder.nickName = user.nickName;
+            builder.profileUrl = user.profileUrl;
+            builder.title = user.title;
+            builder.userType = user.userType;
+            builder.preferredLanguage = user.preferredLanguage;
+            builder.locale = user.locale;
+            builder.timezone = user.timezone;
+            builder.active = user.active;
+            // null lists when empty
+            builder.emails = user.emails;
+            builder.phoneNumbers = user.phoneNumbers;
+            builder.ims = user.ims;
+            builder.photos = user.photos;
+            builder.addresses =user.addresses;
+            builder.groups = user.groups;
+            builder.entitlements = user.entitlements ;
+            builder.roles = user.roles;
+            builder.x509Certificates = user.x509Certificates;
+            builder.any = user.any;
+            builder.schemas = user.schemas;
+            return builder.build();
+        }
+
+        public Builder setName(Name name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setDisplayName(String displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public Builder setNickName(String nickName) {
+            this.nickName = nickName;
+            return this;
+        }
+
+        public Builder setProfileUrl(String profileUrl) {
+            this.profileUrl = profileUrl;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setUserType(String userType) {
+            this.userType = userType;
+            return this;
+        }
+
+        public Builder setPreferredLanguage(String preferredLanguage) {
+            this.preferredLanguage = preferredLanguage;
+            return this;
+        }
+
+        public Builder setLocale(String locale) {
+            this.locale = locale;
+            return this;
+        }
+
+        public Builder setTimezone(String timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        public Builder setActive(Boolean active) {
+            this.active = active;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder setEmails(List<MultiValuedAttribute> emails) {
+            this.emails = emails;
+            return this;
+        }
+
+        public Builder setPhoneNumbers(List<MultiValuedAttribute> phoneNumbers) {
+            this.phoneNumbers = phoneNumbers;
+            return this;
+        }
+
+        public Builder setIms(List<MultiValuedAttribute> ims) {
+            this.ims = ims;
+            return this;
+        }
+
+        public Builder setPhotos(List<MultiValuedAttribute> photos) {
+            this.photos = photos;
+            return this;
+        }
+
+        public Builder setAddresses(List<Address> addresses) {
+            this.addresses = addresses;
+            return this;
+        }
+
+        public Builder setGroups(List<MultiValuedAttribute> groups) {
+            this.groups = groups;
+            return this;
+        }
+
+        public Builder setEntitlements(List<MultiValuedAttribute> entitlements) {
+            this.entitlements = entitlements;
+            return this;
+        }
+
+        public Builder setRoles(List<MultiValuedAttribute> roles) {
+            this.roles = roles;
+            return this;
+        }
+
+        public Builder setX509Certificates(List<MultiValuedAttribute> x509Certificates) {
+            this.x509Certificates = x509Certificates;
+            return this;
+        }
+
+        public Builder setAny(Set<Object> any) {
+            this.any = any;
+            return this;
         }
 
         @Override
-        public Collection<?> values() {
-            return this.address;
+        public User build() {
+            return new User(this);
         }
     }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Emails implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> email = new ArrayList<>();
-
-        /**
-         * Gets the value of the email property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the email property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getEmail().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getEmail() {
-            return this.email;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return email;
-        }
-    }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Entitlements implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> entitlement = new ArrayList<>();
-
-        /**
-         * Gets the value of the entitlement property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the entitlement property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getEntitlement().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getEntitlement() {
-            return this.entitlement;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return  entitlement;
-        }
-    }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Groups implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> group = new ArrayList<>();
-
-        /**
-         * Gets the value of the group property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the group property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getGroup().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getGroup() {
-            return this.group;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return group;
-        }
-    }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Ims implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> im = new ArrayList<>();
-
-        /**
-         * Gets the value of the im property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the im property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getIm().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getIm() {
-            return this.im;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return im;
-        }
-    }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class PhoneNumbers implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> phoneNumber = new ArrayList<>();
-
-        /**
-         * Gets the value of the phoneNumber property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the phoneNumber property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getPhoneNumber().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getPhoneNumber() {
-            return this.phoneNumber;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return phoneNumber;
-        }
-    }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Photos implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> photo = new ArrayList<>();
-
-        /**
-         * Gets the value of the photo property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the photo property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getPhoto().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getPhoto() {
-            return this.photo;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return photo;
-        }
-    }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class Roles implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> role = new ArrayList<>();
-
-        /**
-         * Gets the value of the role property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the role property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getRole().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getRole() {
-            return this.role;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return role;
-        }
-    }
-
-
-    /**
-     * Java class for anonymous complex type.
-     */
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-    public static class X509Certificates implements ContainsListOfMultiValue {
-
-        private List<MultiValuedAttribute> x509Certificate = new ArrayList<>();
-
-        /**
-         * Gets the value of the x509Certificate property.
-         * <p/>
-         * <p/>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the x509Certificate property.
-         * <p/>
-         * <p/>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getX509Certificate().add(newItem);
-         * </pre>
-         * <p/>
-         * <p/>
-         * <p/>
-         * Objects of the following type(s) are allowed in the list
-         * {@link MultiValuedAttribute }
-         */
-        public List<MultiValuedAttribute> getX509Certificate() {
-            return this.x509Certificate;
-        }
-
-        @Override
-        public Collection<MultiValuedAttribute> values() {
-            return x509Certificate;
-        }
-    }
-
 }
 
 

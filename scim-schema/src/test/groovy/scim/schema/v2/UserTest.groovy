@@ -82,26 +82,17 @@ class UserTest extends Specification {
     def "should generate a user based on builder"() {
         given:
         def builder = new User.Builder("test").setActive(true)
-                .setAddresses(new User.Addresses())
                 .setAny(["ha"] as Set)
                 .setDisplayName("display")
-                .setEmails(new User.Emails())
-                .setEntitlements(new User.Entitlements())
-                .setGroups(new User.Groups())
-                .setIms(new User.Ims())
                 .setLocale("locale")
                 .setName(new Name.Builder().build())
                 .setNickName("nickname")
                 .setPassword("password")
-                .setPhoneNumbers(new User.PhoneNumbers())
-                .setPhotos(new User.Photos())
                 .setPreferredLanguage("prefereedLanguage")
                 .setProfileUrl("profileUrl")
-                .setRoles(new User.Roles())
                 .setTimezone("time")
                 .setTitle("title")
                 .setUserType("userType")
-                .setX509Certificates(new User.X509Certificates())
                 .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
         when:
         User user = builder.build()
@@ -136,26 +127,18 @@ class UserTest extends Specification {
     def "should ignore password on output"() {
         given:
         User user = new User.Builder("test").setActive(true)
-                .setAddresses(new User.Addresses())
                 .setAny(["ha"] as Set)
                 .setDisplayName("display")
-                .setEmails(new User.Emails())
-                .setEntitlements(new User.Entitlements())
-                .setGroups(new User.Groups())
-                .setIms(new User.Ims())
+
                 .setLocale("locale")
                 .setName(new Name.Builder().build())
                 .setNickName("nickname")
                 .setPassword("password")
-                .setPhoneNumbers(new User.PhoneNumbers())
-                .setPhotos(new User.Photos())
                 .setPreferredLanguage("prefereedLanguage")
                 .setProfileUrl("profileUrl")
-                .setRoles(new User.Roles())
                 .setTimezone("time")
                 .setTitle("title")
                 .setUserType("userType")
-                .setX509Certificates(new User.X509Certificates())
                 .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
                 .build()
         when:
@@ -180,43 +163,34 @@ class UserTest extends Specification {
         clonedUser.profileUrl == user.profileUrl
     }
 
-    def "should null empty lists for pretty output"() {
+    def "should set empty lists for pretty output"() {
         given:
         User user = new User.Builder("test").setActive(true)
-                .setAddresses(new User.Addresses())
                 .setAny(["ha"] as Set)
                 .setDisplayName("display")
-                .setEmails(new User.Emails())
-                .setEntitlements(new User.Entitlements())
-                .setGroups(new User.Groups())
-                .setIms(new User.Ims())
                 .setLocale("locale")
                 .setName(new Name.Builder().build())
                 .setNickName("nickname")
                 .setPassword("password")
-                .setPhoneNumbers(new User.PhoneNumbers())
-                .setPhotos(new User.Photos())
                 .setPreferredLanguage("prefereedLanguage")
                 .setProfileUrl("profileUrl")
-                .setRoles(new User.Roles())
                 .setTimezone("time")
                 .setTitle("title")
                 .setUserType("userType")
-                .setX509Certificates(new User.X509Certificates())
                 .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
                 .build()
         when:
         User clonedUser = User.Builder.generateForOuput(user)
         then:
-        clonedUser.addresses == null
-        clonedUser.emails == null
-        clonedUser.entitlements == null
-        clonedUser.groups == null
-        clonedUser.ims == null
-        clonedUser.phoneNumbers == null
-        clonedUser.photos == null
-        clonedUser.roles == null
-        clonedUser.x509Certificates == null
+        clonedUser.addresses.empty
+        clonedUser.emails.empty
+        clonedUser.entitlements.empty
+        clonedUser.groups.empty
+        clonedUser.ims.empty
+        clonedUser.phoneNumbers.empty
+        clonedUser.photos.empty
+        clonedUser.roles.empty
+        clonedUser.x509Certificates.empty
     }
 
     def "should copy lists from origin user"() {
@@ -225,183 +199,81 @@ class UserTest extends Specification {
         def generalAttribute = new MultiValuedAttribute.Builder().build()
 
         User user = new User.Builder("test").setActive(true)
-                .setAddresses(new User.Addresses())
                 .setAny(["ha"] as Set)
                 .setDisplayName("display")
-                .setEmails(new User.Emails())
-                .setEntitlements(new User.Entitlements())
-                .setGroups(new User.Groups())
-                .setIms(new User.Ims())
                 .setLocale("locale")
                 .setName(new Name.Builder().build())
                 .setNickName("nickname")
                 .setPassword("password")
-                .setPhoneNumbers(new User.PhoneNumbers())
-                .setPhotos(new User.Photos())
                 .setPreferredLanguage("prefereedLanguage")
                 .setProfileUrl("profileUrl")
-                .setRoles(new User.Roles())
                 .setTimezone("time")
                 .setTitle("title")
                 .setUserType("userType")
-                .setX509Certificates(new User.X509Certificates())
                 .setExternalId("externalid").setId("id").setMeta(new Meta.Builder().build())
                 .build()
 
-        user.addresses.address.add(address)
-        user.emails.email.add(generalAttribute)
-        user.entitlements.entitlement.add(generalAttribute)
-        user.groups.group.add(generalAttribute)
-        user.ims.im.add(generalAttribute)
-        user.phoneNumbers.phoneNumber.add(generalAttribute)
-        user.photos.photo.add(generalAttribute)
-        user.roles.role.add(generalAttribute)
-        user.x509Certificates.x509Certificate.add(generalAttribute)
+        user.addresses.add(address)
+        user.emails.add(generalAttribute)
+        user.entitlements.add(generalAttribute)
+        user.groups.add(generalAttribute)
+        user.ims.add(generalAttribute)
+        user.phoneNumbers.add(generalAttribute)
+        user.photos.add(generalAttribute)
+        user.roles.add(generalAttribute)
+        user.x509Certificates.add(generalAttribute)
 
         when:
         User clonedUser = User.Builder.generateForOuput(user)
         then:
-        clonedUser.addresses.address.get(0) == address
-        clonedUser.emails.email.get(0) == generalAttribute
-        clonedUser.entitlements.entitlement.get(0) == generalAttribute
-        clonedUser.groups.group.get(0) == generalAttribute
-        clonedUser.ims.im.get(0) == generalAttribute
-        clonedUser.phoneNumbers.phoneNumber.get(0) == generalAttribute
-        clonedUser.photos.photo.get(0) == generalAttribute
-        clonedUser.roles.role.get(0) == generalAttribute
-        clonedUser.x509Certificates.x509Certificate.get(0) == generalAttribute
+        clonedUser.addresses.get(0) == address
+        clonedUser.emails.get(0) == generalAttribute
+        clonedUser.entitlements.get(0) == generalAttribute
+        clonedUser.groups.get(0) == generalAttribute
+        clonedUser.ims.get(0) == generalAttribute
+        clonedUser.phoneNumbers.get(0) == generalAttribute
+        clonedUser.photos.get(0) == generalAttribute
+        clonedUser.roles.get(0) == generalAttribute
+        clonedUser.x509Certificates.get(0) == generalAttribute
 
     }
 
 
     def "should be able to enrich addresses, emails, entitlements, groups, phone-numbers, photos, roles and certificates"() {
         given:
-        def user = new User.Builder("test2").setAddresses(new User.Addresses())
-                .setEmails(new User.Emails())
-                .setEntitlements(new User.Entitlements())
-                .setGroups(new User.Groups())
-                .setIms(new User.Ims())
-                .setPhoneNumbers(new User.PhoneNumbers())
-                .setPhotos(new User.Photos())
-                .setRoles(new User.Roles())
-                .setX509Certificates(new User.X509Certificates()).build()
+        def user = new User.Builder("test2").build()
         def address = new Address.Builder().build()
         def generalAttribute = new MultiValuedAttribute.Builder().build()
 
         when:
-        user.addresses.address.add(address)
-        user.emails.email.add(generalAttribute)
-        user.entitlements.entitlement.add(generalAttribute)
-        user.groups.group.add(generalAttribute)
-        user.ims.im.add(generalAttribute)
-        user.phoneNumbers.phoneNumber.add(generalAttribute)
-        user.photos.photo.add(generalAttribute)
-        user.roles.role.add(generalAttribute)
-        user.x509Certificates.x509Certificate.add(generalAttribute)
+        user.addresses.add(address)
+        user.emails.add(generalAttribute)
+        user.entitlements.add(generalAttribute)
+        user.groups.add(generalAttribute)
+        user.ims.add(generalAttribute)
+        user.phoneNumbers.add(generalAttribute)
+        user.photos.add(generalAttribute)
+        user.roles.add(generalAttribute)
+        user.x509Certificates.add(generalAttribute)
 
         and:
-        user.addresses.address.get(0) == address
+        user.addresses.get(0) == address
         and:
-        user.emails.email.get(0) == generalAttribute
+        user.emails.get(0) == generalAttribute
         and:
-        user.entitlements.entitlement.get(0) == generalAttribute
+        user.entitlements.get(0) == generalAttribute
         and:
-        user.groups.group.get(0) == generalAttribute
+        user.groups.get(0) == generalAttribute
         and:
-        user.ims.im.get(0) == generalAttribute
+        user.ims.get(0) == generalAttribute
         and:
-        user.phoneNumbers.phoneNumber.get(0) == generalAttribute
+        user.phoneNumbers.get(0) == generalAttribute
         and:
-        user.photos.photo.get(0) == generalAttribute
+        user.photos.get(0) == generalAttribute
         and:
-        user.roles.role.get(0) == generalAttribute
+        user.roles.get(0) == generalAttribute
         then:
-        user.x509Certificates.x509Certificate.get(0) == generalAttribute
+        user.x509Certificates.get(0) == generalAttribute
     }
-
-    def "Emails class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.Emails()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.email == result
-    }
-
-    def "Entitlements class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.Entitlements()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.entitlement == result
-    }
-
-    def "Groups class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.Groups()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.group == result
-    }
-
-    def "IMs class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.Ims()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.im == result
-    }
-
-    def "Phonenumbers class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.PhoneNumbers()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.phoneNumber == result
-    }
-
-    def "Photos class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.Photos()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.photo == result
-    }
-
-    def "Roles class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.Roles()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.role == result
-    }
-
-    def "X509 class should be inherited from ContainsListOfMultiValue and contain values class"() {
-        given:
-        def underTest = new User.X509Certificates()
-        when:
-        def result = underTest.values()
-        then:
-        underTest instanceof ContainsListOfMultiValue
-        underTest.x509Certificate == result
-    }
-
-
-
-
-
 
 }

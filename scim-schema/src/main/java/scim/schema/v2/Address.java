@@ -28,12 +28,15 @@ package scim.schema.v2;
  */
 public class Address extends MultiValuedAttribute {
 
-    private final String formatted;
-    private final String streetAddress;
-    private final String locality;
-    private final String region;
-    private final String postalCode;
-    private final String country;
+    private String formatted;
+    private String streetAddress;
+    private String locality;
+    private String region;
+    private String postalCode;
+    private String country;
+
+    public Address() {
+    }
 
     private Address(Builder builder) {
         super(builder);
@@ -43,52 +46,6 @@ public class Address extends MultiValuedAttribute {
         this.region = builder.region;
         this.postalCode = builder.postalCode;
         this.country = builder.country;
-
-    }
-
-    public static class Builder extends MultiValuedAttribute.Builder{
-        private String formatted;
-        private String streetAddress;
-        private String locality;
-        private String region;
-        private String postalCode;
-        private String country;
-
-        public Builder setFormatted(String formatted) {
-            this.formatted = formatted;
-            return this;
-        }
-
-        public Builder setStreetAddress(String streetAddress) {
-            this.streetAddress = streetAddress;
-            return this;
-        }
-
-        public Builder setLocality(String locality) {
-            this.locality = locality;
-            return this;
-        }
-
-        public Builder setRegion(String region) {
-            this.region = region;
-            return this;
-        }
-
-        public Builder setPostalCode(String postalCode) {
-            this.postalCode = postalCode;
-            return this;
-        }
-
-        public Builder setCountry(String country) {
-            this.country = country;
-            return this;
-        }
-
-        @Override
-        public Address build() {
-            return new Address(this);
-        }
-
 
     }
 
@@ -150,5 +107,51 @@ public class Address extends MultiValuedAttribute {
      */
     public String getCountry() {
         return country;
+    }
+
+    public static class Builder extends MultiValuedAttribute.Builder {
+        private String formatted;
+        private String streetAddress;
+        private String locality;
+        private String region;
+        private String postalCode;
+        private String country;
+
+        public Builder setFormatted(String formatted) {
+            this.formatted = formatted;
+            return this;
+        }
+
+        public Builder setStreetAddress(String streetAddress) {
+            this.streetAddress = streetAddress;
+            return this;
+        }
+
+        public Builder setLocality(String locality) {
+            this.locality = locality;
+            return this;
+        }
+
+        public Builder setRegion(String region) {
+            this.region = region;
+            return this;
+        }
+
+        public Builder setPostalCode(String postalCode) {
+            this.postalCode = postalCode;
+            return this;
+        }
+
+        public Builder setCountry(String country) {
+            this.country = country;
+            return this;
+        }
+
+        @Override
+        public Address build() {
+            return new Address(this);
+        }
+
+
     }
 }

@@ -74,26 +74,26 @@ class GenericSCIMToEntityWrapperTest extends Specification {
         def any = new HashSet()
         any.add("ha")
         def scimUser = new User.Builder("test").setActive(true)
-                .setAddresses(new User.Addresses())
+
                 .setAny(any)
                 .setDisplayName("display")
-                .setEmails(new User.Emails())
-                .setEntitlements(new User.Entitlements())
-                .setGroups(new User.Groups())
-                .setIms(new User.Ims())
+
+
+
+
                 .setLocale("locale")
                 .setName(new Name.Builder().build())
                 .setNickName("nickname")
                 .setPassword("password")
-                .setPhoneNumbers(new User.PhoneNumbers())
-                .setPhotos(new User.Photos())
+
+
                 .setPreferredLanguage("prefereedLanguage")
                 .setProfileUrl("profileUrl")
-                .setRoles(new User.Roles())
+
                 .setTimezone("time")
                 .setTitle("title")
                 .setUserType("userType")
-                .setX509Certificates(new User.X509Certificates())
+
                 .setExternalId("externalid")
                 .setId("id")
                 .setMeta(new Meta.Builder().build())
@@ -174,34 +174,23 @@ class GenericSCIMToEntityWrapperTest extends Specification {
     }
 
     def "should delete single attribute of a multi-value-attribute list in PATCH"() {
-        def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().setValue("email").setOperation("delete").build())
 
-        def entitlements = new User.Entitlements()
-        entitlements.entitlement.add(new MultiValuedAttribute.Builder().setValue("entitlement").setOperation("delete").build())
-
-        def ims = new User.Ims()
-        ims.im.add(new MultiValuedAttribute.Builder().setValue("im").setOperation("delete").build())
-
-        def numbers = new User.PhoneNumbers()
-        numbers.phoneNumber.add(new MultiValuedAttribute.Builder().setValue("phonenumber").setOperation("delete").build())
-
-        def photos = new User.Photos()
-        photos.photo.add(new MultiValuedAttribute.Builder().setValue("photo").setOperation("delete").build())
-
-        def roles = new User.Roles()
-        roles.role.add(new MultiValuedAttribute.Builder().setValue("role").setOperation("delete").build())
-        def certificates = new User.X509Certificates()
-        certificates.x509Certificate.add(new MultiValuedAttribute.Builder().setValue("x509").setOperation("delete").build())
         def user = new User.Builder("test").setActive(true)
-                .setEmails(emails)
-                .setEntitlements(entitlements)
-                .setIms(ims)
-                .setPhoneNumbers(numbers)
-                .setPhotos(photos)
-                .setRoles(roles)
-                .setX509Certificates(certificates)
                 .build()
+
+        user.emails.add(new MultiValuedAttribute.Builder().setValue("email").setOperation("delete").build())
+
+        user.entitlements.add(new MultiValuedAttribute.Builder().setValue("entitlement").setOperation("delete").build())
+
+        user.ims.add(new MultiValuedAttribute.Builder().setValue("im").setOperation("delete").build())
+
+        user.phoneNumbers.add(new MultiValuedAttribute.Builder().setValue("phonenumber").setOperation("delete").build())
+
+        user.photos.add(new MultiValuedAttribute.Builder().setValue("photo").setOperation("delete").build())
+
+        user.roles.add(new MultiValuedAttribute.Builder().setValue("role").setOperation("delete").build())
+        user.x509Certificates.add(new MultiValuedAttribute.Builder().setValue("x509").setOperation("delete").build())
+
 
         def entity = createEntityWithInternalId()
         addListsToEntity(entity)

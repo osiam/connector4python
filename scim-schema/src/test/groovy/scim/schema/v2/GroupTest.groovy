@@ -23,12 +23,13 @@
 
 package scim.schema.v2
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class GroupTest extends Specification {
     def "should be able to generate a group"() {
         given:
-        def builder = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object())
+        def builder = new Group.Builder().setDisplayName("display").setAny(new Object())
         when:
         def group = builder.build()
 
@@ -39,24 +40,25 @@ class GroupTest extends Specification {
 
     def "should be able to enrich group members"() {
         given:
-        def group = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object()).build()
+        def group = new Group.Builder().setDisplayName("display").setAny(new Object()).build()
         when:
-        group.members.member.add(new MultiValuedAttribute.Builder().build())
+        group.members.add(new MultiValuedAttribute.Builder().build())
 
         then:
-        group.members.member.size() == 1
+        group.members.size() == 1
     }
 
+    @Ignore
     def "members should be a must exist implementation"() {
         given:
-        def group = new Group.Builder().setDisplayName("display").setMembers(new Group.Members()).setAny(new Object()).build()
+        def group = new Group.Builder().setDisplayName("display").setMembers(null).setAny(new Object()).build()
 
         when:
         group.members.member.add(new MultiValuedAttribute.Builder().build())
 
         then:
         group.members.values() == group.members.member
-        group.members instanceof ContainsListOfMultiValue.MustExist
+
 
     }
 
@@ -72,7 +74,6 @@ class GroupTest extends Specification {
         given:
         def group = new Group.Builder().
                 setDisplayName("display").
-                setMembers(new Group.Members()).
                 setAny(new Object()).
                 setId("id").build()
         when:

@@ -26,9 +26,7 @@ package org.osiam.ng.scim.schema.to.entity;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttributeWithType;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttributeWithTypeAndPrimary;
-import scim.schema.v2.ContainsListOfMultiValue;
 import scim.schema.v2.MultiValuedAttribute;
-import scim.schema.v2.NeedToBeReplacedCompletely;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -46,7 +44,7 @@ public class EntityListFieldWrapper {
     }
 
     public void set(Object userValue, SCIMEntities.Entity attributes, Field field) {
-        if (mode == GenericSCIMToEntityWrapper.Mode.PATCH && userValue == null) {
+        if (mode == GenericSCIMToEntityWrapper.Mode.PATCH && (userValue == null || ((Collection) userValue).isEmpty())) {
             return;
         }
         wrapExceptions(userValue, attributes, field);
@@ -75,8 +73,8 @@ public class EntityListFieldWrapper {
             throws IllegalAccessException, InstantiationException {
         Object o = getFieldObject(field);
         Class<?> clazz = attributes.getClazz();
-        ContainsListOfMultiValue listOfMultiValue = (ContainsListOfMultiValue) userValue;
-        updateList((Collection<Object>) o, clazz, listOfMultiValue);
+//        ContainsListOfMultiValue listOfMultiValue = ;
+        updateList((Collection<Object>) o, clazz, (Collection) userValue);
     }
 
     private Object getFieldObject(Field field) throws IllegalAccessException {
@@ -84,11 +82,12 @@ public class EntityListFieldWrapper {
         return field.get(entity);
     }
 
-    private void updateList(Collection<Object> targetList, Class<?> clazz, ContainsListOfMultiValue listOfMultiValue)
+    private void updateList(Collection<Object> targetList, Class<?> clazz, Collection listOfMultiValue)
             throws InstantiationException, IllegalAccessException {
         clearIfNotInPatchMode(targetList);
         if (listOfMultiValue == null) { return; }
-        for (MultiValuedAttribute m : listOfMultiValue.values()) {
+        for (Object o : listOfMultiValue) {
+            MultiValuedAttribute m = (MultiValuedAttribute) o;
             if (notDeleted(m, targetList)) {
                 addSingleObject(clazz, targetList, m);
             }
@@ -174,7 +173,7 @@ public class EntityListFieldWrapper {
             Collection collection = (Collection) object;
             collection.clear();
             if (userValue != null) {
-                for (Object o : ((NeedToBeReplacedCompletely) userValue).values()) {
+                for (Object o : ((Collection) userValue)) {
                     collection.add(setSingleFields(clazz, o));
                 }
             }

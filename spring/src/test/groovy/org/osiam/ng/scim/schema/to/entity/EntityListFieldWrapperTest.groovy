@@ -23,8 +23,6 @@
 
 package org.osiam.ng.scim.schema.to.entity
 
-import org.osiam.ng.resourceserver.entities.EmailEntity
-import org.osiam.ng.resourceserver.entities.UserEntity
 import org.osiam.ng.scim.entities.AddressEntity
 import org.osiam.ng.scim.entities.EmailEntity
 import org.osiam.ng.scim.entities.EntitlementsEntity
@@ -45,39 +43,29 @@ class EntityListFieldWrapperTest extends Specification {
         given:
         def any = new HashSet()
         any.add("ha")
-        def addresses = new User.Addresses()
-        addresses.address.add(new Address.Builder().setDisplay("haha").build())
-        def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().setPrimary(true).build())
-        emails.email.add(new MultiValuedAttribute.Builder().build())
 
-        def entitlements = new User.Entitlements()
-        entitlements.entitlement.add(new MultiValuedAttribute.Builder().build())
-        entitlements.entitlement.add(new MultiValuedAttribute.Builder().setValue("ha").build())
 
-        def ims = new User.Ims()
-        ims.im.add(new MultiValuedAttribute.Builder().build())
 
-        def numbers = new User.PhoneNumbers()
-        numbers.phoneNumber.add(new MultiValuedAttribute.Builder().build())
-
-        def photos = new User.Photos()
-        photos.photo.add(new MultiValuedAttribute.Builder().build())
-
-        def roles = new User.Roles()
-        roles.role.add(new MultiValuedAttribute.Builder().build())
-        def certificates = new User.X509Certificates()
-        certificates.x509Certificate.add(new MultiValuedAttribute.Builder().build())
         def scimUser = new User.Builder("test").setActive(true)
-                .setAddresses(addresses)
-                .setEmails(emails)
-                .setEntitlements(entitlements)
-                .setIms(ims)
-                .setPhoneNumbers(numbers)
-                .setPhotos(photos)
-                .setRoles(roles)
-                .setX509Certificates(certificates)
                 .build()
+
+        scimUser.addresses.address.add(new Address.Builder().setDisplay("haha").build())
+
+        scimUser.emails.add(new MultiValuedAttribute.Builder().setPrimary(true).build())
+        scimUser.emails.add(new MultiValuedAttribute.Builder().build())
+
+        scimUser.entitlements.add(new MultiValuedAttribute.Builder().build())
+        scimUser.entitlements.add(new MultiValuedAttribute.Builder().setValue("ha").build())
+
+        scimUser.ims.add(new MultiValuedAttribute.Builder().build())
+
+        scimUser.phoneNumbers.add(new MultiValuedAttribute.Builder().build())
+
+        scimUser.photos.add(new MultiValuedAttribute.Builder().build())
+
+        scimUser.roles.add(new MultiValuedAttribute.Builder().build())
+        scimUser.x509Certificates.add(new MultiValuedAttribute.Builder().build())
+
 
         def entity = new UserEntity()
         initializeSetsOfEntity(entity)
@@ -87,24 +75,24 @@ class EntityListFieldWrapperTest extends Specification {
 
 
         when:
-        underTest.set(addresses, new SCIMEntities.Entity(AddressEntity, false), aha.get("addresses"))
-        underTest.set(emails, new SCIMEntities.Entity(EmailEntity, true), aha.get("emails"))
-        underTest.set(entitlements, new SCIMEntities.Entity(EntitlementsEntity, true),aha.get("entitlements"))
-        underTest.set(ims, new SCIMEntities.Entity(ImEntity, true),aha.get("ims"))
-        underTest.set(numbers, new SCIMEntities.Entity(PhoneNumberEntity, true),aha.get("phonenumbers"))
-        underTest.set(photos, new SCIMEntities.Entity(PhotoEntity, true),aha.get("photos"))
-        underTest.set(roles, new SCIMEntities.Entity(RolesEntity, true),aha.get("roles"))
-        underTest.set(certificates, new SCIMEntities.Entity(X509CertificateEntity, true),aha.get("x509certificates"))
+        underTest.set(scimUser.addresses, new SCIMEntities.Entity(AddressEntity, false), aha.get("addresses"))
+        underTest.set(scimUser.emails, new SCIMEntities.Entity(EmailEntity, true), aha.get("emails"))
+        underTest.set(scimUser.entitlements, new SCIMEntities.Entity(EntitlementsEntity, true),aha.get("entitlements"))
+        underTest.set(scimUser.ims, new SCIMEntities.Entity(ImEntity, true),aha.get("ims"))
+        underTest.set(scimUser.phoneNumbers, new SCIMEntities.Entity(PhoneNumberEntity, true),aha.get("phonenumbers"))
+        underTest.set(scimUser.photos, new SCIMEntities.Entity(PhotoEntity, true),aha.get("photos"))
+        underTest.set(scimUser.roles, new SCIMEntities.Entity(RolesEntity, true),aha.get("roles"))
+        underTest.set(scimUser.x509Certificates, new SCIMEntities.Entity(X509CertificateEntity, true),aha.get("x509certificates"))
 
         then:
-        scimUser.x509Certificates.x509Certificate.size() == entity.x509Certificates.size()
-        scimUser.roles.role.size() == entity.roles.size()
-        scimUser.entitlements.entitlement.size() == entity.entitlements.size()
-        scimUser.ims.im.size() == entity.ims.size()
-        scimUser.emails.email.size() == entity.emails.size()
-        scimUser.addresses.address.size() == entity.addresses.size()
-        scimUser.phoneNumbers.phoneNumber.size() == entity.phoneNumbers.size()
-        scimUser.photos.photo.size() == entity.photos.size()
+        scimUser.x509Certificates.size() == entity.x509Certificates.size()
+        scimUser.roles.size() == entity.roles.size()
+        scimUser.entitlements.size() == entity.entitlements.size()
+        scimUser.ims.size() == entity.ims.size()
+        scimUser.emails.size() == entity.emails.size()
+        scimUser.addresses.size() == entity.addresses.size()
+        scimUser.phoneNumbers.size() == entity.phoneNumbers.size()
+        scimUser.photos.size() == entity.photos.size()
     }
 
     def "should fail silently if a user is trying to delete an unknown field"(){
@@ -117,9 +105,9 @@ class EntityListFieldWrapperTest extends Specification {
         def underTest = new EntityListFieldWrapper(entity, GenericSCIMToEntityWrapper.Mode.PATCH)
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
 
-        def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().setOperation("delete").setValue("notThere").build())
-        emails.email.add(new MultiValuedAttribute.Builder().setOperation("delete").setValue("there").build())
+        def emails = new ArrayList()
+        emails.add(new MultiValuedAttribute.Builder().setOperation("delete").setValue("notThere").build())
+        emails.add(new MultiValuedAttribute.Builder().setOperation("delete").setValue("there").build())
         when:
         underTest.set(emails, new SCIMEntities.Entity(EmailEntity, true), aha.get("emails"))
         then:
@@ -171,9 +159,9 @@ class EntityListFieldWrapperTest extends Specification {
     }
 
     def "should replace attributes of a multi-value-attribute list"() {
-        def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().setValue("email").setPrimary(true).setType("home").build())
-        emails.email.add(new MultiValuedAttribute.Builder().setValue("email3").setPrimary(true).setType("home").build())
+        def emails = new ArrayList()
+        emails.add(new MultiValuedAttribute.Builder().setValue("email").setPrimary(true).setType("home").build())
+        emails.add(new MultiValuedAttribute.Builder().setValue("email3").setPrimary(true).setType("home").build())
 
         def aha = new GetFieldsOfInputAndTarget().getFieldsAsNormalizedMap(UserEntity)
         def entity = GenericSCIMToEntityWrapperTest.createEntityWithInternalId()

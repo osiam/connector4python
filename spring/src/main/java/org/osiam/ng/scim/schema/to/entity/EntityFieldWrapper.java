@@ -46,7 +46,7 @@ public class EntityFieldWrapper {
         if (userValue instanceof Name) {
             setComplexType.setComplexType(entityField, userValue);
         } else {
-            if (!("password".equals(key) && userValue != null && String.valueOf(userValue).isEmpty())) {
+            if (!("password".equals(key) && (userValue == null || String.valueOf(userValue).isEmpty()))) {
                 updateSimpleField(entityField, userValue);
             }
         }
