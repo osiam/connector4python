@@ -34,7 +34,7 @@ import javax.persistence.ManyToOne;
  * Photos Entity
  */
 @Entity(name = "scim_photo")
-public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
+public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType, HasUser {
 
     @Column
     private String type;

@@ -41,7 +41,7 @@ class GroupPutTest extends Specification {
     EntityManager em = Mock(EntityManager)
     GroupDAO dao = new GroupDAO(em: em)
     def underTest = new SCIMGroupProvisioningBean(groupDAO: dao)
-    Group.Members members = new Group.Members()
+    def members = new HashSet()
     def internalId = UUID.randomUUID()
     def query = Mock(Query)
     def memberId = UUID.randomUUID().toString()
@@ -52,7 +52,7 @@ class GroupPutTest extends Specification {
     def "should abort when group to replace not found"() {
         given:
         def queryResults = []
-        members.member.add(new MultiValuedAttribute.Builder().setValue(internalId.toString()).build())
+        members.add(new MultiValuedAttribute.Builder().setValue(internalId.toString()).build())
         def group = new Group.Builder().setMembers(members).build()
         when:
         underTest.replace(internalId.toString(), group)
@@ -68,7 +68,7 @@ class GroupPutTest extends Specification {
     def "should abort when a member in group is not findable"() {
         given:
         def queryResults = []
-        members.member.add(new MultiValuedAttribute.Builder().setValue(memberId.toString()).build())
+        members.add(new MultiValuedAttribute.Builder().setValue(memberId.toString()).build())
         def group = new Group.Builder().setMembers(members).build()
         def groupToUpdate = [GroupEntity.fromScim(group)]
         when:
@@ -87,7 +87,7 @@ class GroupPutTest extends Specification {
     def "should replace a group with known group member"() {
         given:
 
-        members.member.add(new MultiValuedAttribute.Builder().setValue(memberId.toString()).build())
+        members.add(new MultiValuedAttribute.Builder().setValue(memberId.toString()).build())
         def group = new Group.Builder().setMembers(members).build()
         def groupToUpdate = [GroupEntity.fromScim(group)]
         def queryResults = [GroupEntity.fromScim(group)]
@@ -97,14 +97,14 @@ class GroupPutTest extends Specification {
         2 * em.createNamedQuery("getById") >> query
         2 * query.setParameter("id", _);
         2 * query.getResultList() >>> [groupToUpdate, queryResults]
-        result.members.member.size() == 1
+        result.members.size() == 1
     }
 
     def "should replace a group with known group and user member"() {
         given:
         def memberId2 = UUID.randomUUID().toString()
-        members.member.add(new MultiValuedAttribute.Builder().setValue(memberId.toString()).build())
-        members.member.add(new MultiValuedAttribute.Builder().setValue(memberId2.toString()).build())
+        members.add(new MultiValuedAttribute.Builder().setValue(memberId.toString()).build())
+        members.add(new MultiValuedAttribute.Builder().setValue(memberId2.toString()).build())
         def group = new Group.Builder().setMembers(members).build()
         def groupToUpdate = [GroupEntity.fromScim(group)]
         def userToUpdate = [new UserEntity(id: UUID.fromString(memberId2))]
@@ -115,7 +115,7 @@ class GroupPutTest extends Specification {
         3 * em.createNamedQuery("getById") >> query
         3 * query.setParameter("id", _);
         3 * query.getResultList() >>> [groupToUpdate, queryResults, userToUpdate ]
-        result.members.member.size() == 2
+        result.members.size() == 2
     }
 
 
@@ -129,7 +129,7 @@ class GroupPutTest extends Specification {
         1 * em.createNamedQuery("getById") >> query
         1 * query.setParameter("id", _);
         1 * query.getResultList() >> groupToUpdate
-        result.members.member.size() == 0
+        result.members.size() == 0
     }
 
 

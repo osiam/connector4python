@@ -38,8 +38,8 @@ class GroupPatchTest extends Specification {
     def userId = UUID.randomUUID()
 
     def "should delete a single group in members"() {
-        def members = new Group.Members()
-        members.member.add(new MultiValuedAttribute.Builder().setValue(groupId.toString()).setOperation("delete").build())
+        def members = new HashSet()
+        members.add(new MultiValuedAttribute.Builder().setValue(groupId.toString()).setOperation("delete").build())
         def group = new Group.Builder()
                 .setMembers(members)
                 .setDisplayName("hi")
@@ -56,8 +56,8 @@ class GroupPatchTest extends Specification {
     }
 
     def "should delete a single user in members"() {
-        def members = new Group.Members()
-        members.member.add(new MultiValuedAttribute.Builder().setValue(userId.toString()).setOperation("delete").build())
+        def members = new HashSet()
+        members.add(new MultiValuedAttribute.Builder().setValue(userId.toString()).setOperation("delete").build())
         def group = new Group.Builder()
                 .setMembers(members)
                 .setDisplayName("hi")
@@ -98,9 +98,9 @@ class GroupPatchTest extends Specification {
 
 
     def "should add a multi-value to a attribute list"() {
-        def members = new Group.Members()
+        def members = new HashSet()
         def newUuid = UUID.randomUUID().toString()
-        members.member.add(new MultiValuedAttribute.Builder().setValue(newUuid).setDisplay("narf").build())
+        members.add(new MultiValuedAttribute.Builder().setValue(newUuid).setDisplay("narf").build())
         def group = new Group.Builder()
                 .setMembers(members)
                 .setDisplayName("hi")
@@ -113,14 +113,13 @@ class GroupPatchTest extends Specification {
         1 * groupDAO.getById(id) >> entity
         1 * groupDAO.update(entity) >> entity
         entity.members.size() == 3
-        entity.members.last() instanceof GroupEntity
     }
 
     def "should delete and add a value to a multi-value-attribute list"() {
-        def members = new Group.Members()
+        def members = new HashSet()
         def newUuid = UUID.randomUUID().toString()
-        members.member.add(new MultiValuedAttribute.Builder().setValue(newUuid).setDisplay("narf").build())
-        members.member.add(new MultiValuedAttribute.Builder().setValue(userId).setOperation("delete").build())
+        members.add(new MultiValuedAttribute.Builder().setValue(newUuid).setDisplay("narf").build())
+        members.add(new MultiValuedAttribute.Builder().setValue(userId).setOperation("delete").build())
         def group = new Group.Builder()
                 .setMembers(members)
                 .setDisplayName("hi")
@@ -195,8 +194,8 @@ class GroupPatchTest extends Specification {
         given:
         def meta = new Meta.Builder(null, null).setAttributes(["members"] as Set).build()
 
-        Group.Members members = new Group.Members()
-        members.member.add(new MultiValuedAttribute.Builder().setValue(UUID.randomUUID().toString()).build())
+        def members = new HashSet()
+        members.add(new MultiValuedAttribute.Builder().setValue(UUID.randomUUID().toString()).build())
 
         def user = new Group.Builder().setMembers(members).setMeta(meta).build()
         def entity = createEntityWithInternalId()

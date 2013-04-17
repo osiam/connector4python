@@ -60,6 +60,7 @@ public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> imple
         try {
             userDao.create(userEntity);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResourceExistsException("The user with name " +
                     user.getUserName() +
                     " already exists.");

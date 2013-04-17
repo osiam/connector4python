@@ -26,15 +26,10 @@ package org.osiam.oauth2.client;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import scim.schema.v2.ContainsListOfMultiValue;
-import scim.schema.v2.MultiValuedAttribute;
-import scim.schema.v2.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class CRUDListController {
@@ -54,14 +49,14 @@ public class CRUDListController {
         req.setAttribute("access_token", access_token);
         String used_for = req.getParameter("used_for");
         req.setAttribute("used_for", used_for);
-        KnownMultiValueAttributeLists k = KnownMultiValueAttributeLists.getFromString(used_for.toLowerCase().trim());
-        if (k != null) {
-            MultiValuedAttribute attribute = new MultiValuedAttribute.Builder().setDisplay(req.getParameter("display")).
-                    setOperation(getDelete(req))
-                    .setPrimary(Boolean.valueOf(req.getParameter("primary")))
-                    .setType(req.getParameter("type")).setValue(req.getParameter("value")).build();
-            k.set.values().add(attribute);
-        }
+//        KnownMultiValueAttributeLists k = KnownMultiValueAttributeLists.getFromString(used_for.toLowerCase().trim());
+//        if (k != null) {
+//            MultiValuedAttribute attribute = new MultiValuedAttribute.Builder().setDisplay(req.getParameter("display")).
+//                    setOperation(getDelete(req))
+//                    .setPrimary(Boolean.valueOf(req.getParameter("primary")))
+//                    .setType(req.getParameter("type")).setValue(req.getParameter("value")).build();
+//            k.set.values().add(attribute);
+//        }
 
         return "create_update_user";
     }
@@ -70,39 +65,39 @@ public class CRUDListController {
         return Boolean.valueOf(req.getParameter("delete")) == true ? "delete" : null;
     }
 
-    public enum KnownMultiValueAttributeLists {
-        //        ADDRESS(new User.Addresses().getAddress()),
-        PHONE(new User.PhoneNumbers()),
-        PHOTO(new User.Photos()),
-        EMAIL(new User.Emails()),
-        IM(new User.Ims()),
-        ENTITLEMENT(new User.Entitlements()),
-        ROLE(new User.Roles()),
-        X509(new User.X509Certificates()),
-        GROUP(new User.Groups());
-        private static final Map<String, KnownMultiValueAttributeLists> fromString = new HashMap<>();
-
-        public static KnownMultiValueAttributeLists getFromString(String from){
-            return fromString.get(from);
-        }
-
-        static {
-            for (KnownMultiValueAttributeLists k : values()) {
-                fromString.put(k.name().toLowerCase(), k);
-            }
-        }
-
-        private final ContainsListOfMultiValue set;
-
-
-        private KnownMultiValueAttributeLists(ContainsListOfMultiValue set) {
-            this.set = set;
-        }
-
-        public <T extends ContainsListOfMultiValue> T getSet() {
-            return (T) set;
-        }
-    }
+//    public enum KnownMultiValueAttributeLists {
+//        //        ADDRESS(new User.Addresses().getAddress()),
+//        PHONE(new User.PhoneNumbers()),
+//        PHOTO(new User.Photos()),
+//        EMAIL(new User.Emails()),
+//        IM(new User.Ims()),
+//        ENTITLEMENT(new User.Entitlements()),
+//        ROLE(new User.Roles()),
+//        X509(new User.X509Certificates()),
+//        GROUP(new User.Groups());
+//        private static final Map<String, KnownMultiValueAttributeLists> fromString = new HashMap<>();
+//
+//        public static KnownMultiValueAttributeLists getFromString(String from){
+//            return fromString.get(from);
+//        }
+//
+//        static {
+//            for (KnownMultiValueAttributeLists k : values()) {
+//                fromString.put(k.name().toLowerCase(), k);
+//            }
+//        }
+//
+//        private final ContainsListOfMultiValue set;
+//
+//
+//        private KnownMultiValueAttributeLists(ContainsListOfMultiValue set) {
+//            this.set = set;
+//        }
+//
+//        public <T extends ContainsListOfMultiValue> T getSet() {
+//            return (T) set;
+//        }
+//    }
 
 
 }

@@ -34,7 +34,7 @@ import javax.persistence.ManyToOne;
  * Instant messaging Entity
  */
 @Entity(name = "scim_im")
-public class ImEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
+public class ImEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType, HasUser {
 
 
     @Column

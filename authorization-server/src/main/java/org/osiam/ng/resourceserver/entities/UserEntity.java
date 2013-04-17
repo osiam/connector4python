@@ -31,9 +31,7 @@ import scim.schema.v2.Name;
 import scim.schema.v2.User;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User Entity
@@ -117,40 +115,40 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
         return userEntity;
     }
 
-    private static Set<X509CertificateEntity> scimCertificatesToEntity(User.X509Certificates x509Certificates) {
+    private static Set<X509CertificateEntity> scimCertificatesToEntity(List<MultiValuedAttribute> x509Certificates) {
         Set<X509CertificateEntity> x509CertificateEntities = new HashSet<>();
         if (x509Certificates != null) {
-            for (MultiValuedAttribute multiValuedAttribute : x509Certificates.getX509Certificate()) {
+            for (MultiValuedAttribute multiValuedAttribute : x509Certificates) {
                 x509CertificateEntities.add(X509CertificateEntity.fromScim(multiValuedAttribute));
             }
         }
         return x509CertificateEntities;
     }
 
-    private static Set<RolesEntity> scimUserRolesToEntity(User.Roles roles) {
+    private static Set<RolesEntity> scimUserRolesToEntity(List<MultiValuedAttribute> roles) {
         Set<RolesEntity> rolesEntities = new HashSet<>();
         if (roles != null) {
-            for (MultiValuedAttribute multiValuedAttribute : roles.getRole()) {
+            for (MultiValuedAttribute multiValuedAttribute : roles) {
                 rolesEntities.add(RolesEntity.fromScim(multiValuedAttribute));
             }
         }
         return rolesEntities;
     }
 
-    private static Set<PhotoEntity> scimPhotosToEntity(User.Photos photos) {
+    private static Set<PhotoEntity> scimPhotosToEntity(List<MultiValuedAttribute> photos) {
         Set<PhotoEntity> photoEntities = new HashSet<>();
         if (photos != null) {
-            for (MultiValuedAttribute multiValuedAttribute : photos.getPhoto()) {
+            for (MultiValuedAttribute multiValuedAttribute : photos) {
                 photoEntities.add(PhotoEntity.fromScim(multiValuedAttribute));
             }
         }
         return photoEntities;
     }
 
-    private static Set<PhoneNumberEntity> scimPhonenumbersToEntity(User.PhoneNumbers phoneNumbers) {
+    private static Set<PhoneNumberEntity> scimPhonenumbersToEntity(List<MultiValuedAttribute> phoneNumbers) {
         Set<PhoneNumberEntity> phoneNumberEntities = new HashSet<>();
         if (phoneNumbers != null) {
-            for (MultiValuedAttribute multiValuedAttribute : phoneNumbers.getPhoneNumber()) {
+            for (MultiValuedAttribute multiValuedAttribute : phoneNumbers) {
                 phoneNumberEntities.add(PhoneNumberEntity.fromScim(multiValuedAttribute));
             }
         }
@@ -161,31 +159,31 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
         return NameEntity.fromScim(name);
     }
 
-    private static Set<ImEntity> scimImsToEntity(User.Ims ims) {
+    private static Set<ImEntity> scimImsToEntity(List<MultiValuedAttribute> ims) {
         Set<ImEntity> imEntities = new HashSet<>();
         if (ims != null) {
-            for (MultiValuedAttribute multiValuedAttribute : ims.getIm()) {
+            for (MultiValuedAttribute multiValuedAttribute : ims) {
                 imEntities.add(ImEntity.fromScim(multiValuedAttribute));
             }
         }
         return imEntities;
     }
 
-    private static Set<EntitlementsEntity> scimEntitlementsToEntity(User.Entitlements entitlements) {
+    private static Set<EntitlementsEntity> scimEntitlementsToEntity(List<MultiValuedAttribute> entitlements) {
         Set<EntitlementsEntity> entitlementsEntities = new HashSet<>();
         if (entitlements != null) {
-            for (MultiValuedAttribute multiValuedAttribute : entitlements.getEntitlement()) {
+            for (MultiValuedAttribute multiValuedAttribute : entitlements) {
                 entitlementsEntities.add(EntitlementsEntity.fromScim(multiValuedAttribute));
             }
         }
         return entitlementsEntities;
     }
 
-    private static Set<AddressEntity> scimUserAddressesToEntity(User.Addresses addresses) {
+    private static Set<AddressEntity> scimUserAddressesToEntity(List<Address> addresses) {
 
         Set<AddressEntity> addressEntities = new HashSet<>();
         if (addresses != null) {
-            for (Address address : addresses.getAddress()) {
+            for (Address address : addresses) {
                 addressEntities.add(AddressEntity.fromScim(address));
             }
         }
@@ -202,10 +200,10 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
         return anyStrings;
     }
 
-    private static Set<EmailEntity> scimEmailsToEntity(User.Emails emails) {
+    private static Set<EmailEntity> scimEmailsToEntity(List<MultiValuedAttribute> emails) {
         Set<EmailEntity> emailEntities = new HashSet<>();
         if (emails != null) {
-            for (MultiValuedAttribute multiValuedAttribute : emails.getEmail()) {
+            for (MultiValuedAttribute multiValuedAttribute : emails) {
                 emailEntities.add(EmailEntity.fromScim(multiValuedAttribute));
             }
         }
@@ -584,66 +582,66 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
                 build();
     }
 
-    private User.X509Certificates entityX509CertificatesToScim(Set<X509CertificateEntity> x509CertificateEntities) {
-        User.X509Certificates x509Certificates = new User.X509Certificates();
+    private List<MultiValuedAttribute> entityX509CertificatesToScim(Set<X509CertificateEntity> x509CertificateEntities) {
+        List<MultiValuedAttribute> x509Certificates = new ArrayList<>();
         for (X509CertificateEntity x509CertificateEntity : x509CertificateEntities) {
-            x509Certificates.getX509Certificate().add(x509CertificateEntity.toScim());
+            x509Certificates.add(x509CertificateEntity.toScim());
         }
         return x509Certificates;
     }
 
-    private User.Roles entityRolesToScim(Set<RolesEntity> rolesEntities) {
-        User.Roles roles = new User.Roles();
+    private List<MultiValuedAttribute> entityRolesToScim(Set<RolesEntity> rolesEntities) {
+        List<MultiValuedAttribute> roles = new ArrayList<>();
         for (RolesEntity rolesEntity : rolesEntities) {
-            roles.getRole().add(rolesEntity.toScim());
+            roles.add(rolesEntity.toScim());
         }
         return roles;
     }
 
-    private User.Photos entityPhotosToScim(Set<PhotoEntity> photoEntities) {
-        User.Photos photos = new User.Photos();
+    private List<MultiValuedAttribute> entityPhotosToScim(Set<PhotoEntity> photoEntities) {
+        List<MultiValuedAttribute> photos = new ArrayList<>();
         for (PhotoEntity photoEntity : photoEntities) {
-            photos.getPhoto().add(photoEntity.toScim());
+            photos.add(photoEntity.toScim());
         }
         return photos;
     }
 
-    private User.PhoneNumbers entityPhonenumbersToScim(Set<PhoneNumberEntity> phoneNumberEntities) {
-        User.PhoneNumbers phoneNumbers = new User.PhoneNumbers();
+    private List<MultiValuedAttribute> entityPhonenumbersToScim(Set<PhoneNumberEntity> phoneNumberEntities) {
+        List<MultiValuedAttribute> phoneNumbers = new ArrayList<>();
         for (PhoneNumberEntity phoneNumberEntity : phoneNumberEntities) {
-            phoneNumbers.getPhoneNumber().add(phoneNumberEntity.toScim());
+            phoneNumbers.add(phoneNumberEntity.toScim());
         }
         return phoneNumbers;
     }
 
-    private User.Ims entityImsToScim(Set<ImEntity> imEntities) {
-        User.Ims ims = new User.Ims();
+    private List<MultiValuedAttribute> entityImsToScim(Set<ImEntity> imEntities) {
+        List<MultiValuedAttribute> ims = new ArrayList<>();
         for (ImEntity imEntity : imEntities) {
-            ims.getIm().add(imEntity.toScim());
+            ims.add(imEntity.toScim());
         }
         return ims;
     }
 
-    private User.Groups entityGroupsToScim(Set<GroupEntity> groupEntities) {
-        User.Groups groups = new User.Groups();
+    private List<MultiValuedAttribute> entityGroupsToScim(Set<GroupEntity> groupEntities) {
+        List<MultiValuedAttribute> groups = new ArrayList<>();
         for (GroupEntity groupEntity : groupEntities) {
-            groups.getGroup().add(groupEntity.toMultiValueScim());
+            groups.add(groupEntity.toMultiValueScim());
         }
         return groups;
     }
 
-    private User.Entitlements entityEntitlementsToScim(Set<EntitlementsEntity> entitlementsEntities) {
-        User.Entitlements entitlements = new User.Entitlements();
+    private List<MultiValuedAttribute> entityEntitlementsToScim(Set<EntitlementsEntity> entitlementsEntities) {
+        List<MultiValuedAttribute> entitlements = new ArrayList<>();
         for (EntitlementsEntity entitlementsEntity : entitlementsEntities) {
-            entitlements.getEntitlement().add(entitlementsEntity.toScim());
+            entitlements.add(entitlementsEntity.toScim());
         }
         return entitlements;
     }
 
-    private User.Emails entityEmailToScim(Set<EmailEntity> emailEntities) {
-        User.Emails emails = new User.Emails();
+    private List<MultiValuedAttribute> entityEmailToScim(Set<EmailEntity> emailEntities) {
+        List<MultiValuedAttribute> emails = new ArrayList<>();
         for (EmailEntity emailEntity : emailEntities) {
-            emails.getEmail().add(emailEntity.toScim());
+            emails.add(emailEntity.toScim());
         }
         return emails;
     }
@@ -659,10 +657,10 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
         return objectSet;
     }
 
-    private User.Addresses entityAddressToScim(Set<AddressEntity> addressEntities) {
-        User.Addresses addresses = new User.Addresses();
+    private List<Address> entityAddressToScim(Set<AddressEntity> addressEntities) {
+        List<Address> addresses = new ArrayList<>();
         for (AddressEntity addressEntity : addressEntities) {
-            addresses.getAddress().add(addressEntity.toScim());
+            addresses.add(addressEntity.toScim());
         }
         return addresses;
     }

@@ -34,7 +34,7 @@ import javax.persistence.ManyToOne;
  * Email Entity
  */
 @Entity(name = "scim_email")
-public class EmailEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithTypeAndPrimary {
+public class EmailEntity extends MultiValueAttributeEntitySkeleton implements HasUser, ChildOfMultiValueAttributeWithTypeAndPrimary {
 
     @Column
     private String type;
@@ -42,8 +42,6 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ch
     @Column(name = "postgresql_does_not_like_primary")
     private boolean primary;
 
-    @ManyToOne(optional = false)
-    private UserEntity user;
 
     @Override
     public String getType() {
@@ -65,13 +63,9 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ch
         this.primary = primary;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
+    @ManyToOne(optional = false)
+    protected UserEntity user;
 
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
 
     public MultiValuedAttribute toScim() {
         return new MultiValuedAttribute.Builder().
@@ -87,5 +81,16 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ch
         emailEntity.setValue(String.valueOf(multiValuedAttribute.getValue()));
         emailEntity.setPrimary((multiValuedAttribute.isPrimary() == null ? false : multiValuedAttribute.isPrimary()));
         return emailEntity;
+    }
+
+
+    @Override
+    public UserEntity getUser() {
+        return user;
+    }
+
+    @Override
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

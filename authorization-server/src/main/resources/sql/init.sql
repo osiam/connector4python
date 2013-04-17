@@ -121,7 +121,7 @@ CREATE TABLE scim_user (
   profileurl        CHARACTER VARYING(255),
   timezone          CHARACTER VARYING(255),
   title             CHARACTER VARYING(255),
-  username          CHARACTER VARYING(255) NOT NULL,
+  username          CHARACTER VARYING(255) NOT NULL UNIQUE,
   usertype          CHARACTER VARYING(255),
   name_id           BIGINT
 );

@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.*;
 import java.util.logging.Level;
@@ -63,25 +62,25 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
     @SuppressWarnings("unchecked")
     private void findExistingMultiValueAttributes(UserEntity user) {
         user.setRoles(
-                (Set<RolesEntity>) replaceInstanceWithEntityInstance(user.getRoles(), RolesEntity.class));
+                (Set<RolesEntity>) replaceInstanceWithEntityInstance(user, user.getRoles(), RolesEntity.class));
         user.setEmails(
-                (Set<EmailEntity>) replaceInstanceWithEntityInstance(user.getEmails(), EmailEntity.class));
+                (Set<EmailEntity>) replaceInstanceWithEntityInstance(user, user.getEmails(), EmailEntity.class));
         user.setEntitlements(
-                (Set<EntitlementsEntity>) replaceInstanceWithEntityInstance(user.getEntitlements(),
+                (Set<EntitlementsEntity>) replaceInstanceWithEntityInstance(user, user.getEntitlements(),
                         EntitlementsEntity.class));
-        user.setIms((Set<ImEntity>) replaceInstanceWithEntityInstance(user.getIms(), ImEntity.class));
+        user.setIms((Set<ImEntity>) replaceInstanceWithEntityInstance(user, user.getIms(), ImEntity.class));
         user.setPhotos(
-                (Set<PhotoEntity>) replaceInstanceWithEntityInstance(user.getPhotos(), PhotoEntity.class));
+                (Set<PhotoEntity>) replaceInstanceWithEntityInstance(user, user.getPhotos(), PhotoEntity.class));
         user.setPhoneNumbers(
-                (Set<PhoneNumberEntity>) replaceInstanceWithEntityInstance(user.getPhoneNumbers(),
+                (Set<PhoneNumberEntity>) replaceInstanceWithEntityInstance(user, user.getPhoneNumbers(),
                         PhoneNumberEntity.class));
         user.setX509Certificates(
-                (Set<X509CertificateEntity>) replaceInstanceWithEntityInstance(user.getX509Certificates(),
+                (Set<X509CertificateEntity>) replaceInstanceWithEntityInstance(user, user.getX509Certificates(),
                         X509CertificateEntity.class));
     }
 
     @SuppressWarnings("unchecked")
-    private Set<?> replaceInstanceWithEntityInstance(Collection<?> roles, Class<?> clazz) {
+    private Set<?> replaceInstanceWithEntityInstance(UserEntity user, Collection<?> roles, Class<?> clazz) {
         Set<Object> result = new HashSet<>();
         for (Object r : roles) {
             MultiValueAttributeEntitySkeleton originValue = (MultiValueAttributeEntitySkeleton) r;
@@ -90,7 +89,11 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
             if (entity != null) {
                 result.add(clazz.cast(entity));
             } else {
-                result.add(clazz.cast(originValue));
+
+                Object o = clazz.cast(originValue);
+                if (o instanceof HasUser)
+                    ((HasUser) o).setUser(user);
+                result.add(o);
             }
         }
         return result;

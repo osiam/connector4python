@@ -88,8 +88,8 @@ class GroupEntitySpec extends Specification {
     }
 
     def "mapping from scim should be present"() {
-        Group.Members members = new Group.Members()
-        members.member.add(new MultiValuedAttribute.Builder().
+        def members = new HashSet()
+        members.add(new MultiValuedAttribute.Builder().
                 setValue(UUID.randomUUID().toString()).
                 setDisplay("display").
                 build())
@@ -102,8 +102,8 @@ class GroupEntitySpec extends Specification {
     }
 
     def "members from scim should return null when toscim"() {
-        Group.Members members = new Group.Members()
-        members.member.add(new MultiValuedAttribute.Builder().
+        def members = new HashSet()
+        members.add(new MultiValuedAttribute.Builder().
                 setValue(UUID.randomUUID().toString()).
                 setDisplay("display").
                 build())

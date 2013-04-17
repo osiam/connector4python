@@ -35,25 +35,25 @@ class UserPatchTest extends Specification {
 
 
     def "should delete single attribute of a multi-value-attribute list"() {
-        def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().setValue("email").setOperation("delete").build())
+        def emails = new ArrayList()
+        emails.add(new MultiValuedAttribute.Builder().setValue("email").setOperation("delete").build())
 
-        def entitlements = new User.Entitlements()
-        entitlements.entitlement.add(new MultiValuedAttribute.Builder().setValue("entitlement").setOperation("delete").build())
+        def entitlements = new ArrayList()
+        entitlements.add(new MultiValuedAttribute.Builder().setValue("entitlement").setOperation("delete").build())
 
-        def ims = new User.Ims()
-        ims.im.add(new MultiValuedAttribute.Builder().setValue("im").setOperation("delete").build())
+        def ims = new ArrayList()
+        ims.add(new MultiValuedAttribute.Builder().setValue("im").setOperation("delete").build())
 
-        def numbers = new User.PhoneNumbers()
-        numbers.phoneNumber.add(new MultiValuedAttribute.Builder().setValue("phonenumber").setOperation("delete").build())
+        def numbers = new ArrayList()
+        numbers.add(new MultiValuedAttribute.Builder().setValue("phonenumber").setOperation("delete").build())
 
-        def photos = new User.Photos()
-        photos.photo.add(new MultiValuedAttribute.Builder().setValue("photo").setOperation("delete").build())
+        def photos = new ArrayList()
+        photos.add(new MultiValuedAttribute.Builder().setValue("photo").setOperation("delete").build())
 
-        def roles = new User.Roles()
-        roles.role.add(new MultiValuedAttribute.Builder().setValue("role").setOperation("delete").build())
-        def certificates = new User.X509Certificates()
-        certificates.x509Certificate.add(new MultiValuedAttribute.Builder().setValue("x509").setOperation("delete").build())
+        def roles = new ArrayList()
+        roles.add(new MultiValuedAttribute.Builder().setValue("role").setOperation("delete").build())
+        def certificates = new ArrayList()
+        certificates.add(new MultiValuedAttribute.Builder().setValue("x509").setOperation("delete").build())
         def user = new User.Builder("test").setActive(true)
                 .setEmails(emails)
                 .setEntitlements(entitlements)
@@ -118,25 +118,25 @@ class UserPatchTest extends Specification {
 
 
     def "should replace attributes of a multi-value-attribute list"() {
-        def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().setValue("email").setPrimary(true).setType("home").build())
+        def emails = new ArrayList()
+        emails.add(new MultiValuedAttribute.Builder().setValue("email").setPrimary(true).setType("home").build())
 
-        def entitlements = new User.Entitlements()
-        entitlements.entitlement.add(new MultiValuedAttribute.Builder().setValue("entitlement").setPrimary(true).setType("home").build())
+        def entitlements = new ArrayList()
+        entitlements.add(new MultiValuedAttribute.Builder().setValue("entitlement").setPrimary(true).setType("home").build())
 
-        def ims = new User.Ims()
-        ims.im.add(new MultiValuedAttribute.Builder().setValue("im").setPrimary(true).setType("home").build())
+        def ims = new ArrayList()
+        ims.add(new MultiValuedAttribute.Builder().setValue("im").setPrimary(true).setType("home").build())
 
-        def numbers = new User.PhoneNumbers()
-        numbers.phoneNumber.add(new MultiValuedAttribute.Builder().setValue("phonenumber").setPrimary(true).setType("home").build())
+        def numbers = new ArrayList()
+        numbers.add(new MultiValuedAttribute.Builder().setValue("phonenumber").setPrimary(true).setType("home").build())
 
-        def photos = new User.Photos()
-        photos.photo.add(new MultiValuedAttribute.Builder().setValue("photo").setPrimary(true).setType("home").build())
+        def photos = new ArrayList()
+        photos.add(new MultiValuedAttribute.Builder().setValue("photo").setPrimary(true).setType("home").build())
 
-        def roles = new User.Roles()
-        roles.role.add(new MultiValuedAttribute.Builder().setValue("role").setPrimary(true).setType("home").build())
-        def certificates = new User.X509Certificates()
-        certificates.x509Certificate.add(new MultiValuedAttribute.Builder().setValue("x509").setPrimary(true).setType("home").build())
+        def roles = new ArrayList()
+        roles.add(new MultiValuedAttribute.Builder().setValue("role").setPrimary(true).setType("home").build())
+        def certificates = new ArrayList()
+        certificates.add(new MultiValuedAttribute.Builder().setValue("x509").setPrimary(true).setType("home").build())
         def user = new User.Builder("test").setActive(true)
                 .setEmails(emails)
                 .setEntitlements(entitlements)
@@ -180,9 +180,9 @@ class UserPatchTest extends Specification {
     }
 
     def "should delete and add a value to a multi-value-attribute list"() {
-        def emails = new User.Emails()
-        emails.email.add(new MultiValuedAttribute.Builder().setValue("email").setOperation("delete").build())
-        emails.email.add(new MultiValuedAttribute.Builder().setValue("email2").setType("work").build())
+        def emails = new ArrayList()
+        emails.add(new MultiValuedAttribute.Builder().setValue("email").setOperation("delete").build())
+        emails.add(new MultiValuedAttribute.Builder().setValue("email2").setType("work").build())
         def user = new User.Builder("test").setActive(true)
                 .setEmails(emails)
                 .build()
@@ -201,9 +201,9 @@ class UserPatchTest extends Specification {
 
 
     def "should replace a non Sub-Attribute able attribute of an user (e.q. addresses)"() {
-        def addresses = new User.Addresses()
-        addresses.address.add(new Address.Builder().setStreetAddress("123 Elm Street").build())
-        addresses.address.add(new Address.Builder().setStreetAddress("Kingroad 42").build())
+        def addresses = new ArrayList()
+        addresses.add(new Address.Builder().setStreetAddress("123 Elm Street").build())
+        addresses.add(new Address.Builder().setStreetAddress("Kingroad 42").build())
         def user = new User.Builder("test").setActive(true)
                 .setAddresses(addresses)
                 .build()
@@ -382,8 +382,8 @@ class UserPatchTest extends Specification {
 
     def "should ignore read-only attributes on modify"() {
         given:
-        def user = new User.Builder().setGroups(new User.Groups()).build()
-        user.getGroups().group.add(new MultiValuedAttribute.Builder().build())
+        def user = new User.Builder().setGroups(new ArrayList()).build()
+        user.getGroups().add(new MultiValuedAttribute.Builder().build())
 
         entity.setUsername("username")
 

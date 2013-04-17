@@ -317,7 +317,7 @@ class UserEntitySpec extends Specification {
                 setMiddleName("middleName").
                 build()
 
-        addresses.getAddress().add(new Address.Builder().
+        addresses.add(new Address.Builder().
                 setCountry("country").
                 setFormatted("formatted").
                 setLocality("locality").
@@ -326,41 +326,41 @@ class UserEntitySpec extends Specification {
                 setStreetAddress("streetAddress").setPrimary(true).
                 build())
 
-        emails.getEmail().add(new MultiValuedAttribute.Builder().
+        emails.add(new MultiValuedAttribute.Builder().
                 setPrimary(true).
                 setType("type").
                 setValue("value").
                 build())
 
-        entitlements.getEntitlement().add(new MultiValuedAttribute.Builder().
+        entitlements.add(new MultiValuedAttribute.Builder().
                 setValue("value").
                 build())
 
-        groups.getGroup().add(new MultiValuedAttribute.Builder().
+        groups.add(new MultiValuedAttribute.Builder().
                 setValue(UUID.randomUUID().toString()).
                 setDisplay("display").
                 build())
 
-        ims.getIm().add(new MultiValuedAttribute.Builder().
+        ims.add(new MultiValuedAttribute.Builder().
                 setValue("blaaaa").
                 setType("type").
                 build())
 
-        phoneNumbers.getPhoneNumber().add(new MultiValuedAttribute.Builder().
+        phoneNumbers.add(new MultiValuedAttribute.Builder().
                 setValue("blaaaa").
                 setType("type").
                 build())
 
-        photos.getPhoto().add(new MultiValuedAttribute.Builder().
+        photos.add(new MultiValuedAttribute.Builder().
                 setValue("blaaaa").
                 setType("type").
                 build())
 
-        roles.getRole().add(new MultiValuedAttribute.Builder().
+        roles.add(new MultiValuedAttribute.Builder().
                 setValue("blaaaa").
                 build())
 
-        certificates.getX509Certificate().add(new MultiValuedAttribute.Builder().
+        certificates.add(new MultiValuedAttribute.Builder().
                 setValue("blaaaa").
                 build())
     }
@@ -486,15 +486,15 @@ class UserEntitySpec extends Specification {
         user.x509Certificates != null
     }
 
-    User.Addresses addresses = new User.Addresses()
-    User.Emails emails = new User.Emails()
-    User.Entitlements entitlements = new User.Entitlements()
-    User.Groups groups = new User.Groups()
-    User.Ims ims = new User.Ims()
-    User.PhoneNumbers phoneNumbers = new User.PhoneNumbers()
-    User.Photos photos = new User.Photos()
-    User.Roles roles = new User.Roles()
-    User.X509Certificates certificates = new User.X509Certificates()
+    def addresses = new ArrayList()
+    def emails = new ArrayList()
+    def entitlements = new ArrayList()
+    def groups = new ArrayList()
+    def ims = new ArrayList()
+    def phoneNumbers = new ArrayList()
+    def photos = new ArrayList()
+    def roles = new ArrayList()
+    def certificates = new ArrayList()
 
     def "should be possible to map a scim user class to a user entity"() {
         given:

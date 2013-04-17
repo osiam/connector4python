@@ -34,7 +34,7 @@ import javax.persistence.ManyToOne;
  * Phone Numbers Entity
  */
 @Entity(name = "scim_phoneNumber")
-public class PhoneNumberEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType {
+public class PhoneNumberEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType, HasUser {
 
     @Column
     private String type;
