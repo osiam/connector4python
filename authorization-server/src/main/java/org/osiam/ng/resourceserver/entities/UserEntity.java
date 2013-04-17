@@ -43,6 +43,7 @@ import java.util.Set;
 public class UserEntity extends InternalIdSkeleton implements UserDetails {
 
     private static final String MAPPING_NAME = "user";
+    private static final long serialVersionUID = -6535056565639057058L;
     @Column(nullable = false, unique = true)
     private String userName;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

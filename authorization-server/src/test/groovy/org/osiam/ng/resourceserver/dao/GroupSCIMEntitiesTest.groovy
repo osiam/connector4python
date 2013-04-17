@@ -32,7 +32,7 @@ class GroupSCIMEntitiesTest extends Specification {
         when:
         def member = GroupSCIMEntities.ENTITIES.fromString("members")
         then:
-        member.multiValue
+        !member.notMultiValue
         member.clazz == GroupEntity
     }
 

@@ -40,14 +40,14 @@ class UserSCIMEntitiesTest extends Specification {
            def result = underTest.fromString("emails")
         then:
         result.getClazz() == EmailEntity
-        result.isMultiValue()
+        !result.isNotMultiValue()
     }
     def "should contain ims"() {
         when:
         def result = underTest.fromString("ims")
         then:
         result.getClazz() == ImEntity
-        result.isMultiValue()
+        !result.isNotMultiValue()
 
     }
     def "should contain phonenumbers"() {
@@ -55,7 +55,7 @@ class UserSCIMEntitiesTest extends Specification {
         def result = underTest.fromString("phonenumbers")
         then:
         result.getClazz() == PhoneNumberEntity
-        result.isMultiValue()
+        !result.isNotMultiValue()
 
     }
     def "should contain photos"() {
@@ -63,7 +63,7 @@ class UserSCIMEntitiesTest extends Specification {
         def result = underTest.fromString("photos")
         then:
         result.getClazz() == PhotoEntity
-        result.isMultiValue()
+        !result.isNotMultiValue()
 
     }
     def "should contain entitlements"() {
@@ -71,7 +71,7 @@ class UserSCIMEntitiesTest extends Specification {
         def result = underTest.fromString("entitlements")
         then:
         result.getClazz() == EntitlementsEntity
-        result.isMultiValue()
+        !result.isNotMultiValue()
 
     }
     def "should contain roles"() {
@@ -79,7 +79,7 @@ class UserSCIMEntitiesTest extends Specification {
         def result = underTest.fromString("roles")
         then:
         result.getClazz() == RolesEntity
-        result.isMultiValue()
+        !result.isNotMultiValue()
 
     }
     def "should contain x509certificates"() {
@@ -87,7 +87,7 @@ class UserSCIMEntitiesTest extends Specification {
         def result = underTest.fromString("x509certificates")
         then:
         result.getClazz() == X509CertificateEntity
-        result.isMultiValue()
+        !result.isNotMultiValue()
 
     }
     def "should contain addresses"() {
@@ -95,7 +95,7 @@ class UserSCIMEntitiesTest extends Specification {
         def result = underTest.fromString("addresses")
         then:
         result.getClazz() == AddressEntity
-        !result.isMultiValue()
+        result.isNotMultiValue()
 
     }
 

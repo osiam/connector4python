@@ -54,12 +54,10 @@
 		<form id="loginForm" name="loginForm"
 			action="<c:url value="/login.do"/>" method="post">
 			<p>
-				<label>Username: <input type='text' name='j_username'
-					value="marissa" /></label>
+				<label>Username: <input type='text' name='j_username' value="marissa" /></label>
 			</p>
 			<p>
-				<label>Password: <input type='text' name='j_password'
-					value="koala" /></label>
+				<label>Password: <input type='text' name='j_password' value="koala" /></label>
 			</p>
 
 			<p>

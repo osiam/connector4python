@@ -45,6 +45,7 @@ public abstract class GetInternalIdSkeleton {
             return getSingleInternalIdSkeleton(query, id);
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends InternalIdSkeleton> T getSingleInternalIdSkeleton(Query query, String identifier) {
         List result = query.getResultList();
         if (result.isEmpty()) {

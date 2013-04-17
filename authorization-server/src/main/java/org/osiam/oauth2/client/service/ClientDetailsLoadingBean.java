@@ -43,6 +43,8 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
         //TODO implement DAO to get real client ...
         return new ClientDetails() {
 
+            private static final long serialVersionUID = -3542902414837379208L;
+
             @Override
             public String getClientId() {
                 return clientId;
@@ -50,9 +52,8 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
 
             @Override
             public Set<String> getResourceIds() {
-                Set<String> resources = new HashSet<>();
                 //                resources.add("oauth2res");
-                return resources;
+                return new HashSet<>();
             }
 
             @Override
@@ -93,13 +94,20 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
             @Override
             public Set<String> getRegisteredRedirectUri() {
 
-                return new HashSet<>(Arrays.asList("http://localhost:8080/oauth2-client/accessToken", "http://ong01-devel00.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong01-devel01.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong01-devel02.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong01-systemtest.lan.tarent.de:8080/oauth2-client/accessToken", "http://ong00-systemtest:8080/oauth2-client/accessToken"));
+                return new HashSet<>(Arrays.asList(
+                        "http://localhost:8080/oauth2-client/accessToken",
+                        "http://ong01-devel00.lan.tarent.de:8080/oauth2-client/accessToken",
+                        "http://ong01-devel01.lan.tarent.de:8080/oauth2-client/accessToken",
+                        "http://ong01-devel02.lan.tarent.de:8080/oauth2-client/accessToken",
+                        "http://ong01-systemtest.lan.tarent.de:8080/oauth2-client/accessToken",
+                        "http://ong00-systemtest:8080/oauth2-client/accessToken",
+                        "http://localhost:5000/oauth2",
+                        "http://127.0.0.1:5000/oauth2"));
             }
 
             @Override
             public Collection<GrantedAuthority> getAuthorities() {
-                Collection<GrantedAuthority> blubb = new ArrayList<>();
-                return blubb;
+                return new ArrayList<>();
 
             }
 

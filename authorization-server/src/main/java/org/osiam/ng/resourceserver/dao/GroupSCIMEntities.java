@@ -34,12 +34,12 @@ public class GroupSCIMEntities implements SCIMEntities {
     private Map<String, Entity> fromString = new HashMap<>();
 
     private GroupSCIMEntities() {
-        putEntity("members", GroupEntity.class, true);
+        putEntity(GroupEntity.class);
 
     }
 
-    private void putEntity(String key, Class<?> clazz, boolean multiValue) {
-        fromString.put(key, new Entity(clazz, multiValue));
+    private void putEntity(Class<?> clazz) {
+        fromString.put("members", new Entity(clazz, true));
     }
 
     @Override
