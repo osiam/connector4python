@@ -10,7 +10,7 @@ config = {
     'author_email': 'p.eder@tarent.de',
     'version': '0.1',
     'install_requires': ['nose', 'requests', 'flask', 'mock'],
-    'packages': ['connector', 'client-server'],
+    'packages': ['connector'],
     'scripts': [],
     'name': 'OSIAM NG Example Client'
 }

@@ -1,0 +1,4 @@
+nose
+requests
+flask
+mock

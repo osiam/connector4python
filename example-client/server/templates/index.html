@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if not access_token %}<p class=error><strong>Get Access Token to start the show ...</strong>
+{% else %}
+<h1>Response:</h1>
+<p>{{ response }}</p>
+{% endif %}
+
+
+{% endblock %}
+

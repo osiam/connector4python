@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite name="nosetests" tests="11" errors="0" failures="0" skip="0"><testcase classname="tests.NAME_tests" name="test_basic" time="0.001"><system-out><![CDATA[I RAN!
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_contains_a_SCIMMultiValuedAttribute" time="0.000"></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_create_a_group" time="0.004"><system-out><![CDATA[called create_group result:
+<connector.osiam.SCIMGroup object at 0x2700090>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_create_an_user" time="0.004"><system-out><![CDATA[called create_user result:
+<connector.osiam.SCIMUser instance at 0x26fc758>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_delete_a_group" time="0.006"><system-out><![CDATA[called delete_group result:
+<MagicMock name='delete()' id='40894672'>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_delete_an_user" time="0.006"><system-out><![CDATA[called delete_user result:
+<MagicMock name='delete()' id='41540368'>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_get_a_group" time="0.004"><system-out><![CDATA[called get_group result:
+<connector.osiam.SCIMUser instance at 0x26fc7e8>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_get_an_user" time="0.004"><system-out><![CDATA[called get_user result:
+<connector.osiam.SCIMUser instance at 0x26fc7a0>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_replace_a_group" time="0.004"><system-out><![CDATA[called update_group result:
+<connector.osiam.SCIMGroup object at 0x27a14d0>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_replace_an_user" time="0.004"><system-out><![CDATA[called replace_user result:
+<connector.osiam.SCIMUser instance at 0x26fc320>
+]]></system-out></testcase><testcase classname="tests.osiam_tests.SCIMTestCase" name="test_update_an_user" time="0.004"><system-out><![CDATA[called update_user result:
+<connector.osiam.SCIMUser instance at 0x26fc7a0>
+]]></system-out></testcase></testsuite>

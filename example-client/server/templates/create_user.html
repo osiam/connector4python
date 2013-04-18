@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block body %}
+<form method="post">
+    {% include 'user_fields.html' %}
+    <input type="submit" formaction="/create/User" value="Add Resource"/>
+</form>
+{% endblock %}
+

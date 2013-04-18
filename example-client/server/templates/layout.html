@@ -1,0 +1,42 @@
+<!doctype html>
+<title>OSIAM NG</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+    <h1>OSIAM NG</h1>
+
+    <div class="menu" id="page_header">
+        <ul>
+            <li><a href="/redirect">Get Access Token</a></li>
+            <li><a href="/oauth2-client/crud/user/get?access_token=${access_token}">GET USER</a></li>
+            <li><a href="/oauth2-client/crud/user/put?access_token=${access_token}">PUT USER</a></li>
+            <li><a href="/create/User">POST USER</a></li>
+            <li><a href="/oauth2-client/crud/user/patch?access_token=${access_token}">PATCH USER</a></li>
+            <li><a href="/oauth2-client/crud/user/delete?access_token=${access_token}">DELETE USER</a></li>
+            <!-- groups -->
+            <li><a href="/oauth2-client/crud/group/get?access_token=${access_token}">GET GROUP</a></li>
+            <li><a href="/oauth2-client/crud/group/put?access_token=${access_token}">PUT GROUP</a></li>
+            <li><a href="/oauth2-client/crud/group/post?access_token=${access_token}">POST GROUP</a></li>
+            <li><a href="/oauth2-client/crud/group/patch?access_token=${access_token}">PATCH GROUP</a></li>
+            <li><a href="/oauth2-client/crud/group/delete?access_token=${access_token}">DELETE GROUP</a></li>
+        </ul>
+
+        <!--<form method="post">-->
+
+        <!--<select id="select" size="2 ">-->
+        <!--<option value="3">test</option>-->
+        <!--<option value="4">test2</option>-->
+        <!--</select>-->
+        <!--<button type="submit" value="execute">-->
+        <!--</form>-->
+
+        <form method="POST">
+            <select id="selected" name="selected" onchange='this.form.submit()'>
+                <option value="User">User</option>
+                <option value="Group">Group</option>
+            </select>
+        </form>
+
+    </div>
+
+    {% block body %}{% endblock %}
+</div>
