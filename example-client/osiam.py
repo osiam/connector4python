@@ -93,7 +93,7 @@ def doLog(func):
     def wrapped(*args, **kwargs):
         result = func(*args, **kwargs)
         if log:
-            print 'called {} result:\n{}'.format(func.__name__, result)
+            print 'called {0} result:\n{1}'.format(func.__name__, result)
         return result
 
     return wrapped
@@ -122,7 +122,7 @@ class SCIMGroup(object):
 class SCIM:
     def __init__(self, authorization_server, access_token):
         self.authorization_server = authorization_server
-        self.headers = {'Authorization': "Bearer {}".format(access_token),
+        self.headers = {'Authorization': "Bearer {0}".format(access_token),
                         'content-type': 'application/json'}
 
     def __json_dict_to_object__(self, user):
@@ -142,14 +142,14 @@ class SCIM:
 
     @doLog
     def get_user(self, uuid):
-        r = requests.get('{}/User/{}'.format(self.authorization_server, uuid), headers=self.headers)
+        r = requests.get('{0}/User/{1}'.format(self.authorization_server, uuid), headers=self.headers)
         r_text = r.text
         o = json.loads(r_text)
         return self.__json_dict_to_object__(o)
 
     @doLog
     def create_user(self, user):
-        r = requests.post('{}/User'.format(self.authorization_server),
+        r = requests.post('{0}/User'.format(self.authorization_server),
                           headers=self.headers,
                           data=json.dumps(user, default=convert_to_builtin_type))
         return self.__json_dict_to_object__(json.loads(r.text))
@@ -169,16 +169,16 @@ class SCIM:
 
     @doLog
     def delete_user(self, id):
-        return requests.delete('{}/User/{}'.format(self.authorization_server, id), headers=self.headers)
+        return requests.delete('{0}/User/{1}'.format(self.authorization_server, id), headers=self.headers)
 
     @doLog
     def get_group(self, uuid):
-        r = requests.get('{}/Group/{}'.format(self.authorization_server, uuid), headers=self.headers)
+        r = requests.get('{0}/Group/{1}'.format(self.authorization_server, uuid), headers=self.headers)
         return self.__json_dict_to_object__(json.loads(r.text))
 
     @doLog
     def create_group(self, user):
-        r = requests.post('{}/Group'.format(self.authorization_server),
+        r = requests.post('{0}/Group'.format(self.authorization_server),
                           headers=self.headers,
                           data=json.dumps(user, default=convert_to_builtin_type))
         return self.__json_dict_to_object__(json.loads(r.text))
@@ -198,7 +198,7 @@ class SCIM:
 
     @doLog
     def delete_group(self, id):
-        return requests.delete('{}/Group/{}'.format(self.authorization_server, id), headers=self.headers)
+        return requests.delete('{0}/Group/{1}'.format(self.authorization_server, id), headers=self.headers)
 
 
 if __name__ == '__main__':
