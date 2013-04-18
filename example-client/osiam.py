@@ -136,7 +136,7 @@ class SCIM:
 
     def __single_data_operation__(self, func, id, data, type):
         data = json.dumps(data, default=convert_to_builtin_type)
-        return func('{}/{}/{}'.format(self.authorization_server, type, id),
+        return func('{0}/{1}/{2}'.format(self.authorization_server, type, id),
                     headers=self.headers, data=data)
 
 
