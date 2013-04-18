@@ -1,6 +1,4 @@
 # coding=utf-8
-"""This file is "SDK" for OSIAM NG it should enable you to use OSIAM NG easily"""
-
 import json
 import unittest
 
@@ -8,12 +6,6 @@ import requests
 from mock import patch
 
 import osiam
-
-
-__author__ = 'phil'
-
-log = True
-
 
 class SCIMTestCase(unittest.TestCase):
     scim = osiam.SCIM('http://localhost:8080/authorization-server', "token")
@@ -62,6 +54,6 @@ class SCIMTestCase(unittest.TestCase):
     def test_delete_a_group(self):
         o = self.__mock_call__('delete', self.group, self.scim.delete_group, 'id')
 
-    if __name__ == '__main__':
-        unittest.main()
+if __name__ == '__main__':
+     unittest.main()
 
