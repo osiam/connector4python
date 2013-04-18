@@ -5,7 +5,7 @@ import unittest
 import requests
 from mock import patch
 
-import osiam
+from connector import osiam
 
 class SCIMTestCase(unittest.TestCase):
     scim = osiam.SCIM('http://localhost:8080/authorization-server', "token")
