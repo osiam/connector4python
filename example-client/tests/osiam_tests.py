@@ -78,7 +78,7 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEqual('display', attribute.display)
         self.assertEqual(True, attribute.primary)
         self.assertEqual('type', attribute.type)
-        self.assertEqual('delete', attribute.delete)
+        self.assertEqual('delete', attribute.operation)
         self.assertEqual('formatted', attribute.formatted)
         self.assertEqual('streetAddress', attribute.streetAddress)
         self.assertEqual('locality', attribute.locality)
