@@ -45,14 +45,57 @@ class SCIMTestCase(unittest.TestCase):
     def test_update_an_user(self):
             self.__test_result_of__('patch', self.user, self.scim.update_user, 'id',self.user)
 
-    def test_replace_a_group(self):
+    def test_update_a_group(self):
         self.__test_result_of__('patch', self.group, self.scim.update_group, 'id',self.group)
+
+    def test_update_a_user(self):
+        self.__test_result_of__('patch', self.user, self.scim.update_user, 'id',self.user)
+
+
 
     def test_delete_an_user(self):
         self.__mock_call__('delete', self.user, self.scim.delete_user, 'id')
 
     def test_delete_a_group(self):
-        o = self.__mock_call__('delete', self.group, self.scim.delete_group, 'id')
+        self.__mock_call__('delete', self.group, self.scim.delete_group, 'id')
+
+    def test_contains_a_SCIMMultiValuedAttribute(self):
+        attribute = osiam.SCIMMultiValuedAttribute(value = 'test', display = 'display', primary = True, type = 'type',
+                                                   operation = 'delete')
+        assert attribute is not None
+        self.assertEqual('test', attribute.value)
+        self.assertEqual('display', attribute.display)
+        self.assertEqual(True, attribute.primary)
+        self.assertEqual('type', attribute.type)
+        self.assertEqual('delete', attribute.operation)
+
+    def test_contains_a_SCIMAddress(self):
+        attribute = osiam.SCIMAddress(display = 'display', primary = True, type = 'type',
+                                      operation = 'delete', formatted = 'formatted',
+                                      streetAddress = 'streetAddress', locality = 'locality', region = 'region',
+                                      postalCode = 'postal', country = 'country')
+        assert attribute is not None
+        self.assertEqual('display', attribute.display)
+        self.assertEqual(True, attribute.primary)
+        self.assertEqual('type', attribute.type)
+        self.assertEqual('delete', attribute.delete)
+        self.assertEqual('formatted', attribute.formatted)
+        self.assertEqual('streetAddress', attribute.streetAddress)
+        self.assertEqual('locality', attribute.locality)
+        self.assertEqual('region', attribute.region)
+        self.assertEqual('postal', attribute.postal)
+        self.assertEqual('country', attribute.country)
+
+    def test_contains_a_SCIMName(self):
+        attribute = osiam.SCIMName(formatted = 'formatted', familyName = 'familyName', givenName = 'givenName',
+                                   middleName = 'middleName', honorificPrefix = 'prefix', honorificSuffix = 'suffix')
+        assert attribute is not None
+        self.assertEqual('formatted', attribute.formatted)
+        self.assertEqual('familyName', attribute.familyName)
+        self.assertEqual('givenName', attribute.givenName)
+        self.assertEqual('middleName', attribute.middleName)
+        self.assertEqual('prefix', attribute.honorificPrefix)
+        self.assertEqual('suffix', attribute.honorificSuffix)
 
 if __name__ == '__main__':
      unittest.main()
