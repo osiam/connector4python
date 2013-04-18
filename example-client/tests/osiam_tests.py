@@ -83,7 +83,7 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEqual('streetAddress', attribute.streetAddress)
         self.assertEqual('locality', attribute.locality)
         self.assertEqual('region', attribute.region)
-        self.assertEqual('postal', attribute.postal)
+        self.assertEqual('postal', attribute.postalCode)
         self.assertEqual('country', attribute.country)
 
     def test_contains_a_SCIMName(self):
