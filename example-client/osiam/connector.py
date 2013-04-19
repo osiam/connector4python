@@ -1,10 +1,7 @@
 # coding=utf-8
-"""This file is "SDK" for OSIAM NG it should enable you to use OSIAM NG easily"""
 
 import json
-
 import requests
-
 
 
 __author__ = 'phil'
@@ -27,9 +24,12 @@ class SCIMMultiValuedAttribute:
 
 
 class SCIMAddress(SCIMMultiValuedAttribute):
-    def __init__(self, display=None, primary=False, type=None, operation=None, formatted=None, streetAddress=None,
+    def __init__(self, display=None, primary=False, type=None, operation=None,
+                 formatted=None, streetAddress=None,
                  locality=None, region=None, postalCode=None, country=None):
-        SCIMMultiValuedAttribute.__init__(self, display=display, primary=primary, type=type, operation=operation)
+        SCIMMultiValuedAttribute.__init__(self, display=display,
+                                          primary=primary, type=type,
+                                          operation=operation)
         self.formatted = formatted
         self.streetAddress = streetAddress
         self.locality = locality
@@ -45,8 +45,7 @@ class SCIMName:
                  givenName=None,
                  middleName=None,
                  honorificPrefix=None,
-                 honorificSuffix=None
-    ):
+                 honorificSuffix=None):
         self.formatted = formatted
         self.familyName = familyName
         self.givenName = givenName
@@ -56,12 +55,16 @@ class SCIMName:
 
 
 class SCIMUser:
-    def __init__(self, id=None, schemas=None, userName=None, name=None, displayName=None, nickName=None,
-                 profileUrl=None, title=None, userType=None, preferredLanguage=None, locale=None, timezone=None,
-                 active=None, password=None, emails=None, phoneNumbers=None, ims=None, photos=None, addresses=None,
-                 groups=None, entitlements=None, roles=None, x509Certificates=None, any=None, meta=None,
-                 externalId=None):
-        if not schemas: schemas = ['urn:scim:schemas:core:1.0']
+    def __init__(self, id=None, schemas=None, userName=None, name=None,
+                 displayName=None, nickName=None,
+                 profileUrl=None, title=None, userType=None,
+                 preferredLanguage=None, locale=None, timezone=None,
+                 active=None, password=None, emails=None, phoneNumbers=None,
+                 ims=None, photos=None, addresses=None,
+                 groups=None, entitlements=None, roles=None,
+                 x509Certificates=None, any=None, meta=None, externalId=None):
+        if not schemas:
+            schemas = ['urn:scim:schemas:core:1.0']
         self.userName = userName
         self.name = name
         self.displayName = displayName
@@ -89,14 +92,12 @@ class SCIMUser:
         self.meta = meta
         self.externalId = externalId
 
-
 def doLog(func):
     def wrapped(*args, **kwargs):
         result = func(*args, **kwargs)
         if log:
             print 'called {0} result:\n{1}'.format(func.__name__, result)
         return result
-
     return wrapped
 
 
@@ -111,14 +112,17 @@ class SCIMError(object):
 
 
 class SCIMGroup(object):
-    def __init__(self, displayName=None, members=None, externalId=None, id=None, meta=None, schemas=None):
-        if not schemas: schemas = ['urn:scim:schemas:core:1.0']
+    def __init__(self, displayName=None, members=None, externalId=None,
+                 id=None, meta=None, schemas=None):
+        if not schemas:
+            schemas = ['urn:scim:schemas:core:1.0']
         self.displayName = displayName
         self.members = members
         self.externalId = externalId
         self.id = id
         self.meta = meta
         self.schemas = schemas
+
 
 class SCIM:
     def __init__(self, authorization_server, access_token):
@@ -127,7 +131,8 @@ class SCIM:
                         'content-type': 'application/json'}
 
     def __json_dict_to_object__(self, user):
-        args = dict((key.encode('ascii'), value) for key, value in user.items())
+        args = dict((key.encode('ascii'), value)
+                    for key, value in user.items())
         if user.get('userName') is not None:
             return SCIMUser(**args)
         elif user.get('error_code') is not None:
@@ -152,14 +157,9 @@ class SCIM:
     @doLog
     def create_user(self, user):
         data = json.dumps(user, default=convert_to_builtin_type)
-        print 'DATAAAA: {0}'.format(data)
         r = requests.post('{0}/User'.format(self.authorization_server),
                           headers=self.headers,
                           data=data)
-        print "wtf: {0}".format(r)
-        print "response content: "+r.text
-        print "response content2: "+r.content
-
         return self.__json_dict_to_object__(json.loads(r.text))
 
     def __single_user_data_operation__(self, func, id, user):
@@ -201,9 +201,12 @@ class SCIM:
 
     @doLog
     def update_group(self, id, user):
-        operation = self.__single_group_data_operation__(requests.patch, id, user)
+        operation = self.__single_group_data_operation__(requests.patch, id,
+                                                         user)
         return self.__json_dict_to_object__(json.loads(operation.content))
 
     @doLog
     def delete_group(self, id):
-        return requests.delete('{0}/Group/{1}'.format(self.authorization_server, id), headers=self.headers)
+        return requests.delete('{0}/Group/{1}'.format(
+            self.authorization_server, id), headers=self.headers)
+

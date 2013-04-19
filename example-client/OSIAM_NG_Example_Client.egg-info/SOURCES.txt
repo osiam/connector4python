@@ -1,8 +1,0 @@
-setup.py
-OSIAM_NG_Example_Client.egg-info/PKG-INFO
-OSIAM_NG_Example_Client.egg-info/SOURCES.txt
-OSIAM_NG_Example_Client.egg-info/dependency_links.txt
-OSIAM_NG_Example_Client.egg-info/requires.txt
-OSIAM_NG_Example_Client.egg-info/top_level.txt
-connector/__init__.py
-connector/osiam.py

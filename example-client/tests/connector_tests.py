@@ -5,17 +5,17 @@ import unittest
 import requests
 from mock import patch
 
-from connector import osiam
+from osiam import connector
 
 class SCIMTestCase(unittest.TestCase):
-    scim = osiam.SCIM('http://localhost:8080/authorization-server', "token")
-    user = osiam.SCIMUser(userName='userName')
-    group = osiam.SCIMGroup(displayName='displayName')
+    scim = connector.SCIM('http://localhost:8080/authorization-server', "token")
+    user = connector.SCIMUser(userName='userName')
+    group = connector.SCIMGroup(displayName='displayName')
 
     def __mock_call__(self, methodToMock, result, func, *funcArgs):
         with patch.object(requests, methodToMock) as mock_method:
-            mock_method.return_value.text = json.dumps(result, default=osiam.convert_to_builtin_type)
-            mock_method.return_value.content = json.dumps(result, default=osiam.convert_to_builtin_type)
+            mock_method.return_value.text = json.dumps(result, default=connector.convert_to_builtin_type)
+            mock_method.return_value.content = json.dumps(result, default=connector.convert_to_builtin_type)
             o = func(*funcArgs)
             assert o is not None
             return o
@@ -60,7 +60,7 @@ class SCIMTestCase(unittest.TestCase):
         self.__mock_call__('delete', self.group, self.scim.delete_group, 'id')
 
     def test_contains_a_SCIMMultiValuedAttribute(self):
-        attribute = osiam.SCIMMultiValuedAttribute(value = 'test', display = 'display', primary = True, type = 'type',
+        attribute = connector.SCIMMultiValuedAttribute(value = 'test', display = 'display', primary = True, type = 'type',
                                                    operation = 'delete')
         assert attribute is not None
         self.assertEqual('test', attribute.value)
@@ -70,7 +70,7 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEqual('delete', attribute.operation)
 
     def test_contains_a_SCIMAddress(self):
-        attribute = osiam.SCIMAddress(display = 'display', primary = True, type = 'type',
+        attribute = connector.SCIMAddress(display = 'display', primary = True, type = 'type',
                                       operation = 'delete', formatted = 'formatted',
                                       streetAddress = 'streetAddress', locality = 'locality', region = 'region',
                                       postalCode = 'postal', country = 'country')
@@ -87,7 +87,7 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEqual('country', attribute.country)
 
     def test_contains_a_SCIMName(self):
-        attribute = osiam.SCIMName(formatted = 'formatted', familyName = 'familyName', givenName = 'givenName',
+        attribute = connector.SCIMName(formatted = 'formatted', familyName = 'familyName', givenName = 'givenName',
                                    middleName = 'middleName', honorificPrefix = 'prefix', honorificSuffix = 'suffix')
         assert attribute is not None
         self.assertEqual('formatted', attribute.formatted)

@@ -1,5 +1,5 @@
 from nose.tools import *
-import connector
+import osiam 
 
 def setup():
     print "SETUP!"

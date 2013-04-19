@@ -69,21 +69,22 @@ def redirect_create_user():
 
 @app.route('/create/User', methods=['POST'])
 def create_user():
-#     <p><label>Firstname:<input id="firstname" name="firstname" type="text" value="Arthur"></label></p>
-#    <p><label>Lastname:<input id="lastname" name="lastname" type="text" value="Dent"></label></p>
-    user = osiam.SCIMUser(schemas = request.form.get('schema'),
-                          userName = request.form.get('user_name'),
+    userName = str(request.form.get('user_name'))
+    print 'username: ' + userName
+    user = osiam.SCIMUser(
+#                    schemas = request.form.get('schema'),
+                    userName = request.form.get('user_name'),
 #                          name = name,
-#                           displayName = request.form.get('displayname'),
-#                           nickName = request.form.get('nickname'),
-#                           profileUrl = request.form.get('Profileurl'),
-#                           title = request.form.get('title'),
-#                           userType = request.form.get('usertype'),
-#                           preferredLanguage = request.form.get('preferredlanguage'),
-#                           locale = request.form.get('locale'),
-#                           timezone = request.form.get('timezone'),
-#                          active = True,
-                          password = request.form.get('password'))
+                    displayName = request.form.get('displayname'),
+                    nickName = request.form.get('nickname'),
+                    profileUrl = request.form.get('Profileurl'),
+                    title = request.form.get('title'),
+                    userType = request.form.get('usertype'),
+                    preferredLanguage = request.form.get('preferredlanguage'),
+                    locale = request.form.get('locale'),
+                    timezone = request.form.get('timezone'),
+                    active = True,
+                    password = request.form.get('password'))
     global response, scim
     response = scim.create_user(user)
     return redirect('/')
