@@ -33,19 +33,19 @@ def SCIMMultiValuedAttribute(value=None, display=None, primary=False,
                                          operation)
 
 
-# class SCIMAddress(SCIMMultiValuedAttributeT):
-#    def __init__(self, display=None, primary=False, type=None, operation=None,
-#                 formatted=None, streetAddress=None,
-#                 locality=None, region=None, postalCode=None, country=None):
-#        SCIMMultiValuedAttribute.__init__(self, display=display,
-#                                          primary=primary, type=type,
-#                                          operation=operation)
-#        self.formatted = formatted
-#        self.streetAddress = streetAddress
-#        self.locality = locality
-#        self.region = region
-#        self.postalCode = postalCode
-#        self.country = country
+SCIMAddressT = collections.namedtuple('SCIMAddress',
+                                      ('display', 'primary', 'type',
+                                       'operation', 'formatted', 'locality',
+                                       'region', 'postalCode', 'country',
+                                       'streetAddress'))
+
+
+def SCIMAddress(
+    display=None, primary=None, type=None, operation=None, formatted=None,
+        locality=None, region=None, postalCode=None, country=None,
+        streetAddress=None):
+    return SCIMAddressT(display, primary, type, operation, formatted,
+                        locality, region, postalCode, country, streetAddress)
 
 
 SCIMNameT = collections.namedtuple('SCIMName', (
