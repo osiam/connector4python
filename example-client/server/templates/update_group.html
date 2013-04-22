@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+<form method="post">
+    {% include 'group_fields.html' %}
+    <p><label>UUID:<br><input id="uuid" name="uuid" type="text"></label></p>
+    <input type="submit" formaction="/update/group" value="Update Resource"/>
+</form>
+{% endblock %}
+

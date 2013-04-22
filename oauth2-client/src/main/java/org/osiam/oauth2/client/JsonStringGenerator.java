@@ -34,7 +34,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.osiam.oauth2.client.CRUDListController.KnownMultiValueAttributeLists.*;
 
 public class JsonStringGenerator {
     public static String getJsonStringPatch(String schema, String user_name, String firstname, String lastname, String displayname, String nickname, String profileurl, String title, String usertype, String preferredlanguage, String locale, String timezone, String password, Set<String> metaAttribues) throws IOException {
@@ -45,20 +44,22 @@ public class JsonStringGenerator {
 
 
         User user =
-                getPreFilledBuilder(user_name, firstname, lastname, displayname, nickname, profileurl, title, usertype, preferredlanguage, locale, timezone, password).setEmails(
-                        EMAIL.<User.Emails>getSet().getEmail().isEmpty() ? null :
-                                EMAIL.<User.Emails>getSet()).setPhoneNumbers(
-                        PHONE.<User.PhoneNumbers>getSet().getPhoneNumber().isEmpty() ? null :
-                                PHONE.<User.PhoneNumbers>getSet()).setIms(
-                        IM.<User.Ims>getSet().getIm().isEmpty() ? null : IM.<User.Ims>getSet()).setPhotos(
-                        PHOTO.<User.Photos>getSet().getPhoto().isEmpty() ? null :
-                                PHOTO.<User.Photos>getSet()).setAddresses(getAddresses()).setGroups(GROUP.<User.Groups>getSet()).setEntitlements(
-                        ENTITLEMENT.<User.Entitlements>getSet().getEntitlement().isEmpty() ? null :
-                                ENTITLEMENT.<User.Entitlements>getSet()).setRoles(
-                        ROLE.<User.Roles>getSet().getRole().isEmpty() ? null :
-                                ROLE.<User.Roles>getSet()).setX509Certificates(
-                        X509.<User.X509Certificates>getSet().getX509Certificate().isEmpty() ? null :
-                                X509.<User.X509Certificates>getSet()).setAny(null).setSchemas(getSchemas(schema)).setMeta(meta).build();
+                getPreFilledBuilder(user_name, firstname, lastname, displayname, nickname, profileurl, title, usertype,
+                        preferredlanguage, locale, timezone, password)
+//                        EMAIL.<User.Emails>getSet().getEmail().isEmpty() ? null :
+//                                EMAIL.<User.Emails>getSet()).setPhoneNumbers(
+//                        PHONE.<User.PhoneNumbers>getSet().getPhoneNumber().isEmpty() ? null :
+//                                PHONE.<User.PhoneNumbers>getSet()).setIms(
+//                        IM.<User.Ims>getSet().getIm().isEmpty() ? null : IM.<User.Ims>getSet()).setPhotos(
+//                        PHOTO.<User.Photos>getSet().getPhoto().isEmpty() ? null :
+//                                PHOTO.<User.Photos>getSet()).setAddresses(getAddresses()).setGroups(GROUP.<User.Groups>getSet()).setEntitlements(
+//                        ENTITLEMENT.<User.Entitlements>getSet().getEntitlement().isEmpty() ? null :
+//                                ENTITLEMENT.<User.Entitlements>getSet()).setRoles(
+//                        ROLE.<User.Roles>getSet().getRole().isEmpty() ? null :
+//                                ROLE.<User.Roles>getSet()).setX509Certificates(
+//                        X509.<User.X509Certificates>getSet().getX509Certificate().isEmpty() ? null :
+//                                X509.<User.X509Certificates>getSet()).setAny(null)
+                        .setSchemas(getSchemas(schema)).setMeta(meta).build();
         return new ObjectMapper().writeValueAsString(user);
     }
 
@@ -68,7 +69,7 @@ public class JsonStringGenerator {
 
 
         User user =
-                getPreFilledBuilder(user_name, firstname, lastname, displayname, nickname, profileurl, title, usertype, preferredlanguage, locale, timezone, password).setEmails(EMAIL.<User.Emails>getSet()).setPhoneNumbers(PHONE.<User.PhoneNumbers>getSet()).setIms(IM.<User.Ims>getSet()).setPhotos(PHOTO.<User.Photos>getSet()).setAddresses(getAddresses()).setGroups(GROUP.<User.Groups>getSet()).setEntitlements(ENTITLEMENT.<User.Entitlements>getSet()).setRoles(ROLE.<User.Roles>getSet()).setX509Certificates(X509.<User.X509Certificates>getSet()).setAny(null).setSchemas(getSchemas(schema))
+                getPreFilledBuilder(user_name, firstname, lastname, displayname, nickname, profileurl, title, usertype, preferredlanguage, locale, timezone, password).setAny(null).setSchemas(getSchemas(schema))
 
                         .build();
         return new ObjectMapper().writeValueAsString(user);
@@ -99,7 +100,4 @@ public class JsonStringGenerator {
                 lastName).build();
     }
 
-    static User.Addresses getAddresses() {
-        return null;  //To change body of created methods use File | Settings | File Templates.
-    }
 }

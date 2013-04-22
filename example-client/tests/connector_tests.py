@@ -14,8 +14,8 @@ class SCIMTestCase(unittest.TestCase):
 
     def __mock_call__(self, methodToMock, result, func, *funcArgs):
         with patch.object(requests, methodToMock) as mock_method:
-            mock_method.return_value.text = json.dumps(result, default=connector.convert_to_builtin_type)
-            mock_method.return_value.content = json.dumps(result, default=connector.convert_to_builtin_type)
+            mock_method.return_value.text = json.dumps(result.__dict__)
+            mock_method.return_value.content = json.dumps(result.__dict__)
             o = func(*funcArgs)
             assert o is not None
             return o
@@ -97,6 +97,6 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEqual('prefix', attribute.honorificPrefix)
         self.assertEqual('suffix', attribute.honorificSuffix)
 
+
 if __name__ == '__main__':
      unittest.main()
-

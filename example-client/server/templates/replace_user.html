@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body %}
+<form method="post">
+    {% include 'user_fields.html' %}
+<!--    <select name="selectUUID" size="3">
+        {% for uuid in uuids %}
+        <option name="uuid" id="{{ uuid }}" value="{{ uuid }}">{{ uuid }}</option>
+        {% else %}
+        <option name="moep" id="moep" value="moep"}>nicht da</option>
+        {% endfor %}
+    </select> -->
+    <p><label>ID:<input id="uuid" name="uuid" type="text"></label></p>
+    <input type="submit" formaction="/replace/User" value="Replace Resource"/>
+</form>
+{% endblock %}
+

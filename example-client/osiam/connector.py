@@ -2,126 +2,107 @@
 
 import json
 import requests
-
+import collections
+import logging
 
 __author__ = 'phil'
 
-log = True
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
-class SCIMMultiValuedAttribute:
-    def __init__(self,
-                 value=None,
-                 display=None,
-                 primary=False,
-                 type=None,
-                 operation=None):
-        self.value = value
-        self.display = display
-        self.primary = primary
-        self.type = type
-        self.operation = operation
-
-
-class SCIMAddress(SCIMMultiValuedAttribute):
-    def __init__(self, display=None, primary=False, type=None, operation=None,
-                 formatted=None, streetAddress=None,
-                 locality=None, region=None, postalCode=None, country=None):
-        SCIMMultiValuedAttribute.__init__(self, display=display,
-                                          primary=primary, type=type,
-                                          operation=operation)
-        self.formatted = formatted
-        self.streetAddress = streetAddress
-        self.locality = locality
-        self.region = region
-        self.postalCode = postalCode
-        self.country = country
-
-
-class SCIMName:
-    def __init__(self,
-                 formatted=None,
-                 familyName=None,
-                 givenName=None,
-                 middleName=None,
-                 honorificPrefix=None,
-                 honorificSuffix=None):
-        self.formatted = formatted
-        self.familyName = familyName
-        self.givenName = givenName
-        self.middleName = middleName
-        self.honorificPrefix = honorificPrefix
-        self.honorificSuffix = honorificSuffix
-
-
-class SCIMUser:
-    def __init__(self, id=None, schemas=None, userName=None, name=None,
-                 displayName=None, nickName=None,
-                 profileUrl=None, title=None, userType=None,
-                 preferredLanguage=None, locale=None, timezone=None,
-                 active=None, password=None, emails=None, phoneNumbers=None,
-                 ims=None, photos=None, addresses=None,
-                 groups=None, entitlements=None, roles=None,
-                 x509Certificates=None, any=None, meta=None, externalId=None):
-        if not schemas:
-            schemas = ['urn:scim:schemas:core:1.0']
-        self.userName = userName
-        self.name = name
-        self.displayName = displayName
-        self.nickName = nickName
-        self.profileUrl = profileUrl
-        self.title = title
-        self.userType = userType
-        self.preferredLanguage = preferredLanguage
-        self.locale = locale
-        self.timezone = timezone
-        self.active = active
-        self.password = password
-        self.emails = emails
-        self.phoneNumbers = phoneNumbers
-        self.ims = ims
-        self.photos = photos
-        self.addresses = addresses
-        self.groups = groups
-        self.entitlements = entitlements
-        self.roles = roles
-        self.x509Certificates = x509Certificates
-        self.any = any
-        self.schemas = schemas
-        self.id = id
-        self.meta = meta
-        self.externalId = externalId
 
 def doLog(func):
     def wrapped(*args, **kwargs):
         result = func(*args, **kwargs)
-        if log:
-            print 'called {0} result:\n{1}'.format(func.__name__, result)
+        logger.debug('called {0} params: {1} result:\n{2}'.format(
+            func.__name__, args, result))
         return result
     return wrapped
 
 
-def convert_to_builtin_type(obj):
-    return obj.__dict__
+SCIMMultiValuedAttributeT = collections.namedtuple('SCIMMultiValuedAttribute',
+                                                   ('value', 'display',
+                                                    'primary', 'type',
+                                                    'operation'))
 
 
-class SCIMError(object):
-    def __init__(self, error_code, description=None):
-        self.error_code = error_code
-        self.description = description
+def SCIMMultiValuedAttribute(value=None, display=None, primary=False,
+                             type=None, operation=None):
+        return SCIMMultiValuedAttributeT(value, display, primary, type,
+                                         operation)
 
 
-class SCIMGroup(object):
-    def __init__(self, displayName=None, members=None, externalId=None,
-                 id=None, meta=None, schemas=None):
+# class SCIMAddress(SCIMMultiValuedAttributeT):
+#    def __init__(self, display=None, primary=False, type=None, operation=None,
+#                 formatted=None, streetAddress=None,
+#                 locality=None, region=None, postalCode=None, country=None):
+#        SCIMMultiValuedAttribute.__init__(self, display=display,
+#                                          primary=primary, type=type,
+#                                          operation=operation)
+#        self.formatted = formatted
+#        self.streetAddress = streetAddress
+#        self.locality = locality
+#        self.region = region
+#        self.postalCode = postalCode
+#        self.country = country
+
+
+SCIMNameT = collections.namedtuple('SCIMName', (
+    'formatted', 'familyName', 'givenName', 'middleName', 'honorificPrefix',
+    'honorificSuffix'))
+
+
+def SCIMName(formatted=None, familyName=None, givenName=None, middleName=None,
+             honorificPrefix=None, honorificSuffix=None):
+    return SCIMNameT(formatted, familyName, givenName, middleName,
+                     honorificPrefix, honorificSuffix)
+
+
+SCIMUserT = collections.namedtuple('SCIMUser', (
+    'id', 'schemas', 'userName', 'name',
+    'displayName', 'nickName',
+    'profileUrl', 'title', 'userType',
+    'preferredLanguage', 'locale', 'timezone',
+    'active', 'password', 'emails', 'phoneNumbers',
+    'ims', 'photos', 'addresses',
+    'groups', 'entitlements', 'roles',
+    'x509Certificates', 'any', 'meta', 'externalId'))
+
+
+def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
+             nickName=None, profileUrl=None, title=None, userType=None,
+             preferredLanguage=None, locale=None, timezone=None, active=None,
+             password=None, emails=None, phoneNumbers=None, ims=None,
+             photos=None, addresses=None, groups=None, entitlements=None,
+             roles=None, x509Certificates=None, any=None, meta=None,
+             externalId=None):
         if not schemas:
             schemas = ['urn:scim:schemas:core:1.0']
-        self.displayName = displayName
-        self.members = members
-        self.externalId = externalId
-        self.id = id
-        self.meta = meta
-        self.schemas = schemas
+        return SCIMUserT(id, schemas, userName, name, displayName, nickName,
+                         profileUrl, title, userType, preferredLanguage,
+                         locale, timezone, active, password, emails,
+                         phoneNumbers, ims, photos, addresses, groups,
+                         entitlements, roles, x509Certificates, any, meta,
+                         externalId)
+
+SCIMErrorT = collections.namedtuple('SCIMError', ('error_code', 'description'))
+
+
+def SCIMError(error_code, description=None):
+    return SCIMErrorT(error_code, description)
+
+
+SCIMGroupT = collections.namedtuple('SCIMGroup', ('displayName', 'members',
+                                                  'externalId', 'id', 'meta',
+                                                  'schemas'))
+
+
+def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
+              meta=None, schemas=None):
+    if not schemas:
+        schemas = ['urn:scim:schemas:core:1.0']
+    return SCIMGroupT(displayName, members, externalId, id, meta, schemas)
 
 
 class SCIM:
@@ -131,32 +112,29 @@ class SCIM:
                         'content-type': 'application/json'}
 
     def __json_dict_to_object__(self, user):
-        args = dict((key.encode('ascii'), value)
-                    for key, value in user.items())
         if user.get('userName') is not None:
-            return SCIMUser(**args)
+            return SCIMUser(user)
         elif user.get('error_code') is not None:
-            return SCIMError(**args)
+            return SCIMError(user)
         else:
-            return SCIMGroup(**args)
+            return SCIMGroup(user)
 
     def __single_data_operation__(self, func, id, data, type):
-        data = json.dumps(data, default=convert_to_builtin_type)
-        print "data: {0}".format(data)
+        data = json.dumps(data.__dict__)
         return func('{0}/{1}/{2}'.format(self.authorization_server, type, id),
                     headers=self.headers, data=data)
 
-
     @doLog
     def get_user(self, uuid):
-        r = requests.get('{0}/User/{1}'.format(self.authorization_server, uuid), headers=self.headers)
+        r = requests.get('{0}/User/{1}'.format(
+            self.authorization_server, uuid), headers=self.headers)
         r_text = r.text
         o = json.loads(r_text)
         return self.__json_dict_to_object__(o)
 
     @doLog
     def create_user(self, user):
-        data = json.dumps(user, default=convert_to_builtin_type)
+        data = json.dumps(user.__dict__)
         r = requests.post('{0}/User'.format(self.authorization_server),
                           headers=self.headers,
                           data=data)
@@ -172,23 +150,27 @@ class SCIM:
 
     @doLog
     def update_user(self, id, user):
-        operation = self.__single_user_data_operation__(requests.patch, id, user)
+        operation = self.__single_user_data_operation__(
+            requests.patch, id, user)
         return self.__json_dict_to_object__(json.loads(operation.content))
 
     @doLog
     def delete_user(self, id):
-        return requests.delete('{0}/User/{1}'.format(self.authorization_server, id), headers=self.headers)
+        return requests.delete('{0}/User/{1}'.
+                               format(self.authorization_server, id),
+                               headers=self.headers)
 
     @doLog
     def get_group(self, uuid):
-        r = requests.get('{0}/Group/{1}'.format(self.authorization_server, uuid), headers=self.headers)
+        r = requests.get('{0}/Group/{1}'.format(
+            self.authorization_server, uuid), headers=self.headers)
         return self.__json_dict_to_object__(json.loads(r.text))
 
     @doLog
     def create_group(self, user):
         r = requests.post('{0}/Group'.format(self.authorization_server),
                           headers=self.headers,
-                          data=json.dumps(user, default=convert_to_builtin_type))
+                          data=json.dumps(user.__dict__))
         return self.__json_dict_to_object__(json.loads(r.text))
 
     def __single_group_data_operation__(self, func, id, user):
@@ -196,7 +178,8 @@ class SCIM:
 
     @doLog
     def replace_group(self, id, user):
-        operation = self.__single_group_data_operation__(requests.put, id, user)
+        operation = self.__single_group_data_operation__(
+            requests.put, id, user)
         return self.__json_dict_to_object__(json.loads(operation.content))
 
     @doLog
@@ -209,4 +192,3 @@ class SCIM:
     def delete_group(self, id):
         return requests.delete('{0}/Group/{1}'.format(
             self.authorization_server, id), headers=self.headers)
-
