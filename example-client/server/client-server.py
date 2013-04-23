@@ -11,13 +11,12 @@ import logging
 
 app = Flask(__name__)
 
-authZServer = 'http://localhost:8080/authorization-server'
+authZServer = None
 client_id = 'testClient'
-redirect_uri = 'http://localhost:5000/oauth2'
+redirect_uri = None
 scopes = 'POST PUT GET DELETE PATCH'
-params = {'response_type': 'code', 'state': 'state', 'client_id': client_id,
-          'redirect_uri': redirect_uri, 'scope': scopes}
-oauth2_auth_code = '/oauth/authorize?{0}'.format(urllib.urlencode(params))
+params = None
+oauth2_auth_code = None
 
 access_token = None
 response = []
@@ -30,9 +29,9 @@ def auth_code_to_access_token(code):
     param = {
         'code': code,
         'grant_type': 'authorization_code',
-        'redirect_uri': 'http://localhost:5000/oauth2'
+        'redirect_uri': redirect_uri
     }
-    r = requests.post('http://localhost:8080/authorization-server/oauth/token',
+    r = requests.post('{}/oauth/token'.format(authZServer),
                       auth=HTTPBasicAuth('testClient', 'secret'),
                       params=param)
     global access_token, response, scim
@@ -219,8 +218,13 @@ def show_entries():
 
 
 if __name__ == '__main__':
-    global authZServer
-    if sys.argv[1] is not None:
-        authZServer = sys.argv[1]
+    global authZServer, redirect_uri
+    authZServer = sys.argv[1]
+    redirect_uri = sys.argv[2]
+    params = {'response_type': 'code', 'state': 'state',
+              'client_id': client_id,
+              'redirect_uri': redirect_uri, 'scope': scopes}
+    oauth2_auth_code = '/oauth/authorize?{0}'.format(urllib.urlencode(params))
+    print 'redirect uri is {}'.format(redirect_uri)
     print 'AuthZ-Server is {}'.format(authZServer)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
