@@ -30,9 +30,9 @@ def auth_code_to_access_token(code):
     param = {
         'code': code,
         'grant_type': 'authorization_code',
-        'redirect_uri': 'http://localhost:5000/oauth2'
+        'redirect_uri': redirectUri
     }
-    r = requests.post('http://localhost:8080/authorization-server/oauth/token',
+    r = requests.post('{}/oauth/token'.format(authZServer),
                       auth=HTTPBasicAuth('testClient', 'secret'),
                       params=param)
     global access_token, response, scim
