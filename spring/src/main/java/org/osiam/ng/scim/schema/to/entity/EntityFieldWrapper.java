@@ -40,7 +40,7 @@ public class EntityFieldWrapper {
     }
 
     public void updateSingleField(Field entityField, Object userValue, String key) throws IllegalAccessException, InstantiationException {
-        if (mode == GenericSCIMToEntityWrapper.Mode.PATCH && userValue == null) {
+        if (mode == GenericSCIMToEntityWrapper.Mode.PATCH && (userValue == null || String.valueOf(userValue).isEmpty())) {
             return;
         }
         if (userValue instanceof Name) {
