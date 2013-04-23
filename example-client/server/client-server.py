@@ -1,5 +1,5 @@
 __author__ = 'phil'
-
+import sys
 import ast
 from flask import Flask, request, render_template, redirect
 from requests.auth import HTTPBasicAuth
@@ -219,4 +219,8 @@ def show_entries():
 
 
 if __name__ == '__main__':
+    global authZServer
+    if sys.argv[1] is not None:
+        authZServer = sys.argv[1]
+    print 'AuthZ-Server is {}'.format(authZServer)
     app.run(debug=True)
