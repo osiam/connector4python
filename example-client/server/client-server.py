@@ -29,7 +29,7 @@ def auth_code_to_access_token(code):
     param = {
         'code': code,
         'grant_type': 'authorization_code',
-        'redirect_uri': redirectUri
+        'redirect_uri': redirect_uri
     }
     r = requests.post('{}/oauth/token'.format(authZServer),
                       auth=HTTPBasicAuth('testClient', 'secret'),
@@ -218,13 +218,13 @@ def show_entries():
 
 
 if __name__ == '__main__':
-    global authZServer, redirectUri
+    global authZServer, redirect_uri
     authZServer = sys.argv[1]
-    redirectUri = sys.argv[2]
+    redirect_uri = sys.argv[2]
     params = {'response_type': 'code', 'state': 'state',
               'client_id': client_id,
               'redirect_uri': redirect_uri, 'scope': scopes}
     oauth2_auth_code = '/oauth/authorize?{0}'.format(urllib.urlencode(params))
-    print 'redirect uri is {}'.format(redirectUri)
+    print 'redirect uri is {}'.format(redirect_uri)
     print 'AuthZ-Server is {}'.format(authZServer)
     app.run(host='0.0.0.0', debug=True)
