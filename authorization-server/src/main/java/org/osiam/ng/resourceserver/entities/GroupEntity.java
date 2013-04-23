@@ -26,10 +26,7 @@ package org.osiam.ng.resourceserver.entities;
 import scim.schema.v2.Group;
 import scim.schema.v2.MultiValuedAttribute;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -45,6 +42,10 @@ public class GroupEntity extends InternalIdSkeleton {
     private Set<InternalIdSkeleton> members = new HashSet<>();
     @Column(name = "additional")
     private String any;
+
+    @Column(unique = true, nullable = false)
+    private String displayName;
+
 
     public static GroupEntity fromScim(Group group) {
         GroupEntity groupEntity = new GroupEntity();
@@ -63,14 +64,18 @@ public class GroupEntity extends InternalIdSkeleton {
     }
 
     private static void transferMultiValueAttributeToInternalIdSkeleton(Group group, Set<InternalIdSkeleton> result) {
-        for (MultiValuedAttribute m : group.getMembers()) {
+        for (final MultiValuedAttribute m : group.getMembers()) {
             InternalIdSkeleton skeleton = new InternalIdSkeleton() {
+                @Override
+                public String getDisplayName() {
+                    return m.getDisplay();
+                }
+
                 @Override
                 public <T> T toScim() {
                     return null;  //To change body of implemented methods use File | Settings | File Templates.
                 }
             };
-            skeleton.setDisplayName(m.getDisplay());
             skeleton.setId(UUID.fromString(String.valueOf(m.getValue())));
             result.add(skeleton);
         }
@@ -90,6 +95,14 @@ public class GroupEntity extends InternalIdSkeleton {
 
     public void setAny(String any) {
         this.any = any;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override

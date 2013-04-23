@@ -43,7 +43,7 @@ class GroupDeleteTest extends Specification {
     def query = Mock(Query)
 
 
-    def "should throw an org.osiam.ng.scim.exceptions.ResourceNotFoundException when trying to delete unknown user"() {
+    def "should throw an org.osiam.ng.scim.exceptions.ResourceNotFoundException when trying to delete unknown group"() {
         when:
         bean.delete(id)
         then:
@@ -54,7 +54,7 @@ class GroupDeleteTest extends Specification {
 
     }
 
-    def "should not throw any Exception when trying to delete known user"() {
+    def "should not throw any Exception when trying to delete known group"() {
         given:
         def entity = new GroupEntity()
         when:
