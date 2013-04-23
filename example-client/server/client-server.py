@@ -219,8 +219,12 @@ def show_entries():
 
 
 if __name__ == '__main__':
-    global authZServer
+    global authZServer, redirectUri
     if sys.argv[1] is not None:
         authZServer = sys.argv[1]
+    if sys.argv[2] is not None:
+        redirectUri = sys.argv[2]
+
+    print 'redirect uri is {}'.format(redirectUri)
     print 'AuthZ-Server is {}'.format(authZServer)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

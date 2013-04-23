@@ -7,8 +7,10 @@ from mock import patch
 
 from osiam import connector
 
+
 class SCIMTestCase(unittest.TestCase):
-    scim = connector.SCIM('http://localhost:8080/authorization-server', "token")
+    scim = connector.SCIM(
+        'http://localhost:8080/authorization-server', "token")
     user = connector.SCIMUser(userName='userName')
     group = connector.SCIMGroup(displayName='displayName')
 
@@ -21,8 +23,8 @@ class SCIMTestCase(unittest.TestCase):
             return o
 
     def __test_result_of__(self, methodToMock, result, func, *funcArgs):
-            self.assertEquals(self.__mock_call__(methodToMock, result, func, *funcArgs).__class__, result.__class__)
-
+        self.assertEquals(self.__mock_call__(
+            methodToMock, result, func, *funcArgs).__class__, result.__class__)
 
     def test_get_an_user(self):
         self.__test_result_of__('get', self.user, self.scim.get_user, 'id')
@@ -31,27 +33,32 @@ class SCIMTestCase(unittest.TestCase):
         self.__test_result_of__('get', self.user, self.scim.get_group, 'id')
 
     def test_create_an_user(self):
-            self.__test_result_of__('post', self.user, self.scim.create_user, self.user)
+        self.__test_result_of__(
+            'post', self.user, self.scim.create_user, self.user)
 
     def test_create_a_group(self):
-        self.__test_result_of__('post', self.group, self.scim.create_group, self.group)
+        self.__test_result_of__(
+            'post', self.group, self.scim.create_group, self.group)
 
     def test_replace_an_user(self):
-        self.__test_result_of__('put', self.user, self.scim.replace_user, 'id',self.user)
+        self.__test_result_of__(
+            'put', self.user, self.scim.replace_user, 'id', self.user)
 
     def test_replace_a_group(self):
-        self.__test_result_of__('put', self.group, self.scim.replace_group, 'id',self.group)
+        self.__test_result_of__(
+            'put', self.group, self.scim.replace_group, 'id', self.group)
 
     def test_update_an_user(self):
-            self.__test_result_of__('patch', self.user, self.scim.update_user, 'id',self.user)
+        self.__test_result_of__(
+            'patch', self.user, self.scim.update_user, 'id', self.user)
 
     def test_update_a_group(self):
-        self.__test_result_of__('patch', self.group, self.scim.update_group, 'id',self.group)
+        self.__test_result_of__(
+            'patch', self.group, self.scim.update_group, 'id', self.group)
 
     def test_update_a_user(self):
-        self.__test_result_of__('patch', self.user, self.scim.update_user, 'id',self.user)
-
-
+        self.__test_result_of__(
+            'patch', self.user, self.scim.update_user, 'id', self.user)
 
     def test_delete_an_user(self):
         self.__mock_call__('delete', self.user, self.scim.delete_user, 'id')
@@ -60,8 +67,9 @@ class SCIMTestCase(unittest.TestCase):
         self.__mock_call__('delete', self.group, self.scim.delete_group, 'id')
 
     def test_contains_a_SCIMMultiValuedAttribute(self):
-        attribute = connector.SCIMMultiValuedAttribute(value = 'test', display = 'display', primary = True, type = 'type',
-                                                   operation = 'delete')
+        attribute = connector.SCIMMultiValuedAttribute(
+            value='test', display='display', primary=True, type='type',
+            operation='delete')
         assert attribute is not None
         self.assertEqual('test', attribute.value)
         self.assertEqual('display', attribute.display)
@@ -70,10 +78,12 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEqual('delete', attribute.operation)
 
     def test_contains_a_SCIMAddress(self):
-        attribute = connector.SCIMAddress(display = 'display', primary = True, type = 'type',
-                                      operation = 'delete', formatted = 'formatted',
-                                      streetAddress = 'streetAddress', locality = 'locality', region = 'region',
-                                      postalCode = 'postal', country = 'country')
+        attribute = connector.SCIMAddress(
+            display='display', primary=True, type='type',
+            operation='delete', formatted='formatted',
+            streetAddress='streetAddress', locality='locality',
+            region='region',
+            postalCode='postal', country='country')
         assert attribute is not None
         self.assertEqual('display', attribute.display)
         self.assertEqual(True, attribute.primary)
@@ -87,8 +97,11 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEqual('country', attribute.country)
 
     def test_contains_a_SCIMName(self):
-        attribute = connector.SCIMName(formatted = 'formatted', familyName = 'familyName', givenName = 'givenName',
-                                   middleName = 'middleName', honorificPrefix = 'prefix', honorificSuffix = 'suffix')
+        attribute = connector.SCIMName(
+            formatted='formatted', familyName='familyName',
+            givenName='givenName',
+            middleName='middleName', honorificPrefix='prefix',
+            honorificSuffix='suffix')
         assert attribute is not None
         self.assertEqual('formatted', attribute.formatted)
         self.assertEqual('familyName', attribute.familyName)
@@ -99,4 +112,4 @@ class SCIMTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-     unittest.main()
+    unittest.main()
