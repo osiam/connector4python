@@ -343,7 +343,7 @@ INSERT INTO database_scheme_version VALUES (0.0200000000000000004);
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('hibernate_sequence', 1, false);
+SELECT pg_catalog.setval('hibernate_sequence', 3, false);
 
 
 --
