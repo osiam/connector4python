@@ -26,10 +26,7 @@ package org.osiam.ng.resourceserver.entities;
 import scim.schema.v2.Group;
 import scim.schema.v2.MultiValuedAttribute;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -38,10 +35,11 @@ import java.util.UUID;
  * Group Entity
  */
 @Entity(name = "scim_group")
+//@NamedQueries({@NamedQuery(name = "removeMemberWithId", query = "DELETE FROM scim_group.members i WHERE i.id= :id")})
 public class GroupEntity extends InternalIdSkeleton {
 
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<InternalIdSkeleton> members = new HashSet<>();
     @Column(name = "additional")
     private String any;

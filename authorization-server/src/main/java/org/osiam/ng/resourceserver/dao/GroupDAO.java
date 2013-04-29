@@ -29,6 +29,7 @@ import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
