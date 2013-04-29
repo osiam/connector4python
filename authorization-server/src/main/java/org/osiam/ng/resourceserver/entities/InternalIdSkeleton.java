@@ -28,15 +28,14 @@ import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@NamedQueries({@NamedQuery(name = "getById", query = "SELECT i FROM InternalIdSkeleton i WHERE i.id= :id")})
+@Entity(name = "scim_id")
+@Inheritance(strategy = InheritanceType.JOINED)
+@NamedQueries({@NamedQuery(name = "getById", query = "SELECT i FROM scim_id i WHERE i.id= :id")})
 public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
-
-    @Column
-    protected String displayName;
 
 
     @Type(type = "pg-uuid")
@@ -82,16 +81,10 @@ public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
         this.externalId = externalId;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
+    public abstract String getDisplayName();
 
     public MultiValuedAttribute toMultiValueScim() {
-        return new MultiValuedAttribute.Builder().setDisplay(displayName).setValue(id.toString()).build();
+        return new MultiValuedAttribute.Builder().setDisplay(getDisplayName()).setValue(id.toString()).build();
     }
 
     @Override

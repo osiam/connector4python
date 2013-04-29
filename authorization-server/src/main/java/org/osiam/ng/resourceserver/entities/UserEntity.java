@@ -64,6 +64,9 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
     private Boolean active;
     @Column(nullable = false)
     private String password;
+    @Column
+    private String displayName;
+
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmailEntity> emails;
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -360,6 +363,14 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
         return userName;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     /**
      * @param userName the user name
      */
@@ -553,6 +564,8 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
     public void setAny(Set<String> any) {
         this.any = any;
     }
+
+
 
     public User toScim() {
         return new User.Builder(getUsername()).

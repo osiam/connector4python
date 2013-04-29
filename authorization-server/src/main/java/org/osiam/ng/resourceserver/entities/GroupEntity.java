@@ -44,6 +44,10 @@ public class GroupEntity extends InternalIdSkeleton {
     @Column(name = "additional")
     private String any;
 
+    @Column(unique = true, nullable = false)
+    private String displayName;
+
+
     public static GroupEntity fromScim(Group group) {
         GroupEntity groupEntity = new GroupEntity();
         groupEntity.setDisplayName(group.getDisplayName());
@@ -61,14 +65,18 @@ public class GroupEntity extends InternalIdSkeleton {
     }
 
     private static void transferMultiValueAttributeToInternalIdSkeleton(Group group, Set<InternalIdSkeleton> result) {
-        for (MultiValuedAttribute m : group.getMembers()) {
+        for (final MultiValuedAttribute m : group.getMembers()) {
             InternalIdSkeleton skeleton = new InternalIdSkeleton() {
+                @Override
+                public String getDisplayName() {
+                    return m.getDisplay();
+                }
+
                 @Override
                 public <T> T toScim() {
                     return null;  //To change body of implemented methods use File | Settings | File Templates.
                 }
             };
-            skeleton.setDisplayName(m.getDisplay());
             skeleton.setId(UUID.fromString(String.valueOf(m.getValue())));
             result.add(skeleton);
         }
@@ -88,6 +96,14 @@ public class GroupEntity extends InternalIdSkeleton {
 
     public void setAny(String any) {
         this.any = any;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override

@@ -19,7 +19,7 @@ params = None
 oauth2_auth_code = None
 
 access_token = None
-response = []
+response = None
 uuids = []
 mode = 'user'
 scim = None
@@ -37,7 +37,7 @@ def auth_code_to_access_token(code):
     global access_token, response, scim
     print 'response: ' + r.content
     access_token = json.loads(r.content).get('access_token')
-    response.append(r.content)
+    response = r.content
     scim = connector.SCIM(authZServer, access_token)
     return redirect('/')
 
@@ -85,7 +85,7 @@ def build_user():
 def call_scim_set_response(func, *args):
     global response, scim
     result = func(*args)
-    response.append(result)
+    response = result
     try:
         uuids.append(result.id)
     except AttributeError:
