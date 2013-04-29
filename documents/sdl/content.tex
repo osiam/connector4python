@@ -1,22 +1,62 @@
 \section{Introduction}
+
+
 \subsection(Audience)
+
+Team members of the OSIAM-NG Team --or any other teams who want to adapt this.
+
 \subsection(Purpose)
+
+Is to install a security process to enhance the create a more secure software module within the project OSIAM-NG
+in iterative steps.
+
 \section{Threat Model}
+Will be a Picture.
+
 \section{List of possible Target}
-\subsection{API Calls}
+REST-APIs
+Running container
+Running System
+DataBase-Connection
+
+subsection{API Calls}
 \section{Type of Attacks}
+SQL Injection, Java-Script injection via User-Input.
+Guessing of IDs via error messages, DDoS, 
+attacks to guess a password by measuring response time
 \subsection{Destroy the System}
+SQL Injection, DDoS, ...
+
 \subsection{Leak Informations}
+SQL Injection, Java-Script injection, Guessing of IDs via Error-Messages, 
+attacks to guess the password by time measuring, attack the DataBase to retrieve Informations
+
 \subsection{Corrupt the User-Agent}
+Java-Script injection, XSS,...
+
 \section{Possible Counter Actions}
+
 \subsection{Process}
+Security-Audits, regular Pen-Testing
+
 \subsection{Technical}
+https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet
+https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet
+https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
+https://www.owasp.org/index.php/Session_Management_Cheat_Sheet
+
 \section{How to Find Security Leaks}
+
+
 \subsection{Penetration Testing}
+
+https://www.owasp.org/index.php/Web_Application_Security_Testing_Cheat_Sheet
+
 \subsection{Tools for automatic Testing}
 (e.q. UI Tests)
-\section{How to React on Found Security Leaks}
-\subsection{Patch Software under our Control}
-\subsection{Deal with Dependencies in our Software}
-\subsection{Deal with the Infrastructure}
+
+https://www.owasp.org/index.php/Appendix_A:_Testing_Tools
+
+\subsection{How to Deal with Dependencies in our Software}
+\subsection{How to Deal with the Infrastructure}
 \section{Points to Deal within the Future}
