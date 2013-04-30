@@ -4,6 +4,35 @@ The audience of this document are members of the OSIAM-NG Team.
 The purporse of this Document is to describe a process to enhance the quality of
 OSIAM-NG from the perspective of security in iterative steps.
 
+\section{Process}
+This chapter describes the SDL process which will fit into the short iterations of an agile development. It is splitted in three categories defined by frequency of completion.
+
+The first category consists of the SDL requirements that are essential to security \footnote{\url{http://www.blackhat.com/presentations/bh-dc-10/Sullivan_Bryan/BlackHat-DC-2010-Sullivan-SDL-Agile-wp.pdf}} \footnote{\url{http://www.microsoft.com/security/sdl/discover/sdlagile.aspx}}
+
+1. Every-Sprint practices
+	- Run static code analysis tools per build
+	- Define a list of approved tools and associated security checks
+	- Threat model all new features, determine risks from those threats, and establish appropriate countermeasures 
+	- Secure coding: cross-site scripting, interpreter injections(SQL, LDAP, JSON injections and so on), use only strong crypto, use filtering and escaping
+	- Secure design: attack surface reduction, principle of least privilege (a user should have only as many rights as it needs to do its job), secure defaults	
+	- Security Review includes an examination of threat models, tools outputs, and performance against the quality gates and bug bars. It results in one of three different outcomes: Passed , Passed with exceptions, failed
+
+
+The second category of SDL requirements consists of tasks that must be performed on a regular basis over the lifetime of the project but that are not so critical as to be mandated for each sprint.
+Instead of completing all bucket requirements each sprint, product teams must complete only one SDL requirement from each bucket of related tasks during each sprint.
+2. Bucket Requirements
+	- Verification Tasks: Attack surface review, Negative Testing
+	- Design Review: Review crypto design, User Account Control
+	- Define/update Quality Gates/Bug Bar (A Bug Bar is a list of security vulnerabilities with then according severity: for example there can be a constraint that there will be no release if there are known vulnerabilities in the application with a ``critical'' or ``important'' rating)
+	- Deal with third-party software
+
+The third category of SDL requirements consists of tasks that need to be met when you first start a new project or when you first start using SDL with an existing project. These are generally once-per-project tasks that won’t need to be repeated after they’re complete.
+3. One-Time Requirements
+	- Security and privacy analysis includes assigning security experts
+	- Defining minimum security and privacy criteria for the application
+	- Deploying a security vulnerability item tracking system which allowing for creation, tracking and reporting of software vulnerabilities
+	- Identify functional aspects of the software that require closer review
+
 \section{Threat Model}
 Will be a Picture.
 
