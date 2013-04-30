@@ -7,31 +7,39 @@ OSIAM-NG from the perspective of security in iterative steps.
 \section{Process}
 This chapter describes the SDL process which will fit into the short iterations of an agile development. It is splitted in three categories defined by frequency of completion.
 
-The first category consists of the SDL requirements that are essential to security \footnote{\url{http://www.blackhat.com/presentations/bh-dc-10/Sullivan_Bryan/BlackHat-DC-2010-Sullivan-SDL-Agile-wp.pdf}} \footnote{\url{http://www.microsoft.com/security/sdl/discover/sdlagile.aspx}}
+The first category consists of the SDL requirements that are essential to security \footnote{\url{http://www.blackhat.com/presentations/bh-dc-10/Sullivan_Bryan/BlackHat-DC-2010-Sullivan-SDL-Agile-wp.pdf} \url{http://www.microsoft.com/security/sdl/discover/sdlagile.aspx}}
 
 1. Every-Sprint practices
-	- Run static code analysis tools per build
-	- Define a list of approved tools and associated security checks
-	- Threat model all new features, determine risks from those threats, and establish appropriate countermeasures 
-	- Secure coding: cross-site scripting, interpreter injections(SQL, LDAP, JSON injections and so on), use only strong crypto, use filtering and escaping
-	- Secure design: attack surface reduction, principle of least privilege (a user should have only as many rights as it needs to do its job), secure defaults	
-	- Security Review includes an examination of threat models, tools outputs, and performance against the quality gates and bug bars. It results in one of three different outcomes: Passed , Passed with exceptions, failed
-
+\begin{itemize}
+	\item Run static code analysis tools per build
+	\item Define a list of approved tools and associated security checks
+	\item Threat model all new features, determine risks from those threats, and establish appropriate countermeasures 
+	\item Secure coding: cross-site scripting, interpreter injections(SQL, LDAP, JSON injections and so on), use only strong crypto, use filtering and escaping
+	\item Secure design: attack surface reduction, principle of least privilege (a user should have only as many rights as it needs to do its job), secure defaults	
+	\item Security Review includes an examination of threat models, tools outputs, and performance against the quality gates and bug bars. It results in one of three different outcomes: Passed , Passed with exceptions, failed  
+\end{itemize}
 
 The second category of SDL requirements consists of tasks that must be performed on a regular basis over the lifetime of the project but that are not so critical as to be mandated for each sprint.
 Instead of completing all bucket requirements each sprint, product teams must complete only one SDL requirement from each bucket of related tasks during each sprint.
+
 2. Bucket Requirements
-	- Verification Tasks: Attack surface review, Negative Testing
-	- Design Review: Review crypto design, User Account Control
-	- Define/update Quality Gates/Bug Bar (A Bug Bar is a list of security vulnerabilities with then according severity: for example there can be a constraint that there will be no release if there are known vulnerabilities in the application with a ``critical'' or ``important'' rating)
-	- Deal with third-party software
+\begin{itemize}
+	\item Verification Tasks: Attack surface review, Negative Testing, regular Pen-Testing
+	\item Design Review: Review crypto design, User Account Control
+	\item Define/update Quality Gates/Bug Bar (A Bug Bar is a list of security vulnerabilities with then according severity: for example there can be a constraint that there will be no release if there are known vulnerabilities in the application with a ``critical'' or ``important'' rating)
+	\item Deal with third-party software
+\end{itemize}
 
 The third category of SDL requirements consists of tasks that need to be met when you first start a new project or when you first start using SDL with an existing project. These are generally once-per-project tasks that won’t need to be repeated after they’re complete.
+
 3. One-Time Requirements
-	- Security and privacy analysis includes assigning security experts
-	- Defining minimum security and privacy criteria for the application
-	- Deploying a security vulnerability item tracking system which allowing for creation, tracking and reporting of software vulnerabilities
-	- Identify functional aspects of the software that require closer review
+\begin{itemize}
+	\item Security and privacy analysis includes assigning security experts
+	\item Defining minimum security and privacy criteria for the application
+	\item Deploying a security vulnerability item tracking system which allowing for creation, tracking and reporting of software vulnerabilities
+	\item Identify functional aspects of the software that require closer review
+\end{itemize}
+
 
 \section{Threat Model}
 Will be a Picture.
@@ -119,18 +127,9 @@ Response is a Accesstoken or a Error.
     \hline
     intercept client secret or access-token & use TLS \\
     \hline
-    access_token does not expire & do not automatically refresh access_token \\
+    access\_token does not expire & do not automatically refresh access\_token \\
     \hline
  \end{tabular}
-
-
-
-\subsubsection{Root}
-Comming soon.
-
-\subsubsection{User}
-
-\subsubsection{Group}
 
 \section{Type of Attacks}
 SQL Injection, Java-Script injection via User-Input.
@@ -146,11 +145,6 @@ attacks to guess the password by time measuring, attack the DataBase to retrieve
 \subsection{Corrupt the User-Agent}
 Java-Script injection, XSS,...
 
-\section{Possible Counter Actions}
-
-\subsection{Process}
-Security-Audits, regular Pen-Testing
-
 \subsection{Technical}
 %https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet
 %https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet
@@ -158,6 +152,27 @@ Security-Audits, regular Pen-Testing
 %https://www.owasp.org/index.php/Session_Management_Cheat_Sheet
 %https://www.owasp.org/index.php/Logging_Cheat_Sheet
 %https://www.owasp.org/index.php/Cheat_Sheets
+
+%Security related newsgroups:
+%http://www.securityfocus.com/
+%http://www.securityweek.com/
+%OWASP Guide zu allen Bereichen --> https://www.owasp.org/index.php/Guide_Table_of_Contents
+%OWASP Testing Guide --> https://www.owasp.org/index.php/OWASP_Testing_Guide_v3_Table_of_Contents
+%OWASP App Security Tutorials --> https://www.owasp.org/index.php/OWASP_Appsec_Tutorial_Series
+%OWASP Secure Coding Practices --> https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide
+
+%Tools:
+%OpenSAMM: Model, Templates, Sheets --> http://www.opensamm.org/
+%OWASP LAPSE (Security scanner for Java EE Applications)
+%OWASP Zed Attack Proxy (ZAP) is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications
+%SDL Threat Modeling Tool (Windows only???)
+
+%Security Books:
+%Writing Secure Code, 2nd Ed by David LeBlanc and Michael Howard					 
+%19 Deadly Sins of Software Security by Michael Howard, David LeBlanc, and John Viega		 	 		
+%Building Secure Software by John Viega and Gary McGraw		 		 	
+%Gray Hat Hacking by Shon Harris, et al.	 		 		
+%How to Break Software Security by James Whittaker and Herbert Thompson
 
 \section{How to Find Security Leaks}
 
