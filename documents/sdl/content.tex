@@ -46,6 +46,91 @@ In OSIAM-NG are several possible targets for an attacker:
 \end{itemize}
 
 \subsection{API Calls}
+\subsubsection{SCIM}
+Every call of SCIM is secured with OAuth2, so, you need a valid access-token to gain access. We define Java-Script-, SQL- and JSON-Injection as 'Injection'.
+
+\paragraph{GET authorization-server/[User|Group]/\{ID\}}
+
+Response is a Error- or Resource in JSON.
+
+\begin{tabular}{|l|l|}
+    \hline
+    DDoS & Block IP after n successless tries\\
+    \hline
+    ID Guessing & generalize Error-Response and block IP after n successless tries\\
+
+    \hline
+ \end{tabular}
+
+\paragraph{POST|PUT|PATCH authorization-server/[User|Group]/\{ID\} Resource as JSON} 
+
+Response is a Error- or Resource in JSON. 
+\begin{tabular}{|l|l|}
+    \hline
+    Injection & Whitelist Input\\
+    \hline
+    JSON-Parser overload & Parser Testen \\
+    \hline
+    insecure Database Connection & encrypt sensible Data \\
+    \hline
+ \end{tabular}
+
+\paragraph{DELETE authorization-server/[User|Group]/\{ID\}}
+
+Response is a HTTP-Statuscode.
+
+\begin{tabular}{|l|l|}
+   \hline
+    ID Guessing & block IP after n successless tries\\
+    \hline
+ \end{tabular}
+
+\subsubsection{OAuth2}
+
+\paragraph{Auth-Code flow}
+
+Response is a Auth-Code or a Error.
+
+\begin{tabular}{|l|l|}
+    \hline
+    unknown redirect URI & do not redirect User back to unknown redirect URI\\
+    \hline
+    unsecure credentials & hash and salt sensible credentials \\
+    \hline
+    insufficient user rights & control the right of an user before granting access \\
+    \hline
+    error response is too verbose & generalize error response \\
+    \hline
+    unsecure connection between client and authz & use TLS \\
+    \hline
+    no logout & implement logout \\
+    \hline
+    unable to revoke given grants & implement functionality to revoke given grants \\
+    \hline
+ \end{tabular}
+
+\paragraph{Access-Token flow}
+
+Response is a Accesstoken or a Error.
+
+\begin{tabular}{|l|l|}
+    \hline
+    wrong redirect URI & sent error response\\
+    \hline
+    intercept client secret or access-token & use TLS \\
+    \hline
+    access_token does not expire & do not automatically refresh access_token \\
+    \hline
+ \end{tabular}
+
+
+
+\subsubsection{Root}
+Comming soon.
+
+\subsubsection{User}
+
+\subsubsection{Group}
 
 \section{Type of Attacks}
 SQL Injection, Java-Script injection via User-Input.
