@@ -17,11 +17,10 @@
 
 package org.osiam.ng.resourceserver;
 
+public interface FilterChain {
+    String getKey();
 
+    SingularFilterChain.Constraints getConstraint();
 
-public class FilterParser {
-
-    public FilterChain parse(String p) {
-        return new SingularFilterChain(p);
-    }
+    String getValue();
 }
