@@ -25,6 +25,8 @@ package org.osiam.ng.scim.dao;
 
 import scim.schema.v2.Resource;
 
+import java.util.List;
+
 public interface SCIMProvisioning<T extends Resource> {
     /**
      * This method returns a SCIM resource, it is used for GET calls.
@@ -77,5 +79,13 @@ public interface SCIMProvisioning<T extends Resource> {
      * @param id the identifier of the user.
      */
     void delete(String id);
+
+    /**
+     * This method searches users by name.
+     *
+     * @param name the name of the user.
+     * @return the search results
+     */
+    List<T> search(String name);
 }
 

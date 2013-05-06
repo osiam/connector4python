@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 /**
  * This Controller is used to manage User
@@ -107,6 +108,11 @@ public class UserController {
         scimUserProvisioning.delete(id);
     }
 
-
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public List<User> search(@RequestParam String name) {
+        List<User> users = scimUserProvisioning.search(name);
+        return users;
+    }
 
 }
