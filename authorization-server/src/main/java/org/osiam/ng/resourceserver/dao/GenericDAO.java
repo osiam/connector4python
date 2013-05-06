@@ -26,6 +26,8 @@ package org.osiam.ng.resourceserver.dao;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 
+import java.util.List;
+
 public interface GenericDAO<T extends InternalIdSkeleton> {
     void create(T entity);
 
@@ -34,4 +36,6 @@ public interface GenericDAO<T extends InternalIdSkeleton> {
     T update(T entity);
 
     void delete(String id);
+
+    List<T> search(String name);
 }

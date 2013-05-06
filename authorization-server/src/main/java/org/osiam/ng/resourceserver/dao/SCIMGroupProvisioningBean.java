@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import scim.schema.v2.Group;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,6 +60,11 @@ public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> imp
             throw new ResourceExistsException(group.getDisplayName() + " already exists.");
         }
         return enrichedGroup.toScim();  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<Group> search(String name) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

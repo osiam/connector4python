@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import org.hibernate.search.annotations.*;
+import org.osiam.ng.resourceserver.bridges.NameFieldsClassBridge;
 import scim.schema.v2.Name;
 
 import javax.persistence.Column;
@@ -33,6 +35,8 @@ import javax.persistence.Id;
 /**
  * Name Entity
  */
+@Indexed
+//@ClassBridge(impl = NameFieldsClassBridge.class)
 @Entity(name = "scim_name")
 public class NameEntity {
 

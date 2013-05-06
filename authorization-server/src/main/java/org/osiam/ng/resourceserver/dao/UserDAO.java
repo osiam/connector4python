@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.dao;
 
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.osiam.ng.resourceserver.entities.*;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -133,5 +135,26 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
         UserEntity userEntity = getById(id);
         em.remove(userEntity);
 
+    }
+
+    @Override
+    public List<UserEntity> search(String name) {
+        FullTextEntityManager fullTextEntityManager =
+                org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
+
+        QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
+                .buildQueryBuilder().forEntity( UserEntity.class ).get();
+        org.apache.lucene.search.Query query = queryBuilder
+                .keyword().wildcard()
+                .onField("userName")
+                .matching(name+"*")
+                .createQuery();
+
+        javax.persistence.Query persistenceQuery =
+                fullTextEntityManager.createFullTextQuery(query, UserEntity.class);
+
+        List result = persistenceQuery.getResultList();
+
+        return result;
     }
 }

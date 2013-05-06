@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -69,6 +70,11 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
     public void delete(String id) {
         GroupEntity groupEntity = getById(id);
         em.remove(groupEntity);
+    }
+
+    @Override
+    public List<GroupEntity> search(String name) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public GroupEntity update(GroupEntity entity) {

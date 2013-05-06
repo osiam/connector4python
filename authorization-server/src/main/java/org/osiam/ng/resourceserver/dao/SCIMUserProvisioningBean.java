@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -66,6 +67,11 @@ public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> imple
                     " already exists.");
         }
         return userEntity.toScim();
+    }
+
+    @Override
+    public List<User> search(String name) {
+        return getDao().search(name);
     }
 
     @Override

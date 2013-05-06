@@ -57,6 +57,10 @@
             <id>java.net</id>
             <url>http://download.java.net/maven/2</url>
         </repository>
+        <repository>
+            <id>JBoss-maven-repository</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -86,8 +90,6 @@
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-web</artifactId>
                 </exclusion>
-
-
             </exclusions>
         </dependency>
 
@@ -195,6 +197,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search</artifactId>
+            <version>4.1.1.Final</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.4.2</version>
@@ -207,7 +215,6 @@
             <artifactId>postgresql</artifactId>
             <version>9.1-901.jdbc4</version>
         </dependency>
-
 
     </dependencies>
 
