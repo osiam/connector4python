@@ -44,6 +44,10 @@
 
     <repositories>
         <repository>
+            <id>JBoss-maven-repository</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+        </repository>
+        <repository>
             <id>spring-milestone</id>
             <name>Spring Framework Milestone Repository</name>
             <url>http://maven.springframework.org/milestone</url>
@@ -56,10 +60,6 @@
         <repository>
             <id>java.net</id>
             <url>http://download.java.net/maven/2</url>
-        </repository>
-        <repository>
-            <id>JBoss-maven-repository</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
         </repository>
     </repositories>
 

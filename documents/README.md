@@ -10,4 +10,4 @@ In order to build and use the documents you need:
 
 ## Build and Start
 
-Go to the document you want to build (e.q. sdl) and call two pdflatex.
+Go to the document you want to build (e.q. sdl) and call pdflatex two times.
