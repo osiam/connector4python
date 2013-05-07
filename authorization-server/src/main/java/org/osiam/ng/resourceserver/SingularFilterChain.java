@@ -18,13 +18,17 @@
 package org.osiam.ng.resourceserver;
 
 
+import org.apache.lucene.search.Query;
+import org.hibernate.search.query.dsl.QueryBuilder;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SingularFilterChain implements FilterChain {
-    static final Pattern SINGULAR_CHAIN_PATTERN = Pattern.compile("(\\S+) ("+Constraints.createOrConstraints()+")[ ]??(\\S*)");
+    static final Pattern SINGULAR_CHAIN_PATTERN =
+            Pattern.compile("(\\S+) (" + Constraints.createOrConstraints() + ")[ ]??(\\S*)");
     private final String key;
     private final Constraints constraint;
     private final String value;
@@ -39,19 +43,29 @@ public class SingularFilterChain implements FilterChain {
     }
 
     @Override
-    public String getKey() {
-        return key;
+    public Query buildQuery(QueryBuilder queryBuilder) {
+        switch (constraint) {
+            case CONTAINS:
+                return queryBuilder.keyword().wildcard().onField(key).matching("*" + value + "*").createQuery();
+            case STARTS_WITH:
+                return queryBuilder.keyword().wildcard().onField(key).matching("*" + value).createQuery();
+            case EQUALS:
+                return queryBuilder.keyword().onField(key).matching(value).createQuery();
+            case GREATER_EQUALS:
+                return queryBuilder.range().onField(key).above(value).createQuery();
+            case GREATER_THAN:
+                return queryBuilder.range().onField(key).above(value).excludeLimit().createQuery();
+            case LESS_EQUALS:
+                return queryBuilder.range().onField(key).below(value).createQuery();
+            case LESS_THAN:
+                return queryBuilder.range().onField(key).below(value).excludeLimit().createQuery();
+            default:
+                throw new IllegalArgumentException("Unknown constraint.");
+        }
+
+
     }
 
-    @Override
-    public Constraints getConstraint() {
-        return constraint;
-    }
-
-    @Override
-    public String getValue() {
-        return value;
-    }
 
     public enum Constraints {
         EQUALS("eq"),

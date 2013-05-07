@@ -17,10 +17,8 @@
 
 package org.osiam.ng.resourceserver;
 
+import org.hibernate.search.query.dsl.QueryBuilder;
+
 public interface FilterChain {
-    String getKey();
-
-    SingularFilterChain.Constraints getConstraint();
-
-    String getValue();
+    org.apache.lucene.search.Query buildQuery(QueryBuilder queryBuilder);
 }
