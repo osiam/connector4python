@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.dao;
 
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.osiam.ng.resourceserver.entities.GroupEntity;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
@@ -72,13 +74,29 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
         em.remove(groupEntity);
     }
 
-    @Override
-    public List<GroupEntity> search(String name) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public GroupEntity update(GroupEntity entity) {
         findAndAddMembers(entity);
         return em.merge(entity);
+    }
+
+    @Override
+    public List<GroupEntity> search(String filter) {
+        FullTextEntityManager fullTextEntityManager =
+                org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
+
+        QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
+                .buildQueryBuilder().forEntity( GroupEntity.class ).get();
+        org.apache.lucene.search.Query query = queryBuilder
+                .keyword().wildcard()
+                .onField("displayName")
+                .matching(filter+"*")
+                .createQuery();
+
+        javax.persistence.Query persistenceQuery =
+                fullTextEntityManager.createFullTextQuery(query, GroupEntity.class);
+
+        List result = persistenceQuery.getResultList();
+
+        return result;
     }
 }

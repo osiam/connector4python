@@ -120,6 +120,7 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
     private Set<EntitlementsEntity> entitlements;
 
     //needs to be eager fetched due to authorization decisions
+    @IndexedEmbedded
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<RolesEntity> roles;
 
