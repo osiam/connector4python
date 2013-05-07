@@ -164,6 +164,31 @@ class GroupControllerTest extends Specification {
         result == group
     }
 
+    def "should be able to search a group on /Group URI with GET method"() {
+        given:
+        Method method = GroupController.class.getDeclaredMethod("searchWithGet", String)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        underTest.searchWithGet("filter")
+        then:
+        mapping.method() == [RequestMethod.GET]
+        mapping.value() == []
+        body
+        1* provisioning.search("filter")
+    }
 
-
+    def "should be able to search a group on /Group/.search URI with POST method" () {
+        given:
+        Method method = GroupController.class.getDeclaredMethod("searchWithPost", String)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        underTest.searchWithPost("filter")
+        then:
+        mapping.value() == ["/.search"]
+        mapping.method() == [RequestMethod.POST]
+        body
+        1* provisioning.search("filter")
+    }
 }

@@ -110,9 +110,13 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<User> search(@RequestParam String name) {
-        List<User> users = scimUserProvisioning.search(name);
-        return users;
+    public List<User> searchWithGet(@RequestParam String filter) {
+        return scimUserProvisioning.search(filter);
     }
 
+    @RequestMapping(value = "/.search", method = RequestMethod.POST)
+    @ResponseBody
+    public List<User> searchWithPost(@RequestBody String filter) {
+        return scimUserProvisioning.search(filter);
+    }
 }

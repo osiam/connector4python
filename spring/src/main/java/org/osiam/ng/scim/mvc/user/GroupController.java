@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/Group")
@@ -90,5 +91,17 @@ public class GroupController {
         Group group = scimGroupProvisioning.update(id, user);
         setLocation(request, response);
         return group;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public List<Group> searchWithGet(@RequestParam String filter) {
+        return scimGroupProvisioning.search(filter);
+    }
+
+    @RequestMapping(value = "/.search", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Group> searchWithPost(@RequestBody String filter) {
+        return scimGroupProvisioning.search(filter);
     }
 }

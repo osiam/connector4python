@@ -218,4 +218,31 @@ class UserControllerTest extends Specification {
         validateUser(result)
     }
 
+    def "should be able to search a user on /User URI with GET method" () {
+        given:
+        Method method = UserController.class.getDeclaredMethod("searchWithGet", String)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        underTest.searchWithGet("filter")
+        then:
+        mapping.value() == []
+        mapping.method() == [RequestMethod.GET]
+        body
+        1* provisioning.search("filter")
+    }
+
+    def "should be able to search a user on /User/.search URI with POST method" () {
+        given:
+        Method method = UserController.class.getDeclaredMethod("searchWithPost", String)
+        when:
+        RequestMapping mapping = method.getAnnotation(RequestMapping)
+        ResponseBody body = method.getAnnotation(ResponseBody)
+        underTest.searchWithPost("filter")
+        then:
+        mapping.value() == ["/.search"]
+        mapping.method() == [RequestMethod.POST]
+        body
+        1* provisioning.search("filter")
+    }
 }

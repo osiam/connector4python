@@ -81,11 +81,10 @@ public interface SCIMProvisioning<T extends Resource> {
     void delete(String id);
 
     /**
-     * This method searches users by name.
+     * This method provide a search across users or groups.
      *
-     * @param name the name of the user.
+     * @param filter the filter expression.
      * @return the search results
      */
-    List<T> search(String name);
+    List<T> search(String filter);
 }
-
