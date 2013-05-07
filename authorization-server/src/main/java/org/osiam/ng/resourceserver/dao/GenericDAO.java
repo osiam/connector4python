@@ -29,6 +29,7 @@ import org.osiam.ng.resourceserver.entities.UserEntity;
 import java.util.List;
 
 public interface GenericDAO<T extends InternalIdSkeleton> {
+
     void create(T entity);
 
     T getById(String id);
@@ -37,5 +38,5 @@ public interface GenericDAO<T extends InternalIdSkeleton> {
 
     void delete(String id);
 
-    List<T> search(String name);
+    List<T> search(String filter);
 }

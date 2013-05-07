@@ -40,7 +40,9 @@ import java.util.logging.Logger;
 
 @Service
 public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> implements SCIMGroupProvisioning {
+
     Logger logger = Logger.getLogger(SCIMGroupProvisioningBean.class.getName());
+
     @Inject
     private GroupDAO groupDAO;
 
@@ -63,8 +65,8 @@ public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> imp
     }
 
     @Override
-    public List<Group> search(String name) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public List<Group> search(String filter) {
+        return getDao().search(filter);
     }
 
     @Override

@@ -45,7 +45,6 @@ import java.util.UUID;
 @Service
 public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> implements SCIMUserProvisioning {
 
-
     @Inject
     private UserDAO userDao;
 
@@ -70,8 +69,8 @@ public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> imple
     }
 
     @Override
-    public List<User> search(String name) {
-        return getDao().search(name);
+    public List<User> search(String filter) {
+        return getDao().search(filter);
     }
 
     @Override

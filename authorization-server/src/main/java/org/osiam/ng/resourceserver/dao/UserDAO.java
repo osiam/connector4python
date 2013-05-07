@@ -138,7 +138,7 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
     }
 
     @Override
-    public List<UserEntity> search(String name) {
+    public List<UserEntity> search(String filter) {
         FullTextEntityManager fullTextEntityManager =
                 org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
 
@@ -147,7 +147,7 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
         org.apache.lucene.search.Query query = queryBuilder
                 .keyword().wildcard()
                 .onField("userName")
-                .matching(name+"*")
+                .matching(filter +"*")
                 .createQuery();
 
         javax.persistence.Query persistenceQuery =
