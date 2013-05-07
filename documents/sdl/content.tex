@@ -36,7 +36,7 @@ The third category of SDL requirements consists of tasks that need to be met whe
 \begin{itemize}
 	\item Security and privacy analysis includes assigning security experts
 	\item Defining minimum security and privacy criteria for the application
-	\item Deploying a security vulnerability item tracking system which allowing for creation, tracking and reporting of software vulnerabilities
+	\item Deploying a security vulnerability item tracking system which allowes for creation, tracking and reporting of software vulnerabilities
 	\item Identify functional aspects of the software that require closer review
 \end{itemize}
 
@@ -45,21 +45,21 @@ The third category of SDL requirements consists of tasks that need to be met whe
 Will be a Picture.
 
 \section{List of possible Target}
-In OSIAM-NG are several possible targets for an attacker:
+In OSIAM-NG there are several possible targets for an attacker:
 \begin{itemize}
 \item REST-APIs -- an attacker can use our REST-API to gain informationen about or overload the system or application.
 \item Running Container -- an attacker can use informations about the running container (e.q. Tomcat) to start a specific attack.
-\item Data Base -- an attacker could obtain access to the used database and gain sensible data.
+\item Database -- an attacker could obtain access to the used database and gain sensible data.
 \item Running System -- an attacker could try to attack the system directly to gain access.
 \end{itemize}
 
 \subsection{API Calls}
 \subsubsection{SCIM}
-Every call of SCIM is secured with OAuth2, so, you need a valid access-token to gain access. We define Java-Script-, SQL- and JSON-Injection as 'Injection'.
+Every call of SCIM is secured with OAuth2, so, you need a valid access-token to gain access. We define Java-Script-, SQL- and JSON-Injections as 'Injection'.
 
 \paragraph{GET authorization-server/[User|Group]/\{ID\}}
 
-Response is a Error- or Resource in JSON.
+Response is an Error- or Resource in JSON.
 
 \begin{tabular}{|l|l|}
     \hline
@@ -72,7 +72,7 @@ Response is a Error- or Resource in JSON.
 
 \paragraph{POST|PUT|PATCH authorization-server/[User|Group]/\{ID\} Resource as JSON} 
 
-Response is a Error- or Resource in JSON. 
+Response is an Error- or Resource in JSON. 
 \begin{tabular}{|l|l|}
     \hline
     Injection & Whitelist Input\\
@@ -85,7 +85,7 @@ Response is a Error- or Resource in JSON.
 
 \paragraph{DELETE authorization-server/[User|Group]/\{ID\}}
 
-Response is a HTTP-Statuscode.
+Response is an HTTP-Statuscode.
 
 \begin{tabular}{|l|l|}
    \hline
@@ -97,7 +97,7 @@ Response is a HTTP-Statuscode.
 
 \paragraph{Auth-Code flow}
 
-Response is a Auth-Code or a Error.
+Response is an Auth-Code or an Error.
 
 \begin{tabular}{|l|l|}
     \hline
@@ -119,7 +119,7 @@ Response is a Auth-Code or a Error.
 
 \paragraph{Access-Token flow}
 
-Response is a Accesstoken or a Error.
+Response is an Accesstoken or an Error.
 
 \begin{tabular}{|l|l|}
     \hline
@@ -140,7 +140,7 @@ SQL Injection, DDoS, ...
 
 \subsection{Leak Informations}
 SQL Injection, Java-Script injection, Guessing of IDs via Error-Messages, 
-attacks to guess the password by time measuring, attack the DataBase to retrieve Informations
+attacks to guess the password by time measuring, attacks on the Database to retrieve Informations.
 
 \subsection{Corrupt the User-Agent}
 Java-Script injection, XSS,...
