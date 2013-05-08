@@ -34,12 +34,17 @@ public class SingularFilterChain implements FilterChain {
     private final String value;
 
     public SingularFilterChain(String chain) {
-        Matcher matcher = SINGULAR_CHAIN_PATTERN.matcher(chain);
-        if (!matcher.matches()) { throw new IllegalArgumentException(chain + " is not a SingularFilterChain."); }
-        this.key = matcher.group(1);
-        this.constraint = Constraints.fromString.get(matcher.group(2));
-        this.value = matcher.group(3);
-
+        if (chain == null || chain.isEmpty()) {
+            this.key = null;
+            this.constraint = Constraints.fromString.get("empty");
+            this.value = null;
+        } else {
+            Matcher matcher = SINGULAR_CHAIN_PATTERN.matcher(chain);
+            if (!matcher.matches()) { throw new IllegalArgumentException(chain + " is not a SingularFilterChain."); }
+            this.key = matcher.group(1);
+            this.constraint = Constraints.fromString.get(matcher.group(2));
+            this.value = matcher.group(3);
+        }
     }
 
     @Override
@@ -59,6 +64,10 @@ public class SingularFilterChain implements FilterChain {
                 return queryBuilder.range().onField(key).below(value).createQuery();
             case LESS_THAN:
                 return queryBuilder.range().onField(key).below(value).excludeLimit().createQuery();
+            case PRESENT:
+                return queryBuilder.keyword().wildcard().onField(key).matching("*").createQuery();
+            case EMPTY:
+                return queryBuilder.all().createQuery();
             default:
                 throw new IllegalArgumentException("Unknown constraint.");
         }
@@ -75,7 +84,8 @@ public class SingularFilterChain implements FilterChain {
         GREATER_THAN("gt"),
         GREATER_EQUALS("ge"),
         LESS_THAN("lt"),
-        LESS_EQUALS("le");
+        LESS_EQUALS("le"),
+        EMPTY("empty");
         static Map<String, Constraints> fromString = new ConcurrentHashMap<>();
 
         static {
