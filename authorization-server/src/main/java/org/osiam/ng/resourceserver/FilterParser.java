@@ -18,7 +18,9 @@
 package org.osiam.ng.resourceserver;
 
 
+import org.springframework.stereotype.Service;
 
+@Service
 public class FilterParser {
 
     public FilterChain parse(String p) {

@@ -23,8 +23,11 @@
 
 package org.osiam.ng.resourceserver.dao;
 
-import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.Session;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.*;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -34,12 +37,18 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 @Repository
 @Transactional
 public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEntity> {
+
+    @Inject
+    private FilterParser filterParser;
 
     @Inject
     private PasswordEncoder passwordEncoder;
@@ -139,22 +148,22 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
 
     @Override
     public List<UserEntity> search(String filter) {
-        FullTextEntityManager fullTextEntityManager =
-                org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
 
-        QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
+        FullTextSession fullTextSession = Search.getFullTextSession((Session) em.getDelegate());
+
+        QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
                 .buildQueryBuilder().forEntity( UserEntity.class ).get();
-        org.apache.lucene.search.Query query = queryBuilder
-                .keyword().wildcard()
-                .onField("userName")
-                .matching(filter +"*")
-                .createQuery();
 
-        javax.persistence.Query persistenceQuery =
-                fullTextEntityManager.createFullTextQuery(query, UserEntity.class);
+        org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder);
 
-        List result = persistenceQuery.getResultList();
+/*        org.apache.lucene.search.Sort sort = new Sort(
+                new SortField(sortBy, SortField.STRING, sortOrder));*/
 
-        return result;
+        org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery( query, UserEntity.class );
+/*        fullTextQuery.setMaxResults(count);
+        fullTextQuery.setFirstResult(startIndex);
+        fullTextQuery.setSort(sort);*/
+
+        return fullTextQuery.list();
     }
 }

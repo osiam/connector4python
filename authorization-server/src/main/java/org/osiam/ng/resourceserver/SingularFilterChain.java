@@ -48,7 +48,7 @@ public class SingularFilterChain implements FilterChain {
             case CONTAINS:
                 return queryBuilder.keyword().wildcard().onField(key).matching("*" + value + "*").createQuery();
             case STARTS_WITH:
-                return queryBuilder.keyword().wildcard().onField(key).matching("*" + value).createQuery();
+                return queryBuilder.keyword().wildcard().onField(key).matching(value + "*" ).createQuery();
             case EQUALS:
                 return queryBuilder.keyword().onField(key).matching(value).createQuery();
             case GREATER_EQUALS:
