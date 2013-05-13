@@ -23,6 +23,7 @@
 
 package org.osiam.ng.resourceserver.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -154,7 +155,9 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
         QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
                 .buildQueryBuilder().forEntity( UserEntity.class ).get();
 
-        org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder);
+        Criteria criteria = ((Session) em.getDelegate()).createCriteria(UserEntity.class);
+
+        org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder, criteria);
 
 /*        org.apache.lucene.search.Sort sort = new Sort(
                 new SortField(sortBy, SortField.STRING, sortOrder));*/

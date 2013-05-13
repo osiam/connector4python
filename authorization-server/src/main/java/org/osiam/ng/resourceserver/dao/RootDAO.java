@@ -46,10 +46,8 @@ public class RootDAO <T extends Resource> extends GetInternalIdSkeleton{
                 .buildQueryBuilder().forEntity( UserEntity.class ).get();
 
         Criteria criteria = ((Session) em.getDelegate()).createCriteria(UserEntity.class);
-        //TODO: removed hardcoded string and replace with key from parser(queryBuilder)
-        criteria.add(Restrictions.isNotNull("displayName"));
 
-        org.apache.lucene.search.Query userQuery = filterParser.parse(filter).buildQuery(userQueryBuilder);
+        org.apache.lucene.search.Query userQuery = filterParser.parse(filter).buildQuery(userQueryBuilder, criteria);
 
 /*        org.apache.lucene.search.Sort sort = new Sort(
                 new SortField(sortBy, SortField.STRING, sortOrder));*/
@@ -70,7 +68,9 @@ public class RootDAO <T extends Resource> extends GetInternalIdSkeleton{
         QueryBuilder groupQueryBuilder = fullTextSession.getSearchFactory()
                 .buildQueryBuilder().forEntity( GroupEntity.class ).get();
 
-        org.apache.lucene.search.Query groupQuery = filterParser.parse(filter).buildQuery(groupQueryBuilder);
+        Criteria criteria = ((Session) em.getDelegate()).createCriteria(GroupEntity.class);
+
+        org.apache.lucene.search.Query groupQuery = filterParser.parse(filter).buildQuery(groupQueryBuilder, criteria);
 
 /*        org.apache.lucene.search.Sort sort = new Sort(
                 new SortField(sortBy, SortField.STRING, sortOrder));*/

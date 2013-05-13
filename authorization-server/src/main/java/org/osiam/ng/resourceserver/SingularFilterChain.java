@@ -19,6 +19,8 @@ package org.osiam.ng.resourceserver;
 
 
 import org.apache.lucene.search.Query;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
 import java.util.Map;
@@ -48,7 +50,7 @@ public class SingularFilterChain implements FilterChain {
     }
 
     @Override
-    public Query buildQuery(QueryBuilder queryBuilder) {
+    public Query buildQuery(QueryBuilder queryBuilder, Criteria criteria) {
         switch (constraint) {
             case CONTAINS:
                 return queryBuilder.keyword().wildcard().onField(key).matching("*" + value + "*").createQuery();
@@ -65,6 +67,7 @@ public class SingularFilterChain implements FilterChain {
             case LESS_THAN:
                 return queryBuilder.range().onField(key).below(value).excludeLimit().createQuery();
             case PRESENT:
+                criteria.add(Restrictions.isNotNull(key));
                 return queryBuilder.keyword().wildcard().onField(key).matching("*").createQuery();
             case EMPTY:
                 return queryBuilder.all().createQuery();
