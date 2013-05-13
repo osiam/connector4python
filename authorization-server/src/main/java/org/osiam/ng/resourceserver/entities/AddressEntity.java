@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.Field;
 import scim.schema.v2.Address;
 
 import javax.persistence.*;
@@ -37,30 +39,39 @@ public class AddressEntity {
     @GeneratedValue
     private long id;
 
+    @Field
     @Column
     private String type;
 
+    @Field
     @Column
     private String formatted;
 
+    @Field
     @Column
     private String streetAddress;
 
+    @Field
     @Column
     private String locality;
 
+    @Field
     @Column
     private String region;
 
+    @Field
     @Column
     private String postalCode;
 
+    @Field
     @Column
     private String country;
 
+    @Field
     @Column(name = "postgresql_does_not_like_primary")
     private Boolean primary;
 
+    @ContainedIn
     @ManyToOne
     private UserEntity user;
 

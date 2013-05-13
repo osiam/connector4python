@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.Field;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttributeWithTypeAndPrimary;
 import scim.schema.v2.MultiValuedAttribute;
 
@@ -36,9 +38,11 @@ import javax.persistence.ManyToOne;
 @Entity(name = "scim_email")
 public class EmailEntity extends MultiValueAttributeEntitySkeleton implements HasUser, ChildOfMultiValueAttributeWithTypeAndPrimary {
 
+    @Field
     @Column
     private String type;
 
+    @Field
     @Column(name = "postgresql_does_not_like_primary")
     private boolean primary;
 
@@ -63,6 +67,7 @@ public class EmailEntity extends MultiValueAttributeEntitySkeleton implements Ha
         this.primary = primary;
     }
 
+    @ContainedIn
     @ManyToOne(optional = false)
     protected UserEntity user;
 

@@ -24,6 +24,7 @@
 package org.osiam.ng.resourceserver.entities;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.search.annotations.Field;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import scim.schema.v2.MultiValuedAttribute;
 
@@ -37,15 +38,17 @@ import java.util.UUID;
 @NamedQueries({@NamedQuery(name = "getById", query = "SELECT i FROM scim_id i WHERE i.id= :id")})
 public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
 
-
+    @Field
     @Type(type = "pg-uuid")
     @Column(unique = true, nullable = false)
     protected UUID id;
 
+    @Field
     @Id
     @GeneratedValue
     protected long internal_id;
 
+    @Field
     @Column(unique = true)
     protected String externalId;
 

@@ -49,7 +49,7 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
     @Column(nullable = false, unique = true)
     private String userName;
 
-    //@Field
+    @IndexedEmbedded
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private NameEntity name;
 
