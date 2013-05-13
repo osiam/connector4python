@@ -23,6 +23,17 @@
 
 package org.osiam.ng.resourceserver.dao
 
+import org.hibernate.Criteria
+import org.hibernate.Session
+import org.hibernate.search.FullTextQuery
+import org.hibernate.search.FullTextSession
+import org.hibernate.search.SearchFactory
+import org.hibernate.search.query.dsl.EntityContext
+import org.hibernate.search.query.dsl.QueryBuilder
+import org.hibernate.search.query.dsl.QueryContextBuilder
+import org.osiam.ng.HibernateSessionHelper
+import org.osiam.ng.resourceserver.FilterChain
+import org.osiam.ng.resourceserver.FilterParser
 import org.osiam.ng.resourceserver.entities.GroupEntity
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton
 import org.osiam.ng.resourceserver.entities.RolesEntity
@@ -36,7 +47,11 @@ import javax.persistence.EntityManager
 import javax.persistence.Query
 
 class UserDAOTest extends Specification {
-    def underTest = new UserDAO()
+
+    def filterParser = Mock(FilterParser)
+    def hibernateSessionHelper = Mock(HibernateSessionHelper)
+
+    def underTest = new UserDAO(filterParser: filterParser, hibernateSessionHelper: hibernateSessionHelper)
     def em = Mock(EntityManager)
     def userEntity = Mock(UserEntity)
 
@@ -201,5 +216,38 @@ class UserDAOTest extends Specification {
         1 * em.createNamedQuery("getById") >> query
         1 * query.getResultList() >> [internalidSkeleton]
         thrown(ResourceNotFoundException)
+    }
+
+    def "should do filtered searches on users"() {
+        given:
+        def fullTextSessionMock = Mock(FullTextSession)
+        def searchFactoryMock = Mock(SearchFactory)
+        def queryContextBuilderMock = Mock(QueryContextBuilder)
+        def entityContextMock = Mock(EntityContext)
+        def queryBuilderMock = Mock(QueryBuilder)
+        def hibernateSessionMock = Mock(Session)
+        def filterChainMock = Mock(FilterChain)
+        def criteriaMock = Mock(Criteria)
+        def queryMock = Mock(org.apache.lucene.search.Query)
+        def fullTextQuery = Mock(FullTextQuery)
+
+        hibernateSessionHelper.getFullTextSession(em) >> fullTextSessionMock
+        fullTextSessionMock.getSearchFactory() >> searchFactoryMock
+        searchFactoryMock.buildQueryBuilder() >> queryContextBuilderMock
+        queryContextBuilderMock.forEntity(UserEntity) >> entityContextMock
+        entityContextMock.get() >> queryBuilderMock
+
+        hibernateSessionHelper.getHibernateSession(em) >> hibernateSessionMock
+        hibernateSessionMock.createCriteria(UserEntity) >> criteriaMock
+        filterParser.parse("anyFilter") >> filterChainMock
+        filterChainMock.buildQuery(queryBuilderMock, criteriaMock) >> queryMock
+
+        fullTextSessionMock.createFullTextQuery(queryMock, UserEntity) >> fullTextQuery
+
+        when:
+        underTest.search("anyFilter")
+
+        then:
+        1 * fullTextQuery.list()
     }
 }

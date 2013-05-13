@@ -23,6 +23,7 @@
 
 package org.osiam.ng
 
+import org.hibernate.search.FullTextSession
 import org.osiam.ng.resourceserver.entities.DBVersion
 import spock.lang.Specification
 
@@ -30,11 +31,16 @@ import javax.persistence.EntityManager
 
 class DataBaseSchemeVersionValidatorTest extends Specification {
     def em = Mock(EntityManager)
-    def underTest = new DataBaseSchemeVersionValidator(em: em)
+    def reIndexHelper = Mock(HibernateSessionHelper)
+    def underTest = new DataBaseSchemeVersionValidator(em: em, hibernateSessionHelper: reIndexHelper)
+    def fullTextSessionMock = Mock(FullTextSession)
+    def massIndexer = Mock(org.hibernate.search.MassIndexer)
 
     def "should not throw an exception if set version of database-scheme got found"() {
         given:
         def version = new DBVersion()
+        reIndexHelper.getFullTextSession(em) >> fullTextSessionMock
+        fullTextSessionMock.createIndexer() >> massIndexer
 
         when:
         underTest.checkVersion()
@@ -44,6 +50,10 @@ class DataBaseSchemeVersionValidatorTest extends Specification {
     }
 
     def "should throw an exception if set version of database-scheme got not found"() {
+        given:
+        reIndexHelper.getFullTextSession(em) >> fullTextSessionMock
+        fullTextSessionMock.createIndexer() >> massIndexer
+
         when:
         underTest.checkVersion()
 
@@ -58,6 +68,9 @@ class DataBaseSchemeVersionValidatorTest extends Specification {
         def version = new DBVersion()
         version.version = 0.03
         em.find(DBVersion, DBVersion.DB_VERSION) >> version
+
+        reIndexHelper.getFullTextSession(em) >> fullTextSessionMock
+        fullTextSessionMock.createIndexer() >> massIndexer
 
         when:
         underTest.checkVersion()

@@ -1,12 +1,10 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
 import org.hibernate.search.SearchException;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.GroupEntity;
 import org.osiam.ng.resourceserver.entities.UserEntity;
@@ -25,6 +23,8 @@ public class RootDAO <T extends Resource> extends GetInternalIdSkeleton{
     @Inject
     private FilterParser filterParser;
 
+    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
+
     public List<T> search(String filter) {
 
         List<T> resultList = new ArrayList<>();
@@ -40,12 +40,12 @@ public class RootDAO <T extends Resource> extends GetInternalIdSkeleton{
 
     private List<T> searchUser(String filter) {
 
-        FullTextSession fullTextSession = Search.getFullTextSession((Session) em.getDelegate());
+        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
 
         QueryBuilder userQueryBuilder = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity( UserEntity.class ).get();
+                .buildQueryBuilder().forEntity(UserEntity.class).get();
 
-        Criteria criteria = ((Session) em.getDelegate()).createCriteria(UserEntity.class);
+        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(UserEntity.class);
 
         org.apache.lucene.search.Query userQuery = filterParser.parse(filter).buildQuery(userQueryBuilder, criteria);
 
@@ -63,12 +63,12 @@ public class RootDAO <T extends Resource> extends GetInternalIdSkeleton{
 
     private List<T> searchGroup(String filter) {
 
-        FullTextSession fullTextSession = Search.getFullTextSession((Session) em.getDelegate());
+        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
 
         QueryBuilder groupQueryBuilder = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity( GroupEntity.class ).get();
+                .buildQueryBuilder().forEntity(GroupEntity.class).get();
 
-        Criteria criteria = ((Session) em.getDelegate()).createCriteria(GroupEntity.class);
+        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(GroupEntity.class);
 
         org.apache.lucene.search.Query groupQuery = filterParser.parse(filter).buildQuery(groupQueryBuilder, criteria);
 

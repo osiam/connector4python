@@ -95,4 +95,12 @@ class ScimUserProvisioningBeanSpec extends Specification {
         then:
         1 * userDao.delete(id)
     }
+
+    def "should call dao search on search"(){
+        when:
+        scimUserProvisioningBean.search("anyFilter")
+
+        then:
+        1 * userDao.search("anyFilter")
+    }
 }

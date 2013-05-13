@@ -24,10 +24,9 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.*;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
@@ -50,6 +49,8 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
 
     @Inject
     private FilterParser filterParser;
+
+    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
 
     @Inject
     private PasswordEncoder passwordEncoder;
@@ -150,19 +151,19 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
     @Override
     public List<UserEntity> search(String filter) {
 
-        FullTextSession fullTextSession = Search.getFullTextSession((Session) em.getDelegate());
+        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
 
         QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity( UserEntity.class ).get();
+                .buildQueryBuilder().forEntity(UserEntity.class).get();
 
-        Criteria criteria = ((Session) em.getDelegate()).createCriteria(UserEntity.class);
+        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(UserEntity.class);
 
         org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder, criteria);
 
 /*        org.apache.lucene.search.Sort sort = new Sort(
                 new SortField(sortBy, SortField.STRING, sortOrder));*/
 
-        org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery( query, UserEntity.class );
+        org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, UserEntity.class);
 /*        fullTextQuery.setMaxResults(count);
         fullTextQuery.setFirstResult(startIndex);
         fullTextQuery.setSort(sort);*/

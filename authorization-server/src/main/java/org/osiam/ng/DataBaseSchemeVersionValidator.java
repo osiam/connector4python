@@ -23,13 +23,10 @@
 
 package org.osiam.ng;
 
-import org.hibernate.Session;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.MassIndexer;
-import org.hibernate.search.impl.FullTextSessionImpl;
 import org.osiam.ng.resourceserver.entities.DBVersion;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
@@ -43,6 +40,7 @@ public class DataBaseSchemeVersionValidator {
     @PersistenceContext
     private EntityManager em;
 
+    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
 
     @PostConstruct
     public void checkVersion() throws InterruptedException {
@@ -58,8 +56,9 @@ public class DataBaseSchemeVersionValidator {
     }
 
     private void reIndexDataBase() throws InterruptedException {
-        FullTextSession fullTextSession = new FullTextSessionImpl((Session) em.getDelegate());
+        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
         MassIndexer massIndexer = fullTextSession.createIndexer();
         massIndexer.startAndWait();
     }
+
 }

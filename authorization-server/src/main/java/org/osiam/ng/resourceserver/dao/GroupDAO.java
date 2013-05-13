@@ -24,10 +24,9 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.GroupEntity;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;
@@ -48,6 +47,8 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
 
     @Inject
     private FilterParser filterParser;
+
+    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
 
     @Override
     public void create(GroupEntity group) {
@@ -88,12 +89,12 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
 
     @Override
     public List<GroupEntity> search(String filter) {
-        FullTextSession fullTextSession = Search.getFullTextSession((Session) em.getDelegate());
+        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
 
         QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity( GroupEntity.class ).get();
+                .buildQueryBuilder().forEntity(GroupEntity.class).get();
 
-        Criteria criteria = ((Session) em.getDelegate()).createCriteria(GroupEntity.class);
+        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(GroupEntity.class);
         org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder, criteria);
 
 /*        org.apache.lucene.search.Sort sort = new Sort(

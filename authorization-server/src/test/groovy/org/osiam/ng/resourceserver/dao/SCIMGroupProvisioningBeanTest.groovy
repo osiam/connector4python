@@ -30,11 +30,11 @@ import scim.schema.v2.Group
 import spock.lang.Specification
 
 class SCIMGroupProvisioningBeanTest extends Specification {
+
     def groupDao = Mock(GroupDAO)
     def underTest = new SCIMGroupProvisioningBean(groupDAO: groupDao)
     def group = Mock(Group)
     def entity = Mock(GroupEntity)
-
 
 
     def "should return with id enriched group on create"(){
@@ -76,10 +76,17 @@ class SCIMGroupProvisioningBeanTest extends Specification {
     def "should call dao delete on delete"(){
         when:
         underTest.delete("id")
+
         then:
         1 * groupDao.delete("id")
 
     }
 
+    def "should call dao search on search"(){
+        when:
+        underTest.search("anyFilter")
 
+        then:
+        1 * groupDao.search("anyFilter")
+    }
 }

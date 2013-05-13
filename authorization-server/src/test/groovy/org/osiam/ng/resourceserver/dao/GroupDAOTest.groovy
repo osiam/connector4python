@@ -23,6 +23,17 @@
 
 package org.osiam.ng.resourceserver.dao
 
+import org.hibernate.Criteria
+import org.hibernate.Session
+import org.hibernate.search.FullTextQuery
+import org.hibernate.search.FullTextSession
+import org.hibernate.search.SearchFactory
+import org.hibernate.search.query.dsl.EntityContext
+import org.hibernate.search.query.dsl.QueryBuilder
+import org.hibernate.search.query.dsl.QueryContextBuilder
+import org.osiam.ng.HibernateSessionHelper
+import org.osiam.ng.resourceserver.FilterChain
+import org.osiam.ng.resourceserver.FilterParser
 import org.osiam.ng.resourceserver.entities.GroupEntity
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton
 import org.osiam.ng.resourceserver.entities.UserEntity
@@ -38,7 +49,9 @@ class GroupDAOTest extends Specification {
     Query query = Mock(Query)
     InternalIdSkeleton internalidSkeleton = new GroupEntity(id: UUID.randomUUID())
 
-    def underTest = new GroupDAO(em: em)
+    def filterParser = Mock(FilterParser)
+    def hibernateSessionHelper = Mock(HibernateSessionHelper)
+    def underTest = new GroupDAO(em: em, filterParser: filterParser, hibernateSessionHelper: hibernateSessionHelper)
     String id = UUID.randomUUID().toString()
 
     def setup(){
@@ -111,6 +124,37 @@ class GroupDAOTest extends Specification {
         thrown(ResourceNotFoundException)
     }
 
+    def "should do filtered searches on groups"() {
+        given:
+        def fullTextSessionMock = Mock(FullTextSession)
+        def searchFactoryMock = Mock(SearchFactory)
+        def queryContextBuilderMock = Mock(QueryContextBuilder)
+        def entityContextMock = Mock(EntityContext)
+        def queryBuilderMock = Mock(QueryBuilder)
+        def hibernateSessionMock = Mock(Session)
+        def filterChainMock = Mock(FilterChain)
+        def criteriaMock = Mock(Criteria)
+        def queryMock = Mock(org.apache.lucene.search.Query)
+        def fullTextQuery = Mock(FullTextQuery)
 
+        hibernateSessionHelper.getFullTextSession(em) >> fullTextSessionMock
+        fullTextSessionMock.getSearchFactory() >> searchFactoryMock
+        searchFactoryMock.buildQueryBuilder() >> queryContextBuilderMock
+        queryContextBuilderMock.forEntity(GroupEntity) >> entityContextMock
+        entityContextMock.get() >> queryBuilderMock
+
+        hibernateSessionHelper.getHibernateSession(em) >> hibernateSessionMock
+        hibernateSessionMock.createCriteria(GroupEntity) >> criteriaMock
+        filterParser.parse("anyFilter") >> filterChainMock
+        filterChainMock.buildQuery(queryBuilderMock, criteriaMock) >> queryMock
+
+        fullTextSessionMock.createFullTextQuery(queryMock, GroupEntity) >> fullTextQuery
+
+        when:
+        underTest.search("anyFilter")
+
+        then:
+        1 * fullTextQuery.list()
+    }
 
 }

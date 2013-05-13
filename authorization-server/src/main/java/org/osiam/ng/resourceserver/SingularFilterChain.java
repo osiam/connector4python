@@ -74,8 +74,6 @@ public class SingularFilterChain implements FilterChain {
             default:
                 throw new IllegalArgumentException("Unknown constraint.");
         }
-
-
     }
 
 
