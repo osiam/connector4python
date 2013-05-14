@@ -128,7 +128,6 @@
             <artifactId>spring-core</artifactId>
         </dependency>
 
-<<<<<<< Updated upstream
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
@@ -146,9 +145,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>
-=======
 
->>>>>>> Stashed changes
         <!-- Security -->
         <dependency>
             <groupId>org.springframework.security</groupId>
