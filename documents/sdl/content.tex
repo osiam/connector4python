@@ -4,12 +4,12 @@ The audience of this document are members of the OSIAM-NG Team.
 The purporse of this Document is to describe a process to enhance the quality of
 OSIAM-NG from the perspective of security in iterative steps.
 
-\section{Process}
-This chapter describes the SDL process which will fit into the short iterations of an agile development. It is splitted in three categories defined by frequency of completion.
+This document describes the SDL process which will fit into the short iterations of an agile development. It is splitted in three categories defined by frequency of completion.
+
+\section{ Every-Sprint practices}
 
 The first category consists of the SDL requirements that are essential to security \footnote{\url{http://www.blackhat.com/presentations/bh-dc-10/Sullivan_Bryan/BlackHat-DC-2010-Sullivan-SDL-Agile-wp.pdf} \url{http://www.microsoft.com/security/sdl/discover/sdlagile.aspx}}
 
-1. Every-Sprint practices
 \begin{itemize}
 	\item Run static code analysis tools per build
 	\item Define a list of approved tools and associated security checks
@@ -19,10 +19,10 @@ The first category consists of the SDL requirements that are essential to securi
 	\item Security Review includes an examination of threat models, tools outputs, and performance against the quality gates and bug bars. It results in one of three different outcomes: Passed , Passed with exceptions, failed  
 \end{itemize}
 
+\section{Bucket Requirements}
 The second category of SDL requirements consists of tasks that must be performed on a regular basis over the lifetime of the project but that are not so critical as to be mandated for each sprint.
 Instead of completing all bucket requirements each sprint, product teams must complete only one SDL requirement from each bucket of related tasks during each sprint.
 
-2. Bucket Requirements
 \begin{itemize}
 	\item Verification Tasks: Attack surface review, Negative Testing, regular Pen-Testing
 	\item Design Review: Review crypto design, User Account Control
@@ -31,9 +31,9 @@ Instead of completing all bucket requirements each sprint, product teams must co
 	\item Deal with third-party software
 \end{itemize}
 
-The third category of SDL consists of task which must be done on every requirement changes which have consequences on the functional behaviour of the project itself. 
+\section{On requirement Changes}
 
-3. On requirement Changes
+The third category of SDL consists of task which must be done on every requirement changes which have consequences on the functional behaviour of the project itself. 
 
 \begin{itemize}
 	\item Security and privacy analysis includes assigning security experts
@@ -42,142 +42,15 @@ The third category of SDL consists of task which must be done on every requireme
 
 The fourth category of SDL requirements consists of tasks that need to be met when you first start a new project or when you first start using SDL with an existing project. These are generally once-per-project tasks that won’t need to be repeated after they’re complete.
 
-4. One-Time Requirements
+\section{One-Time Requirements}
 \begin{itemize}
 	\item Deploying a security vulnerability item tracking system which allowes for creation, tracking and reporting of software vulnerabilities
 \end{itemize}
 
+\section{Testing}
 
-\section{List of possible targets}
-In OSIAM-NG there are several possible targets for an attacker:
-\begin{itemize}
-\item REST-APIs -- an attacker can use our REST-API to gain informationen about or overload the system or application.
-\item Running Container -- an attacker can use informations about the running container (e.q. Tomcat) to start a specific attack.
-\item Database -- an attacker could obtain access to the used database and gain sensible data.
-\item Running System -- an attacker could try to attack the system directly to gain access.
-\end{itemize}
+The testing process cannot be described right now because we haven't done any security related tests yet. 
 
-\subsection{API Calls}
-\subsubsection{SCIM}
-Every call of SCIM is secured with OAuth2, so, you need a valid access-token to gain access. We define Java-Script-, SQL- and JSON-Injections as 'Injection'.
+\section{Handling the Bug Bar}
 
-\paragraph{GET authorization-server/[User|Group]/\{ID\}}
-
-Response is an Error- or Resource in JSON.
-
-\begin{tabular}{|l|l|}
-    \hline
-    DDoS & Block IP after n successless tries\\
-    \hline
-    ID Guessing & generalize Error-Response and block IP after n successless tries\\
-
-    \hline
- \end{tabular}
-
-D
-g
-Resource as JSON\paragraph{POST|PUT|PATCH authorization-server/[User|Group]/\{ID\} Resource as JSON} 
-
-Response is an Error- or Resource in JSON.
-
- 
-\begin{tabular}{|l|l|}
-    \hline
-    Injection & Whitelist Input\\
-    \hline
-    JSON-Parser overload & Parser Testen \\
-    \hline
-    insecure Database Connection & encrypt sensible Data \\
-    \hline
- \end{tabular}
-
-\paragraph{DELETE authorization-server/[User|Group]/\{ID\}}
-
-Response is an HTTP-Statuscode.
-
-\begin{tabular}{|l|l|}
-   \hline
-    ID Guessing & block IP after n successless tries\\
-    \hline
- \end{tabular}
-
-\subsubsection{OAuth2}
-
-\paragraph{Auth-Code flow}
-
-Response is an Auth-Code or an Error.
-
-\begin{tabular}{|l|l|}
-    \hline
-    unknown redirect URI & do not redirect User back to unknown redirect URI\\
-    \hline
-    unsecure credentials & hash and salt sensible credentials \\
-    \hline
-    insufficient user rights & control the right of an user before granting access \\
-    \hline
-    error response is too verbose & generalize error response \\
-    \hline
-    unsecure connection between client and authz & use TLS \\
-    \hline
-    no logout & implement logout \\
-    \hline
-    unable to revoke given grants & implement functionality to revoke given grants \\
-    \hline
- \end{tabular}
-
-\paragraph{Access-Token flow}
-
-Response is an Accesstoken or an Error.
-
-\begin{tabular}{|l|l|}
-    \hline
-    wrong redirect URI & sent error response\\
-    \hline
-    intercept client secret or access-token & use TLS \\
-    \hline
-    access\_token does not expire & do not automatically refresh access\_token \\
-    \hline
- \end{tabular}
-
-\section{Type of Attacks}
-SQL Injection, Java-Script injection via User-Input.
-Guessing of IDs via error messages, DDoS, 
-attacks to guess a password by measuring response time
-\subsection{Destroy the System}
-SQL Injection, DDoS, ...
-
-\subsection{Leak Informations}
-SQL Injection, Java-Script injection, Guessing of IDs via Error-Messages, 
-attacks to guess the password by time measuring, attacks on the Database to retrieve Informations.
-
-\subsection{Corrupt the User-Agent}
-Java-Script injection, XSS,...
-
-\subsection{Technical}
-%https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet
-%https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet
-%https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
-%https://www.owasp.org/index.php/Session_Management_Cheat_Sheet
-%https://www.owasp.org/index.php/Logging_Cheat_Sheet
-%https://www.owasp.org/index.php/Cheat_Sheets
-
-%Security related newsgroups:
-%http://www.securityfocus.com/
-%http://www.securityweek.com/
-%OWASP Guide zu allen Bereichen --> https://www.owasp.org/index.php/Guide_Table_of_Contents
-%OWASP Testing Guide --> https://www.owasp.org/index.php/OWASP_Testing_Guide_v3_Table_of_Contents
-%OWASP App Security Tutorials --> https://www.owasp.org/index.php/OWASP_Appsec_Tutorial_Series
-%OWASP Secure Coding Practices --> https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide
-
-%Tools:
-%OpenSAMM: Model, Templates, Sheets --> http://www.opensamm.org/
-%OWASP LAPSE (Security scanner for Java EE Applications)
-%OWASP Zed Attack Proxy (ZAP) is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications
-%SDL Threat Modeling Tool (Windows only???)
-
-%Security Books:
-%Writing Secure Code, 2nd Ed by David LeBlanc and Michael Howard					 
-%19 Deadly Sins of Software Security by Michael Howard, David LeBlanc, and John Viega		 	 		
-%Building Secure Software by John Viega and Gary McGraw		 		 	
-%Gray Hat Hacking by Shon Harris, et al.	 		 		
-%How to Break Software Security by James Whittaker and Herbert Thompson
+The handling of the Bug Bar cannot be described because we don't have any bug tracker, yet.
