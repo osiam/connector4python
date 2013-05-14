@@ -1,6 +1,17 @@
 # ignore target-folder everywhere
 **target/
-
+*.fdt
+*.fdx
+*.fnm
+*.frq
+*.nrm
+*.prx
+*.tii
+*.tis
+*.cfs
+*segements_*tw
+*segments.gen
+*write.lock
 **.settings/
 **.project
 **.classpath

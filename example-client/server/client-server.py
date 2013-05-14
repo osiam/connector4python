@@ -11,9 +11,7 @@ import logging
 
 app = Flask(__name__)
 
-authZServer = None
 client_id = 'testClient'
-redirect_uri = None
 scopes = 'POST PUT GET DELETE PATCH'
 params = None
 oauth2_auth_code = None

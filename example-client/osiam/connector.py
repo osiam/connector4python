@@ -8,7 +8,7 @@ import logging
 __author__ = 'phil'
 
 
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -112,12 +112,13 @@ class SCIM:
                         'content-type': 'application/json'}
 
     def __json_dict_to_object__(self, user):
-        if user.get('userName') is not None:
-            return SCIMUser(user)
-        elif user.get('error_code') is not None:
-            return SCIMError(user)
-        else:
-            return SCIMGroup(user)
+        return user
+#        if user.get('userName') is not None:
+#            return SCIMUser(user)
+#        elif user.get('error_code') is not None:
+#            return SCIMError(user)
+#        else:
+#            return SCIMGroup(user)
 
     def __single_data_operation__(self, func, id, data, type):
         data = json.dumps(data.__dict__)
