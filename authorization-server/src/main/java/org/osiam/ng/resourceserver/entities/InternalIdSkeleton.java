@@ -43,7 +43,6 @@ public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
     @Column(unique = true, nullable = false)
     protected UUID id;
 
-    @Field
     @Id
     @GeneratedValue
     protected long internal_id;
