@@ -1,10 +1,14 @@
 package org.osiam.ng.resourceserver.dao;
 
+import org.hibernate.search.SearchException;
 import org.osiam.ng.scim.dao.SCIMRootProvisioning;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,15 +20,33 @@ import java.util.List;
 @Service
 public class SCIMRootProvisioningBean implements SCIMRootProvisioning {
 
+    private static final Logger LOGGER = Logger.getLogger(SCIMRootProvisioningBean.class.getName());
     @Inject
-    private RootDAO rootDAO;
-
-    protected RootDAO getDao() {
-        return rootDAO;
-    }
+    private UserDAO userDAO;
+    @Inject
+    private GroupDAO groupDAO;
 
     @Override
     public List search(String filter) {
-        return getDao().search(filter);
+        List result = new ArrayList();
+        addUser(filter, result);
+        addGroup(filter, result);
+        return result;
+    }
+
+    private void addUser(String filter, List result) {
+        try {
+            result.addAll(userDAO.search(filter));
+        } catch (SearchException e) {
+            LOGGER.log(Level.FINE, "Filter " + filter + " not useable on User", e);
+        }
+    }
+
+    private void addGroup(String filter, List result) {
+        try {
+            result.addAll(groupDAO.search(filter));
+        } catch (SearchException e) {
+            LOGGER.log(Level.FINE, "Filter " + filter + " not useable on Group", e);
+        }
     }
 }
