@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import scim.schema.v2.Resource;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -28,13 +29,15 @@ public class RootController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<Resource> searchWithGet(@RequestParam String filter) {
+    public List<Resource> searchWithGet(HttpServletRequest request) {
+        String filter = request.getParameter("filter");
         return scimRootProvisioning.search(filter);
     }
 
     @RequestMapping(value = ".search", method = RequestMethod.POST)
     @ResponseBody
-    public List<Resource> searchWithPost(@RequestBody String filter) {
+    public List<Resource> searchWithPost(HttpServletRequest request) {
+        String filter = request.getParameter("filter");
         return scimRootProvisioning.search(filter);
     }
 }

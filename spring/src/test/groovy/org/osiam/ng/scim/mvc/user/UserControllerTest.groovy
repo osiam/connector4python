@@ -220,11 +220,15 @@ class UserControllerTest extends Specification {
 
     def "should be able to search a user on /User URI with GET method" () {
         given:
-        Method method = UserController.class.getDeclaredMethod("searchWithGet", String)
+        Method method = UserController.class.getDeclaredMethod("searchWithGet", HttpServletRequest)
+        def servletRequestMock = Mock(HttpServletRequest)
+        servletRequestMock.getParameter("filter") >> "filter"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
-        underTest.searchWithGet("filter")
+        underTest.searchWithGet(servletRequestMock)
+
         then:
         mapping.value() == []
         mapping.method() == [RequestMethod.GET]
@@ -234,11 +238,15 @@ class UserControllerTest extends Specification {
 
     def "should be able to search a user on /User/.search URI with POST method" () {
         given:
-        Method method = UserController.class.getDeclaredMethod("searchWithPost", String)
+        Method method = UserController.class.getDeclaredMethod("searchWithPost", HttpServletRequest)
+        def servletRequestMock = Mock(HttpServletRequest)
+        servletRequestMock.getParameter("filter") >> "filter"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
-        underTest.searchWithPost("filter")
+        underTest.searchWithPost(servletRequestMock)
+
         then:
         mapping.value() == ["/.search"]
         mapping.method() == [RequestMethod.POST]

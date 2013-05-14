@@ -95,13 +95,15 @@ public class GroupController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<Group> searchWithGet(@RequestParam String filter) {
+    public List<Group> searchWithGet(HttpServletRequest request) {
+        String filter = request.getParameter("filter");
         return scimGroupProvisioning.search(filter);
     }
 
     @RequestMapping(value = "/.search", method = RequestMethod.POST)
     @ResponseBody
-    public List<Group> searchWithPost(@RequestBody String filter) {
+    public List<Group> searchWithPost(HttpServletRequest request) {
+        String filter = request.getParameter("filter");
         return scimGroupProvisioning.search(filter);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
 import spock.lang.Specification
 
+import javax.servlet.http.HttpServletRequest
 import java.lang.reflect.Method
 
 /**
@@ -22,11 +23,15 @@ class RootControllerSpec extends Specification{
 
     def "should be able to search a resource on / URI with GET method" () {
         given:
-        Method method = RootController.class.getDeclaredMethod("searchWithGet", String)
+        Method method = RootController.class.getDeclaredMethod("searchWithGet", HttpServletRequest)
+        def servletRequestMock = Mock(HttpServletRequest)
+        servletRequestMock.getParameter("filter") >> "filter"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
-        underTest.searchWithGet("filter")
+        underTest.searchWithGet(servletRequestMock)
+
         then:
         mapping.value() == []
         mapping.method() == [RequestMethod.GET]
@@ -36,11 +41,15 @@ class RootControllerSpec extends Specification{
 
     def "should be able to search a resource on /.search URI with POST method" () {
         given:
-        Method method = RootController.class.getDeclaredMethod("searchWithPost", String)
+        Method method = RootController.class.getDeclaredMethod("searchWithPost", HttpServletRequest)
+        def servletRequestMock = Mock(HttpServletRequest)
+        servletRequestMock.getParameter("filter") >> "filter"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
-        underTest.searchWithPost("filter")
+        underTest.searchWithPost(servletRequestMock)
+
         then:
         mapping.value() == [".search"]
         mapping.method() == [RequestMethod.POST]

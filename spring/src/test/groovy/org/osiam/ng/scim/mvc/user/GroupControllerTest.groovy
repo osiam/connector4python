@@ -166,11 +166,15 @@ class GroupControllerTest extends Specification {
 
     def "should be able to search a group on /Group URI with GET method"() {
         given:
-        Method method = GroupController.class.getDeclaredMethod("searchWithGet", String)
+        Method method = GroupController.class.getDeclaredMethod("searchWithGet", HttpServletRequest)
+        def servletRequestMock = Mock(HttpServletRequest)
+        servletRequestMock.getParameter("filter") >> "filter"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
-        underTest.searchWithGet("filter")
+        underTest.searchWithGet(servletRequestMock)
+
         then:
         mapping.method() == [RequestMethod.GET]
         mapping.value() == []
@@ -180,11 +184,15 @@ class GroupControllerTest extends Specification {
 
     def "should be able to search a group on /Group/.search URI with POST method" () {
         given:
-        Method method = GroupController.class.getDeclaredMethod("searchWithPost", String)
+        Method method = GroupController.class.getDeclaredMethod("searchWithPost", HttpServletRequest)
+        def servletRequestMock = Mock(HttpServletRequest)
+        servletRequestMock.getParameter("filter") >> "filter"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
-        underTest.searchWithPost("filter")
+        underTest.searchWithPost(servletRequestMock)
+
         then:
         mapping.value() == ["/.search"]
         mapping.method() == [RequestMethod.POST]
