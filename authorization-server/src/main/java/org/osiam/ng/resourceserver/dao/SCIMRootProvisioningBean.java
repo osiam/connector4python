@@ -29,12 +29,12 @@ public class SCIMRootProvisioningBean implements SCIMRootProvisioning {
     @Override
     public List search(String filter) {
         List result = new ArrayList();
-        addUser(filter, result);
-        addGroup(filter, result);
+        addUserToSearchResult(filter, result);
+        addGroupToSearchResult(filter, result);
         return result;
     }
 
-    private void addUser(String filter, List result) {
+    private void addUserToSearchResult(String filter, List result) {
         try {
             result.addAll(userDAO.search(filter));
         } catch (SearchException e) {
@@ -42,7 +42,7 @@ public class SCIMRootProvisioningBean implements SCIMRootProvisioning {
         }
     }
 
-    private void addGroup(String filter, List result) {
+    private void addGroupToSearchResult(String filter, List result) {
         try {
             result.addAll(groupDAO.search(filter));
         } catch (SearchException e) {
