@@ -9,7 +9,7 @@
 *.tii
 *.tis
 *.cfs
-*segements_*tw
+*segments_*
 *segments.gen
 *write.lock
 **.settings/
