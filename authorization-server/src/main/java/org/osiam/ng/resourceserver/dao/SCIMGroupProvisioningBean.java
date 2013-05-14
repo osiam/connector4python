@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import scim.schema.v2.Group;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -42,7 +43,6 @@ import java.util.logging.Logger;
 public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> implements SCIMGroupProvisioning {
 
     Logger logger = Logger.getLogger(SCIMGroupProvisioningBean.class.getName());
-
     @Inject
     private GroupDAO groupDAO;
 
@@ -66,7 +66,9 @@ public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> imp
 
     @Override
     public List<Group> search(String filter) {
-        return getDao().search(filter);
+        List<Group> groups = new ArrayList<>();
+        for (Object g : getDao().search(filter)) { groups.add(((GroupEntity) g).toScim()); }
+        return groups;
     }
 
     @Override

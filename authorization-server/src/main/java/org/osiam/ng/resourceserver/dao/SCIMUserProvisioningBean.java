@@ -23,15 +23,18 @@
 
 package org.osiam.ng.resourceserver.dao;
 
+import org.osiam.ng.resourceserver.entities.GroupEntity;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
 import org.osiam.ng.scim.schema.to.entity.GenericSCIMToEntityWrapper;
 import org.osiam.ng.scim.schema.to.entity.SCIMEntities;
 import org.springframework.stereotype.Service;
+import scim.schema.v2.Group;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,7 +73,9 @@ public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> imple
 
     @Override
     public List<User> search(String filter) {
-        return getDao().search(filter);
+        List<User> users = new ArrayList<>();
+        for (Object g : getDao().search(filter)) { users.add(((UserEntity) g).toScim()); }
+        return users;
     }
 
     @Override

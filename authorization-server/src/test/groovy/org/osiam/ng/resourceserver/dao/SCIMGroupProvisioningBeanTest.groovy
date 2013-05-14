@@ -87,6 +87,6 @@ class SCIMGroupProvisioningBeanTest extends Specification {
         underTest.search("anyFilter")
 
         then:
-        1 * groupDao.search("anyFilter")
+        1 * groupDao.search("anyFilter") >> []
     }
 }

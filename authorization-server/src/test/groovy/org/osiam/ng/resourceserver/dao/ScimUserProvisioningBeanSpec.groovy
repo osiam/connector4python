@@ -49,7 +49,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should throw exception if user already exists"() {
         given:
-        userDao.create(_) >> {throw new Exception()}
+        userDao.create(_) >> { throw new Exception() }
         scimUser.getUserName() >> "Bäm"
 
         when:
@@ -81,13 +81,13 @@ class ScimUserProvisioningBeanSpec extends Specification {
         when:
         scimUserProvisioningBean.setFieldsWrapException(setUserFields);
         then:
-        1 * setUserFields.setFields() >> {throw new IllegalAccessException("Blubb")}
+        1 * setUserFields.setFields() >> { throw new IllegalAccessException("Blubb") }
         def e = thrown(IllegalStateException)
         e.message == "This should not happen."
 
     }
 
-    def "should call dao delete on delete"(){
+    def "should call dao delete on delete"() {
         given:
         def id = UUID.randomUUID().toString()
         when:
@@ -96,11 +96,11 @@ class ScimUserProvisioningBeanSpec extends Specification {
         1 * userDao.delete(id)
     }
 
-    def "should call dao search on search"(){
+    def "should call dao search on search"() {
         when:
         scimUserProvisioningBean.search("anyFilter")
 
         then:
-        1 * userDao.search("anyFilter")
+        1 * userDao.search("anyFilter") >> []
     }
 }
