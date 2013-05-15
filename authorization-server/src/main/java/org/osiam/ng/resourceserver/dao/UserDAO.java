@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.dao;
 
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.hibernate.Criteria;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -149,7 +151,7 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
     }
 
     @Override
-    public List<UserEntity> search(String filter) {
+    public List<UserEntity> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
 
         FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
 
@@ -160,14 +162,15 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
 
         org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder, criteria);
 
-/*        org.apache.lucene.search.Sort sort = new Sort(
-                new SortField(sortBy, SortField.STRING, sortOrder));*/
+        org.apache.lucene.search.Sort sort = new Sort(
+                new SortField(sortBy, SortField.STRING, sortOrder.equalsIgnoreCase("descending")));
 
         org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, UserEntity.class);
-/*        fullTextQuery.setMaxResults(count);
+        fullTextQuery.setMaxResults(count);
         fullTextQuery.setFirstResult(startIndex);
-        fullTextQuery.setSort(sort);*/
+        fullTextQuery.setSort(sort);
 
         return fullTextQuery.list();
     }
+
 }

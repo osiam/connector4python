@@ -84,9 +84,9 @@ class SCIMGroupProvisioningBeanTest extends Specification {
 
     def "should call dao search on search"(){
         when:
-        underTest.search("anyFilter")
+        underTest.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * groupDao.search("anyFilter") >> []
+        1 * groupDao.search("anyFilter", "userName", "ascending", 100, 1) >> []
     }
 }
