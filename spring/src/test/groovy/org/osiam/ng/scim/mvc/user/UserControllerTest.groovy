@@ -41,7 +41,8 @@ import java.lang.reflect.Method
 class UserControllerTest extends Specification {
 
     def requestParamHelper = Mock(RequestParamHelper)
-    def underTest = new UserController(requestParamHelper: requestParamHelper)
+    def jsonResponseEnrichHelper = Mock(JsonResponseEnrichHelper)
+    def underTest = new UserController(requestParamHelper: requestParamHelper, jsonResponseEnrichHelper: jsonResponseEnrichHelper)
     def provisioning = Mock(SCIMUserProvisioning)
     def httpServletRequest = Mock(HttpServletRequest)
     def httpServletResponse = Mock(HttpServletResponse)
@@ -232,6 +233,8 @@ class UserControllerTest extends Specification {
         map.get("count") >> 10
         map.get("startIndex") >> 1
 
+        jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
@@ -256,6 +259,8 @@ class UserControllerTest extends Specification {
         map.get("sortOrder") >> "sortOrder"
         map.get("count") >> 10
         map.get("startIndex") >> 1
+
+        jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)

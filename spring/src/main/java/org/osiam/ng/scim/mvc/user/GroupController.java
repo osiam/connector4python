@@ -46,6 +46,7 @@ public class GroupController {
     private SCIMGroupProvisioning scimGroupProvisioning;
 
     private RequestParamHelper requestParamHelper = new RequestParamHelper();
+    private JsonResponseEnrichHelper jsonResponseEnrichHelper = new JsonResponseEnrichHelper();
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -99,17 +100,21 @@ public class GroupController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<Group> searchWithGet(HttpServletRequest request) {
+    public String searchWithGet(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        return scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        List<Group> resultList = scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
+
+        return jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(resultList, parameterMap);
     }
 
     @RequestMapping(value = "/.search", method = RequestMethod.POST)
     @ResponseBody
-    public List<Group> searchWithPost(HttpServletRequest request) {
+    public String searchWithPost(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        return scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        List<Group> resultList = scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
+
+        return jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(resultList, parameterMap);
     }
 }

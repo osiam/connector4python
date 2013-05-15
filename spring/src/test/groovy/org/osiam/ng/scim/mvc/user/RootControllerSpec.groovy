@@ -20,7 +20,8 @@ class RootControllerSpec extends Specification{
 
     def provisioning = Mock(SCIMRootProvisioning)
     def requestParamHelper = Mock(RequestParamHelper)
-    def underTest = new RootController(scimRootProvisioning: provisioning, requestParamHelper: requestParamHelper)
+    def jsonResponseEnrichHelper = Mock(JsonResponseEnrichHelper)
+    def underTest = new RootController(scimRootProvisioning: provisioning, requestParamHelper: requestParamHelper, jsonResponseEnrichHelper: jsonResponseEnrichHelper)
 
     def "should be able to search a resource on / URI with GET method" () {
         given:
@@ -34,6 +35,8 @@ class RootControllerSpec extends Specification{
         map.get("sortOrder") >> "sortOrder"
         map.get("count") >> 10
         map.get("startIndex") >> 1
+
+        jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -59,6 +62,8 @@ class RootControllerSpec extends Specification{
         map.get("sortOrder") >> "sortOrder"
         map.get("count") >> 10
         map.get("startIndex") >> 1
+
+        jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)

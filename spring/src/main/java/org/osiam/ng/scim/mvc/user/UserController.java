@@ -23,6 +23,9 @@
 
 package org.osiam.ng.scim.mvc.user;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -57,7 +60,7 @@ public class UserController {
     private SCIMUserProvisioning scimUserProvisioning;
 
     private RequestParamHelper requestParamHelper = new RequestParamHelper();
-
+    private JsonResponseEnrichHelper jsonResponseEnrichHelper = new JsonResponseEnrichHelper();
 
     public void setScimUserProvisioning(SCIMUserProvisioning scimUserProvisioning) {
         this.scimUserProvisioning = scimUserProvisioning;
@@ -113,17 +116,21 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<User> searchWithGet(HttpServletRequest request) {
+    public String searchWithGet(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        return scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        List<User> resultList = scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
+
+        return jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(resultList, parameterMap);
     }
 
     @RequestMapping(value = "/.search", method = RequestMethod.POST)
     @ResponseBody
-    public List<User> searchWithPost(HttpServletRequest request) {
+    public String searchWithPost(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        return scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        List<User> resultList = scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
+
+        return jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(resultList, parameterMap);
     }
 }

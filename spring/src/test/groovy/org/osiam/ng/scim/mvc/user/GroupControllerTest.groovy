@@ -41,7 +41,8 @@ class GroupControllerTest extends Specification {
     def httpServletRequest = Mock(HttpServletRequest)
     def provisioning = Mock(SCIMGroupProvisioning)
     def requestParamHelper = Mock(RequestParamHelper)
-    def underTest = new GroupController(scimGroupProvisioning: provisioning, requestParamHelper: requestParamHelper)
+    def jsonResponseEnrichHelper = Mock(JsonResponseEnrichHelper)
+    def underTest = new GroupController(scimGroupProvisioning: provisioning, requestParamHelper: requestParamHelper, jsonResponseEnrichHelper: jsonResponseEnrichHelper)
     def httpServletResponse = Mock(HttpServletResponse)
     Group group = new Group.Builder().setDisplayName("group1").setId(UUID.randomUUID().toString()).build()
 
@@ -179,6 +180,8 @@ class GroupControllerTest extends Specification {
         map.get("count") >> 10
         map.get("startIndex") >> 1
 
+        jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
+
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
         ResponseBody body = method.getAnnotation(ResponseBody)
@@ -203,6 +206,8 @@ class GroupControllerTest extends Specification {
         map.get("sortOrder") >> "sortOrder"
         map.get("count") >> 10
         map.get("startIndex") >> 1
+
+        jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)

@@ -4,6 +4,7 @@ import org.osiam.ng.scim.dao.SCIMRootProvisioning;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import scim.schema.v2.Resource;
+import scim.schema.v2.User;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -29,20 +30,25 @@ public class RootController {
     private SCIMRootProvisioning scimRootProvisioning;
 
     private RequestParamHelper requestParamHelper = new RequestParamHelper();
+    private JsonResponseEnrichHelper jsonResponseEnrichHelper = new JsonResponseEnrichHelper();
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<Resource> searchWithGet(HttpServletRequest request) {
+    public String searchWithGet(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        return scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        List<Resource> resultList = scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
+
+        return jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(resultList, parameterMap);
     }
 
     @RequestMapping(value = ".search", method = RequestMethod.POST)
     @ResponseBody
-    public List<Resource> searchWithPost(HttpServletRequest request) {
+    public String searchWithPost(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        return scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        List<Resource> resultList = scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
+
+        return jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(resultList, parameterMap);
     }
 }
