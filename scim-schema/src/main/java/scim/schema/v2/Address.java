@@ -23,9 +23,12 @@
 
 package scim.schema.v2;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 /**
  * Java class for address complex type.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Address extends MultiValuedAttribute {
 
     private String formatted;
