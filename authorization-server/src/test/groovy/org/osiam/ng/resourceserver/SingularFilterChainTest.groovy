@@ -51,7 +51,7 @@ class SingularFilterChainTest extends Specification{
         termMatchingContext.matching("\"bjensen\"") >> termTermination
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * termTermination.createQuery() >> Mock(Query)
@@ -91,7 +91,7 @@ class SingularFilterChainTest extends Specification{
         termMatchingContext.matching("*" + "\"O'Malley\"" + "*") >> termTermination
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * termTermination.createQuery() >> Mock(Query)
@@ -123,7 +123,7 @@ class SingularFilterChainTest extends Specification{
         termMatchingContext.matching("\"L\"" + "*") >> termTermination
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * termTermination.createQuery() >> Mock(Query)
@@ -156,7 +156,7 @@ class SingularFilterChainTest extends Specification{
         termMatchingContext.matching("*") >> termTermination
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * termTermination.createQuery() >> Mock(Query)
@@ -189,7 +189,7 @@ class SingularFilterChainTest extends Specification{
         rangeTerminationExcludable.excludeLimit() >> rangeTerminationExcludable
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
@@ -220,7 +220,7 @@ class SingularFilterChainTest extends Specification{
         rangeMatchingContext.above("\"2011-05-13T04:42:34Z\"") >> rangeTerminationExcludable
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
@@ -252,7 +252,7 @@ class SingularFilterChainTest extends Specification{
         rangeTerminationExcludable.excludeLimit() >> rangeTerminationExcludable
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
@@ -283,7 +283,7 @@ class SingularFilterChainTest extends Specification{
         rangeMatchingContext.below("\"2011-05-13T04:42:34Z\"") >> rangeTerminationExcludable
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
@@ -309,7 +309,7 @@ class SingularFilterChainTest extends Specification{
         queryBuilder.all() >> allContext
 
         when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
+        singularFilterChain.buildCriterion(queryBuilder, criteria)
 
         then:
         1 * allContext.createQuery() >> Mock(Query)

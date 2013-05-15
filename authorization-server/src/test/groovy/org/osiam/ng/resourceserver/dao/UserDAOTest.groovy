@@ -240,7 +240,7 @@ class UserDAOTest extends Specification {
         hibernateSessionHelper.getHibernateSession(em) >> hibernateSessionMock
         hibernateSessionMock.createCriteria(UserEntity) >> criteriaMock
         filterParser.parse("anyFilter") >> filterChainMock
-        filterChainMock.buildQuery(queryBuilderMock, criteriaMock) >> queryMock
+        filterChainMock.buildCriterion(queryBuilderMock, criteriaMock) >> queryMock
 
         fullTextSessionMock.createFullTextQuery(queryMock, UserEntity) >> fullTextQuery
 

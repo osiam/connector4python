@@ -24,8 +24,7 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.hibernate.Criteria;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.query.dsl.QueryBuilder;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.*;
@@ -35,8 +34,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -47,10 +45,8 @@ import java.util.logging.Level;
 @Transactional
 public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEntity> {
 
-    @Inject
-    private FilterParser filterParser;
 
-    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
+
 
     @Inject
     private PasswordEncoder passwordEncoder;
@@ -150,24 +146,21 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
 
     @Override
     public List<UserEntity> search(String filter) {
+        return search(UserEntity.class, filter);
+    }
 
-        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
 
-        QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity(UserEntity.class).get();
-
-        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(UserEntity.class);
-
-        org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder, criteria);
-
-/*        org.apache.lucene.search.Sort sort = new Sort(
-                new SortField(sortBy, SortField.STRING, sortOrder));*/
-
-        org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, UserEntity.class);
-/*        fullTextQuery.setMaxResults(count);
-        fullTextQuery.setFirstResult(startIndex);
-        fullTextQuery.setSort(sort);*/
-
-        return fullTextQuery.list();
+    @Override
+    protected void createAliasesForCriteria(Criteria criteria) {
+        criteria.createAlias("name", "name");
+        criteria.createAlias("emails", "emails");
+        criteria.createAlias("phoneNumbers", "phoneNumbers");
+        criteria.createAlias("ims", "ims");
+        criteria.createAlias("photos", "photos");
+        criteria.createAlias("addresses", "addresses");
+        criteria.createAlias("groups", "groups");
+        criteria.createAlias("entitlements", "entitlements");
+        criteria.createAlias("roles", "roles");
+        criteria.createAlias("x509Certificates", "x509Certificates");
     }
 }

@@ -24,9 +24,6 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.hibernate.Criteria;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.query.dsl.QueryBuilder;
-import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.GroupEntity;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;
@@ -47,8 +44,6 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
 
     @Inject
     private FilterParser filterParser;
-
-    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
 
     @Override
     public void create(GroupEntity group) {
@@ -89,22 +84,11 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
 
     @Override
     public List<GroupEntity> search(String filter) {
-        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
+        return search(GroupEntity.class, filter);
+    }
 
-        QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity(GroupEntity.class).get();
-
-        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(GroupEntity.class);
-        org.apache.lucene.search.Query query = filterParser.parse(filter).buildQuery(queryBuilder, criteria);
-
-/*        org.apache.lucene.search.Sort sort = new Sort(
-                new SortField(sortBy, SortField.STRING, sortOrder));*/
-
-        org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, GroupEntity.class);
-/*        fullTextQuery.setMaxResults(count);
-        fullTextQuery.setFirstResult(startIndex);
-        fullTextQuery.setSort(sort);*/
-
-        return fullTextQuery.list();
+    @Override
+    protected void createAliasesForCriteria(Criteria criteria) {
+        criteria.createAlias("members", "members");
     }
 }

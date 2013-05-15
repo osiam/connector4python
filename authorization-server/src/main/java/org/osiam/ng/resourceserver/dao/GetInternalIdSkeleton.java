@@ -23,21 +23,32 @@
 
 package org.osiam.ng.resourceserver.dao;
 
+import org.hibernate.Criteria;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import org.osiam.ng.HibernateSessionHelper;
+import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class GetInternalIdSkeleton {
     protected final static Logger LOGGER = Logger.getLogger(GetInternalIdSkeleton.class.getName());
     @PersistenceContext
     protected EntityManager em;
+
+    @Inject
+    protected FilterParser filterParser;
+
+    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
+
 
     protected <T extends InternalIdSkeleton> T getInternalIdSkeleton(String id) {
         Query query = em.createNamedQuery("getById");
@@ -54,6 +65,21 @@ public abstract class GetInternalIdSkeleton {
         return (T) result.get(0);
 
     }
+
+    protected <T extends InternalIdSkeleton> List<T> search(Class<T> clazz, String filter) {
+        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
+        QueryBuilder queryBuilder = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(clazz).get();
+        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(clazz);
+        createAliasesForCriteria(criteria);
+        org.apache.lucene.search.Query query = queryBuilder.all().createQuery();
+        org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, clazz);
+        fullTextQuery.setCriteriaQuery(criteria.add(filterParser.parse(filter).buildCriterion()));
+        return fullTextQuery.list();
+    }
+
+    protected abstract void createAliasesForCriteria(Criteria criteria);
+
+
 
 
 }

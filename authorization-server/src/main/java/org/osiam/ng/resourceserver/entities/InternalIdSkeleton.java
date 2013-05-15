@@ -25,6 +25,7 @@ package org.osiam.ng.resourceserver.entities;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import scim.schema.v2.MultiValuedAttribute;
 
@@ -44,7 +45,7 @@ public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
     protected UUID id;
 
     @Id
-    @Field
+    @Field(index = Index.YES)
     @GeneratedValue
     protected long internal_id;
 

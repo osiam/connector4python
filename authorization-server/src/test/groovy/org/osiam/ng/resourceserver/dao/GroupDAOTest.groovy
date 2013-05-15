@@ -146,7 +146,7 @@ class GroupDAOTest extends Specification {
         hibernateSessionHelper.getHibernateSession(em) >> hibernateSessionMock
         hibernateSessionMock.createCriteria(GroupEntity) >> criteriaMock
         filterParser.parse("anyFilter") >> filterChainMock
-        filterChainMock.buildQuery(queryBuilderMock, criteriaMock) >> queryMock
+        filterChainMock.buildCriterion(queryBuilderMock, criteriaMock) >> queryMock
 
         fullTextSessionMock.createFullTextQuery(queryMock, GroupEntity) >> fullTextQuery
 

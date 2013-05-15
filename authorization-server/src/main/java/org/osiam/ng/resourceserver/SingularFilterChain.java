@@ -18,16 +18,9 @@
 package org.osiam.ng.resourceserver;
 
 
-import org.apache.lucene.analysis.StopAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
 import java.util.Map;
@@ -43,45 +36,34 @@ public class SingularFilterChain implements FilterChain {
     private final String value;
 
     public SingularFilterChain(String chain) {
-        if (chain == null || chain.isEmpty()) {
-            this.key = null;
-            this.constraint = Constraints.fromString.get("empty");
-            this.value = null;
-        } else {
-            Matcher matcher = SINGULAR_CHAIN_PATTERN.matcher(chain);
-            if (!matcher.matches()) { throw new IllegalArgumentException(chain + " is not a SingularFilterChain."); }
-            this.key = matcher.group(1);
-            this.constraint = Constraints.fromString.get(matcher.group(2));
-            this.value = matcher.group(3);
+        Matcher matcher = SINGULAR_CHAIN_PATTERN.matcher(chain);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(chain + " is not a SingularFilterChain.");
         }
+        this.key = matcher.group(1);
+        this.constraint = Constraints.fromString.get(matcher.group(2));
+        this.value = matcher.group(3);
     }
 
     @Override
-    public Query buildQuery(QueryBuilder queryBuilder, Criteria criteria) {
+    public Criterion buildCriterion() {
         switch (constraint) {
             case CONTAINS:
-                return queryBuilder.keyword().wildcard().onField(key).matching("*" + value + "*").createQuery();
+                return Restrictions.like(key, "*" + value + "*");
             case STARTS_WITH:
-                return queryBuilder.keyword().wildcard().onField(key).matching(value + "*" ).createQuery();
+                return Restrictions.like(key, value + "*");
             case EQUALS:
-                return queryBuilder.keyword().onField(key).matching(value).createQuery();
+                return Restrictions.eq(key, value);
             case GREATER_EQUALS:
-                return queryBuilder.range().onField(key).above(value).createQuery();
+                return Restrictions.ge(key, value);
             case GREATER_THAN:
-                try {
-                    return new QueryParser(Version.LUCENE_35, key, new StandardAnalyzer(Version.LUCENE_35)).parse(key+":["+value+" null]");
-                } catch (ParseException e) {
-                    throw new IllegalArgumentException(e);
-                }
+                return Restrictions.gt(key, value);
             case LESS_EQUALS:
-                return queryBuilder.range().onField(key).below(value).createQuery();
+                return Restrictions.le(key, value);
             case LESS_THAN:
-                return queryBuilder.range().onField(key).below(value).excludeLimit().createQuery();
+                return Restrictions.lt(key, value);
             case PRESENT:
-                criteria.add(Restrictions.isNotNull(key));
-                return queryBuilder.keyword().wildcard().onField(key).matching("*").createQuery();
-            case EMPTY:
-                return queryBuilder.all().createQuery();
+                return Restrictions.isNotNull(key);
             default:
                 throw new IllegalArgumentException("Unknown constraint.");
         }
@@ -96,12 +78,13 @@ public class SingularFilterChain implements FilterChain {
         GREATER_THAN("gt"),
         GREATER_EQUALS("ge"),
         LESS_THAN("lt"),
-        LESS_EQUALS("le"),
-        EMPTY("empty");
+        LESS_EQUALS("le");
         static Map<String, Constraints> fromString = new ConcurrentHashMap<>();
 
         static {
-            for (Constraints k : values()) { fromString.put(k.constraint, k); }
+            for (Constraints k : values()) {
+                fromString.put(k.constraint, k);
+            }
         }
 
         private final String constraint;
@@ -114,7 +97,9 @@ public class SingularFilterChain implements FilterChain {
         static String createOrConstraints() {
             StringBuilder sb = new StringBuilder();
             for (Constraints k : values()) {
-                if (sb.length() != 0) { sb.append("|");}
+                if (sb.length() != 0) {
+                    sb.append("|");
+                }
                 sb.append(k.constraint);
             }
             return sb.toString();
