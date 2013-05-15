@@ -18,9 +18,16 @@
 package org.osiam.ng.resourceserver;
 
 
+import org.apache.lucene.analysis.StopAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
 import java.util.Map;
@@ -61,7 +68,11 @@ public class SingularFilterChain implements FilterChain {
             case GREATER_EQUALS:
                 return queryBuilder.range().onField(key).above(value).createQuery();
             case GREATER_THAN:
-                return queryBuilder.range().onField(key).above(value).excludeLimit().createQuery();
+                try {
+                    return new QueryParser(Version.LUCENE_35, key, new StandardAnalyzer(Version.LUCENE_35)).parse(key+":["+value+" null]");
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
             case LESS_EQUALS:
                 return queryBuilder.range().onField(key).below(value).createQuery();
             case LESS_THAN:
