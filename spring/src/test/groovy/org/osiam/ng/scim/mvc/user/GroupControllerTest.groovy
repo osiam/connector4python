@@ -37,9 +37,11 @@ import javax.servlet.http.HttpServletResponse
 import java.lang.reflect.Method
 
 class GroupControllerTest extends Specification {
+
     def httpServletRequest = Mock(HttpServletRequest)
     def provisioning = Mock(SCIMGroupProvisioning)
-    def underTest = new GroupController(scimGroupProvisioning: provisioning)
+    def requestParamHelper = Mock(RequestParamHelper)
+    def underTest = new GroupController(scimGroupProvisioning: provisioning, requestParamHelper: requestParamHelper)
     def httpServletResponse = Mock(HttpServletResponse)
     Group group = new Group.Builder().setDisplayName("group1").setId(UUID.randomUUID().toString()).build()
 
@@ -168,7 +170,14 @@ class GroupControllerTest extends Specification {
         given:
         Method method = GroupController.class.getDeclaredMethod("searchWithGet", HttpServletRequest)
         def servletRequestMock = Mock(HttpServletRequest)
-        servletRequestMock.getParameter("filter") >> "filter"
+        def map = Mock(Map)
+        requestParamHelper.getRequestParameterValues(servletRequestMock) >> map
+
+        map.get("filter") >> "filter"
+        map.get("sortBy") >> "sortBy"
+        map.get("sortOrder") >> "sortOrder"
+        map.get("count") >> 10
+        map.get("startIndex") >> 1
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -179,14 +188,21 @@ class GroupControllerTest extends Specification {
         mapping.method() == [RequestMethod.GET]
         mapping.value() == []
         body
-        1* provisioning.search("filter")
+        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
     }
 
     def "should be able to search a group on /Group/.search URI with POST method" () {
         given:
         Method method = GroupController.class.getDeclaredMethod("searchWithPost", HttpServletRequest)
         def servletRequestMock = Mock(HttpServletRequest)
-        servletRequestMock.getParameter("filter") >> "filter"
+        def map = Mock(Map)
+        requestParamHelper.getRequestParameterValues(servletRequestMock) >> map
+
+        map.get("filter") >> "filter"
+        map.get("sortBy") >> "sortBy"
+        map.get("sortOrder") >> "sortOrder"
+        map.get("count") >> 10
+        map.get("startIndex") >> 1
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -197,6 +213,6 @@ class GroupControllerTest extends Specification {
         mapping.value() == ["/.search"]
         mapping.method() == [RequestMethod.POST]
         body
-        1* provisioning.search("filter")
+        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
     }
 }

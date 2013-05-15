@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This Controller is used to manage User
@@ -54,6 +55,8 @@ public class UserController {
 
     @Inject
     private SCIMUserProvisioning scimUserProvisioning;
+
+    private RequestParamHelper requestParamHelper = new RequestParamHelper();
 
 
     public void setScimUserProvisioning(SCIMUserProvisioning scimUserProvisioning) {
@@ -111,14 +114,16 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<User> searchWithGet(HttpServletRequest request) {
-        String filter = request.getParameter("filter");
-        return scimUserProvisioning.search(filter);
+        Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
+        return scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+                (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
     }
 
     @RequestMapping(value = "/.search", method = RequestMethod.POST)
     @ResponseBody
     public List<User> searchWithPost(HttpServletRequest request) {
-        String filter = request.getParameter("filter");
-        return scimUserProvisioning.search(filter);
+        Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
+        return scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+                (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
     }
 }

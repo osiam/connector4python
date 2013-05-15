@@ -8,6 +8,7 @@ import scim.schema.v2.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This Controller is used to manage Root URI actions
@@ -27,17 +28,21 @@ public class RootController {
     @Inject
     private SCIMRootProvisioning scimRootProvisioning;
 
+    private RequestParamHelper requestParamHelper = new RequestParamHelper();
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Resource> searchWithGet(HttpServletRequest request) {
-        String filter = request.getParameter("filter");
-        return scimRootProvisioning.search(filter);
+        Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
+        return scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+                (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
     }
 
     @RequestMapping(value = ".search", method = RequestMethod.POST)
     @ResponseBody
     public List<Resource> searchWithPost(HttpServletRequest request) {
-        String filter = request.getParameter("filter");
-        return scimRootProvisioning.search(filter);
+        Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
+        return scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+                (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
     }
 }

@@ -19,13 +19,21 @@ import java.lang.reflect.Method
 class RootControllerSpec extends Specification{
 
     def provisioning = Mock(SCIMRootProvisioning)
-    def underTest = new RootController(scimRootProvisioning: provisioning)
+    def requestParamHelper = Mock(RequestParamHelper)
+    def underTest = new RootController(scimRootProvisioning: provisioning, requestParamHelper: requestParamHelper)
 
     def "should be able to search a resource on / URI with GET method" () {
         given:
         Method method = RootController.class.getDeclaredMethod("searchWithGet", HttpServletRequest)
         def servletRequestMock = Mock(HttpServletRequest)
-        servletRequestMock.getParameter("filter") >> "filter"
+        def map = Mock(Map)
+        requestParamHelper.getRequestParameterValues(servletRequestMock) >> map
+
+        map.get("filter") >> "filter"
+        map.get("sortBy") >> "sortBy"
+        map.get("sortOrder") >> "sortOrder"
+        map.get("count") >> 10
+        map.get("startIndex") >> 1
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -36,14 +44,21 @@ class RootControllerSpec extends Specification{
         mapping.value() == []
         mapping.method() == [RequestMethod.GET]
         body
-        1* provisioning.search("filter")
+        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
     }
 
     def "should be able to search a resource on /.search URI with POST method" () {
         given:
         Method method = RootController.class.getDeclaredMethod("searchWithPost", HttpServletRequest)
         def servletRequestMock = Mock(HttpServletRequest)
-        servletRequestMock.getParameter("filter") >> "filter"
+        def map = Mock(Map)
+        requestParamHelper.getRequestParameterValues(servletRequestMock) >> map
+
+        map.get("filter") >> "filter"
+        map.get("sortBy") >> "sortBy"
+        map.get("sortOrder") >> "sortOrder"
+        map.get("count") >> 10
+        map.get("startIndex") >> 1
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -54,6 +69,6 @@ class RootControllerSpec extends Specification{
         mapping.value() == [".search"]
         mapping.method() == [RequestMethod.POST]
         body
-        1* provisioning.search("filter")
+        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
     }
 }

@@ -40,7 +40,8 @@ import java.lang.reflect.Method
 
 class UserControllerTest extends Specification {
 
-    def underTest = new UserController()
+    def requestParamHelper = Mock(RequestParamHelper)
+    def underTest = new UserController(requestParamHelper: requestParamHelper)
     def provisioning = Mock(SCIMUserProvisioning)
     def httpServletRequest = Mock(HttpServletRequest)
     def httpServletResponse = Mock(HttpServletResponse)
@@ -222,7 +223,14 @@ class UserControllerTest extends Specification {
         given:
         Method method = UserController.class.getDeclaredMethod("searchWithGet", HttpServletRequest)
         def servletRequestMock = Mock(HttpServletRequest)
-        servletRequestMock.getParameter("filter") >> "filter"
+        def map = Mock(Map)
+        requestParamHelper.getRequestParameterValues(servletRequestMock) >> map
+
+        map.get("filter") >> "filter"
+        map.get("sortBy") >> "sortBy"
+        map.get("sortOrder") >> "sortOrder"
+        map.get("count") >> 10
+        map.get("startIndex") >> 1
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -233,14 +241,21 @@ class UserControllerTest extends Specification {
         mapping.value() == []
         mapping.method() == [RequestMethod.GET]
         body
-        1* provisioning.search("filter")
+        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
     }
 
     def "should be able to search a user on /User/.search URI with POST method" () {
         given:
         Method method = UserController.class.getDeclaredMethod("searchWithPost", HttpServletRequest)
         def servletRequestMock = Mock(HttpServletRequest)
-        servletRequestMock.getParameter("filter") >> "filter"
+        def map = Mock(Map)
+        requestParamHelper.getRequestParameterValues(servletRequestMock) >> map
+
+        map.get("filter") >> "filter"
+        map.get("sortBy") >> "sortBy"
+        map.get("sortOrder") >> "sortOrder"
+        map.get("count") >> 10
+        map.get("startIndex") >> 1
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -251,6 +266,6 @@ class UserControllerTest extends Specification {
         mapping.value() == ["/.search"]
         mapping.method() == [RequestMethod.POST]
         body
-        1* provisioning.search("filter")
+        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
     }
 }

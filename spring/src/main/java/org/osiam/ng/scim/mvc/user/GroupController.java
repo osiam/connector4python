@@ -36,12 +36,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/Group")
 public class GroupController {
+
     @Inject
     private SCIMGroupProvisioning scimGroupProvisioning;
+
+    private RequestParamHelper requestParamHelper = new RequestParamHelper();
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -96,14 +100,16 @@ public class GroupController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Group> searchWithGet(HttpServletRequest request) {
-        String filter = request.getParameter("filter");
-        return scimGroupProvisioning.search(filter);
+        Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
+        return scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+                (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
     }
 
     @RequestMapping(value = "/.search", method = RequestMethod.POST)
     @ResponseBody
     public List<Group> searchWithPost(HttpServletRequest request) {
-        String filter = request.getParameter("filter");
-        return scimGroupProvisioning.search(filter);
+        Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
+        return scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+                (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
     }
 }
