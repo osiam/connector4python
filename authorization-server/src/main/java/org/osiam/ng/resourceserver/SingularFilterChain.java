@@ -49,11 +49,11 @@ public class SingularFilterChain implements FilterChain {
     public Criterion buildCriterion() {
         switch (constraint) {
             case CONTAINS:
-                return Restrictions.like(key, "*" + value + "*");
+                return Restrictions.like(key, "%" + value + "%");
             case STARTS_WITH:
-                return Restrictions.like(key, value + "*");
+                return Restrictions.like(key, value + "%");
             case EQUALS:
-                return Restrictions.eq(key, value);
+                return Restrictions.like(key, value);
             case GREATER_EQUALS:
                 return Restrictions.ge(key, value);
             case GREATER_THAN:
