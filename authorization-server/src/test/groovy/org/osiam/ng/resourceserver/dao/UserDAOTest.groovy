@@ -245,9 +245,12 @@ class UserDAOTest extends Specification {
         fullTextSessionMock.createFullTextQuery(queryMock, UserEntity) >> fullTextQuery
 
         when:
-        underTest.search("anyFilter")
+        underTest.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
+        1 * fullTextQuery.setSort(_)
+        1 * fullTextQuery.setMaxResults(100)
+        1 * fullTextQuery.setFirstResult(1)
         1 * fullTextQuery.list()
     }
 }

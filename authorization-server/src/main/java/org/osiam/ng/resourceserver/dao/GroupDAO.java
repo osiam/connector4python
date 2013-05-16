@@ -23,6 +23,8 @@
 
 package org.osiam.ng.resourceserver.dao;
 
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.hibernate.Criteria;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.GroupEntity;
@@ -83,12 +85,13 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
     }
 
     @Override
-    public List<GroupEntity> search(String filter) {
-        return search(GroupEntity.class, filter);
+    public List<GroupEntity> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
+        return search(GroupEntity.class, filter, count, startIndex, sortBy, sortOrder);
     }
 
     @Override
     protected void createAliasesForCriteria(Criteria criteria) {
         criteria.createAlias("members", "members");
     }
+
 }

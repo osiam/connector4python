@@ -98,9 +98,9 @@ class ScimUserProvisioningBeanSpec extends Specification {
 
     def "should call dao search on search"() {
         when:
-        scimUserProvisioningBean.search("anyFilter")
+        scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDao.search("anyFilter") >> []
+        1 * userDao.search("anyFilter", "userName", "ascending", 100, 1) >> []
     }
 }

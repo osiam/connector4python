@@ -24,9 +24,6 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.hibernate.Criteria;
-import org.hibernate.search.annotations.IndexedEmbedded;
-import org.osiam.ng.HibernateSessionHelper;
-import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.*;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -145,22 +142,24 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
     }
 
     @Override
-    public List<UserEntity> search(String filter) {
-        return search(UserEntity.class, filter);
+    public List<UserEntity> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
+        return search(UserEntity.class, filter, count, startIndex, sortBy, sortOrder);
     }
+
 
 
     @Override
     protected void createAliasesForCriteria(Criteria criteria) {
-        criteria.createAlias("name", "name");
-        criteria.createAlias("emails", "emails");
-        criteria.createAlias("phoneNumbers", "phoneNumbers");
-        criteria.createAlias("ims", "ims");
-        criteria.createAlias("photos", "photos");
-        criteria.createAlias("addresses", "addresses");
-        criteria.createAlias("groups", "groups");
-        criteria.createAlias("entitlements", "entitlements");
-        criteria.createAlias("roles", "roles");
-        criteria.createAlias("x509Certificates", "x509Certificates");
+//        criteria.createAlias("name", "name");
+//        criteria.createAlias("emails", "emails");
+//        criteria.createAlias("phoneNumbers", "phoneNumbers");
+//        criteria.createAlias("ims", "ims");
+//        criteria.createAlias("photos", "photos");
+//        criteria.createAlias("addresses", "addresses");
+//        criteria.createAlias("groups", "groups");
+//        criteria.createAlias("entitlements", "entitlements");
+//        criteria.createAlias("roles", "roles");
+//        criteria.createAlias("x509Certificates", "x509Certificates");
     }
+
 }

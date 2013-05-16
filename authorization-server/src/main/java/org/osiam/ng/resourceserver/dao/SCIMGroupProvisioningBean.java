@@ -65,9 +65,9 @@ public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> imp
     }
 
     @Override
-    public List<Group> search(String filter) {
+    public List<Group> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
         List<Group> groups = new ArrayList<>();
-        for (Object g : getDao().search(filter)) { groups.add(((GroupEntity) g).toScim()); }
+        for (Object g : getDao().search(filter, sortBy, sortOrder, count, startIndex)) { groups.add(((GroupEntity) g).toScim()); }
         return groups;
     }
 
@@ -80,6 +80,5 @@ public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> imp
     public GenericSCIMToEntityWrapper.For getTarget() {
         return GenericSCIMToEntityWrapper.For.GROUP;
     }
-
 
 }

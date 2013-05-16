@@ -23,14 +23,12 @@
 
 package org.osiam.ng.resourceserver.dao;
 
-import org.osiam.ng.resourceserver.entities.GroupEntity;
 import org.osiam.ng.resourceserver.entities.UserEntity;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.osiam.ng.scim.exceptions.ResourceExistsException;
 import org.osiam.ng.scim.schema.to.entity.GenericSCIMToEntityWrapper;
 import org.osiam.ng.scim.schema.to.entity.SCIMEntities;
 import org.springframework.stereotype.Service;
-import scim.schema.v2.Group;
 import scim.schema.v2.User;
 
 import javax.inject.Inject;
@@ -72,9 +70,9 @@ public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> imple
     }
 
     @Override
-    public List<User> search(String filter) {
+    public List<User> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
         List<User> users = new ArrayList<>();
-        for (Object g : getDao().search(filter)) { users.add(((UserEntity) g).toScim()); }
+        for (Object g : getDao().search(filter, sortBy, sortOrder, count, startIndex)) { users.add(((UserEntity) g).toScim()); }
         return users;
     }
 
@@ -87,6 +85,7 @@ public class SCIMUserProvisioningBean extends SCIMProvisiongSkeleton<User> imple
     public GenericSCIMToEntityWrapper.For getTarget() {
         return GenericSCIMToEntityWrapper.For.USER;
     }
+
 }
 
 

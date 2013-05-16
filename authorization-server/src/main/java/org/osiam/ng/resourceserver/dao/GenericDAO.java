@@ -38,5 +38,5 @@ public interface GenericDAO<T extends InternalIdSkeleton> {
 
     void delete(String id);
 
-    List<T> search(String filter);
+    List<T> search(String filter, String sortBy, String sortOrder, int count, int startIndex);
 }

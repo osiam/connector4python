@@ -27,24 +27,24 @@ public class SCIMRootProvisioningBean implements SCIMRootProvisioning {
     private GroupDAO groupDAO;
 
     @Override
-    public List search(String filter) {
+    public List search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
         List result = new ArrayList();
-        addUser(filter, result);
-        addGroup(filter, result);
+        addUserToSearchResult(filter, sortBy, sortOrder, count, startIndex, result);
+        addGroupToSearchResult(filter, sortBy, sortOrder, count, startIndex, result);
         return result;
     }
 
-    private void addUser(String filter, List result) {
+    private void addUserToSearchResult(String filter, String sortBy, String sortOrder, int count, int startIndex, List result) {
         try {
-            result.addAll(userDAO.search(filter));
+            result.addAll(userDAO.search(filter, sortBy, sortOrder, count, startIndex));
         } catch (SearchException e) {
             LOGGER.log(Level.FINE, "Filter " + filter + " not useable on User", e);
         }
     }
 
-    private void addGroup(String filter, List result) {
+    private void addGroupToSearchResult(String filter, String sortBy, String sortOrder, int count, int startIndex, List result) {
         try {
-            result.addAll(groupDAO.search(filter));
+            result.addAll(groupDAO.search(filter, sortBy, sortOrder, count, startIndex));
         } catch (SearchException e) {
             LOGGER.log(Level.FINE, "Filter " + filter + " not useable on Group", e);
         }

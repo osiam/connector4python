@@ -18,28 +18,28 @@ class SCIMRootProvisioningBeanSpec extends Specification {
 
     def "should call dao search on search"() {
         when:
-        scimRootProvisioningBean.search("anyFilter")
+        scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDAO.search("anyFilter") >> []
-        1 * groupDAO.search("anyFilter") >> []
+        1 * userDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * groupDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
     }
 
     def "should ignore SearchException on UserDAO"() {
         when:
-        scimRootProvisioningBean.search("anyFilter")
+        scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDAO.search("anyFilter") >> { throw new SearchException("moep") }
-        1 * groupDAO.search("anyFilter") >> []
+        1 * userDAO.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
+        1 * groupDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
     }
 
     def "should ignore SearchException on GroupDAO"() {
         when:
-        scimRootProvisioningBean.search("anyFilter")
+        scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDAO.search("anyFilter") >> []
-        1 * groupDAO.search("anyFilter") >> { throw new SearchException("moep") }
+        1 * userDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * groupDAO.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
     }
 }
