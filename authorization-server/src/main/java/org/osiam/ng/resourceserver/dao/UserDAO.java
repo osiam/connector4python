@@ -34,7 +34,6 @@ import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -142,7 +141,7 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
     }
 
     @Override
-    public List<UserEntity> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
+    public SCIMSearchResult<UserEntity> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
         return search(UserEntity.class, filter, count, startIndex, sortBy, sortOrder);
     }
 
@@ -151,16 +150,6 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
     @Override
     protected void createAliasesForCriteria(Criteria criteria) {
         criteria.createAlias("name", "name");
-//        criteria.createAlias("emails.type", "emails.type");
-//        criteria.createAlias("emails", "email");
-//        criteria.createAlias("phoneNumbers", "phoneNumbers");
-//        criteria.createAlias("ims", "ims");
-//        criteria.createAlias("photos", "photos");
-//        criteria.createAlias("addresses", "addresses");
-//        criteria.createAlias("groups", "groups");
-//        criteria.createAlias("entitlements", "entitlements");
-//        criteria.createAlias("roles", "roles");
-//        criteria.createAlias("x509Certificates", "x509Certificates");
     }
 
 }

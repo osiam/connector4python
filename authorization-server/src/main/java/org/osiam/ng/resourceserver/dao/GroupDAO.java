@@ -23,8 +23,6 @@
 
 package org.osiam.ng.resourceserver.dao;
 
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
 import org.hibernate.Criteria;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.GroupEntity;
@@ -35,14 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
 
 @Repository
 @Transactional
-public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupEntity>{
+public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupEntity> {
 
     @Inject
     private FilterParser filterParser;
@@ -85,7 +82,7 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
     }
 
     @Override
-    public List<GroupEntity> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
+    public SCIMSearchResult<GroupEntity> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
         return search(GroupEntity.class, filter, count, startIndex, sortBy, sortOrder);
     }
 

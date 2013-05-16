@@ -40,7 +40,7 @@ public class SingularFilterChain implements FilterChain {
         if (!matcher.matches()) {
             throw new IllegalArgumentException(chain + " is not a SingularFilterChain.");
         }
-        this.key = matcher.group(1);
+        this.key = matcher.group(1).trim();
         this.constraint = Constraints.fromString.get(matcher.group(2));
         this.value = matcher.group(3);
     }

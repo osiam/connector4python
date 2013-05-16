@@ -25,9 +25,12 @@ package org.osiam.ng.resourceserver.dao;
 
 import org.apache.lucene.search.Sort;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.hibernate.sql.JoinType;
 import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;
@@ -68,16 +71,21 @@ public abstract class GetInternalIdSkeleton {
 
     }
 
-    protected <T extends InternalIdSkeleton> List<T> search(Class<T> clazz, String filter, int count, int startIndex, String sortBy, String sortOrder) {
+    protected <T> SCIMSearchResult<T> search(Class<T> clazz, String filter, int count, int startIndex, String sortBy, String sortOrder) {
         Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(clazz);
-        if (filter != null && !filter.isEmpty())
+        if (filter != null && !filter.isEmpty()) {
             criteria = criteria.add(filterParser.parse(filter).buildCriterion());
+        }
         createAliasesForCriteria(criteria);
         criteria.setMaxResults(count);
         criteria.setFirstResult(startIndex);
-        //TODO enable desc
-        criteria.addOrder(Order.asc(sortBy));
-        return criteria.list();
+        long totalResult = (long) criteria.setProjection(Projections.rowCount()).uniqueResult();
+        if (sortOrder.equalsIgnoreCase("descending"))
+            criteria.addOrder(Order.desc(sortBy));
+        else
+            criteria.addOrder(Order.asc(sortBy));
+        List list = criteria.setProjection(null).list();
+        return new SCIMSearchResult(list, totalResult);
     }
 
     protected abstract void createAliasesForCriteria(Criteria criteria);
