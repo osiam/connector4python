@@ -48,7 +48,8 @@ public class JsonResponseEnrichHelper {
 
         String finalJson;
         try {
-            String jsonResultList = new ObjectMapper().writeValueAsString(resultList);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResultList = objectMapper.writeValueAsString(resultList);
             ObjectMapper mapper = new ObjectMapper();
             JsonNode origNode = mapper.readTree(jsonResultList);
 
