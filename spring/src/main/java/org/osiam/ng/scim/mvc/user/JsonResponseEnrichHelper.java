@@ -21,17 +21,26 @@ import java.util.Map;
 public class JsonResponseEnrichHelper {
 
     public String getJsonUserResponseWithAdditionalFields(List<User> resultList, Map<String, Object> parameterMap) {
-        String schema = (String)resultList.get(0).getSchemas().toArray()[0];
+        String schema = "";
+        if (resultList.size() != 0 && resultList.get(0).getSchemas() != null) {
+            schema = (String)resultList.get(0).getSchemas().toArray()[0];
+        }
         return getJsonResponseWithAdditionalFields(resultList, parameterMap, schema);
     }
 
     public String getJsonGroupResponseWithAdditionalFields(List<Group> resultList, Map<String, Object> parameterMap) {
-        String schema = (String)resultList.get(0).getSchemas().toArray()[0];
+        String schema = "";
+        if (resultList.size() != 0 && resultList.get(0).getSchemas() != null) {
+            schema = (String)resultList.get(0).getSchemas().toArray()[0];
+        }
         return getJsonResponseWithAdditionalFields(resultList, parameterMap, schema);
     }
 
     public String getJsonRootResponseWithAdditionalFields(List<Resource> resultList, Map<String, Object> parameterMap) {
-        String schema = (String)resultList.get(0).getSchemas().toArray()[0];
+        String schema = "";
+        if (resultList.size() != 0 && resultList.get(0).getSchemas() != null) {
+            schema = (String)resultList.get(0).getSchemas().toArray()[0];
+        }
         return getJsonResponseWithAdditionalFields(resultList, parameterMap, schema);
     }
 
@@ -39,7 +48,8 @@ public class JsonResponseEnrichHelper {
 
         String finalJson;
         try {
-            String jsonResultList = new ObjectMapper().writeValueAsString(resultList);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResultList = objectMapper.writeValueAsString(resultList);
             ObjectMapper mapper = new ObjectMapper();
             JsonNode origNode = mapper.readTree(jsonResultList);
 
