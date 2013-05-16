@@ -25,6 +25,7 @@ package org.osiam.ng.resourceserver.dao;
 
 import org.apache.lucene.search.Sort;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.osiam.ng.HibernateSessionHelper;
@@ -68,18 +69,14 @@ public abstract class GetInternalIdSkeleton {
     }
 
     protected <T extends InternalIdSkeleton> List<T> search(Class<T> clazz, String filter, int count, int startIndex, String sortBy, String sortOrder) {
-        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
-        QueryBuilder queryBuilder = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(clazz).get();
         Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(clazz);
-        createAliasesForCriteria(criteria);
-        org.apache.lucene.search.Query query = queryBuilder.all().createQuery();
-        org.hibernate.search.FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, clazz);
         if (filter != null && !filter.isEmpty())
             criteria = criteria.add(filterParser.parse(filter).buildCriterion());
-        fullTextQuery.setCriteriaQuery(criteria);
-        fullTextQuery.setMaxResults(count);
-        fullTextQuery.setFirstResult(startIndex);
-        fullTextQuery.setSort(new Sort());
+        createAliasesForCriteria(criteria);
+        criteria.setMaxResults(count);
+        criteria.setFirstResult(startIndex);
+        //TODO enable desc
+        criteria.addOrder(Order.asc(sortBy));
         return criteria.list();
     }
 

@@ -53,7 +53,7 @@ public class SingularFilterChain implements FilterChain {
             case STARTS_WITH:
                 return Restrictions.like(key, value + "%");
             case EQUALS:
-                return Restrictions.like(key, value);
+                return Restrictions.eq(key, value);
             case GREATER_EQUALS:
                 return Restrictions.ge(key, value);
             case GREATER_THAN:
