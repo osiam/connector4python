@@ -21,10 +21,12 @@ import java.util.logging.Logger;
 public class SCIMRootProvisioningBean implements SCIMRootProvisioning {
 
     private static final Logger LOGGER = Logger.getLogger(SCIMRootProvisioningBean.class.getName());
+
     @Inject
-    private UserDAO userDAO;
+    private SCIMUserProvisioningBean scimUserProvisioningBean;
+
     @Inject
-    private GroupDAO groupDAO;
+    private SCIMGroupProvisioningBean scimGroupProvisioningBean;
 
     @Override
     public List search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
@@ -36,17 +38,17 @@ public class SCIMRootProvisioningBean implements SCIMRootProvisioning {
 
     private void addUserToSearchResult(String filter, String sortBy, String sortOrder, int count, int startIndex, List result) {
         try {
-            result.addAll(userDAO.search(filter, sortBy, sortOrder, count, startIndex));
+            result.addAll(scimUserProvisioningBean.search(filter, sortBy, sortOrder, count, startIndex));
         } catch (SearchException e) {
-            LOGGER.log(Level.FINE, "Filter " + filter + " not useable on User", e);
+            LOGGER.log(Level.FINE, "Filter " + filter + " not usable on User", e);
         }
     }
 
     private void addGroupToSearchResult(String filter, String sortBy, String sortOrder, int count, int startIndex, List result) {
         try {
-            result.addAll(groupDAO.search(filter, sortBy, sortOrder, count, startIndex));
+            result.addAll(scimGroupProvisioningBean.search(filter, sortBy, sortOrder, count, startIndex));
         } catch (SearchException e) {
-            LOGGER.log(Level.FINE, "Filter " + filter + " not useable on Group", e);
+            LOGGER.log(Level.FINE, "Filter " + filter + " not usable on Group", e);
         }
     }
 }
