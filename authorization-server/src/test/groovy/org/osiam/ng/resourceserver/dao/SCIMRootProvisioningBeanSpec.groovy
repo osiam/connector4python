@@ -12,17 +12,17 @@ import spock.lang.Specification
  */
 class SCIMRootProvisioningBeanSpec extends Specification {
 
-    def userDAO = Mock(UserDAO)
-    def groupDAO = Mock(GroupDAO)
-    def scimRootProvisioningBean = new SCIMRootProvisioningBean(userDAO: userDAO, groupDAO: groupDAO)
+    def scimUserProvisioningBean = Mock(SCIMUserProvisioningBean)
+    def scimGroupProvisioningBean = Mock(SCIMGroupProvisioningBean)
+    def scimRootProvisioningBean = new SCIMRootProvisioningBean(scimUserProvisioningBean: scimUserProvisioningBean, scimGroupProvisioningBean: scimGroupProvisioningBean)
 
     def "should call dao search on search"() {
         when:
         scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
-        1 * groupDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
     }
 
     def "should ignore SearchException on UserDAO"() {
@@ -30,8 +30,8 @@ class SCIMRootProvisioningBeanSpec extends Specification {
         scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDAO.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
-        1 * groupDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
+        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
     }
 
     def "should ignore SearchException on GroupDAO"() {
@@ -39,7 +39,7 @@ class SCIMRootProvisioningBeanSpec extends Specification {
         scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDAO.search("anyFilter", "userName", "ascending", 100, 1) >> []
-        1 * groupDAO.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
+        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
     }
 }
