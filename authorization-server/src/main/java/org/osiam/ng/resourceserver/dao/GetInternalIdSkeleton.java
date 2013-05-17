@@ -49,6 +49,17 @@ public abstract class GetInternalIdSkeleton {
 
     private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
 
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
+    public void setFilterParser(FilterParser filterParser) {
+        this.filterParser = filterParser;
+    }
+
+    public void setHibernateSessionHelper(HibernateSessionHelper hibernateSessionHelper) {
+        this.hibernateSessionHelper = hibernateSessionHelper;
+    }
 
     protected <T extends InternalIdSkeleton> T getInternalIdSkeleton(String id) {
         Query query = em.createNamedQuery("getById");

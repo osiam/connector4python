@@ -25,12 +25,7 @@ package org.osiam.ng.resourceserver.dao
 
 import org.hibernate.Criteria
 import org.hibernate.Session
-import org.hibernate.search.FullTextQuery
-import org.hibernate.search.FullTextSession
-import org.hibernate.search.SearchFactory
-import org.hibernate.search.query.dsl.EntityContext
-import org.hibernate.search.query.dsl.QueryBuilder
-import org.hibernate.search.query.dsl.QueryContextBuilder
+import org.hibernate.criterion.Criterion
 import org.osiam.ng.HibernateSessionHelper
 import org.osiam.ng.resourceserver.FilterChain
 import org.osiam.ng.resourceserver.FilterParser
@@ -44,6 +39,7 @@ import javax.persistence.EntityManager
 import javax.persistence.Query
 
 class GroupDAOTest extends Specification {
+
     EntityManager em = Mock(EntityManager)
 
     Query query = Mock(Query)
@@ -51,11 +47,14 @@ class GroupDAOTest extends Specification {
 
     def filterParser = Mock(FilterParser)
     def hibernateSessionHelper = Mock(HibernateSessionHelper)
-    def underTest = new GroupDAO(em: em, filterParser: filterParser, hibernateSessionHelper: hibernateSessionHelper)
+    def underTest = new GroupDAO()
     String id = UUID.randomUUID().toString()
 
     def setup(){
         em.createNamedQuery("getById") >> query
+        underTest.setHibernateSessionHelper(hibernateSessionHelper)
+        underTest.setFilterParser(filterParser)
+        underTest.setEm(em)
     }
 
     def "should abort when a given member does not exists"() {
@@ -124,40 +123,32 @@ class GroupDAOTest extends Specification {
         thrown(ResourceNotFoundException)
     }
 
-    def "should do filtered searches on groups"() {
+    def "should do filtered searches on groups sorting ascending"() {
         given:
-        def fullTextSessionMock = Mock(FullTextSession)
-        def searchFactoryMock = Mock(SearchFactory)
-        def queryContextBuilderMock = Mock(QueryContextBuilder)
-        def entityContextMock = Mock(EntityContext)
-        def queryBuilderMock = Mock(QueryBuilder)
         def hibernateSessionMock = Mock(Session)
         def filterChainMock = Mock(FilterChain)
         def criteriaMock = Mock(Criteria)
-        def queryMock = Mock(org.apache.lucene.search.Query)
-        def fullTextQuery = Mock(FullTextQuery)
-
-        hibernateSessionHelper.getFullTextSession(em) >> fullTextSessionMock
-        fullTextSessionMock.getSearchFactory() >> searchFactoryMock
-        searchFactoryMock.buildQueryBuilder() >> queryContextBuilderMock
-        queryContextBuilderMock.forEntity(GroupEntity) >> entityContextMock
-        entityContextMock.get() >> queryBuilderMock
+        def criterionMock = Mock(Criterion)
+        def groupList = ["group"] as List
 
         hibernateSessionHelper.getHibernateSession(em) >> hibernateSessionMock
-        hibernateSessionMock.createCriteria(GroupEntity) >> criteriaMock
+        hibernateSessionMock.createCriteria(GroupEntity.class) >> criteriaMock
         filterParser.parse("anyFilter") >> filterChainMock
-        filterChainMock.buildCriterion(queryBuilderMock, criteriaMock) >> queryMock
-
-        fullTextSessionMock.createFullTextQuery(queryMock, GroupEntity) >> fullTextQuery
+        filterChainMock.buildCriterion() >> criterionMock
+        criteriaMock.add(criterionMock) >> criteriaMock
+        criteriaMock.setProjection(_) >> criteriaMock
+        criteriaMock.uniqueResult() >> 1000.toLong()
+        criteriaMock.setResultTransformer(_) >> criteriaMock
+        criteriaMock.list() >> groupList
 
         when:
-        underTest.search("anyFilter", "userName", "ascending", 100, 1)
+        def result = underTest.search("anyFilter", "displayName", "ascending", 100, 1)
 
         then:
-        1 * fullTextQuery.setSort(_)
-        1 * fullTextQuery.setMaxResults(100)
-        1 * fullTextQuery.setFirstResult(1)
-        1 * fullTextQuery.list()
+        result != null
+        result.getTotalResult() == 1000
+        result.getResult() == groupList
+
     }
 
 }

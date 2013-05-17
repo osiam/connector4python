@@ -41,9 +41,6 @@ import java.util.logging.Level;
 @Transactional
 public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupEntity> {
 
-    @Inject
-    private FilterParser filterParser;
-
     @Override
     public void create(GroupEntity group) {
         findAndAddMembers(group);

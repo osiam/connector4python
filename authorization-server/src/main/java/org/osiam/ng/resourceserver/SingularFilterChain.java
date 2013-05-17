@@ -18,10 +18,8 @@
 package org.osiam.ng.resourceserver;
 
 
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.search.query.dsl.QueryBuilder;
 
 import java.text.DateFormat;
 import java.text.ParseException;
