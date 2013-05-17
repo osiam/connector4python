@@ -44,7 +44,6 @@ import javax.persistence.Query
 class UserDAOTest extends Specification {
 
     def em = Mock(EntityManager)
-    def hibernateSessionHelperMock = Mock(HibernateSessionHelper)
     def filterParserMock = Mock(FilterParser)
     def underTest = new UserDAO()
     def userEntity = Mock(UserEntity)
@@ -52,7 +51,6 @@ class UserDAOTest extends Specification {
     def setup() {
         underTest.setEm(em)
         underTest.setFilterParser(filterParserMock)
-        underTest.setHibernateSessionHelper(hibernateSessionHelperMock)
         userEntity.roles >> new HashSet<>(Arrays.asList(new RolesEntity(value: "test"), new RolesEntity()))
         userEntity.addresses >> new HashSet<>()
         userEntity.phoneNumbers >> new HashSet<>()
@@ -222,7 +220,7 @@ class UserDAOTest extends Specification {
         def criterionMock = Mock(Criterion)
         def userList = ["user"] as List
 
-        hibernateSessionHelperMock.getHibernateSession(em) >> hibernateSessionMock
+        em.getDelegate() >> hibernateSessionMock
         hibernateSessionMock.createCriteria(UserEntity.class) >> criteriaMock
         filterParserMock.parse("anyFilter") >> filterChainMock
         filterChainMock.buildCriterion() >> criterionMock
@@ -250,7 +248,7 @@ class UserDAOTest extends Specification {
         def criterionMock = Mock(Criterion)
         def userList = ["user"] as List
 
-        hibernateSessionHelperMock.getHibernateSession(em) >> hibernateSessionMock
+        em.getDelegate() >> hibernateSessionMock
         hibernateSessionMock.createCriteria(UserEntity.class) >> criteriaMock
         filterParserMock.parse("anyFilter") >> filterChainMock
         filterChainMock.buildCriterion() >> criterionMock

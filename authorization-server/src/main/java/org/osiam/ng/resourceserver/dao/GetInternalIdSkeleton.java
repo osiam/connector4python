@@ -47,6 +47,10 @@ public abstract class GetInternalIdSkeleton {
     @Inject
     protected FilterParser filterParser;
 
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
     public void setFilterParser(FilterParser filterParser) {
         this.filterParser = filterParser;
     }

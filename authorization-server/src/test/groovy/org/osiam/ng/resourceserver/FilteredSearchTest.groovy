@@ -28,7 +28,7 @@ class FilteredSearchTest extends Specification{
         then:
         result.key == 'userName'
         result.constraint == SingularFilterChain.Constraints.EQUALS
-        result.value == "\"bjensen\""
+        result.value == "bjensen"
     }
 
     def "should parse without \""(){
@@ -46,7 +46,7 @@ class FilteredSearchTest extends Specification{
         then:
         result.key == 'name.familyName'
         result.constraint == SingularFilterChain.Constraints.CONTAINS
-        result.value == "\"O'Malley\""
+        result.value == "O'Malley"
     }
     def "should parse starts with (sw)"(){
         when:
@@ -54,7 +54,7 @@ class FilteredSearchTest extends Specification{
         then:
         result.key == 'userName'
         result.constraint == SingularFilterChain.Constraints.STARTS_WITH
-        result.value == "\"L\""
+        result.value == "L"
 
     }
     def "should parse present (pr)"(){
@@ -73,7 +73,7 @@ class FilteredSearchTest extends Specification{
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.GREATER_THAN
-        result.value == "\"2011-05-13T04:42:34Z\""
+        result.value == "2011-05-13T04:42:34Z"
 
     }
     def "should parse greater than or equal (ge)"(){
@@ -82,7 +82,7 @@ class FilteredSearchTest extends Specification{
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.GREATER_EQUALS
-        result.value == "\"2011-05-13T04:42:34Z\""
+        result.value == "2011-05-13T04:42:34Z"
 
     }
     def "should parse less than (lt)"(){
@@ -91,7 +91,7 @@ class FilteredSearchTest extends Specification{
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.LESS_THAN
-        result.value == "\"2011-05-13T04:42:34Z\""
+        result.value == "2011-05-13T04:42:34Z"
 
     }
     def "should parse less than or equal (le)"(){
@@ -100,7 +100,7 @@ class FilteredSearchTest extends Specification{
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.LESS_EQUALS
-        result.value == "\"2011-05-13T04:42:34Z\""
+        result.value == "2011-05-13T04:42:34Z"
 
     }
 

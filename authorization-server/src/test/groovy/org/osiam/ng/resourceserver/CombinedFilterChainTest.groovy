@@ -30,7 +30,7 @@ class CombinedFilterChainTest extends Specification {
         cf.term2 instanceof SingularFilterChain
         cf.term2.key == 'userType'
         cf.term2.constraint == SingularFilterChain.Constraints.EQUALS
-        cf.term2.value == '"Intern"'
+        cf.term2.value == 'Intern'
 
     }
 
@@ -43,18 +43,18 @@ class CombinedFilterChainTest extends Specification {
         cf.term1 instanceof SingularFilterChain
         cf.term1.key == 'userType'
         cf.term1.constraint == SingularFilterChain.Constraints.EQUALS
-        cf.term1.value == '"Employee"'
+        cf.term1.value == 'Employee'
         cf.combinedWith == CombinedFilterChain.Combiner.AND
         cf.term2 instanceof CombinedFilterChain
         cf.term2.combinedWith == CombinedFilterChain.Combiner.OR
         cf.term2.term1 instanceof SingularFilterChain
         cf.term2.term1.key == 'emails'
         cf.term2.term1.constraint == SingularFilterChain.Constraints.CONTAINS
-        cf.term2.term1.value == '"example.com"'
+        cf.term2.term1.value == 'example.com'
         cf.term2.term2 instanceof SingularFilterChain
         cf.term2.term2.key == 'emails'
         cf.term2.term2.constraint == SingularFilterChain.Constraints.CONTAINS
-        cf.term2.term2.value == '"example.org"'
+        cf.term2.term2.value == 'example.org'
 
 
     }
