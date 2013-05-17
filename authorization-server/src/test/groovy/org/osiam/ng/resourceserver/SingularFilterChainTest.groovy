@@ -64,28 +64,6 @@ class SingularFilterChainTest extends Specification{
 
     }
 
-    def "should build query for (sw) constraint"() {
-        given:
-        def singularFilterChain = new SingularFilterChain("userName sw \"L\"")
-        def queryBuilder = Mock(QueryBuilder)
-        def criteria = Mock(Criteria)
-        def termContext = Mock(TermContext)
-        def wildcardContext = Mock(WildcardContext)
-        def termMatchingContext = Mock(TermMatchingContext)
-        def termTermination = Mock(TermTermination)
-
-        queryBuilder.keyword() >> termContext
-        termContext.wildcard() >> wildcardContext
-        wildcardContext.onField("userName") >> termMatchingContext
-        termMatchingContext.matching("\"L\"" + "*") >> termTermination
-
-        when:
-        singularFilterChain.buildQuery(queryBuilder, criteria)
-
-        then:
-        1 * termTermination.createQuery() >> Mock(Query)
-    }
-
     def "should parse present (pr)"(){
         when:
         def result = new SingularFilterChain("title pr")
@@ -137,15 +115,6 @@ class SingularFilterChainTest extends Specification{
 
     }
 
-
-    def "should parse a empty or null chain and choose (empty) constraint"(){
-        when:
-        def result = new SingularFilterChain("")
-        then:
-        result.key == null
-        result.constraint == SingularFilterChain.Constraints.EMPTY
-        result.value == null
-    }
 
     def "should throw exception if no constraint matches"(){
         when:
