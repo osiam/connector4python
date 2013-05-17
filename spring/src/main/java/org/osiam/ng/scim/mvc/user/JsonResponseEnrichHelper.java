@@ -4,12 +4,8 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.osiam.ng.resourceserver.dao.SCIMSearchResult;
-import scim.schema.v2.Group;
-import scim.schema.v2.Resource;
-import scim.schema.v2.User;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,26 +29,28 @@ public class JsonResponseEnrichHelper {
 
     private String getJsonResponseWithAdditionalFields(SCIMSearchResult scimSearchResult, Map<String, Object> parameterMap, String schema) {
 
-        String finalJson;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResultList = objectMapper.writeValueAsString(scimSearchResult.getResult());
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode origNode = mapper.readTree(jsonResultList);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-            ObjectNode rootNode = mapper.createObjectNode();
-            rootNode.put("totalResults", scimSearchResult.getTotalResult());
-            rootNode.put("itemsPerPage", (int)parameterMap.get("count"));
-            rootNode.put("startIndex", (int)parameterMap.get("startIndex"));
-            rootNode.put("schemas", schema);
-            rootNode.put("Resources", origNode);
+        ObjectNode rootNode;
+        ObjectNode objectNode = objectMapper.convertValue(scimSearchResult.getResult(), ObjectNode.class);
 
-            finalJson = rootNode.toString();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Set<String> attributes = (Set<String>) parameterMap.get("attributes");
+        while (objectNode.getFieldNames().hasNext()) {
+            String test = objectNode.getFieldNames().next();
+            if(!attributes.contains(test)) {
+                attributes.remove(test);
+            }
         }
 
-        return finalJson;
+        objectNode.remove(attributes);
+
+        rootNode = objectMapper.createObjectNode();
+        rootNode.put("totalResults", scimSearchResult.getTotalResult());
+        rootNode.put("itemsPerPage", (int)parameterMap.get("count"));
+        rootNode.put("startIndex", (int)parameterMap.get("startIndex"));
+        rootNode.put("schemas", schema);
+        rootNode.put("Resources", objectNode);
+
+        return rootNode.toString();
     }
 }
