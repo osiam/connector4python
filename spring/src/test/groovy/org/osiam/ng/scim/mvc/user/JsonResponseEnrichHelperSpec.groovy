@@ -1,5 +1,6 @@
 package org.osiam.ng.scim.mvc.user
 
+import org.osiam.ng.resourceserver.dao.SCIMSearchResult
 import scim.schema.v2.Group
 import scim.schema.v2.Resource
 import scim.schema.v2.User
@@ -24,14 +25,20 @@ class JsonResponseEnrichHelperSpec extends Specification {
         parameterMapMock.get("count") >> 10
         parameterMapMock.get("startIndex") >> 0
 
+        def scimSearchResult = Mock(SCIMSearchResult)
+        def set = [] as Set
+
+        scimSearchResult.getResult() >> userList
+        scimSearchResult.getTotalResult() >> 1337
+
         when:
-        def jsonResult = jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(userList, parameterMapMock)
+        def jsonResult = jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMapMock, set)
 
         then:
-        jsonResult.contains("\"totalResults\":1000,\"itemsPerPage\":10,\"startIndex\":0,\"schemas\":\"\",\"Resources\":[]")
+        jsonResult.contains("\"totalResults\":1337,\"itemsPerPage\":10,\"startIndex\":0,\"schemas\":\"\",\"Resources\":[]")
     }
 
-    def "should return Json string with additional values for user search"() {
+    def "should return Json string with additional values for searches on users, groups and booth"() {
         given:
         def user = new User.Builder("username").setSchemas(["schemas:urn:scim:schemas:core:1.0"] as Set).build()
         def userList = [user] as List<User>
@@ -40,43 +47,17 @@ class JsonResponseEnrichHelperSpec extends Specification {
         parameterMapMock.get("count") >> 10
         parameterMapMock.get("startIndex") >> 0
 
-        when:
-        def jsonResult = jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(userList, parameterMapMock)
+        def scimSearchResult = Mock(SCIMSearchResult)
+        def set = ["schemas:urn:scim:schemas:core:1.0"] as Set
 
-        then:
-        jsonResult.contains("\"totalResults\":1000,\"itemsPerPage\":10,\"startIndex\":0,\"schemas\":\"schemas:urn:scim:schemas:core:1.0\",\"Resources\":[{\"schemas\":[\"schemas:urn:scim:schemas:core:1.0\"],\"userName\":\"username\"}]")
-    }
-
-    def "should return Json string with additional values for group search"() {
-        given:
-        def group = new Group.Builder().setSchemas(["schemas:urn:scim:schemas:core:1.0"] as Set).build()
-        def groupList = [group] as List<Group>
-        def parameterMapMock = Mock(Map)
-
-        parameterMapMock.get("count") >> 10
-        parameterMapMock.get("startIndex") >> 0
+        scimSearchResult.getResult() >> userList
+        scimSearchResult.getTotalResult() >> 1337
 
         when:
-        def jsonResult = jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(groupList, parameterMapMock)
+        def jsonResult = jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMapMock, set)
 
         then:
-        jsonResult.contains("\"totalResults\":1000,\"itemsPerPage\":10,\"startIndex\":0,\"schemas\":\"schemas:urn:scim:schemas:core:1.0\",\"Resources\":[{\"schemas\":[\"schemas:urn:scim:schemas:core:1.0\"]}]")
+        jsonResult.contains("\"totalResults\":1337,\"itemsPerPage\":10,\"startIndex\":0,\"schemas\":\"schemas:urn:scim:schemas:core:1.0\",\"Resources\":[{\"schemas\":[\"schemas:urn:scim:schemas:core:1.0\"],\"userName\":\"username\"}]")
     }
 
-    def "should return Json string with additional values for root search"() {
-        given:
-        def user = new User.Builder("username").setSchemas(["schemas:urn:scim:schemas:core:1.0"] as Set).build()
-        def group = new Group.Builder().setSchemas(["schemas:urn:scim:schemas:core:1.0"] as Set).build()
-        def resultList = [user, group] as List<Resource>
-        def parameterMapMock = Mock(Map)
-
-        parameterMapMock.get("count") >> 10
-        parameterMapMock.get("startIndex") >> 0
-
-        when:
-        def jsonResult = jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(resultList, parameterMapMock)
-
-        then:
-        jsonResult.contains("\"totalResults\":1000,\"itemsPerPage\":10,\"startIndex\":0,\"schemas\":\"schemas:urn:scim:schemas:core:1.0\",\"Resources\":[{\"schemas\":[\"schemas:urn:scim:schemas:core:1.0\"],\"userName\":\"username\"},{\"schemas\":[\"schemas:urn:scim:schemas:core:1.0\"]}]")
-    }
 }

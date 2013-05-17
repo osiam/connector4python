@@ -23,6 +23,7 @@
 
 package org.osiam.ng.scim.mvc.user
 
+import org.osiam.ng.resourceserver.dao.SCIMSearchResult
 import org.osiam.ng.scim.dao.SCIMGroupProvisioning
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.RequestMapping
@@ -180,7 +181,10 @@ class GroupControllerTest extends Specification {
         map.get("count") >> 10
         map.get("startIndex") >> 1
 
-        jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
+        def scimSearchResultMock = Mock(SCIMSearchResult)
+        def set = ["schemas"] as Set
+        provisioning.search("filter", "sortBy", "sortOrder", 10, 1) >> scimSearchResultMock
+        scimSearchResultMock.getSchemas() >> set
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -191,7 +195,7 @@ class GroupControllerTest extends Specification {
         mapping.method() == [RequestMethod.GET]
         mapping.value() == []
         body
-        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
+        1 * jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResultMock, map, set)
     }
 
     def "should be able to search a group on /Group/.search URI with POST method" () {
@@ -207,7 +211,10 @@ class GroupControllerTest extends Specification {
         map.get("count") >> 10
         map.get("startIndex") >> 1
 
-        jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
+        def scimSearchResultMock = Mock(SCIMSearchResult)
+        def set = ["schemas"] as Set
+        provisioning.search("filter", "sortBy", "sortOrder", 10, 1) >> scimSearchResultMock
+        scimSearchResultMock.getSchemas() >> set
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -218,6 +225,7 @@ class GroupControllerTest extends Specification {
         mapping.value() == ["/.search"]
         mapping.method() == [RequestMethod.POST]
         body
-        1* provisioning.search("filter", "sortBy", "sortOrder", 10, 1)
+        1 * jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResultMock, map, set)
+
     }
 }
