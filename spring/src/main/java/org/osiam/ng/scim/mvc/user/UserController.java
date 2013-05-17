@@ -26,6 +26,7 @@ package org.osiam.ng.scim.mvc.user;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
+import org.osiam.ng.resourceserver.dao.SCIMSearchResult;
 import org.osiam.ng.scim.dao.SCIMUserProvisioning;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -118,19 +119,19 @@ public class UserController {
     @ResponseBody
     public String searchWithGet(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        List<User> resultList = scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        SCIMSearchResult scimSearchResult = scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
 
-        return jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(resultList, parameterMap);
+        return jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMap, scimSearchResult.getSchemas());
     }
 
     @RequestMapping(value = "/.search", method = RequestMethod.POST)
     @ResponseBody
     public String searchWithPost(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        List<User> resultList = scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        SCIMSearchResult scimSearchResult = scimUserProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
 
-        return jsonResponseEnrichHelper.getJsonUserResponseWithAdditionalFields(resultList, parameterMap);
+        return jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMap, scimSearchResult.getSchemas());
     }
 }

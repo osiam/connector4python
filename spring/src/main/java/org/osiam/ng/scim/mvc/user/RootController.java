@@ -1,15 +1,16 @@
 package org.osiam.ng.scim.mvc.user;
 
+import org.osiam.ng.resourceserver.dao.SCIMSearchResult;
 import org.osiam.ng.scim.dao.SCIMRootProvisioning;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import scim.schema.v2.Resource;
-import scim.schema.v2.User;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This Controller is used to manage Root URI actions
@@ -36,19 +37,21 @@ public class RootController {
     @ResponseBody
     public String searchWithGet(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        List<Resource> resultList = scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+       SCIMSearchResult scimSearchResult = scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
 
-        return jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(resultList, parameterMap);
+        return jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMap, scimSearchResult.getSchemas());
     }
 
     @RequestMapping(value = ".search", method = RequestMethod.POST)
     @ResponseBody
     public String searchWithPost(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        List<Resource> resultList = scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        SCIMSearchResult scimSearchResult = scimRootProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
 
-        return jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(resultList, parameterMap);
+        return jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMap, scimSearchResult.getSchemas());
     }
+
+
 }

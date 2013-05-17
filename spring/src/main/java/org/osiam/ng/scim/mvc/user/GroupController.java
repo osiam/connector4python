@@ -23,6 +23,7 @@
 
 package org.osiam.ng.scim.mvc.user;
 
+import org.osiam.ng.resourceserver.dao.SCIMSearchResult;
 import org.osiam.ng.scim.dao.SCIMGroupProvisioning;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -102,19 +103,19 @@ public class GroupController {
     @ResponseBody
     public String searchWithGet(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        List<Group> resultList = scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        SCIMSearchResult scimSearchResult = scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
 
-        return jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(resultList, parameterMap);
+        return jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMap, scimSearchResult.getSchemas());
     }
 
     @RequestMapping(value = "/.search", method = RequestMethod.POST)
     @ResponseBody
     public String searchWithPost(HttpServletRequest request) {
         Map<String,Object> parameterMap = requestParamHelper.getRequestParameterValues(request);
-        List<Group> resultList = scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
+        SCIMSearchResult scimSearchResult = scimGroupProvisioning.search((String)parameterMap.get("filter"), (String)parameterMap.get("sortBy"), (String)parameterMap.get("sortOrder"),
                 (int)parameterMap.get("count"), (int)parameterMap.get("startIndex"));
 
-        return jsonResponseEnrichHelper.getJsonGroupResponseWithAdditionalFields(resultList, parameterMap);
+        return jsonResponseEnrichHelper.getJsonFromSearchResult(scimSearchResult, parameterMap, scimSearchResult.getSchemas());
     }
 }

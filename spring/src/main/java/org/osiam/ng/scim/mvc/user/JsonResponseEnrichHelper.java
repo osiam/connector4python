@@ -3,6 +3,7 @@ package org.osiam.ng.scim.mvc.user;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
+import org.osiam.ng.resourceserver.dao.SCIMSearchResult;
 import scim.schema.v2.Group;
 import scim.schema.v2.Resource;
 import scim.schema.v2.User;
@@ -10,6 +11,7 @@ import scim.schema.v2.User;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,41 +22,26 @@ import java.util.Map;
  */
 public class JsonResponseEnrichHelper {
 
-    public String getJsonUserResponseWithAdditionalFields(List<User> resultList, Map<String, Object> parameterMap) {
+
+   public String getJsonFromSearchResult(SCIMSearchResult resultList, Map<String, Object> parameterMap, Set<String> schemas) {
         String schema = "";
-        if (resultList.size() != 0 && resultList.get(0).getSchemas() != null) {
-            schema = (String)resultList.get(0).getSchemas().toArray()[0];
+        if (schemas != null && schemas.iterator().hasNext()) {
+            schema = schemas.iterator().next();
         }
         return getJsonResponseWithAdditionalFields(resultList, parameterMap, schema);
     }
 
-    public String getJsonGroupResponseWithAdditionalFields(List<Group> resultList, Map<String, Object> parameterMap) {
-        String schema = "";
-        if (resultList.size() != 0 && resultList.get(0).getSchemas() != null) {
-            schema = (String)resultList.get(0).getSchemas().toArray()[0];
-        }
-        return getJsonResponseWithAdditionalFields(resultList, parameterMap, schema);
-    }
-
-    public String getJsonRootResponseWithAdditionalFields(List<Resource> resultList, Map<String, Object> parameterMap) {
-        String schema = "";
-        if (resultList.size() != 0 && resultList.get(0).getSchemas() != null) {
-            schema = (String)resultList.get(0).getSchemas().toArray()[0];
-        }
-        return getJsonResponseWithAdditionalFields(resultList, parameterMap, schema);
-    }
-
-    private String getJsonResponseWithAdditionalFields(List resultList, Map<String, Object> parameterMap, String schema) {
+    private String getJsonResponseWithAdditionalFields(SCIMSearchResult scimSearchResult, Map<String, Object> parameterMap, String schema) {
 
         String finalJson;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResultList = objectMapper.writeValueAsString(resultList);
+            String jsonResultList = objectMapper.writeValueAsString(scimSearchResult.getResult());
             ObjectMapper mapper = new ObjectMapper();
             JsonNode origNode = mapper.readTree(jsonResultList);
 
             ObjectNode rootNode = mapper.createObjectNode();
-            rootNode.put("totalResults", 1000);
+            rootNode.put("totalResults", scimSearchResult.getTotalResult());
             rootNode.put("itemsPerPage", (int)parameterMap.get("count"));
             rootNode.put("startIndex", (int)parameterMap.get("startIndex"));
             rootNode.put("schemas", schema);

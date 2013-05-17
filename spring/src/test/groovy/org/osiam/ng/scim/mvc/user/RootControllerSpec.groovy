@@ -36,7 +36,7 @@ class RootControllerSpec extends Specification{
         map.get("count") >> 10
         map.get("startIndex") >> 1
 
-        jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
+        jsonResponseEnrichHelper.getJsonFromSearchResult(Mock(List), map, blubb) >> "theJsonString"
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
@@ -63,7 +63,7 @@ class RootControllerSpec extends Specification{
         map.get("count") >> 10
         map.get("startIndex") >> 1
 
-        jsonResponseEnrichHelper.getJsonRootResponseWithAdditionalFields(Mock(List), map) >> "theJsonString"
+        jsonResponseEnrichHelper.getJsonFromSearchResult(Mock(List), map, blubb) >> "theJsonString"
 
         when:
         RequestMapping mapping = method.getAnnotation(RequestMapping)
