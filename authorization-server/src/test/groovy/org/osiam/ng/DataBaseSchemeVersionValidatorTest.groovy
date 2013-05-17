@@ -23,7 +23,6 @@
 
 package org.osiam.ng
 
-import org.hibernate.search.FullTextSession
 import org.osiam.ng.resourceserver.entities.DBVersion
 import spock.lang.Specification
 
@@ -31,10 +30,8 @@ import javax.persistence.EntityManager
 
 class DataBaseSchemeVersionValidatorTest extends Specification {
     def em = Mock(EntityManager)
-    def reIndexHelper = Mock(HibernateSessionHelper)
-    def underTest = new DataBaseSchemeVersionValidator(em: em, hibernateSessionHelper: reIndexHelper)
-    def fullTextSessionMock = Mock(FullTextSession)
-    def massIndexer = Mock(org.hibernate.search.MassIndexer)
+
+    def underTest = new DataBaseSchemeVersionValidator(em: em)
 
     def "should not throw an exception if set version of database-scheme got found"() {
         given:

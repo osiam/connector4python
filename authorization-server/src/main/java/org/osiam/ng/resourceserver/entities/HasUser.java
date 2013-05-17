@@ -17,11 +17,6 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
-
-import javax.persistence.*;
-
-
 public interface HasUser {
     void setUser(UserEntity user);
     UserEntity getUser();

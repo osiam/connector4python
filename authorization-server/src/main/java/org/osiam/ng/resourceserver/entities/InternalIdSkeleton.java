@@ -24,15 +24,11 @@
 package org.osiam.ng.resourceserver.entities;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Index;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.*;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "scim_id")
@@ -40,17 +36,14 @@ import java.util.UUID;
 @NamedQueries({@NamedQuery(name = "getById", query = "SELECT i FROM scim_id i WHERE i.id= :id")})
 public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
 
-    @Field
     @Type(type = "pg-uuid")
     @Column(unique = true, nullable = false)
     protected UUID id;
 
     @Id
-    @Field(index = Index.YES)
     @GeneratedValue
     protected long internal_id;
 
-    @Field
     @Column(unique = true)
     protected String externalId;
 

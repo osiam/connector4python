@@ -23,8 +23,6 @@
 
 package org.osiam.ng;
 
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.MassIndexer;
 import org.osiam.ng.resourceserver.entities.DBVersion;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,12 +38,8 @@ public class DataBaseSchemeVersionValidator {
     @PersistenceContext
     private EntityManager em;
 
-    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
-
     @PostConstruct
     public void checkVersion() throws InterruptedException {
-        reIndexDataBase();
-
         DBVersion version = em.find(DBVersion.class, DBVersion.DB_VERSION);
         if (version == null || !Double.valueOf(version.version).equals(DBVersion.DB_VERSION)) {
             throw new IllegalStateException("Database Scheme " +
@@ -54,11 +48,4 @@ public class DataBaseSchemeVersionValidator {
                     "The reason may be that the wrong database scheme is enrolled, please contact a System-Administrator");
         }
     }
-
-    private void reIndexDataBase() throws InterruptedException {
-        FullTextSession fullTextSession = hibernateSessionHelper.getFullTextSession(em);
-        MassIndexer massIndexer = fullTextSession.createIndexer();
-        massIndexer.startAndWait();
-    }
-
 }

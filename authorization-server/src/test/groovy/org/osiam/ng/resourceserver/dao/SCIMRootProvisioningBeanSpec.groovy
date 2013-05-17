@@ -1,6 +1,5 @@
 package org.osiam.ng.resourceserver.dao
 
-import org.hibernate.search.SearchException
 import spock.lang.Specification
 
 /**
@@ -30,7 +29,7 @@ class SCIMRootProvisioningBeanSpec extends Specification {
         scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
+        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new Exception("moep") }
         1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
     }
 
@@ -40,6 +39,6 @@ class SCIMRootProvisioningBeanSpec extends Specification {
 
         then:
         1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
-        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new SearchException("moep") }
+        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new Exception("moep") }
     }
 }

@@ -23,7 +23,6 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import org.hibernate.search.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import scim.schema.v2.Address;
@@ -38,89 +37,88 @@ import java.util.*;
  * User Entity
  */
 @Entity(name = "scim_user")
-@Indexed
 @NamedQueries({@NamedQuery(name = "getUserByUsername", query = "SELECT u FROM scim_user u WHERE u.userName = :username")})
 public class UserEntity extends InternalIdSkeleton implements UserDetails {
 
     private static final String MAPPING_NAME = "user";
     private static final long serialVersionUID = -6535056565639057058L;
 
-    @Field
+    
     @Column(nullable = false, unique = true)
     private String userName;
 
-    @IndexedEmbedded
+    
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private NameEntity name;
 
-    @Field
+    
     @Column
     private String nickName;
 
-    @Field
+    
     @Column
     private String profileUrl;
 
-    @Field
+    
     @Column
     private String title;
 
-    @Field
+    
     @Column
     private String userType;
 
-    @Field
+    
     @Column
     private String preferredLanguage;
 
-    @Field
+    
     @Column
     private String locale;
 
-    @Field
+    
     @Column
     private String timezone;
 
-    @Field
+    
     @Column
     private Boolean active;
 
     @Column(nullable = false)
     private String password;
 
-    @Field
+    
     @Column
     private String displayName;
 
-    @IndexedEmbedded
+    
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmailEntity> emails;
 
-    @IndexedEmbedded
+    
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PhoneNumberEntity> phoneNumbers;
 
-    @IndexedEmbedded
+    
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ImEntity> ims;
 
     @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PhotoEntity> photos;
 
-    @IndexedEmbedded
+    
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<AddressEntity> addresses;
 
-    @IndexedEmbedded
+    
     @OneToMany(fetch = FetchType.EAGER)
     private Set<GroupEntity> groups;
 
-    @IndexedEmbedded
+    
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<EntitlementsEntity> entitlements;
 
     //needs to be eager fetched due to authorization decisions
-    @IndexedEmbedded
+    
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<RolesEntity> roles;
 

@@ -17,9 +17,7 @@
 
 package org.osiam.ng.resourceserver;
 
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.search.query.dsl.QueryBuilder;
 
 public interface FilterChain {
     Criterion buildCriterion();

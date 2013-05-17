@@ -23,8 +23,6 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import org.hibernate.search.annotations.ContainedIn;
-import org.hibernate.search.annotations.Field;
 import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttributeWithType;
 import scim.schema.v2.MultiValuedAttribute;
 
@@ -38,11 +36,9 @@ import javax.persistence.ManyToOne;
 @Entity(name = "scim_photo")
 public class PhotoEntity extends MultiValueAttributeEntitySkeleton implements ChildOfMultiValueAttributeWithType, HasUser {
 
-    @Field
     @Column
     private String type;
 
-    @ContainedIn
     @ManyToOne
     private UserEntity user;
 

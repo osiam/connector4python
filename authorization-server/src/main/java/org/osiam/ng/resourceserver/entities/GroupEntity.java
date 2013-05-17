@@ -23,9 +23,6 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
 import scim.schema.v2.Group;
 import scim.schema.v2.MultiValuedAttribute;
 
@@ -38,18 +35,16 @@ import java.util.UUID;
  * Group Entity
  */
 @Entity(name = "scim_group")
-@Indexed
+
 //@NamedQueries({@NamedQuery(name = "removeMemberWithId", query = "DELETE FROM scim_group.members i WHERE i.id= :id")})
 public class GroupEntity extends InternalIdSkeleton {
 
-    @IndexedEmbedded
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<InternalIdSkeleton> members = new HashSet<>();
 
     @Column(name = "additional")
     private String any;
 
-    @Field
     @Column(unique = true, nullable = false)
     private String displayName;
 

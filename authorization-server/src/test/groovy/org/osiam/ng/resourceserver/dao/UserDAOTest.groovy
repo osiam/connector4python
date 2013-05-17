@@ -26,7 +26,7 @@ package org.osiam.ng.resourceserver.dao
 import org.hibernate.Criteria
 import org.hibernate.Session
 import org.hibernate.criterion.Criterion
-import org.osiam.ng.HibernateSessionHelper
+
 import org.osiam.ng.resourceserver.FilterChain
 import org.osiam.ng.resourceserver.FilterParser
 import org.osiam.ng.resourceserver.entities.GroupEntity

@@ -19,10 +19,9 @@
 
 package org.osiam.ng.resourceserver
 
-import org.apache.lucene.search.Query
+
 import org.hibernate.Criteria
 import org.hibernate.criterion.Criterion
-import org.hibernate.search.query.dsl.*
 import spock.lang.Specification
 
 class SingularFilterChainTest extends Specification{

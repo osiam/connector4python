@@ -23,7 +23,6 @@
 
 package org.osiam.ng.resourceserver.entities;
 
-import org.hibernate.search.annotations.Field;
 import scim.schema.v2.Name;
 
 import javax.persistence.Column;
@@ -41,27 +40,21 @@ public class NameEntity {
     @GeneratedValue
     private long id;
 
-    @Field
     @Column
     private String formatted;
 
-    @Field
     @Column
     private String familyName;
 
-    @Field
     @Column
     private String givenName;
 
-    @Field
     @Column
     private String middleName;
 
-    @Field
     @Column
     private String honorificPrefix;
 
-    @Field
     @Column
     private String honorificSuffix;
 

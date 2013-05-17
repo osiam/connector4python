@@ -24,9 +24,9 @@
 package org.osiam.ng.resourceserver.dao;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;
 import org.osiam.ng.scim.exceptions.ResourceNotFoundException;
@@ -47,19 +47,10 @@ public abstract class GetInternalIdSkeleton {
     @Inject
     protected FilterParser filterParser;
 
-    private HibernateSessionHelper hibernateSessionHelper = new HibernateSessionHelper();
-
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
-
     public void setFilterParser(FilterParser filterParser) {
         this.filterParser = filterParser;
     }
 
-    public void setHibernateSessionHelper(HibernateSessionHelper hibernateSessionHelper) {
-        this.hibernateSessionHelper = hibernateSessionHelper;
-    }
 
     protected <T extends InternalIdSkeleton> T getInternalIdSkeleton(String id) {
         Query query = em.createNamedQuery("getById");
@@ -78,7 +69,7 @@ public abstract class GetInternalIdSkeleton {
     }
 
     protected <T> SCIMSearchResult<T> search(Class<T> clazz, String filter, int count, int startIndex, String sortBy, String sortOrder) {
-        Criteria criteria = hibernateSessionHelper.getHibernateSession(em).createCriteria(clazz);
+        Criteria criteria = ((Session) em.getDelegate()).createCriteria(clazz);
         if (filter != null && !filter.isEmpty()) {
             criteria = criteria.add(filterParser.parse(filter).buildCriterion());
         }
