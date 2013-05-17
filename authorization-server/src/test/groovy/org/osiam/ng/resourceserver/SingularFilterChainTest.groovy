@@ -50,7 +50,7 @@ class SingularFilterChainTest extends Specification{
         then:
         result.key == 'userName'
         result.constraint == SingularFilterChain.Constraints.EQUALS
-        result.value == "1"
+        result.value == 1
     }
 
     def "should parse contains (co)"(){

@@ -228,6 +228,7 @@ class UserDAOTest extends Specification {
         filterChainMock.buildCriterion() >> criterionMock
         criteriaMock.add(criterionMock) >> criteriaMock
         criteriaMock.setProjection(_) >> criteriaMock
+        criteriaMock.setResultTransformer(_) >> criteriaMock
         criteriaMock.uniqueResult() >> 1000.toLong()
         criteriaMock.list() >> userList
 
@@ -255,6 +256,7 @@ class UserDAOTest extends Specification {
         filterChainMock.buildCriterion() >> criterionMock
         criteriaMock.add(criterionMock) >> criteriaMock
         criteriaMock.setProjection(_) >> criteriaMock
+        criteriaMock.setResultTransformer(_) >> criteriaMock
         criteriaMock.uniqueResult() >> 1000.toLong()
         criteriaMock.list() >> userList
 
