@@ -31,6 +31,7 @@ import org.osiam.ng.scim.schema.to.entity.SCIMEntities;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import scim.schema.v2.Group;
+import scim.schema.v2.User;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -65,10 +66,11 @@ public class SCIMGroupProvisioningBean extends SCIMProvisiongSkeleton<Group> imp
     }
 
     @Override
-    public List<Group> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
+    public SCIMSearchResult<Group> search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
         List<Group> groups = new ArrayList<>();
-        for (Object g : getDao().search(filter, sortBy, sortOrder, count, startIndex)) { groups.add(((GroupEntity) g).toScim()); }
-        return groups;
+        SCIMSearchResult<GroupEntity> result = getDao().search(filter, sortBy, sortOrder, count, startIndex);
+        for (Object g : result.getResult()) { groups.add(((GroupEntity) g).toScim()); }
+        return new SCIMSearchResult(groups, result.getTotalResult());
     }
 
     @Override
