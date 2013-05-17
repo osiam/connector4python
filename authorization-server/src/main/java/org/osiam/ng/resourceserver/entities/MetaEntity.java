@@ -23,10 +23,13 @@
 
 package org.osiam.ng.resourceserver.entities;
 
+import scim.schema.v2.Meta;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -44,16 +47,21 @@ public class MetaEntity {
     private long id;
 
     @Column
-    private GregorianCalendar created;
+    private Calendar created;
 
     @Column
-    private GregorianCalendar lastModified;
+    private Calendar lastModified;
 
     @Column
     private String location;
 
     @Column
     private String version;
+
+    public MetaEntity(Calendar instance) {
+        created = instance;
+        lastModified = instance;
+    }
 
     public long getId() {
         return id;
@@ -63,19 +71,19 @@ public class MetaEntity {
         this.id = id;
     }
 
-    public GregorianCalendar getCreated() {
+    public Calendar getCreated() {
         return created;
     }
 
-    public void setCreated(GregorianCalendar created) {
+    public void setCreated(Calendar created) {
         this.created = created;
     }
 
-    public GregorianCalendar getLastModified() {
+    public Calendar getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(GregorianCalendar lastModified) {
+    public void setLastModified(Calendar lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -93,5 +101,9 @@ public class MetaEntity {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public Meta toScim() {
+        return new Meta.Builder(created.getTime(), lastModified.getTime()).build();
     }
 }

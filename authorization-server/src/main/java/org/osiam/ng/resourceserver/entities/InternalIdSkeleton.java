@@ -30,6 +30,7 @@ import org.osiam.ng.scim.entity.interfaces.ChildOfMultiValueAttribute;
 import scim.schema.v2.MultiValuedAttribute;
 
 import javax.persistence.*;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -52,6 +53,9 @@ public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
     @Field
     @Column(unique = true)
     protected String externalId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    protected MetaEntity meta = new MetaEntity(GregorianCalendar.getInstance());
 
 
     public UUID getId() {
@@ -100,6 +104,14 @@ public abstract class InternalIdSkeleton implements ChildOfMultiValueAttribute{
     @Override
     public void setValue(String value) {
         id = UUID.fromString(value);
+    }
+
+    public MetaEntity getMeta() {
+        return meta;
+    }
+
+    public void setMeta(MetaEntity meta) {
+        this.meta = meta;
     }
 
     public abstract <T> T toScim();
