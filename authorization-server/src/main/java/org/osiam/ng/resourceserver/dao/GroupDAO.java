@@ -85,7 +85,7 @@ public class GroupDAO extends GetInternalIdSkeleton implements GenericDAO<GroupE
 
     @Override
     protected void createAliasesForCriteria(Criteria criteria) {
-        criteria.createAlias("members", "members");
+        criteria.createAlias("meta", "meta");
     }
 
 }

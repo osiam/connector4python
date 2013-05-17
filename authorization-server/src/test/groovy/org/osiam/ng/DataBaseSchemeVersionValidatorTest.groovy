@@ -36,21 +36,13 @@ class DataBaseSchemeVersionValidatorTest extends Specification {
     def "should not throw an exception if set version of database-scheme got found"() {
         given:
         def version = new DBVersion()
-        reIndexHelper.getFullTextSession(em) >> fullTextSessionMock
-        fullTextSessionMock.createIndexer() >> massIndexer
-
         when:
         underTest.checkVersion()
-
         then:
         1 * em.find(DBVersion, DBVersion.DB_VERSION) >> version
     }
 
     def "should throw an exception if set version of database-scheme got not found"() {
-        given:
-        reIndexHelper.getFullTextSession(em) >> fullTextSessionMock
-        fullTextSessionMock.createIndexer() >> massIndexer
-
         when:
         underTest.checkVersion()
 
@@ -65,9 +57,6 @@ class DataBaseSchemeVersionValidatorTest extends Specification {
         def version = new DBVersion()
         version.version = 0.03
         em.find(DBVersion, DBVersion.DB_VERSION) >> version
-
-        reIndexHelper.getFullTextSession(em) >> fullTextSessionMock
-        fullTextSessionMock.createIndexer() >> massIndexer
 
         when:
         underTest.checkVersion()
