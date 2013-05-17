@@ -23,7 +23,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "someSortOrder"
         servletRequestMock.getParameter("startIndex") >> "1"
         servletRequestMock.getParameter("count") >> "10"
-        servletRequestMock.getParameter()
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -39,6 +39,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "someSortOrder"
         servletRequestMock.getParameter("startIndex") >> "1"
         servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -54,6 +55,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> null
         servletRequestMock.getParameter("startIndex") >> "1"
         servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -69,6 +71,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "descending"
         servletRequestMock.getParameter("startIndex") >> "1"
         servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -84,6 +87,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "descending"
         servletRequestMock.getParameter("startIndex") >> null
         servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -99,6 +103,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "descending"
         servletRequestMock.getParameter("startIndex") >> "11"
         servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -114,6 +119,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "descending"
         servletRequestMock.getParameter("startIndex") >> "11"
         servletRequestMock.getParameter("count") >> null
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -129,6 +135,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "descending"
         servletRequestMock.getParameter("startIndex") >> "11"
         servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -144,6 +151,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "descending"
         servletRequestMock.getParameter("startIndex") >> "11"
         servletRequestMock.getParameter("count") >> "-10"
+        servletRequestMock.getParameter("attributes") >> ["userName"]
 
         when:
         requestParamHelper.getRequestParameterValues(servletRequestMock)
@@ -152,4 +160,21 @@ class RequestParamHelperSpec extends Specification {
         def e = thrown(RuntimeException)
         e.getMessage() == "Negative count values are not allowed"
     }
+
+    def "should exist default value if attributes are null"() {
+        given:
+        servletRequestMock.getParameter("filter") >> "someFilter"
+        servletRequestMock.getParameter("sortBy") >> "userName"
+        servletRequestMock.getParameter("sortOrder") >> "descending"
+        servletRequestMock.getParameter("startIndex") >> "11"
+        servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter("attributes") >> null
+
+        when:
+        Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)
+
+        then:
+        result.get("attributes") == []
+    }
+
 }
