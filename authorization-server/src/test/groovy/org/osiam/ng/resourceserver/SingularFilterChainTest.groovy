@@ -19,27 +19,19 @@
 
 package org.osiam.ng.resourceserver
 
-<<<<<<< HEAD
 import org.apache.lucene.search.Query
 import org.hibernate.Criteria
 import org.hibernate.criterion.Criterion
-import org.hibernate.criterion.NotNullExpression
-import org.hibernate.criterion.SimpleExpression
 import org.hibernate.search.query.dsl.*
-=======
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
 import spock.lang.Specification
 
 class SingularFilterChainTest extends Specification{
 
-    def "should parse datetime correctly"(){
-        when:
-        def result = new SingularFilterChain("meta.created eq 2011-05-13 04:42:34")
-        then:
-<<<<<<< HEAD
-        result.value instanceof Date
 
-=======
+    def "should parse equals (eq)"(){
+        when:
+        def result = new SingularFilterChain("userName eq \"bjensen\"")
+        then:
         result.key == 'userName'
         result.constraint == SingularFilterChain.Constraints.EQUALS
         result.value == "\"bjensen\""
@@ -48,121 +40,135 @@ class SingularFilterChainTest extends Specification{
     def "should build query for (eq) constraint"() {
         given:
         def singularFilterChain = new SingularFilterChain("userName eq \"bjensen\"")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+        def termContext = Mock(TermContext)
+        def termMatchingContext = Mock(TermMatchingContext)
+        def termTermination = Mock(TermTermination)
+
+        queryBuilder.keyword() >> termContext
+        termContext.onField("userName") >> termMatchingContext
+        termMatchingContext.matching("\"bjensen\"") >> termTermination
 
         when:
-        def result = singularFilterChain.buildCriterion()
+        singularFilterChain.buildQuery(queryBuilder, criteria)
 
         then:
-        result != null
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
+        1 * termTermination.createQuery() >> Mock(Query)
     }
 
-    def "should parse long correctly"(){
+    def "should parse without \""(){
         when:
-        def result = new SingularFilterChain("internal_id eq 1")
+        def result = new SingularFilterChain("userName eq 1")
         then:
-<<<<<<< HEAD
-        result.value instanceof Long
-=======
         result.key == 'userName'
         result.constraint == SingularFilterChain.Constraints.EQUALS
-        result.value == 1
-    }
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
-
-    }
-
-
-
-    def "should build query for (eq) constraint"() {
-        given:
-<<<<<<< HEAD
-        def singularFilterChain = new SingularFilterChain("userName eq \"bjensen\"")
-=======
-        def singularFilterChain = new SingularFilterChain("name.familyName co \"O'Malley\"")
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
-
-        when:
-        def result = singularFilterChain.buildCriterion()
-
-        then:
-<<<<<<< HEAD
-        result.op == "="
-        result.value == "bjensen"
-        result.propertyName == "userName"
-        result instanceof SimpleExpression
-=======
-        result != null
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
+        result.value == "1"
     }
 
     def "should parse contains (co)"(){
         when:
-        def result = new SingularFilterChain("name.familyName co \"O'Malley\"").buildCriterion()
+        def result = new SingularFilterChain("name.familyName co \"O'Malley\"")
         then:
-        result.propertyName == 'name.familyName'
-        result.op == " like "
-        result.value == "%O'Malley%"
-        result instanceof SimpleExpression
+        result.key == 'name.familyName'
+        result.constraint == SingularFilterChain.Constraints.CONTAINS
+        result.value == "\"O'Malley\""
     }
 
-<<<<<<< HEAD
+      def "should build query for (co) constraint"() {
+        given:
+        def singularFilterChain = new SingularFilterChain("name.familyName co \"O'Malley\"")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+        def termContext = Mock(TermContext)
+        def wildcardContext = Mock(WildcardContext)
+        def termMatchingContext = Mock(TermMatchingContext)
+        def termTermination = Mock(TermTermination)
+
+        queryBuilder.keyword() >> termContext
+        termContext.wildcard() >> wildcardContext
+        wildcardContext.onField("name.familyName") >> termMatchingContext
+        termMatchingContext.matching("*" + "\"O'Malley\"" + "*") >> termTermination
+
+        when:
+        singularFilterChain.buildQuery(queryBuilder, criteria)
+
+        then:
+        1 * termTermination.createQuery() >> Mock(Query)
+    }
+
     def "should parse starts with (sw)"(){
         when:
-        def result = new SingularFilterChain("userName sw \"L\"").buildCriterion()
+        def result = new SingularFilterChain("userName sw \"L\"")
         then:
-        result.propertyName == 'userName'
-        result.op == " like "
-        result.value == "L%"
-        result instanceof SimpleExpression
-=======
+        result.key == 'userName'
+        result.constraint == SingularFilterChain.Constraints.STARTS_WITH
+        result.value == "\"L\""
+
+    }
+
     def "should build query for (sw) constraint"() {
         given:
         def singularFilterChain = new SingularFilterChain("userName sw \"L\"")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+        def termContext = Mock(TermContext)
+        def wildcardContext = Mock(WildcardContext)
+        def termMatchingContext = Mock(TermMatchingContext)
+        def termTermination = Mock(TermTermination)
+
+        queryBuilder.keyword() >> termContext
+        termContext.wildcard() >> wildcardContext
+        wildcardContext.onField("userName") >> termMatchingContext
+        termMatchingContext.matching("\"L\"" + "*") >> termTermination
 
         when:
-        def result = singularFilterChain.buildCriterion()
+        singularFilterChain.buildQuery(queryBuilder, criteria)
 
         then:
-        result != null
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
+        1 * termTermination.createQuery() >> Mock(Query)
     }
-
 
     def "should parse present (pr)"(){
         when:
-        def result = new SingularFilterChain("title pr").buildCriterion()
+        def result = new SingularFilterChain("title pr")
         then:
-        result.propertyName == 'title'
-        result instanceof NotNullExpression
+        result.key == 'title'
+        result.constraint == SingularFilterChain.Constraints.PRESENT
+        !result.value
 
     }
 
-<<<<<<< HEAD
-=======
     def "should build query for (pr) constraint"() {
         given:
         def singularFilterChain = new SingularFilterChain("title pr")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+        def termContext = Mock(TermContext)
+        def wildcardContext = Mock(WildcardContext)
+        def termMatchingContext = Mock(TermMatchingContext)
+        def termTermination = Mock(TermTermination)
+
+        criteria.add(Mock(Criterion))
+        queryBuilder.keyword() >> termContext
+        termContext.wildcard() >> wildcardContext
+        wildcardContext.onField("title") >> termMatchingContext
+        termMatchingContext.matching("*") >> termTermination
 
         when:
-        def result = singularFilterChain.buildCriterion()
+        singularFilterChain.buildQuery(queryBuilder, criteria)
 
         then:
-        result != null
+        1 * termTermination.createQuery() >> Mock(Query)
     }
 
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
     def "should parse greater than (gt)"(){
+        //
         when:
-        def result = new SingularFilterChain("meta.lastModified gt \"2011-05-13 04:42:34\"")
+        def result = new SingularFilterChain("meta.lastModified gt \"2011-05-13T04:42:34Z\"")
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.GREATER_THAN
-<<<<<<< HEAD
-        result.value instanceof Date
-
-
-=======
         result.value == "\"2011-05-13T04:42:34Z\""
 
     }
@@ -170,75 +176,94 @@ class SingularFilterChainTest extends Specification{
     def "should build query for (gt) constraint"() {
         given:
         def singularFilterChain = new SingularFilterChain("meta.lastModified gt \"2011-05-13T04:42:34Z\"")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+
+        def rangeContext = Mock(RangeContext)
+        def rangeMatchingContext = Mock(RangeMatchingContext)
+        def rangeTerminationExcludable = Mock(RangeTerminationExcludable)
+
+        queryBuilder.range() >> rangeContext
+        rangeContext.onField("meta.lastModified") >> rangeMatchingContext
+        rangeMatchingContext.above("\"2011-05-13T04:42:34Z\"") >> rangeTerminationExcludable
+        rangeTerminationExcludable.excludeLimit() >> rangeTerminationExcludable
 
         when:
-        def result = singularFilterChain.buildCriterion()
+        singularFilterChain.buildQuery(queryBuilder, criteria)
 
         then:
-        result != null
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
+        1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
     }
-
 
     def "should parse greater than or equal (ge)"(){
         when:
-        def result = new SingularFilterChain("meta.lastModified ge \"2011-05-13 04:42:34 \"")
+        def result = new SingularFilterChain("meta.lastModified ge \"2011-05-13T04:42:34Z\"")
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.GREATER_EQUALS
-        result.value instanceof Date
+        result.value == "\"2011-05-13T04:42:34Z\""
 
-<<<<<<< HEAD
-
-=======
     }
 
     def "should build query for (ge) constraint"() {
         given:
         def singularFilterChain = new SingularFilterChain("meta.lastModified ge \"2011-05-13T04:42:34Z\"")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+
+        def rangeContext = Mock(RangeContext)
+        def rangeMatchingContext = Mock(RangeMatchingContext)
+        def rangeTerminationExcludable = Mock(RangeTerminationExcludable)
+
+        queryBuilder.range() >> rangeContext
+        rangeContext.onField("meta.lastModified") >> rangeMatchingContext
+        rangeMatchingContext.above("\"2011-05-13T04:42:34Z\"") >> rangeTerminationExcludable
 
         when:
-        def result = singularFilterChain.buildCriterion()
+        singularFilterChain.buildQuery(queryBuilder, criteria)
 
         then:
-        result != null
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
+        1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
     }
-
 
     def "should parse less than (lt)"(){
         when:
-        def result = new SingularFilterChain("meta.lastModified lt \"2011-05-13 04:42:34\"")
+        def result = new SingularFilterChain("meta.lastModified lt \"2011-05-13T04:42:34Z\"")
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.LESS_THAN
-        result.value instanceof Date
+        result.value == "\"2011-05-13T04:42:34Z\""
 
+    }
 
-<<<<<<< HEAD
-=======
     def "should build query for (lt) constraint"() {
         given:
         def singularFilterChain = new SingularFilterChain("meta.lastModified lt \"2011-05-13T04:42:34Z\"")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+
+        def rangeContext = Mock(RangeContext)
+        def rangeMatchingContext = Mock(RangeMatchingContext)
+        def rangeTerminationExcludable = Mock(RangeTerminationExcludable)
+
+        queryBuilder.range() >> rangeContext
+        rangeContext.onField("meta.lastModified") >> rangeMatchingContext
+        rangeMatchingContext.below("\"2011-05-13T04:42:34Z\"") >> rangeTerminationExcludable
+        rangeTerminationExcludable.excludeLimit() >> rangeTerminationExcludable
 
         when:
-        def result = singularFilterChain.buildCriterion()
+        singularFilterChain.buildQuery(queryBuilder, criteria)
 
         then:
-        result != null
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
+        1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
     }
-
 
     def "should parse less than or equal (le)"(){
         when:
-        def result = new SingularFilterChain("meta.lastModified le \"2011-05-13 04:42:34\"")
+        def result = new SingularFilterChain("meta.lastModified le \"2011-05-13T04:42:34Z\"")
         then:
         result.key == 'meta.lastModified'
         result.constraint == SingularFilterChain.Constraints.LESS_EQUALS
-<<<<<<< HEAD
-        result.value instanceof Date
-=======
         result.value == "\"2011-05-13T04:42:34Z\""
 
     }
@@ -246,13 +271,48 @@ class SingularFilterChainTest extends Specification{
     def "should build query for (le) constraint"() {
         given:
         def singularFilterChain = new SingularFilterChain("meta.lastModified le \"2011-05-13T04:42:34Z\"")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+
+        def rangeContext = Mock(RangeContext)
+        def rangeMatchingContext = Mock(RangeMatchingContext)
+        def rangeTerminationExcludable = Mock(RangeTerminationExcludable)
+
+        queryBuilder.range() >> rangeContext
+        rangeContext.onField("meta.lastModified") >> rangeMatchingContext
+        rangeMatchingContext.below("\"2011-05-13T04:42:34Z\"") >> rangeTerminationExcludable
 
         when:
-        def result = singularFilterChain.buildCriterion()
+        singularFilterChain.buildQuery(queryBuilder, criteria)
 
         then:
-        result != null
->>>>>>> 81a14accbde563ba27fe5ad72e1581b75666d206
+        1 * rangeTerminationExcludable.createQuery() >> Mock(Query)
+    }
+
+    def "should parse a empty or null chain and choose (empty) constraint"(){
+        when:
+        def result = new SingularFilterChain("")
+        then:
+        result.key == null
+        result.constraint == SingularFilterChain.Constraints.EMPTY
+        result.value == null
+    }
+
+    def "should build query for (empty) constraint"() {
+        given:
+        def singularFilterChain = new SingularFilterChain("")
+        def queryBuilder = Mock(QueryBuilder)
+        def criteria = Mock(Criteria)
+
+        def allContext = Mock(AllContext)
+
+        queryBuilder.all() >> allContext
+
+        when:
+        singularFilterChain.buildQuery(queryBuilder, criteria)
+
+        then:
+        1 * allContext.createQuery() >> Mock(Query)
     }
 
     def "should throw exception if no constraint matches"(){

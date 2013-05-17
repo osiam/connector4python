@@ -225,6 +225,12 @@
             <version>4.1.1.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.owlike</groupId>
+            <artifactId>genson</artifactId>
+            <version>0.94</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -93,8 +93,7 @@ public class UserEntity extends InternalIdSkeleton implements UserDetails {
     private String displayName;
 
     @IndexedEmbedded
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "user_internal_id", referencedColumnName = "internal_id")
+    @OneToMany(mappedBy = MAPPING_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmailEntity> emails;
 
     @IndexedEmbedded
