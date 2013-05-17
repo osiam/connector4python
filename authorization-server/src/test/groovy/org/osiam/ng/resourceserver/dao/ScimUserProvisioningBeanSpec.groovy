@@ -97,10 +97,20 @@ class ScimUserProvisioningBeanSpec extends Specification {
     }
 
     def "should call dao search on search"() {
+        given:
+        def scimSearchResultMock = Mock(SCIMSearchResult)
+        userDao.search("anyFilter", "userName", "ascending", 100, 1) >> scimSearchResultMock
+
+        def userEntityMock = Mock(UserEntity)
+        def userList = [userEntityMock] as List
+        scimSearchResultMock.getResult() >> userList
+        scimSearchResultMock.getTotalResult() >> 1000.toLong()
+
         when:
-        scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
+        def result = scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * userDao.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        result != null
+        result.getTotalResult() == 1000.toLong()
     }
 }

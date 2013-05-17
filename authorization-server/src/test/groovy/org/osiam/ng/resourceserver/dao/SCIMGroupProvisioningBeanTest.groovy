@@ -82,11 +82,21 @@ class SCIMGroupProvisioningBeanTest extends Specification {
 
     }
 
-    def "should call dao search on search"(){
+    def "should call dao search on search"() {
+        given:
+        def scimSearchResultMock = Mock(SCIMSearchResult)
+        groupDao.search("anyFilter", "userName", "ascending", 100, 1) >> scimSearchResultMock
+
+        def groupEntityMock = Mock(GroupEntity)
+        def userList = [groupEntityMock] as List
+        scimSearchResultMock.getResult() >> userList
+        scimSearchResultMock.getTotalResult() >> 1000.toLong()
+
         when:
-        underTest.search("anyFilter", "userName", "ascending", 100, 1)
+        def result = underTest.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * groupDao.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        result != null
+        result.getTotalResult() == 1000.toLong()
     }
 }

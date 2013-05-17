@@ -25,12 +25,7 @@ package org.osiam.ng.resourceserver.dao
 
 import org.hibernate.Criteria
 import org.hibernate.Session
-import org.hibernate.search.FullTextQuery
-import org.hibernate.search.FullTextSession
-import org.hibernate.search.SearchFactory
-import org.hibernate.search.query.dsl.EntityContext
-import org.hibernate.search.query.dsl.QueryBuilder
-import org.hibernate.search.query.dsl.QueryContextBuilder
+import org.hibernate.criterion.Criterion
 import org.osiam.ng.HibernateSessionHelper
 import org.osiam.ng.resourceserver.FilterChain
 import org.osiam.ng.resourceserver.FilterParser
@@ -48,15 +43,16 @@ import javax.persistence.Query
 
 class UserDAOTest extends Specification {
 
-    def filterParser = Mock(FilterParser)
-    def hibernateSessionHelper = Mock(HibernateSessionHelper)
-
-    def underTest = new UserDAO(filterParser: filterParser, hibernateSessionHelper: hibernateSessionHelper)
     def em = Mock(EntityManager)
+    def hibernateSessionHelperMock = Mock(HibernateSessionHelper)
+    def filterParserMock = Mock(FilterParser)
+    def underTest = new UserDAO()
     def userEntity = Mock(UserEntity)
 
     def setup() {
         underTest.setEm(em)
+        underTest.setFilterParser(filterParserMock)
+        underTest.setHibernateSessionHelper(hibernateSessionHelperMock)
         userEntity.roles >> new HashSet<>(Arrays.asList(new RolesEntity(value: "test"), new RolesEntity()))
         userEntity.addresses >> new HashSet<>()
         userEntity.phoneNumbers >> new HashSet<>()
@@ -218,39 +214,57 @@ class UserDAOTest extends Specification {
         thrown(ResourceNotFoundException)
     }
 
-    def "should do filtered searches on users"() {
+    def "should do filtered searches on users sorting ascending"() {
         given:
-        def fullTextSessionMock = Mock(FullTextSession)
-        def searchFactoryMock = Mock(SearchFactory)
-        def queryContextBuilderMock = Mock(QueryContextBuilder)
-        def entityContextMock = Mock(EntityContext)
-        def queryBuilderMock = Mock(QueryBuilder)
         def hibernateSessionMock = Mock(Session)
         def filterChainMock = Mock(FilterChain)
         def criteriaMock = Mock(Criteria)
-        def queryMock = Mock(org.apache.lucene.search.Query)
-        def fullTextQuery = Mock(FullTextQuery)
+        def criterionMock = Mock(Criterion)
+        def userList = ["user"] as List
 
-        hibernateSessionHelper.getFullTextSession(em) >> fullTextSessionMock
-        fullTextSessionMock.getSearchFactory() >> searchFactoryMock
-        searchFactoryMock.buildQueryBuilder() >> queryContextBuilderMock
-        queryContextBuilderMock.forEntity(UserEntity) >> entityContextMock
-        entityContextMock.get() >> queryBuilderMock
-
-        hibernateSessionHelper.getHibernateSession(em) >> hibernateSessionMock
-        hibernateSessionMock.createCriteria(UserEntity) >> criteriaMock
-        filterParser.parse("anyFilter") >> filterChainMock
-        filterChainMock.buildCriterion(queryBuilderMock, criteriaMock) >> queryMock
-
-        fullTextSessionMock.createFullTextQuery(queryMock, UserEntity) >> fullTextQuery
+        hibernateSessionHelperMock.getHibernateSession(em) >> hibernateSessionMock
+        hibernateSessionMock.createCriteria(UserEntity.class) >> criteriaMock
+        filterParserMock.parse("anyFilter") >> filterChainMock
+        filterChainMock.buildCriterion() >> criterionMock
+        criteriaMock.add(criterionMock) >> criteriaMock
+        criteriaMock.setProjection(_) >> criteriaMock
+        criteriaMock.uniqueResult() >> 1000.toLong()
+        criteriaMock.list() >> userList
 
         when:
-        underTest.search("anyFilter", "userName", "ascending", 100, 1)
+        def result = underTest.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * fullTextQuery.setSort(_)
-        1 * fullTextQuery.setMaxResults(100)
-        1 * fullTextQuery.setFirstResult(1)
-        1 * fullTextQuery.list()
+        result != null
+        result.getTotalResult() == 1000
+        result.getResult() == userList
+
+    }
+
+    def "should do filtered searches on users sorting descending"() {
+        given:
+        def hibernateSessionMock = Mock(Session)
+        def filterChainMock = Mock(FilterChain)
+        def criteriaMock = Mock(Criteria)
+        def criterionMock = Mock(Criterion)
+        def userList = ["user"] as List
+
+        hibernateSessionHelperMock.getHibernateSession(em) >> hibernateSessionMock
+        hibernateSessionMock.createCriteria(UserEntity.class) >> criteriaMock
+        filterParserMock.parse("anyFilter") >> filterChainMock
+        filterChainMock.buildCriterion() >> criterionMock
+        criteriaMock.add(criterionMock) >> criteriaMock
+        criteriaMock.setProjection(_) >> criteriaMock
+        criteriaMock.uniqueResult() >> 1000.toLong()
+        criteriaMock.list() >> userList
+
+        when:
+        def result = underTest.search("anyFilter", "userName", "descending", 100, 1)
+
+        then:
+        result != null
+        result.getTotalResult() == 1000
+        result.getResult() == userList
+
     }
 }

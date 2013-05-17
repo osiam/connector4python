@@ -41,15 +41,8 @@ import java.util.logging.Level;
 @Transactional
 public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEntity> {
 
-
-
-
     @Inject
     private PasswordEncoder passwordEncoder;
-
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
 
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;

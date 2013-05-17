@@ -18,11 +18,8 @@
 package org.osiam.ng.resourceserver;
 
 
-import org.apache.lucene.search.Query;
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.search.query.dsl.QueryBuilder;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
