@@ -2,6 +2,10 @@ package org.osiam.ng.scim.mvc.user;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
+import org.codehaus.jackson.map.ser.FilterProvider;
+import org.codehaus.jackson.map.ser.impl.SimpleBeanPropertyFilter;
+import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
 import org.codehaus.jackson.node.ObjectNode;
 import org.osiam.ng.resourceserver.dao.SCIMSearchResult;
 
@@ -29,28 +33,32 @@ public class JsonResponseEnrichHelper {
 
     private String getJsonResponseWithAdditionalFields(SCIMSearchResult scimSearchResult, Map<String, Object> parameterMap, String schema) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
 
-        ObjectNode rootNode;
-        ObjectNode objectNode = objectMapper.convertValue(scimSearchResult.getResult(), ObjectNode.class);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.getSerializationConfig().addMixInAnnotations(
+                Object.class, PropertyFilterMixIn.class);
 
-        Set<String> attributes = (Set<String>) parameterMap.get("attributes");
-        while (objectNode.getFieldNames().hasNext()) {
-            String test = objectNode.getFieldNames().next();
-            if(!attributes.contains(test)) {
-                attributes.remove(test);
-            }
+        String[] ignorableFieldNames = (String[]) parameterMap.get("attributes");
+
+        FilterProvider filters = new SimpleFilterProvider()
+                .addFilter("filter properties by name",
+                        SimpleBeanPropertyFilter.filterOutAllExcept(
+                                ignorableFieldNames));
+        ObjectWriter writer = mapper.writer(filters);
+
+        try {
+            String jsonString = writer.writeValueAsString(scimSearchResult.getResult());
+            JsonNode jsonNode = mapper.readTree(jsonString);
+            ObjectNode rootNode = mapper.createObjectNode();
+            rootNode.put("totalResults", scimSearchResult.getTotalResult());
+            rootNode.put("itemsPerPage", (int)parameterMap.get("count"));
+            rootNode.put("startIndex", (int)parameterMap.get("startIndex"));
+            rootNode.put("schemas", schema);
+            rootNode.put("Resources", jsonNode);
+
+            return rootNode.toString();
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
         }
-
-        objectNode.remove(attributes);
-
-        rootNode = objectMapper.createObjectNode();
-        rootNode.put("totalResults", scimSearchResult.getTotalResult());
-        rootNode.put("itemsPerPage", (int)parameterMap.get("count"));
-        rootNode.put("startIndex", (int)parameterMap.get("startIndex"));
-        rootNode.put("schemas", schema);
-        rootNode.put("Resources", objectNode);
-
-        return rootNode.toString();
     }
 }
