@@ -23,6 +23,7 @@ class RequestParamHelperSpec extends Specification {
         servletRequestMock.getParameter("sortOrder") >> "someSortOrder"
         servletRequestMock.getParameter("startIndex") >> "1"
         servletRequestMock.getParameter("count") >> "10"
+        servletRequestMock.getParameter()
 
         when:
         Map result = requestParamHelper.getRequestParameterValues(servletRequestMock)

@@ -35,16 +35,9 @@ public class JsonResponseEnrichHelper {
 
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.getSerializationConfig().addMixInAnnotations(
-                Object.class, PropertyFilterMixIn.class);
 
         String[] ignorableFieldNames = (String[]) parameterMap.get("attributes");
-
-        FilterProvider filters = new SimpleFilterProvider()
-                .addFilter("filter properties by name",
-                        SimpleBeanPropertyFilter.filterOutAllExcept(
-                                ignorableFieldNames));
-        ObjectWriter writer = mapper.writer(filters);
+        ObjectWriter writer = getObjectWriter(mapper, ignorableFieldNames);
 
         try {
             String jsonString = writer.writeValueAsString(scimSearchResult.getResult());
@@ -60,5 +53,20 @@ public class JsonResponseEnrichHelper {
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    private ObjectWriter getObjectWriter(ObjectMapper mapper, String[] ignorableFieldNames) {
+
+        if(ignorableFieldNames.length != 0) {
+            mapper.getSerializationConfig().addMixInAnnotations(
+                    Object.class, PropertyFilterMixIn.class);
+
+            FilterProvider filters = new SimpleFilterProvider()
+                    .addFilter("filter properties by name",
+                            SimpleBeanPropertyFilter.filterOutAllExcept(
+                                    ignorableFieldNames));
+            return mapper.writer(filters);
+        }
+        return mapper.writer();
     }
 }

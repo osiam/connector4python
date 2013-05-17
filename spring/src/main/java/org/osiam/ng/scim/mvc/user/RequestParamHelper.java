@@ -23,7 +23,7 @@ public class RequestParamHelper {
         parameterMap.put("sortBy", request.getParameter("sortBy") != null ? request.getParameter("sortBy") : "internal_id");
         parameterMap.put("sortOrder", request.getParameter("sortOrder") != null ? request.getParameter("sortOrder") : "ascending");
         parameterMap.put("startIndex", request.getParameter("startIndex") != null ? Integer.parseInt(request.getParameter("startIndex")) : 0);
-        parameterMap.put("attributes", (request.getParameter("attributes").split(",")));
+        parameterMap.put("attributes", (request.getParameter("attributes") != null ? request.getParameter("attributes").split(",") : new String[0]) );
 
         int count = request.getParameter("count") != null ? Integer.parseInt(request.getParameter("count")): 100;
         if (count <= 0)
