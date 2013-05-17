@@ -36,6 +36,19 @@
     <!--<bean id="scimUserProvisioning" class="org.osiam.ng.resourceserver.dao.ScimUserProvisioningBean"/>-->
 
     <!-- Resource Service interface secured via OAuth2 -->
+    <http pattern="/" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
+          access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
+
+        <!-- resources below /secured/get/resource/ are accessed via scope "READ" -->
+        <intercept-url pattern="/User/**" access="SCOPE_DYNAMIC"/>
+
+        <!-- validates the delivered access token -->
+        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER"/>
+
+        <!-- uses general oauthAccessDeniedHandler -->
+        <access-denied-handler ref="oauthAccessDeniedHandler"/>
+    </http>
+
     <http pattern="/User/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
           access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
 
@@ -48,6 +61,7 @@
         <!-- uses general oauthAccessDeniedHandler -->
         <access-denied-handler ref="oauthAccessDeniedHandler"/>
     </http>
+
     <http pattern="/Group/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
           access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
 

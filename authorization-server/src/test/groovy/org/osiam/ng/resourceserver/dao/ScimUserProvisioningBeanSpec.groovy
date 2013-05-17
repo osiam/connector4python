@@ -19,8 +19,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
     def userDao = Mock(UserDAO)
     def userEntity = Mock(UserEntity)
     def scimUser = Mock(User)
-    SCIMUserProvisioningBean scimUserProvisioningBean =
-        new SCIMUserProvisioningBean(userDao: userDao)
+    SCIMUserProvisioningBean scimUserProvisioningBean = new SCIMUserProvisioningBean(userDao: userDao)
 
 
     def "should be possible to get an user by his id"() {
