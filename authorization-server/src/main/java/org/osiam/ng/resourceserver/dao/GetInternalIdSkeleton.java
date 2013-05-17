@@ -23,14 +23,9 @@
 
 package org.osiam.ng.resourceserver.dao;
 
-import org.apache.lucene.search.Sort;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.query.dsl.QueryBuilder;
-import org.hibernate.sql.JoinType;
 import org.osiam.ng.HibernateSessionHelper;
 import org.osiam.ng.resourceserver.FilterParser;
 import org.osiam.ng.resourceserver.entities.InternalIdSkeleton;

@@ -30,7 +30,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,10 +47,10 @@ public class MetaEntity {
     private long id;
 
     @Column
-    private Calendar created;
+    private Date created;
 
     @Column
-    private Calendar lastModified;
+    private Date lastModified;
 
     @Column
     private String location;
@@ -59,9 +59,13 @@ public class MetaEntity {
     private String version;
 
     public MetaEntity(Calendar instance) {
-        created = instance;
-        lastModified = instance;
+        created = instance.getTime();
+        lastModified = instance.getTime();
     }
+
+    public MetaEntity() {}
+
+
 
     public long getId() {
         return id;
@@ -71,19 +75,19 @@ public class MetaEntity {
         this.id = id;
     }
 
-    public Calendar getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(Calendar created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
-    public Calendar getLastModified() {
+    public Date getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(Calendar lastModified) {
+    public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -104,6 +108,6 @@ public class MetaEntity {
     }
 
     public Meta toScim() {
-        return new Meta.Builder(created.getTime(), lastModified.getTime()).build();
+        return new Meta.Builder(created, lastModified).build();
     }
 }

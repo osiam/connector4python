@@ -23,6 +23,10 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -30,7 +34,8 @@ import java.util.regex.Pattern;
 
 public class SingularFilterChain implements FilterChain {
     static final Pattern SINGULAR_CHAIN_PATTERN =
-            Pattern.compile("(\\S+) (" + Constraints.createOrConstraints() + ")[ ]??(\\S*)");
+            Pattern.compile("(\\S+) (" + Constraints.createOrConstraints() + ")[ ]??([\\S ]*?)");
+    static final DateFormat DATE_FORMAT = new SimpleDateFormat("d-MM-yyyy HH:mm:ss");
 
     private final String key;
     private final Constraints constraint;
@@ -44,14 +49,19 @@ public class SingularFilterChain implements FilterChain {
         this.key = matcher.group(1).trim();
         this.constraint = Constraints.fromString.get(matcher.group(2));
 
-        this.value = castToOriginValue(matcher.group(3));
+        this.value = castToOriginValue(matcher.group(3).trim());
 
     }
 
     private Object castToOriginValue(String group) {
-        if (group.matches("[0-9]+"))
+        if (!group.startsWith("\"") && group.matches("[0-9]+"))
             return Long.valueOf(group);
-        return group;  //To change body of created methods use File | Settings | File Templates.
+        try {
+            group = group.replace("\"", "");
+            return DATE_FORMAT.parse(group);
+        } catch (ParseException e) {
+            return group;
+        }
     }
 
     @Override

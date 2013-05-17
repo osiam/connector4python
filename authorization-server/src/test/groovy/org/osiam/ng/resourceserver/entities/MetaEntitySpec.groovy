@@ -35,7 +35,7 @@ import spock.lang.Specification
 class MetaEntitySpec extends Specification {
 
     MetaEntity metaEntity = new MetaEntity()
-    def gregorianCalendar = Mock(GregorianCalendar)
+    def date = Mock(Date)
 
     def "setter and getter for the Id should be present"() {
         when:
@@ -47,18 +47,18 @@ class MetaEntitySpec extends Specification {
 
     def "setter and getter for the created field should be present"() {
         when:
-        metaEntity.setCreated(gregorianCalendar)
+        metaEntity.setCreated(date)
 
         then:
-        metaEntity.getCreated() == gregorianCalendar
+        metaEntity.getCreated() == date
     }
 
     def "setter and getter for the modified field should be present"() {
         when:
-        metaEntity.setLastModified(gregorianCalendar)
+        metaEntity.setLastModified(date)
 
         then:
-        metaEntity.getLastModified() == gregorianCalendar
+        metaEntity.getLastModified() == date
     }
 
     def "setter and getter for the location should be present"() {

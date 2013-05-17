@@ -149,6 +149,7 @@ public class UserDAO extends GetInternalIdSkeleton implements GenericDAO<UserEnt
 
     @Override
     protected void createAliasesForCriteria(Criteria criteria) {
+        criteria.createAlias("meta", "meta");
         criteria.createAlias("name", "name");
     }
 
