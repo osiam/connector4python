@@ -1,68 +1,26 @@
-ALTER TABLE ONLY public.scim_enterprise DROP CONSTRAINT fke1bc510cae52e63f;
-ALTER TABLE ONLY public.scim_photo DROP CONSTRAINT fkdd4f01a7738674d5;
-ALTER TABLE ONLY public.scim_group DROP CONSTRAINT fkdcd4b9f4e9e686e0;
-ALTER TABLE ONLY public.scim_email DROP CONSTRAINT fkdcb60f11738674d5;
-ALTER TABLE ONLY public.scim_phonenumber DROP CONSTRAINT fkd9f3520c738674d5;
-ALTER TABLE ONLY public.scim_address DROP CONSTRAINT fka4a85629738674d5;
-ALTER TABLE ONLY public.scim_certificate DROP CONSTRAINT fk956dd94c738674d5;
-ALTER TABLE ONLY public.scim_group_scim_id DROP CONSTRAINT fk8d2c327bc347d0ba;
-ALTER TABLE ONLY public.scim_group_scim_id DROP CONSTRAINT fk8d2c327b6d23d136;
-ALTER TABLE ONLY public.scim_im DROP CONSTRAINT fk725705cf738674d5;
-ALTER TABLE ONLY public.scim_user_scim_roles DROP CONSTRAINT fk70e4b45be638e451;
-ALTER TABLE ONLY public.scim_user_scim_roles DROP CONSTRAINT fk70e4b45babdb6640;
-ALTER TABLE ONLY public.scim_user_scim_group DROP CONSTRAINT fk704b1c1dabdb6640;
-ALTER TABLE ONLY public.scim_user_scim_group DROP CONSTRAINT fk704b1c1d17c2116;
-ALTER TABLE ONLY public.scim_user DROP CONSTRAINT fk38b265b6e9e686e0;
-ALTER TABLE ONLY public.scim_user DROP CONSTRAINT fk38b265b627b5137b;
-ALTER TABLE ONLY public.scim_user_scim_address DROP CONSTRAINT fk340ed212abdb6640;
-ALTER TABLE ONLY public.scim_user_scim_address DROP CONSTRAINT fk340ed212353ef531;
-ALTER TABLE ONLY public.scim_user_scim_entitlements DROP CONSTRAINT fk2d322588ef67251f;
-ALTER TABLE ONLY public.scim_user_scim_entitlements DROP CONSTRAINT fk2d322588abdb6640;
-ALTER TABLE ONLY public.scim_user_additional DROP CONSTRAINT fk20575a504c8bba87;
-ALTER TABLE ONLY public.scim_user_scim_roles DROP CONSTRAINT scim_user_scim_roles_pkey;
-ALTER TABLE ONLY public.scim_user_scim_group DROP CONSTRAINT scim_user_scim_group_pkey;
-ALTER TABLE ONLY public.scim_user_scim_entitlements DROP CONSTRAINT scim_user_scim_entitlements_pkey;
-ALTER TABLE ONLY public.scim_user_scim_address DROP CONSTRAINT scim_user_scim_address_pkey;
-ALTER TABLE ONLY public.scim_user DROP CONSTRAINT scim_user_pkey;
-ALTER TABLE ONLY public.scim_roles DROP CONSTRAINT scim_roles_pkey;
-ALTER TABLE ONLY public.scim_photo DROP CONSTRAINT scim_photo_pkey;
-ALTER TABLE ONLY public.scim_phonenumber DROP CONSTRAINT scim_phonenumber_pkey;
-ALTER TABLE ONLY public.scim_name DROP CONSTRAINT scim_name_pkey;
-ALTER TABLE ONLY public.scim_meta DROP CONSTRAINT scim_meta_pkey;
-ALTER TABLE ONLY public.scim_manager DROP CONSTRAINT scim_manager_pkey;
-ALTER TABLE ONLY public.scim_im DROP CONSTRAINT scim_im_pkey;
-ALTER TABLE ONLY public.scim_id DROP CONSTRAINT scim_id_pkey;
-ALTER TABLE ONLY public.scim_group_scim_id DROP CONSTRAINT scim_group_scim_id_pkey;
-ALTER TABLE ONLY public.scim_group DROP CONSTRAINT scim_group_pkey;
-ALTER TABLE ONLY public.scim_entitlements DROP CONSTRAINT scim_entitlements_pkey;
-ALTER TABLE ONLY public.scim_enterprise DROP CONSTRAINT scim_enterprise_pkey;
-ALTER TABLE ONLY public.scim_email DROP CONSTRAINT scim_email_pkey;
-ALTER TABLE ONLY public.scim_certificate DROP CONSTRAINT scim_certificate_pkey;
-ALTER TABLE ONLY public.scim_address DROP CONSTRAINT scim_address_pkey;
-ALTER TABLE ONLY public.database_scheme_version DROP CONSTRAINT database_scheme_version_pkey;
-DROP TABLE public.scim_user_scim_roles;
-DROP TABLE public.scim_user_scim_group;
-DROP TABLE public.scim_user_scim_entitlements;
-DROP TABLE public.scim_user_scim_address;
-DROP TABLE public.scim_user_additional;
-DROP TABLE public.scim_user;
-DROP TABLE public.scim_roles;
-DROP TABLE public.scim_photo;
-DROP TABLE public.scim_phonenumber;
-DROP TABLE public.scim_name;
-DROP TABLE public.scim_meta;
-DROP TABLE public.scim_manager;
-DROP TABLE public.scim_im;
-DROP TABLE public.scim_id;
-DROP TABLE public.scim_group_scim_id;
-DROP TABLE public.scim_group;
-DROP TABLE public.scim_entitlements;
-DROP TABLE public.scim_enterprise;
-DROP TABLE public.scim_email;
-DROP TABLE public.scim_certificate;
-DROP TABLE public.scim_address;
-DROP SEQUENCE public.hibernate_sequence;
-DROP TABLE public.database_scheme_version;
+DROP TABLE scim_user_scim_roles CASCADE;
+DROP TABLE scim_user_scim_group CASCADE;
+DROP TABLE scim_user_scim_entitlements CASCADE;
+DROP TABLE scim_user_scim_address CASCADE;
+DROP TABLE scim_user_additional CASCADE;
+DROP TABLE scim_user CASCADE;
+DROP TABLE scim_roles CASCADE;
+DROP TABLE scim_photo CASCADE;
+DROP TABLE scim_phonenumber CASCADE;
+DROP TABLE scim_name CASCADE;
+DROP TABLE scim_meta CASCADE;
+DROP TABLE scim_manager CASCADE;
+DROP TABLE scim_im CASCADE;
+DROP TABLE scim_id CASCADE;
+DROP TABLE scim_group_scim_id CASCADE;
+DROP TABLE scim_group CASCADE;
+DROP TABLE scim_entitlements CASCADE;
+DROP TABLE scim_enterprise CASCADE;
+DROP TABLE scim_email CASCADE;
+DROP TABLE scim_certificate CASCADE;
+DROP TABLE scim_address CASCADE;
+DROP SEQUENCE hibernate_sequence CASCADE;
+DROP TABLE database_scheme_version CASCADE;
 DROP EXTENSION plpgsql;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -154,14 +112,18 @@ CREATE TABLE scim_entitlements (
 
 CREATE TABLE scim_group (
     additional character varying(255),
-    displayname character varying(255) NOT NULL,
+    displayname character varying(255) NOT NULL UNIQUE,
     internal_id bigint NOT NULL
 );
 
 
---
--- Name: scim_group_scim_id; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
+CREATE TABLE scim_meta (
+  id bigint NOT NULL UNIQUE ,
+  created timestamp without time zone,
+  lastmodified timestamp without time zone,
+  location character varying(255),
+  version character varying(255)
+);
 
 CREATE TABLE scim_group_scim_id (
     scim_group_internal_id bigint NOT NULL,
@@ -176,6 +138,7 @@ CREATE TABLE scim_group_scim_id (
 CREATE TABLE scim_id (
     internal_id bigint NOT NULL,
     externalid character varying(255) unique ,
+    meta_id bigint references scim_meta(id),
     id uuid NOT NULL
 );
 
@@ -199,19 +162,6 @@ CREATE TABLE scim_manager (
     id bigint NOT NULL,
     displayname character varying(255),
     managerid bytea
-);
-
-
---
--- Name: scim_meta; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE scim_meta (
-    id bigint NOT NULL,
-    created timestamp without time zone,
-    lastmodified timestamp without time zone,
-    location character varying(255),
-    version character varying(255)
 );
 
 
@@ -393,8 +343,8 @@ INSERT INTO scim_group VALUES (NULL, 'testGroup2', 2);
 -- Data for Name: scim_id; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO scim_id VALUES (1, NULL, 'cef9452e-00a9-4cec-a086-d171374ffbef');
-INSERT INTO scim_id VALUES (2, NULL, '2a820312-67b3-4275-963d-b235c6525207');
+INSERT INTO scim_id VALUES (1, NULL, NULL, 'cef9452e-00a9-4cec-a086-d171374ffbef');
+INSERT INTO scim_id VALUES (2, NULL, NULL, '2a820312-67b3-4275-963d-b235c6525207');
 
 
 --
