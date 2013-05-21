@@ -79,8 +79,8 @@ public abstract class GetInternalIdSkeleton {
         }
         createAliasesForCriteria(criteria);
         criteria.setMaxResults(count);
-        criteria.setFirstResult(startIndex);
         long totalResult = getTotalResults(criteria);
+        criteria.setFirstResult(startIndex);
         setSortOrder(sortBy, sortOrder, criteria);
         List list = criteria.setProjection(null).setResultTransformer(Criteria.ROOT_ENTITY).list();
         return new SCIMSearchResult(list, totalResult);
