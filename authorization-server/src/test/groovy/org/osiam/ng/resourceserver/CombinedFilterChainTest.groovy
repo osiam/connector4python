@@ -1,5 +1,6 @@
 package org.osiam.ng.resourceserver
 
+import org.hibernate.criterion.Criterion
 import spock.lang.Specification
 
 class CombinedFilterChainTest extends Specification {
@@ -55,7 +56,16 @@ class CombinedFilterChainTest extends Specification {
         cf.term2.term2.key == 'emails'
         cf.term2.term2.constraint == SingularFilterChain.Constraints.CONTAINS
         cf.term2.term2.value == 'example.org'
+    }
 
+    def "should build an criterion"() {
+        given:
+        def filter = 'userType eq "Employee" OR (emails co "example.com" NOR emails co "example.org")'
+        def chain = new CombinedFilterChain(filter)
+        when:
+        def cf = chain.buildCriterion()
+        then:
+        cf instanceof Criterion
 
     }
 }

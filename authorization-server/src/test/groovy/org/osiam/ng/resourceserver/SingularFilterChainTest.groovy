@@ -26,89 +26,89 @@ class SingularFilterChainTest extends Specification{
 
     def "should parse equals (eq)"(){
         when:
-        def result = new SingularFilterChain("userName eq \"bjensen\"")
+        def result = new SingularFilterChain("userName eq \"bjensen\"").buildCriterion()
         then:
-        result.key == 'userName'
-        result.constraint == SingularFilterChain.Constraints.EQUALS
+        result.propertyName == 'userName'
+        result.op == "="
         result.value == "bjensen"
+
+
+
     }
 
     def "should parse without \""(){
         when:
-        def result = new SingularFilterChain("userName eq 1")
+        def result = new SingularFilterChain("userName eq 1").buildCriterion()
         then:
-        result.key == 'userName'
-        result.constraint == SingularFilterChain.Constraints.EQUALS
+        result.propertyName == 'userName'
+        result.op == "="
         result.value == 1
+
     }
 
     def "should parse contains (co)"(){
         when:
-        def result = new SingularFilterChain("name.familyName co \"O'Malley\"")
+        def result = new SingularFilterChain("name.familyName co \"O'Malley\"").buildCriterion()
         then:
-        result.key == 'name.familyName'
-        result.constraint == SingularFilterChain.Constraints.CONTAINS
-        result.value == "O'Malley"
+        result.propertyName == 'name.familyName'
+        result.op == " like "
+        result.value == "%O'Malley%"
     }
 
     def "should parse starts with (sw)"(){
         when:
-        def result = new SingularFilterChain("userName sw \"L\"")
+        def result = new SingularFilterChain("userName sw \"L\"").buildCriterion()
         then:
-        result.key == 'userName'
-        result.constraint == SingularFilterChain.Constraints.STARTS_WITH
-        result.value == "L"
+        result.propertyName == 'userName'
+        result.op == " like "
+        result.value == "L%"
 
     }
 
     def "should parse present (pr)"(){
         when:
-        def result = new SingularFilterChain("title pr")
+        def result = new SingularFilterChain("title pr").buildCriterion()
         then:
-        result.key == 'title'
-        result.constraint == SingularFilterChain.Constraints.PRESENT
-        !result.value
-
+        result.propertyName == 'title'
     }
 
     def "should parse greater than (gt)"(){
-        //
         when:
-        def result = new SingularFilterChain("meta.lastModified gt \"2011-05-13T04:42:34Z\"")
+        def result = new SingularFilterChain("meta.lastModified gt \"2011-05-13T04:42:34Z\"").buildCriterion()
         then:
-        result.key == 'meta.lastModified'
-        result.constraint == SingularFilterChain.Constraints.GREATER_THAN
+        result.propertyName == 'meta.lastModified'
+        result.op == ">"
         result.value == "2011-05-13T04:42:34Z"
 
     }
 
     def "should parse greater than or equal (ge)"(){
         when:
-        def result = new SingularFilterChain("meta.lastModified ge \"2011-05-13T04:42:34Z\"")
+        def result = new SingularFilterChain("meta.lastModified ge \"2011-05-13T04:42:34Z\"").buildCriterion()
         then:
-        result.key == 'meta.lastModified'
-        result.constraint == SingularFilterChain.Constraints.GREATER_EQUALS
+        result.propertyName == 'meta.lastModified'
+        result.op == ">="
         result.value == "2011-05-13T04:42:34Z"
 
     }
 
     def "should parse less than (lt)"(){
         when:
-        def result = new SingularFilterChain("meta.lastModified lt \"2011-05-13T04:42:34Z\"")
+        def result = new SingularFilterChain("meta.lastModified lt \"2011-05-13T04:42:34Z\"").buildCriterion()
         then:
-        result.key == 'meta.lastModified'
-        result.constraint == SingularFilterChain.Constraints.LESS_THAN
+        result.propertyName == 'meta.lastModified'
+        result.op == "<"
         result.value == "2011-05-13T04:42:34Z"
 
     }
 
     def "should parse less than or equal (le)"(){
         when:
-        def result = new SingularFilterChain("meta.lastModified le \"2011-05-13T04:42:34Z\"")
+        def result = new SingularFilterChain("meta.lastModified le \"2011-05-13 04:42:34\"").buildCriterion()
         then:
-        result.key == 'meta.lastModified'
-        result.constraint == SingularFilterChain.Constraints.LESS_EQUALS
-        result.value == "2011-05-13T04:42:34Z"
+        result.propertyName == 'meta.lastModified'
+        result.op == "<="
+        result.value instanceof Date
 
     }
 

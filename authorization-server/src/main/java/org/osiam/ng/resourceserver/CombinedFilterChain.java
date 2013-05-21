@@ -41,7 +41,7 @@ public class CombinedFilterChain implements FilterChain {
         }
         this.term1 = filterParser.parse(matcher.group(1));
         this.combinedWith = Combiner.fromString(matcher.group(2));
-        this.term2= filterParser.parse(matcher.group(3));
+        this.term2 = filterParser.parse(matcher.group(3));
     }
 
     @Override
@@ -49,10 +49,8 @@ public class CombinedFilterChain implements FilterChain {
         if (combinedWith == Combiner.AND) {
             return Restrictions.and(term1.buildCriterion(), term2.buildCriterion());
         }
-        else if (combinedWith == Combiner.OR) {
-            return Restrictions.or(term1.buildCriterion(), term2.buildCriterion());
-        }
-        throw new IllegalArgumentException("Combined with is unknown: "+combinedWith);
+        return Restrictions.or(term1.buildCriterion(), term2.buildCriterion());
+
     }
 
 
@@ -72,18 +70,6 @@ public class CombinedFilterChain implements FilterChain {
 
         Combiner(String constraint) {
             this.constraint = constraint;
-        }
-
-        static String createOrConstraints() {
-            StringBuilder sb = new StringBuilder();
-            for (Combiner k : values()) {
-                if (sb.length() != 0) {
-                    sb.append("|");
-                }
-                sb.append(k.constraint);
-            }
-            return sb.toString();
-
         }
 
 
