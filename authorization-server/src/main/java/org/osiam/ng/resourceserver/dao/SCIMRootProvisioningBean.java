@@ -29,9 +29,11 @@ public class SCIMRootProvisioningBean implements SCIMRootProvisioning {
     @Override
     public SCIMSearchResult search(String filter, String sortBy, String sortOrder, int count, int startIndex) {
 
-        SCIMSearchResult userSearchResult = addUserToSearchResult(filter, sortBy, sortOrder, count, startIndex);
-        SCIMSearchResult groupSearchResult = addGroupToSearchResult(filter, sortBy, sortOrder, count, startIndex);
-
+        int userGroupMaxResult = count / 2;
+        SCIMSearchResult userSearchResult = addUserToSearchResult(filter, sortBy, sortOrder, userGroupMaxResult,
+                startIndex);
+        SCIMSearchResult groupSearchResult = addGroupToSearchResult(filter, sortBy, sortOrder, userGroupMaxResult,
+                startIndex);
         SCIMSearchResult scimSearchResult = new SCIMSearchResult(userSearchResult.getResult(), userSearchResult.getTotalResult());
         scimSearchResult.addResult(groupSearchResult.getResult());
         scimSearchResult.addTotalResult(groupSearchResult.getTotalResult());

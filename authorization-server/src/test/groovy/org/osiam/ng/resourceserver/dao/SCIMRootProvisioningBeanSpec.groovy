@@ -20,8 +20,8 @@ class SCIMRootProvisioningBeanSpec extends Specification {
         scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
-        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 50, 1) >> []
+        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 50, 1) >> []
     }
 
     def "should ignore SearchException on UserDAO"() {
@@ -29,8 +29,8 @@ class SCIMRootProvisioningBeanSpec extends Specification {
         scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new Exception("moep") }
-        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
+        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 50, 1) >> { throw new Exception("moep") }
+        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 50, 1) >> []
     }
 
     def "should ignore SearchException on GroupDAO"() {
@@ -38,7 +38,7 @@ class SCIMRootProvisioningBeanSpec extends Specification {
         scimRootProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1)
 
         then:
-        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> []
-        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 100, 1) >> { throw new Exception("moep") }
+        1 * scimUserProvisioningBean.search("anyFilter", "userName", "ascending", 50, 1) >> []
+        1 * scimGroupProvisioningBean.search("anyFilter", "userName", "ascending", 50, 1) >> { throw new Exception("moep") }
     }
 }
