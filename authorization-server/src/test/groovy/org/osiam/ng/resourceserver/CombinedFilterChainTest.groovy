@@ -58,9 +58,18 @@ class CombinedFilterChainTest extends Specification {
         cf.term2.term2.value == 'example.org'
     }
 
+    def "should throw an exception when filter does not match"(){
+        when:
+        new CombinedFilterChain("xxx NOR xxx")
+        then:
+        def e = thrown(IllegalArgumentException)
+        e.message == "xxx NOR xxx is not a CombinedFilterChain."
+    }
+
+
     def "should build an criterion"() {
         given:
-        def filter = 'userType eq "Employee" OR (emails co "example.com" NOR emails co "example.org")'
+        def filter = 'userType eq "Employee" AND (emails co "example.com" OR emails co "example.org")'
         def chain = new CombinedFilterChain(filter)
         when:
         def cf = chain.buildCriterion()
