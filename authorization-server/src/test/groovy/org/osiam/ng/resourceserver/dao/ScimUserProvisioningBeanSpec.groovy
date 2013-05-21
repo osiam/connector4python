@@ -101,6 +101,7 @@ class ScimUserProvisioningBeanSpec extends Specification {
         userDao.search("anyFilter", "userName", "ascending", 100, 1) >> scimSearchResultMock
 
         def userEntityMock = Mock(UserEntity)
+        def user = Mock(User)
         def userList = [userEntityMock] as List
         scimSearchResultMock.getResult() >> userList
         scimSearchResultMock.getTotalResult() >> 1000.toLong()
