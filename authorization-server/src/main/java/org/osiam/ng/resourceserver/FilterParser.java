@@ -27,10 +27,7 @@ public class FilterParser {
         if (CombinedFilterChain.COMBINED_FILTER_CHAIN.matcher(p).matches()) {
             return new CombinedFilterChain(p);
         }
-        else if (SingularFilterChain.SINGULAR_CHAIN_PATTERN.matcher(p).matches()) {
-            return new SingularFilterChain(p);
-        }
+        return new SingularFilterChain(p);
 
-        throw new IllegalArgumentException(p + " is not a valid filter.");
     }
 }
