@@ -46,10 +46,12 @@ public class CombinedFilterChain implements FilterChain {
 
     @Override
     public Criterion buildCriterion() {
-        if (combinedWith == Combiner.AND)
+        if (combinedWith == Combiner.AND) {
             return Restrictions.and(term1.buildCriterion(), term2.buildCriterion());
-        else if (combinedWith == Combiner.OR)
+        }
+        else if (combinedWith == Combiner.OR) {
             return Restrictions.or(term1.buildCriterion(), term2.buildCriterion());
+        }
         throw new IllegalArgumentException("Combined with is unknown: "+combinedWith);
     }
 
@@ -57,7 +59,7 @@ public class CombinedFilterChain implements FilterChain {
     public enum Combiner {
         AND("and"),
         OR("or");
-        static Map<String, Combiner> fromString = new ConcurrentHashMap<>();
+        private static Map<String, Combiner> fromString = new ConcurrentHashMap<>();
 
         static {
             for (Combiner k : values()) {
