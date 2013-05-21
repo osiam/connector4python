@@ -24,10 +24,12 @@ import org.springframework.stereotype.Service;
 public class FilterParser {
 
     public FilterChain parse(String p) {
-        if (CombinedFilterChain.COMBINED_FILTER_CHAIN.matcher(p).matches())
+        if (CombinedFilterChain.COMBINED_FILTER_CHAIN.matcher(p).matches()) {
             return new CombinedFilterChain(p);
-        else if (SingularFilterChain.SINGULAR_CHAIN_PATTERN.matcher(p).matches())
+        }
+        else if (SingularFilterChain.SINGULAR_CHAIN_PATTERN.matcher(p).matches()) {
             return new SingularFilterChain(p);
+        }
 
         throw new IllegalArgumentException(p + " is not a valid filter.");
     }

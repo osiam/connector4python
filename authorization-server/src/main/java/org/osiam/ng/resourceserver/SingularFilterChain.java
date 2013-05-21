@@ -24,7 +24,6 @@ import org.hibernate.criterion.Restrictions;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -33,7 +32,7 @@ import java.util.regex.Pattern;
 public class SingularFilterChain implements FilterChain {
     static final Pattern SINGULAR_CHAIN_PATTERN =
             Pattern.compile("(\\S+) (" + Constraints.createOrConstraints() + ")[ ]??([\\S ]*?)");
-    static final DateFormat DATE_FORMAT = new SimpleDateFormat("d-MM-yyyy HH:mm:ss");
+    final DateFormat dateFormat = new SimpleDateFormat("d-MM-yyyy HH:mm:ss");
 
     private final String key;
     private final Constraints constraint;
@@ -52,11 +51,12 @@ public class SingularFilterChain implements FilterChain {
     }
 
     private Object castToOriginValue(String group) {
-        if (!group.startsWith("\"") && group.matches("[0-9]+"))
+        if (!group.startsWith("\"") && group.matches("[0-9]+")) {
             return Long.valueOf(group);
+        }
         try {
             group = group.replace("\"", "");
-            return DATE_FORMAT.parse(group);
+            return dateFormat.parse(group);
         } catch (ParseException e) {
             return group;
         }
@@ -96,10 +96,10 @@ public class SingularFilterChain implements FilterChain {
         GREATER_EQUALS("ge"),
         LESS_THAN("lt"),
         LESS_EQUALS("le");
-        static Map<String, Constraints> fromString = new ConcurrentHashMap<>();
+        private static Map<String, Constraints> fromString = new ConcurrentHashMap<>();
 
         static {
-            for (Constraints k : values()) {
+            for (final Constraints k : values()) {
                 fromString.put(k.constraint, k);
             }
         }
