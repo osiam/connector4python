@@ -3,7 +3,7 @@ package org.osiam.ng.resourceserver
 import org.hibernate.criterion.Criterion
 import spock.lang.Specification
 
-class CombinedFilterChainTest extends Specification {
+class CombinedFilteredSearchTest extends Specification {
     def "should be able to parse title pr and userType eq Employee"() {
         given:
         def filter = 'title pr and userType eq "Employee"'
