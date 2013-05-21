@@ -80,15 +80,24 @@ public abstract class GetInternalIdSkeleton {
         createAliasesForCriteria(criteria);
         criteria.setMaxResults(count);
         criteria.setFirstResult(startIndex);
-        long totalResult = (long) criteria.setProjection(Projections.rowCount()).uniqueResult();
+        long totalResult = getTotalResults(criteria);
+        setSortOrder(sortBy, sortOrder, criteria);
+        List list = criteria.setProjection(null).setResultTransformer(Criteria.ROOT_ENTITY).list();
+        return new SCIMSearchResult(list, totalResult);
+    }
+
+    private void setSortOrder(String sortBy, String sortOrder, Criteria criteria) {
         if (sortOrder.equalsIgnoreCase("descending")) {
             criteria.addOrder(Order.desc(sortBy));
         }
         else {
             criteria.addOrder(Order.asc(sortBy));
         }
-        List list = criteria.setProjection(null).setResultTransformer(Criteria.ROOT_ENTITY).list();
-        return new SCIMSearchResult(list, totalResult);
+    }
+
+    private long getTotalResults(Criteria criteria) {
+        Object result = criteria.setProjection(Projections.rowCount()).uniqueResult();
+        return result != null ? (long) result : 0;
     }
 
     protected abstract void createAliasesForCriteria(Criteria criteria);
