@@ -19,6 +19,6 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.9</version>
-        </dependency>2
+        </dependency>
     </dependencies>
 </project>
