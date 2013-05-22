@@ -1,12 +1,28 @@
-osiam
-=====
+#osiam
 
 OSIAM - The Open Source Identity and Access Management
 
-project structure
-=================
+#project structure
 
 This project gets build with maven, the module structure is
 
-* authorization-server -- will be an OAuth2 Authorization Server 
-* oauth2-client -- will be an OAuth2 Client sample application
+* osiam-server -- is the main project it is SCIM based, web identity data store.
+* scim-schema -- is a scim api for building other java rojects.
+* python-connector -- is a requests based osiam connector for python.
+* example-client -- is a python 2.7, flask, python-connector based example
+  client for OSIAM.
+* scripts -- contains a couple of script which we use ...
+* documents -- contains documents, mostly in LaTeX
+
+# Project Configuration
+
+# Build and Run the Project
+
+# HTTP-Calls 
+
+## User
+
+## Groups
+
+## Search
+
