@@ -23,8 +23,8 @@
 
 package org.osiam.ng.scim.schema.to.entity
 
-import org.osiam.ng.scim.entities.NameEntity
-import org.osiam.ng.scim.entities.UserEntity
+import org.osiam.ng.resourceserver.entities.NameEntity
+import org.osiam.ng.resourceserver.entities.UserEntity
 import scim.schema.v2.Name
 import scim.schema.v2.User
 import spock.lang.Specification

@@ -23,16 +23,16 @@
 
 package org.osiam.ng.scim.schema.to.entity
 
-import org.osiam.ng.scim.entities.AddressEntity
-import org.osiam.ng.scim.entities.EmailEntity
-import org.osiam.ng.scim.entities.EntitlementsEntity
-import org.osiam.ng.scim.entities.ImEntity
-import org.osiam.ng.scim.entities.NameEntity
-import org.osiam.ng.scim.entities.PhoneNumberEntity
-import org.osiam.ng.scim.entities.PhotoEntity
-import org.osiam.ng.scim.entities.RolesEntity
-import org.osiam.ng.scim.entities.UserEntity
-import org.osiam.ng.scim.entities.X509CertificateEntity
+import org.osiam.ng.resourceserver.entities.AddressEntity
+import org.osiam.ng.resourceserver.entities.EmailEntity
+import org.osiam.ng.resourceserver.entities.EntitlementsEntity
+import org.osiam.ng.resourceserver.entities.ImEntity
+import org.osiam.ng.resourceserver.entities.NameEntity
+import org.osiam.ng.resourceserver.entities.PhoneNumberEntity
+import org.osiam.ng.resourceserver.entities.PhotoEntity
+import org.osiam.ng.resourceserver.entities.RolesEntity
+import org.osiam.ng.resourceserver.entities.UserEntity
+import org.osiam.ng.resourceserver.entities.X509CertificateEntity
 import scim.schema.v2.Meta
 import scim.schema.v2.MultiValuedAttribute
 import scim.schema.v2.Name
@@ -152,7 +152,7 @@ class GenericSCIMToEntityWrapperTest extends Specification {
 
     static UserEntity createEntityWithInternalId() {
         def entity = new UserEntity()
-        entity.internalId = UUID.randomUUID()
+        entity.id = UUID.randomUUID()
         entity
     }
 

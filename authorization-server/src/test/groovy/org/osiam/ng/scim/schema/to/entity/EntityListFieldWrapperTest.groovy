@@ -23,15 +23,8 @@
 
 package org.osiam.ng.scim.schema.to.entity
 
-import org.osiam.ng.scim.entities.AddressEntity
-import org.osiam.ng.scim.entities.EmailEntity
-import org.osiam.ng.scim.entities.EntitlementsEntity
-import org.osiam.ng.scim.entities.ImEntity
-import org.osiam.ng.scim.entities.PhoneNumberEntity
-import org.osiam.ng.scim.entities.PhotoEntity
-import org.osiam.ng.scim.entities.RolesEntity
-import org.osiam.ng.scim.entities.UserEntity
-import org.osiam.ng.scim.entities.X509CertificateEntity
+import org.osiam.ng.resourceserver.entities.*
+
 import scim.schema.v2.Address
 import scim.schema.v2.MultiValuedAttribute
 import scim.schema.v2.User
