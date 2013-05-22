@@ -22,7 +22,7 @@ This project gets build with maven, the module structure is
 * maven
 
 
-See osiam-server/README.md for instrutcions to see build, configure, use the
+See osiam-server/README.md for instrutcions to build, configure, use the
 osiam-server.
 
 
