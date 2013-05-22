@@ -14,15 +14,16 @@ This project gets build with maven, the module structure is
 * scripts -- contains a couple of script which we use ...
 * documents -- contains documents, mostly in LaTeX
 
-# Project Configuration
+# Requirements
 
-# Build and Run the Project
+* PostgreSQL 
+* Java 1.7
+* Tomcat (or Jetty, ...)
+* maven
 
-# HTTP-Calls 
 
-## User
+See osiam-server/README.md for instrutcions to see build, configure, use the
+osiam-server.
 
-## Groups
 
-## Search
 
