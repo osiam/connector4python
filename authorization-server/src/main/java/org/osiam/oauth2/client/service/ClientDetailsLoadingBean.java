@@ -102,6 +102,7 @@ public class ClientDetailsLoadingBean implements ClientDetailsService {
                         "http://ong01-devel03.lan.tarent.de:8080/oauth2-client/accessToken",
                         "http://ong01-devel04.lan.tarent.de:8080/oauth2-client/accessToken",
                         "http://ong01-devel05.lan.tarent.de:8080/oauth2-client/accessToken",
+                        "http://ong01-systemtest.lan.tarent.de:5000/oauth2",
                         "http://ong01-devel10.lan.tarent.de:5000/oauth2",
                         "http://ong01-devel00.lan.tarent.de:5000/oauth2",
                         "http://ong01-devel11.lan.tarent.de:5000/oauth2",
