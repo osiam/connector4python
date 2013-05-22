@@ -23,14 +23,14 @@ class SCIMTestCase(unittest.TestCase):
             return o
 
     def __test_result_of__(self, methodToMock, result, func, *funcArgs):
-        self.assertEquals(self.__mock_call__(
-            methodToMock, result, func, *funcArgs).__class__, result.__class__)
+        x = self.__mock_call__(methodToMock, result, func, *funcArgs).__class__
+        self.assertEquals(x, dict)
 
     def test_get_an_user(self):
         self.__test_result_of__('get', self.user, self.scim.get_user, 'id')
 
     def test_get_a_group(self):
-        self.__test_result_of__('get', self.user, self.scim.get_group, 'id')
+        self.__test_result_of__('get', self.group, self.scim.get_group, 'id')
 
     def test_create_an_user(self):
         self.__test_result_of__(
