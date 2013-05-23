@@ -3,12 +3,11 @@ package org.osiam.ng.serializer;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,11 +18,10 @@ import java.util.TimeZone;
  */
 public class JsonDateSerializer extends JsonSerializer<Date> {
 
-    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private final DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTime();
 
     @Override
-    public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-        dateFormat.setTimeZone(TimeZone.getTimeZone("CET"));
-        jgen.writeString(dateFormat.format(value));
+    public void serialize(Date value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeString(dateTimeFormatter.print(value.getTime()));
     }
 }
