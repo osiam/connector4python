@@ -24,6 +24,7 @@
 package scim.schema.v2;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.osiam.ng.serializer.JsonDateSerializer;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -36,7 +37,9 @@ import java.util.Set;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Meta {
 
+    @JsonSerialize(using=JsonDateSerializer.class)
     private Date created;
+    @JsonSerialize(using=JsonDateSerializer.class)
     private Date lastModified;
     private String location;
     private String version;
