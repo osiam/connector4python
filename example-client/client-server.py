@@ -1,17 +1,34 @@
 __author__ = 'phil'
-import sys
-import ast
+
 from flask import Flask, request, render_template, redirect
+from osiam import connector
 from requests.auth import HTTPBasicAuth
+import argparse
+import ast
+import json
+import logging
 import requests
 import urllib
-import json
-from osiam import connector
-import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+parser = argparse.ArgumentParser(description='This is an example client to' +
+                                 'show the usage of the osiam-connector and ' +
+                                 'for demonstration purpose only. It is, by ' +
+                                 'all means, not suited for production.')
+parser.add_argument('-r', '--redirect', help='A OSIAM known redirect uri.',
+                    default='http://localhost:5000/oauth2')
+parser.add_argument('-o', '--osiam', help='The uri to OSIAM.',
+                    default='http://localhost:8080/osiam-server')
+parser.add_argument('-c', '--client', help='The name of the client.',
+                    default='testClient')
+parser.add_argument('-s', '--client-secret', help='The name of the client.',
+                    default='secret')
+
 
 app = Flask(__name__)
 
-client_id = 'testClient'
 scopes = 'POST PUT GET DELETE PATCH'
 params = None
 oauth2_auth_code = None
@@ -30,7 +47,7 @@ def auth_code_to_access_token(code):
         'redirect_uri': redirect_uri
     }
     r = requests.post('{}/oauth/token'.format(authZServer),
-                      auth=HTTPBasicAuth('testClient', 'secret'),
+                      auth=HTTPBasicAuth(client, client_secret),
                       params=param)
     global access_token, response, scim
     print 'response: ' + r.content
@@ -216,11 +233,13 @@ def show_entries():
 
 
 if __name__ == '__main__':
-    global authZServer, redirect_uri
-    authZServer = sys.argv[1]
-    redirect_uri = sys.argv[2]
+    args = parser.parse_args()
+    client = args.client
+    client_secret = args.client_secret
+    authZServer = args.osiam
+    redirect_uri = args.redirect
     params = {'response_type': 'code', 'state': 'state',
-              'client_id': client_id,
+              'client_id': client,
               'redirect_uri': redirect_uri, 'scope': scopes}
     oauth2_auth_code = '/oauth/authorize?{0}'.format(urllib.urlencode(params))
     print 'redirect uri is {}'.format(redirect_uri)
