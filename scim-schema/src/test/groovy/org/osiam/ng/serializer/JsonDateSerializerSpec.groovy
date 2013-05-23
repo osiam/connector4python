@@ -2,8 +2,6 @@ package org.osiam.ng.serializer
 
 import org.codehaus.jackson.JsonGenerator
 import org.codehaus.jackson.map.SerializerProvider
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
 import spock.lang.Specification
 
 /**
@@ -20,11 +18,8 @@ class JsonDateSerializerSpec extends Specification {
     def serializerProviderMock = Mock(SerializerProvider)
 
     def "should serialize dates to ISO value"() {
-        given:
-        def date = new DateTime(2013, 5, 23, 11, 57, 00, DateTimeZone.forID("CET"))
-
         when:
-        jsonDateSerializer.serialize(date, jsonGeneratorMock, serializerProviderMock)
+        jsonDateSerializer.serialize(GregorianCalendar.getInstance().getTime(), jsonGeneratorMock, serializerProviderMock)
 
         then:
         1 * jsonGeneratorMock.writeString(_)

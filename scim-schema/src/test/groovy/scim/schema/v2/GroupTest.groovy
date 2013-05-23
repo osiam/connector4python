@@ -48,17 +48,15 @@ class GroupTest extends Specification {
         group.members.size() == 1
     }
 
-    @Ignore
     def "members should be a must exist implementation"() {
         given:
-        def group = new Group.Builder().setDisplayName("display").setMembers(null).setAny(new Object()).build()
+        def group = new Group.Builder().setDisplayName("display").setAny(new Object()).build()
 
         when:
-        group.members.member.add(new MultiValuedAttribute.Builder().build())
+        group.members.add(new MultiValuedAttribute.Builder().build())
 
         then:
-        group.members.values() == group.members.member
-
+        group.members != null
 
     }
 
