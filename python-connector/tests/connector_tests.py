@@ -10,7 +10,7 @@ from osiam import connector
 
 class SCIMTestCase(unittest.TestCase):
     scim = connector.SCIM(
-        'http://localhost:8080/authorization-server', "token")
+        'http://localhost:8080/osiam-server', "token")
     user = connector.SCIMUser(userName='userName')
     group = connector.SCIMGroup(displayName='displayName')
 
@@ -65,6 +65,24 @@ class SCIMTestCase(unittest.TestCase):
 
     def test_delete_a_group(self):
         self.__mock_call__('delete', self.group, self.scim.delete_group, 'id')
+
+    def test_search_a_user_with_get(self):
+        self.__test_result_of__('get', self.user, self.scim.search_with_get_on_users, 'params')
+
+    def test_search_a_user_with_post(self):
+        self.__test_result_of__('post', self.user, self.scim.search_with_post_on_users, 'data')
+
+    def test_search_a_group_with_get(self):
+        self.__test_result_of__('get', self.group, self.scim.search_with_get_on_groups, 'params')
+
+    def test_search_a_group_with_post(self):
+        self.__test_result_of__('post', self.group, self.scim.search_with_post_on_groups, 'data')
+
+    def test_search_on_root_with_get(self):
+        self.__test_result_of__('get', self.user, self.scim.search_with_get_on_root, 'param')
+
+    def test_search_on_root_with_post(self):
+        self.__test_result_of__('post', self.user, self.scim.search_with_post_on_root, 'data')
 
     def test_contains_a_SCIMMultiValuedAttribute(self):
         attribute = connector.SCIMMultiValuedAttribute(

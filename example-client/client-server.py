@@ -231,6 +231,46 @@ def show_entries():
     return render_template('index.html', access_token=access_token,
                            response=response)
 
+def call_search_on_osiam_server(func):
+    if request.form.get('method') == 'get':
+        return call_scim_set_response(func, request.form.get('params'))
+    elif request.form.get('method') == 'post':
+        dict = ast.literal_eval(request.form.get('params'))
+        return call_scim_set_response(func, dict)
+
+@app.route('/search/User')
+def redirect_search_user():
+    return render_template('search_user.html')
+
+@app.route('/search/User', methods=['POST'])
+def search_user():
+    if request.form.get('method') == 'get':
+        return call_search_on_osiam_server(scim.search_with_get_on_users)
+    elif request.form.get('method') == 'post':
+        return call_search_on_osiam_server(scim.search_with_post_on_users)
+
+@app.route('/search/Group')
+def redirect_search_group():
+    return render_template('search_group.html')
+
+@app.route('/search/Group', methods=['POST'])
+def search_group():
+    if request.form.get('method') == 'get':
+        return call_search_on_osiam_server(scim.search_with_get_on_groups)
+    elif request.form.get('method') == 'post':
+        return call_search_on_osiam_server(scim.search_with_post_on_groups)
+
+@app.route('/search/Root')
+def redirect_search_root():
+    return render_template('search_root.html')
+
+@app.route('/search/Root', methods=['POST'])
+def search_root():
+    if request.form.get('method') == 'get':
+        return call_search_on_osiam_server(scim.search_with_get_on_root)
+    elif request.form.get('method') == 'post':
+        return call_search_on_osiam_server(scim.search_with_post_on_root)
+
 
 if __name__ == '__main__':
     args = parser.parse_args()

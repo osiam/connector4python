@@ -5,18 +5,27 @@
     <h1>OSIAM NG</h1>
     <div class="menu" id="page_header">
         <ul>
+            <!-- OAuth -->
             <li><a href="/redirect">Get Access Token</a></li>
+
+            <!-- Users -->
             <li><a href="/get/User">GET USER</a></li>
             <li><a href="/replace/User">PUT USER</a></li>
             <li><a href="/create/User">POST USER</a></li>
             <li><a href="/update/User">PATCH USER</a></li>
             <li><a href="/delete/User">DELETE USER</a></li>
-            <!-- groups -->
+
+            <!-- Groups -->
             <li><a href="/get/group">GET GROUP</a></li>
             <li><a href="/replace/group">PUT GROUP</a></li>
             <li><a href="/create/group">POST GROUP</a></li>
             <li><a href="/update/group">PATCH GROUP</a></li>
-            <li><a href="/delete/group">DELETE GROUP</a></li>
+            <li><a href="/delete/group">DELETE GROUP</a></li><br>
+
+            <!-- Search -->
+            <li><a href="/search/User">SEARCH USER</a></li>
+            <li><a href="/search/Group">SEARCH GROUP</a></li>
+            <li><a href="/search/Root">SEARCH ROOT</a></li>
         </ul>
     </div>
     {% block body %}{% endblock %}
