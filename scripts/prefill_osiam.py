@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 from obtain_access_token import FakeUser
 from osiam import connector
 import logging
@@ -22,7 +23,7 @@ parser.add_argument('-o', '--osiam', help='The uri to OSIAM.',
 parser.add_argument('-p', '--password', help='The password of the user.',
                     default='koala')
 parser.add_argument('-c', '--client', help='The name of the client.',
-                    default='testClient')
+                    default='23f9452e-00a9-4cec-a086-d171374ffb42')
 
 
 def build_user(username):
