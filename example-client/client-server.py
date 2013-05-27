@@ -22,7 +22,7 @@ parser.add_argument('-r', '--redirect', help='A OSIAM known redirect uri.',
 parser.add_argument('-o', '--osiam', help='The uri to OSIAM.',
                     default='http://localhost:8080/osiam-server')
 parser.add_argument('-c', '--client', help='The name of the client.',
-                    default='testClient')
+                    default='23f9452e-00a9-4cec-a086-d171374ffb42')
 parser.add_argument('-s', '--client-secret', help='The name of the client.',
                     default='secret')
 
