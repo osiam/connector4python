@@ -69,7 +69,6 @@ SCIMUserT = collections.namedtuple('SCIMUser', (
     'groups', 'entitlements', 'roles',
     'x509Certificates', 'any', 'meta', 'externalId'))
 
-
 def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
              nickName=None, profileUrl=None, title=None, userType=None,
              preferredLanguage=None, locale=None, timezone=None, active=None,
@@ -104,6 +103,14 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
         schemas = ['urn:scim:schemas:core:1.0']
     return SCIMGroupT(displayName, members, externalId, id, meta, schemas)
 
+
+ClientT = collections.namedtuple('Client', ('id', 'access_token_validity',
+    'refresh_token_validity', 'redirect_uri', 'clientSecret', 'scope'))
+
+def Client(id=None, access_token_validity=None, refresh_token_validity=None,
+           redirect_uri=None, clientSecret=None, scope=None):
+    return ClientT(id, access_token_validity, refresh_token_validity,
+                  redirect_uri, clientSecret, scope)
 
 class SCIM:
 
@@ -230,3 +237,20 @@ class SCIM:
         r = requests.post('{0}/.search'.format(
             self.authorization_server), headers=self.headers, params=data)
         return json.loads(r.text)
+
+    @doLog
+    def get_client(self, id):
+        r = requests.get('{0}/Client/{1}'.format(
+            self.authorization_server, id), headers=self.headers)
+        return json.loads(r.text)
+
+    @doLog
+    def create_client(self, client):
+        r = requests.post('{0}/Client'.format(
+            self.authorization_server), headers=self.headers, params=client)
+        return json.loads(r.text)
+
+    @doLog
+    def delete_client(self, id):
+        return requests.delete('{0}/Client/{1}'.format(
+            self.authorization_server, id), headers=self.headers)
