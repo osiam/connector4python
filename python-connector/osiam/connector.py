@@ -8,7 +8,7 @@ import logging
 __author__ = 'phil'
 
 
-#logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -106,6 +106,7 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
 
 
 class SCIM:
+
     def __init__(self, authorization_server, access_token):
         self.authorization_server = authorization_server
         self.headers = {'Authorization': "Bearer {0}".format(access_token),
@@ -196,30 +197,36 @@ class SCIM:
 
     @doLog
     def search_with_get_on_users(self, params):
-        r = requests.get('{0}/User/?{1}'.format(self.authorization_server, params), headers=self.headers)
+        r = requests.get('{0}/User/?{1}'.format(
+            self.authorization_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_users(self, data):
-        r = requests.post('{0}/User/.search'.format(self.authorization_server), headers=self.headers, params=data)
+        r = requests.post('{0}/User/.search'.format(
+            self.authorization_server), headers=self.headers, params=data)
         return json.loads(r.text)
 
     @doLog
     def search_with_get_on_groups(self, params):
-        r = requests.get('{0}/Group/?{1}'.format(self.authorization_server, params), headers=self.headers)
+        r = requests.get('{0}/Group/?{1}'.format(
+            self.authorization_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_groups(self, data):
-        r = requests.post('{0}/Group/.search'.format(self.authorization_server), headers=self.headers, params=data)
+        r = requests.post('{0}/Group/.search'.format(
+            self.authorization_server), headers=self.headers, params=data)
         return json.loads(r.text)
 
     @doLog
     def search_with_get_on_root(self, params):
-        r = requests.get('{0}/?{1}'.format(self.authorization_server, params), headers=self.headers)
+        r = requests.get('{0}/?{1}'.format(
+            self.authorization_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_root(self, data):
-        r = requests.post('{0}/.search'.format(self.authorization_server), headers=self.headers, params=data)
+        r = requests.post('{0}/.search'.format(
+            self.authorization_server), headers=self.headers, params=data)
         return json.loads(r.text)

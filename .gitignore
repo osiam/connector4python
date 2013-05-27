@@ -54,3 +54,4 @@ dist/
 *.out
 *.synctex.gz
 *.pdf
+nosetests.xml
