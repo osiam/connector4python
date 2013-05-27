@@ -13,6 +13,7 @@ class SCIMTestCase(unittest.TestCase):
         'http://localhost:8080/osiam-server', "token")
     user = connector.SCIMUser(userName='userName')
     group = connector.SCIMGroup(displayName='displayName')
+    client = connector.Client()
 
     def __mock_call__(self, methodToMock, result, func, *funcArgs):
         with patch.object(requests, methodToMock) as mock_method:
@@ -83,6 +84,25 @@ class SCIMTestCase(unittest.TestCase):
 
     def test_search_on_root_with_post(self):
         self.__test_result_of__('post', self.user, self.scim.search_with_post_on_root, 'data')
+
+    def test_get_client(self):
+        self.__test_result_of__('get', self.client, self.scim.get_client, 'id')
+
+    def test_create_client(self):
+        self.__test_result_of__('post', self.client, self.scim.create_client, self.client)
+
+    def test_delete_client(self):
+        self.__mock_call__('delete', self.client, self.scim.delete_client, 'id')
+
+    def test_contains_a_client(self):
+        attribute = connector.Client('1234', 1337, 1337, 'http://blaaa', 'secret', ['GET','POST', 'DELETE', 'PATCH', 'PUT'])
+        assert attribute is not None
+        self.assertEqual('1234', attribute.id)
+        self.assertEquals(1337, attribute.access_token_validity)
+        self.assertEquals(1337, attribute.refresh_token_validity)
+        self.assertEquals('http://blaaa', attribute.redirect_uri)
+        self.assertEquals('secret', attribute.clientSecret)
+        self.assertEquals(['GET','POST', 'DELETE', 'PATCH', 'PUT'], attribute.scope)
 
     def test_contains_a_SCIMMultiValuedAttribute(self):
         attribute = connector.SCIMMultiValuedAttribute(
