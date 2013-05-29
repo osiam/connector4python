@@ -18,7 +18,7 @@ Before you can start the demo server, you need to install the osiam-connector
 via 
 
 ```sh
-python setup.py install
+python client-setup.py 
 ```
 
 since this connector is unstable right now it highly recommended to use
@@ -27,7 +27,7 @@ virtualenv for the installation process.
 When you have installed the osiam-connector you can start the demo server with:
 
 ``sh
- python server/client-server.py $url/authorization-server $redirect_uri/oauth2
+python client-server.py 
  
 ```
 
