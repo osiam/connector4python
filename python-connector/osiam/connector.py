@@ -104,13 +104,13 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
     return SCIMGroupT(displayName, members, externalId, id, meta, schemas)
 
 
-ClientT = collections.namedtuple('Client', ('id', 'access_token_validity',
-    'refresh_token_validity', 'redirect_uri', 'clientSecret', 'scope'))
+ClientT = collections.namedtuple('Client', ('id', 'accessTokenValiditySeconds',
+    'refreshTokenValiditySeconds', 'redirect_uri', 'client_secret', 'scope'))
 
-def Client(id=None, access_token_validity=None, refresh_token_validity=None,
-           redirect_uri=None, clientSecret=None, scope=None):
-    return ClientT(id, access_token_validity, refresh_token_validity,
-                  redirect_uri, clientSecret, scope)
+def Client(id=None, accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
+           redirect_uri=None, client_secret=None, scope=None):
+    return ClientT(id, accessTokenValiditySeconds, refreshTokenValiditySeconds,
+                  redirect_uri, client_secret, scope)
 
 class SCIM:
 
@@ -247,7 +247,7 @@ class SCIM:
     @doLog
     def create_client(self, client):
         r = requests.post('{0}/Client'.format(
-            self.authorization_server), headers=self.headers, params=client)
+            self.authorization_server), headers=self.headers, data=json.dumps(client.__dict__))
         return json.loads(r.text)
 
     @doLog
