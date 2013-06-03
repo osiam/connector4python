@@ -24,6 +24,10 @@ parser.add_argument('-p', '--password', help='The password of the user.',
                     default='koala')
 parser.add_argument('-c', '--client', help='The name of the client.',
                     default='23f9452e-00a9-4cec-a086-d171374ffb42')
+parser.add_argument('--group-member', help='A number of groups inside a group',
+                    default=0, type=int)
+parser.add_argument('--member', help='When enabled it inserts every user in ' +
+                    'every group', default=False, type=bool)
 
 
 def build_user(username):
@@ -41,8 +45,17 @@ def build_user(username):
         password='password')
 
 
-def build_group(display_name):
-    return connector.SCIMGroup(displayName=display_name)
+def build_group(display_name, member=None):
+    group = connector.SCIMGroup(displayName=display_name, members=member)
+    print "Group: {}".format(group)
+    return group
+
+
+def create_multi_value_attribute(val):
+    print "Value::::{}".format(val)
+    aha = {'value': val['id']}
+    return aha
+#connector.SCIMMultiValuedAttribute(value=val['id'])
 
 
 if __name__ == '__main__':
@@ -55,7 +68,12 @@ if __name__ == '__main__':
     access_token = fakeUser.get_access_token()
     scim = connector.SCIM(authorization_server=args.osiam,
                           access_token=access_token)
+    member = []
     for x in range(0, args.user_amount):
-        scim.create_user(user=build_user('FNORD{}'.format(x)))
+        user = scim.create_user(user=build_user('FNORD{}'.format(x)))
+        member.append(create_multi_value_attribute(user))
+    for x in range(0, args.group_member):
+        group = scim.create_group(user=build_group('group_member{}'.format(x)))
+        member.append(create_multi_value_attribute(group))
     for x in range(0, args.group_amount):
-        scim.create_group(user=build_group('Prefect{}'.format(x)))
+        scim.create_group(user=build_group('Prefect{}'.format(x), member))
