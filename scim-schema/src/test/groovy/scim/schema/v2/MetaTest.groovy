@@ -41,7 +41,7 @@ class MetaTest extends Specification {
         when:
         def meta = new Meta.Builder().build();
         then:
-        meta.created == meta.lastModified
+        meta.created >= meta.lastModified
         meta.created.time >= oldSysTime
     }
 
