@@ -46,16 +46,11 @@ def build_user(username):
 
 
 def build_group(display_name, member=None):
-    group = connector.SCIMGroup(displayName=display_name, members=member)
-    print "Group: {}".format(group)
-    return group
+    return connector.SCIMGroup(displayName=display_name, members=member)
 
 
 def create_multi_value_attribute(val):
-    print "Value::::{}".format(val)
-    aha = {'value': val['id']}
-    return aha
-#connector.SCIMMultiValuedAttribute(value=val['id'])
+    return {'value': val['id']}
 
 
 if __name__ == '__main__':
