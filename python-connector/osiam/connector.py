@@ -104,13 +104,13 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
     return SCIMGroupT(displayName, members, externalId, id, meta, schemas)
 
 
-ClientT = collections.namedtuple('Client', ('id', 'accessTokenValiditySeconds',
-    'refreshTokenValiditySeconds', 'redirect_uri', 'client_secret', 'scope'))
+ClientT = collections.namedtuple('Client', ('accessTokenValiditySeconds',
+    'refreshTokenValiditySeconds', 'redirect_uri', 'scope'))
 
-def Client(id=None, accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
-           redirect_uri=None, client_secret=None, scope=None):
-    return ClientT(id, accessTokenValiditySeconds, refreshTokenValiditySeconds,
-                  redirect_uri, client_secret, scope)
+def Client(accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
+           redirect_uri=None, scope=None):
+    return ClientT(accessTokenValiditySeconds, refreshTokenValiditySeconds,
+                  redirect_uri, scope)
 
 class SCIM:
 
