@@ -3,6 +3,7 @@ from obtain_access_token import FakeUser
 from osiam import connector
 import logging
 import argparse
+from threading import Thread
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -53,6 +54,19 @@ def create_multi_value_attribute(val):
     return {'value': val['id']}
 
 
+def create_user(member, x):
+    user = scim.create_user(user=build_user('FNORD{}'.format(x)))
+    member.append(create_multi_value_attribute(user))
+
+
+def create_group_without_member(member, x):
+    group = scim.create_group(user=build_group('group_member{}'.format(x)))
+    member.append(create_multi_value_attribute(group))
+
+
+def create_group(member, x):
+    scim.create_group(user=build_group('Prefect{}'.format(x), member))
+
 if __name__ == '__main__':
     args = parser.parse_args()
     logger.info('{} will be used to gain access'.format(args.username))
@@ -65,10 +79,8 @@ if __name__ == '__main__':
                           access_token=access_token)
     member = []
     for x in range(0, args.user_amount):
-        user = scim.create_user(user=build_user('FNORD{}'.format(x)))
-        member.append(create_multi_value_attribute(user))
+        Thread(target=create_user, args=(member, x)).start()
     for x in range(0, args.group_member):
-        group = scim.create_group(user=build_group('group_member{}'.format(x)))
-        member.append(create_multi_value_attribute(group))
+        Thread(target=create_group_without_member, args=(member, x)).start()
     for x in range(0, args.group_amount):
-        scim.create_group(user=build_group('Prefect{}'.format(x), member))
+        Thread(target=create_group, args=(member, x)).start()
