@@ -82,13 +82,23 @@ def redirect_create_user():
 
 def build_user():
     userMeta = None
+    lastName = None
+    firstName = None
+
     if request.form.get('meta') !=None:
         userMeta = connector.Meta(attributes=request.form.get('meta').split())
+
+    if request.form.get('lastname') !=None:
+        lastName = request.form.get('lastname')
+
+    if request.form.get('firstname') !=None:
+        firstName = request.form.get('firstname')
 
     return connector.SCIMUser(
         #   schemas = request.form.get('schema'),
         userName=request.form.get('user_name'),
-        #                          name = name,
+        name = connector.SCIMName(familyName=lastName,
+                                  givenName=firstName),
         displayName=request.form.get('displayname'),
         nickName=request.form.get('nickname'),
         profileUrl=request.form.get('Profileurl'),

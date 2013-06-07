@@ -80,6 +80,8 @@ def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
             schemas = ['urn:scim:schemas:core:1.0']
         if meta != None:
             meta = meta.__dict__
+        if name != None:
+            name = name.__dict__
         return SCIMUserT(id, schemas, userName, name, displayName, nickName,
                          profileUrl, title, userType, preferredLanguage,
                          locale, timezone, active, password, emails,
