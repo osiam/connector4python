@@ -2,7 +2,7 @@
 
 OSIAM - The Open Source Identity and Access Management
 
-See osiam-server/README.md for instrutcions on how to build, configure and use osiam-server.
+See osiam-server/README.md for instructions on how to build, configure and use osiam-server.
 
 #project structure
 
