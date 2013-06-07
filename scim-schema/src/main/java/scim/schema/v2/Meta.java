@@ -131,6 +131,10 @@ public class Meta {
         return location;
     }
 
+    public void setLocation(String location) {
+        this.location =location;
+    }
+
     /**
      * Gets the value of the version property.
      * 

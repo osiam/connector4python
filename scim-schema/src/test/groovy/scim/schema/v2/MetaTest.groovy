@@ -101,8 +101,17 @@ class MetaTest extends Specification {
         def meta = new Meta.Builder().setResourceType("rt").build();
         then:
         meta.getResourceType() == "rt"
+    }
 
+    def"should be able to set location without the builder"() {
+        given:
+        def meta = new Meta.Builder()
+                .setLocation("dunno")
+                .build();
+        when:
+        meta.setLocation("know")
 
-
+        then:
+        meta.getLocation() == "know"
     }
 }
