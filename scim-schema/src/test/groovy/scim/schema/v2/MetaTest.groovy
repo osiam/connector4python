@@ -95,4 +95,14 @@ class MetaTest extends Specification {
         meta.getAttributes().size() == 1
 
     }
+
+    def "should contain resourceType"() {
+        when:
+        def meta = new Meta.Builder().setResourceType("rt").build();
+        then:
+        meta.getResourceType() == "rt"
+
+
+
+    }
 }
