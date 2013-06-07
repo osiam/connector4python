@@ -2,6 +2,8 @@
 
 OSIAM - The Open Source Identity and Access Management
 
+See osiam-server/README.md for instrutcions on how to build, configure and use osiam-server.
+
 #project structure
 
 This project gets build with maven, the module structure is
@@ -26,5 +28,3 @@ This project gets build with maven, the module structure is
 Bug reporting tool and known issues can be found here:
 
 [OSIAM bugtracker](https://github.com/osiam/osiam/issues)
-
-See osiam-server/README.md for instrutcions on how to build, configure and use osiam-server.
