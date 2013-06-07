@@ -44,6 +44,7 @@ public class Meta {
     private String location;
     private String version;
     private Set<String> attributes;
+    private String resourceType;
 
     //JSon Serializing ...
     public Meta() { }
@@ -55,6 +56,7 @@ public class Meta {
         this.attributes = builder.attributes;
         this.location = builder.location;
         this.version = builder.version;
+        this.resourceType = builder.resourceType;
     }
 
     public static class Builder{
@@ -63,6 +65,7 @@ public class Meta {
         private String location;
         private String version;
         private Set<String> attributes = new HashSet<>();
+        public String resourceType;
 
         /**
          * Will set created, as well as lastModified to System.currentTime
@@ -97,6 +100,12 @@ public class Meta {
             this.version = version;
             return this;
         }
+
+        public Builder setResourceType(String resourceType) {
+            this.resourceType = resourceType;
+            return this;
+        }
+
 
         public Builder setAttributes(Set<String> attributes) {
             this.attributes = attributes;
@@ -147,5 +156,7 @@ public class Meta {
         return new Date(lastModified.getTime());
     }
 
-
+    public String getResourceType() {
+        return resourceType;
+    }
 }

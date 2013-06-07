@@ -44,7 +44,8 @@ public abstract class Resource {
 
     public abstract static class Builder {
         protected String id;
-        protected Meta meta;
+        protected Meta meta
+                ;
         protected Set<String> schemas = Constants.CORE_SCHEMAS;
 
         public Builder setSchemas(Set<String> schemas) {
