@@ -21,5 +21,10 @@ This project gets build with maven, the module structure is
 * Tomcat (or Jetty, ...)
 * maven
 
+# Bugtracker
+
+Bug reporting tool and known issues can be found here:
+
+[OSIAM bugtracker](https://jira.osiam.org)
 
 See osiam-server/README.md for instrutcions on how to build, configure and use osiam-server.
