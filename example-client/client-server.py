@@ -81,6 +81,10 @@ def redirect_create_user():
 
 
 def build_user():
+    userMeta = None
+    if request.form.get('meta') !=None:
+        userMeta = connector.Meta(attributes=request.form.get('meta').split())
+
     return connector.SCIMUser(
         #   schemas = request.form.get('schema'),
         userName=request.form.get('user_name'),
@@ -94,7 +98,8 @@ def build_user():
         locale=request.form.get('locale'),
         timezone=request.form.get('timezone'),
         active=True,
-        password=request.form.get('password'))
+        password=request.form.get('password'),
+        meta=userMeta)
 
 
 def call_scim_set_response(func, *args):
@@ -163,8 +168,13 @@ def build_group():
             logging.info('Line:{}'.format(s))
             d = ast.literal_eval(s)
             members.append(d)
+
+    groupMeta = None
+    if request.form.get('meta') !=None:
+        groupMeta = connector.Meta(attributes=request.form.get('meta').split())
+
     return connector.SCIMGroup(displayName=request.form.get('displayname'),
-                               members=members)
+                               members=members, meta=groupMeta)
 
 
 @app.route('/create/group')

@@ -78,6 +78,8 @@ def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
              externalId=None):
         if not schemas:
             schemas = ['urn:scim:schemas:core:1.0']
+        if meta != None:
+            meta = meta.__dict__
         return SCIMUserT(id, schemas, userName, name, displayName, nickName,
                          profileUrl, title, userType, preferredLanguage,
                          locale, timezone, active, password, emails,
@@ -101,6 +103,8 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
               meta=None, schemas=None):
     if not schemas:
         schemas = ['urn:scim:schemas:core:1.0']
+    if meta != None:
+        meta = meta.__dict__
     return SCIMGroupT(displayName, members, externalId, id, meta, schemas)
 
 
@@ -111,6 +115,13 @@ def Client(accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
            redirect_uri=None, scope=None):
     return ClientT(accessTokenValiditySeconds, refreshTokenValiditySeconds,
                   redirect_uri, scope)
+
+MetaT = collections.namedtuple('Meta', ('created', 'lastModified', 'location',
+                                        'version', 'attributes', 'resourceType'))
+
+def Meta(created=None, lastModified=None, location=None,
+                    version=None, attributes=None, resourceType=None):
+    return MetaT(created, lastModified, location, version, attributes, resourceType)
 
 class SCIM:
 
