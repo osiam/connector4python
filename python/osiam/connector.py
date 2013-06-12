@@ -189,25 +189,25 @@ class SCIM:
         return self.__json_dict_to_object__(json.loads(r.text))
 
     @doLog
-    def create_group(self, user):
+    def create_group(self, group):
         r = requests.post('{0}/Group'.format(self.authorization_server),
                           headers=self.headers,
-                          data=json.dumps(user.__dict__))
+                          data=json.dumps(group.__dict__))
         return self.__json_dict_to_object__(json.loads(r.text))
 
     def __single_group_data_operation__(self, func, id, user):
         return self.__single_data_operation__(func, id, user, "Group")
 
     @doLog
-    def replace_group(self, id, user):
+    def replace_group(self, id, group):
         operation = self.__single_group_data_operation__(
-            requests.put, id, user)
+            requests.put, id, group)
         return self.__json_dict_to_object__(json.loads(operation.content))
 
     @doLog
-    def update_group(self, id, user):
+    def update_group(self, id, group):
         operation = self.__single_group_data_operation__(requests.patch, id,
-                                                         user)
+                                                         group)
         return self.__json_dict_to_object__(json.loads(operation.content))
 
     @doLog

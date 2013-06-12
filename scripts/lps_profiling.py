@@ -11,7 +11,7 @@ def do_log(func):
         tstart = datetime.now()
         result = func(*args, **kwargs)
         tstop = datetime.now()
-        logger.info('{0};{1};{2}'.format(func.__name__, tstop-tstart, sys.getsizeof(result)))
+        logger.info('{0};{1};{2};{3}'.format(func.__name__, args[1], tstop-tstart, sys.getsizeof(args[2])))
         return result
     return wrapped
 
@@ -22,4 +22,4 @@ def __init__(log_file_path, script_name):
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
     logger.setLevel(logging.INFO)
-    logger.info('name;running_time;data_volume_in_bytes')
+    logger.info('name;iterations;running_time;data_volume_in_bytes')
