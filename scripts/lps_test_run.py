@@ -47,4 +47,8 @@ if __name__ == '__main__':
     #lps_test_contract.User().all(args.serial, args.parallel)
     #lps_test_contract.Group().all(args.serial, args.parallel)
     lps_test_contract.all(args.serial, args.parallel)
+    #lps_test_contract.User().create(args.serial, args.parallel)
+    #lps_test_contract.Group().create(args.serial, args.parallel)
+    #lps_test_contract.Group().delete(args.serial, args.parallel)
+    #lps_test_contract.Group().search(args.serial, args.parallel)
     print 'the end'
