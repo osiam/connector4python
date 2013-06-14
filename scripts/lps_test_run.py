@@ -40,15 +40,34 @@ parser.add_argument('--parallel', help='The number of parallel runs.',
 # Test run
 #TODO
 
+def start_test(test):
+    print test['resource'].title()
+    print test['method']
+    print test['serial']
+    print test['parallel']
+
+
+def identify_tests(testcases):
+    for test in testcases['tests']:
+        start_test(test)
+
+
+def load_testcases(path_to_file):
+    testcases = {}
+    execfile(path_to_file, testcases)
+    identify_tests(testcases)
+
 if __name__ == '__main__':
-    args = parser.parse_args()
-    lps_test_contract.__init__(args.server, args.client, '23f9452e-00a9-4cec-a086-d171374ffb42')
-    print 'run tests'
+    load_testcases('/home/jtodea/git/osiam/scripts/tests.py')
+    #args = parser.parse_args()
+    #lps_test_contract.__init__(args.server, args.client, '23f9452e-00a9-4cec-a086-d171374ffb42')
+    #print 'run tests'
     #lps_test_contract.User().all(args.serial, args.parallel)
     #lps_test_contract.Group().all(args.serial, args.parallel)
-    lps_test_contract.all(args.serial, args.parallel)
+    #lps_test_contract.all(args.serial, args.parallel)
     #lps_test_contract.User().create(args.serial, args.parallel)
+    #lps_test_contract.User().delete(args.serial, args.parallel)
     #lps_test_contract.Group().create(args.serial, args.parallel)
     #lps_test_contract.Group().delete(args.serial, args.parallel)
     #lps_test_contract.Group().search(args.serial, args.parallel)
-    print 'the end'
+    #print 'the end'
