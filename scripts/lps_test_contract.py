@@ -112,7 +112,7 @@ class User():
             self.__delete_user_serial__(s, self.__build_user__(), count)
 
         for count in range(p):
-            self.__delete_user_parallel__(p, self.__build_user__(), count)
+            self.__delete_user_parallel__(p, self.__build_user__(), s+count)
 
 
     def search(self, s, p):
@@ -322,7 +322,7 @@ class Group():
             self.__delete_group_serial__(s, self.__build_group__(), count)
 
         for count in range(p):
-            self.__delete_group_parallel__(p, self.__build_group__(), count)
+            self.__delete_group_parallel__(p, self.__build_group__(), s+count)
 
 
     def search(self, s, p):
