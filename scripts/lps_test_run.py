@@ -1,7 +1,12 @@
 __author__ = 'jtodea'
 
+import logging
+import lps_profiling
 import argparse
 import lps_test_contract
+
+logger = logging.getLogger(__name__)
+
 
 parser = argparse.ArgumentParser(description='This is a script to run the' +
                                              'OSIAM lps test suit.')
@@ -24,50 +29,55 @@ parser.add_argument('--server', help='The server host name',
 parser.add_argument('--client', help='The client host name.',
                     default='localhost')
 
-parser.add_argument('--serial', help='The number of serial runs.',
+parser.add_argument('--serial', help='The number of maximal serial runs.',
                     default=10, type=int)
 
 parser.add_argument('--parallel', help='The number of parallel runs.',
-                    default=5, type=int)
+                    default=10, type=int)
 
 
-# Parse client_id and secret from file
-#TODO
-
-# Prefill osiam db
-#TODO
-
-# Test run
-#TODO
-
-def start_test(test):
-    print test['resource'].title()
-    print test['method']
-    print test['serial']
-    print test['parallel']
+def start_test(test, serial, parallel):
+    res = test['resource']
+    method_name = test['method']
+    print "running {} of class {}".format(method_name, res)
+    # getting class
+    class_ = getattr(lps_test_contract, res)
+    print "got class: {}".format(class_.__name__)
+    # getting method
+    method = getattr(class_(), method_name)
+    return method(serial, parallel)
 
 
-def identify_tests(testcases):
+def identify_tests(testcases, serial, parallel):
+    complete_duration = []
+    print "executing {}".format(testcases)
     for test in testcases['tests']:
-        start_test(test)
+        complete_duration.append(start_test(test, serial, parallel))
+    return {'min': min(complete_duration), 'max': max(complete_duration),
+            'avg': sum(complete_duration) / len(complete_duration)}
 
 
-def load_testcases(path_to_file):
+def execute_sequence(max_serial, max_parallel, test):
     testcases = {}
-    execfile(path_to_file, testcases)
-    identify_tests(testcases)
+    execfile(test, testcases)
+    logger.addHandler(lps_profiling.create_filehandler("/tmp/", test))
+    logger.setLevel(logging.INFO)
+    #durchsatz fehlt ..
+    logger.info('serial*parallel;min;max;avg')
+
+    print "executing sequence {}".format(test)
+    for i in range(max_serial):
+        for j in range(max_parallel):
+            serial = i + 1
+            parallel = j + 1
+            result = identify_tests(testcases, serial, parallel)
+            logger.info("{}x{};{};{};{};".format(serial, parallel,
+                                                 result["min"],
+                                                 result["max"], result["avg"]))
 
 if __name__ == '__main__':
-    load_testcases('/home/jtodea/git/osiam/scripts/tests.py')
-    #args = parser.parse_args()
-    #lps_test_contract.__init__(args.server, args.client, '23f9452e-00a9-4cec-a086-d171374ffb42')
-    #print 'run tests'
-    #lps_test_contract.User().all(args.serial, args.parallel)
-    #lps_test_contract.Group().all(args.serial, args.parallel)
-    #lps_test_contract.all(args.serial, args.parallel)
-    #lps_test_contract.User().create(args.serial, args.parallel)
-    #lps_test_contract.User().delete(args.serial, args.parallel)
-    #lps_test_contract.Group().create(args.serial, args.parallel)
-    #lps_test_contract.Group().delete(args.serial, args.parallel)
-    #lps_test_contract.Group().search(args.serial, args.parallel)
-    #print 'the end'
+#    load_testcases('tests.py')
+    args = parser.parse_args()
+    lps_test_contract.__init__(args.server, args.client,
+                               '23f9452e-00a9-4cec-a086-d171374ffb42')
+    execute_sequence(args.serial, args.parallel, 'tests.py')
