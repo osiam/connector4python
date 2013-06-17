@@ -3,7 +3,6 @@
 __author__ = 'jtodea, phil'
 
 import logging
-import lps_profiling
 import argparse
 import lps_test_contract
 
@@ -47,7 +46,7 @@ def identify_tests(testcases, serial, parallel):
 def execute_sequence(max_serial, max_parallel, test):
     testcases = {}
     execfile(test, testcases)
-    logger.addHandler(lps_profiling.create_filehandler("/tmp/", test))
+    logger.addHandler(lps_test_contract.create_filehandler("/tmp/", test))
     logger.setLevel(logging.INFO)
     #durchsatz fehlt ..
     logger.info('serial*parallel;min;max;avg')

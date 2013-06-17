@@ -1,10 +1,14 @@
 __author__ = 'jtodea'
 
 from osiam import connector
-import lps_profiling
 from obtain_access_token import FakeUser
 from multiprocessing import Process
 import random
+import logging
+from datetime import datetime
+import sys
+
+logger = logging.getLogger(__name__)
 
 
 scim = None
@@ -19,7 +23,30 @@ def __init__(server, client, client_id):
     access_token = fakeUser.get_access_token()
     global scim
     scim = connector.SCIM('http://localhost:8080/osiam-server', access_token)
-    lps_profiling.__init__('/tmp/', 'lps_test_run')
+    print 'init profiling'
+    logger.addHandler(create_filehandler("/tmp", "method_calls_debug"))
+    logger.setLevel(logging.INFO)
+    logger.info('name;iterations;running_time;data_volume_in_bytes')
+
+
+def do_log(func):
+    def wrapped(*args, **kwargs):
+        tstart = datetime.now()
+        func(*args, **kwargs)
+        tstop = datetime.now()
+        duration = tstop - tstart
+        logger.info('{0};{1};{2};{3}'.format(func.__name__, args[1], duration,
+                                             sys.getsizeof(args[2])))
+        return duration
+    return wrapped
+
+
+def create_filehandler(log_file_path, script_name):
+    file_handler = logging.FileHandler('{0}/{1}_{2}.log'.format(
+        log_file_path, datetime.now().isoformat(), script_name))
+    formatter = logging.Formatter('%(message)s')
+    file_handler.setFormatter(formatter)
+    return file_handler
 
 
 def all(s, p):
@@ -114,35 +141,35 @@ class User():
         self.search(s, p)
         self.delete(s, p)
 
-    @lps_profiling.do_log
+    @do_log
     def __create_user_parallel__(self, runs_for_profiling, user):
         """ runs_for_profiling always second parameter
             user always third parameter """
         p = Process(target=scim.create_user(user))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __replace_user_parallel__(self, runs_for_profiling, user):
         """ runs_for_profiling always second parameter
             user always third parameter """
         p = Process(target=scim.replace_user(self.user_ids.pop(), user))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __update_user_parallel__(self, runs_for_profiling, user):
         """ runs_for_profiling always second parameter
             user always third parameter """
         p = Process(target=scim.update_user(self.user_ids.pop(), user))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __delete_user_parallel__(self, runs_for_profiling, user):
         """ runs_for_profiling always second parameter
             user always third parameter """
         p = Process(target=scim.delete_user(self.user_ids.pop()))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __get_user_parallel__(self, runs_for_profiling, user):
         """ runs_for_profiling always second parameter
             user always third parameter"""
@@ -155,14 +182,14 @@ class User():
         self.__search_with_post_on_user_parallel__(runs_for_profiling,
                                                    self.__get_filter__('post'))
 
-    @lps_profiling.do_log
+    @do_log
     def __search_with_get_on_user_parallel__(self, runs_for_profiling, filter):
         """ runs_for_profiling always second parameter
             filter always third parameter"""
         p = Process(target=scim.search_with_get_on_users(filter))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __search_with_post_on_user_parallel__(self, runs_for_profiling,
                                               filter):
         """ runs_for_profiling always second parameter
@@ -255,65 +282,65 @@ class Group():
         self.search(s, p)
         self.delete(s, p)
 
-    @lps_profiling.do_log
+    @do_log
     def __create_group_serial__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         scim.create_group(group)
 
-    @lps_profiling.do_log
+    @do_log
     def __create_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         p = Process(target=scim.create_group(group))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __replace_group_serial__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         scim.replace_group(self.group_ids.pop(), group)
 
-    @lps_profiling.do_log
+    @do_log
     def __replace_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         p = Process(target=scim.replace_group(self.group_ids.pop(), group))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __update_group_serial__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         scim.update_group(self.group_ids.pop(), group)
 
-    @lps_profiling.do_log
+    @do_log
     def __update_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         p = Process(target=scim.update_group(self.group_ids.pop(), group))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __delete_group_serial__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         scim.delete_group(self.group_ids.pop())
 
-    @lps_profiling.do_log
+    @do_log
     def __delete_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         p = Process(target=scim.delete_group(self.group_ids.pop()))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __get_group_serial__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         scim.get_group(self.group_ids.pop())
 
-    @lps_profiling.do_log
+    @do_log
     def __get_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
@@ -326,13 +353,13 @@ class Group():
         self.__search_with_post_on_group_serial__(
             runs_for_profiling, self.__get_filter__('post'))
 
-    @lps_profiling.do_log
+    @do_log
     def __search_with_get_on_group_serial__(self, runs_for_profiling, filter):
         """ runs_for_profiling always second parameter
             filter always third parameter """
         scim.search_with_get_on_groups(filter)
 
-    @lps_profiling.do_log
+    @do_log
     def __search_with_post_on_group_serial__(self, runs_for_profiling, filter):
         """ runs_for_profiling always second parameter
             filter always third parameter """
@@ -344,14 +371,14 @@ class Group():
         self.__search_with_post_on_group_parallel__(
             runs_for_profiling, self.__get_filter__('post'))
 
-    @lps_profiling.do_log
+    @do_log
     def __search_with_get_on_group_parallel__(self, runs_for_profiling, filter):
         """ runs_for_profiling always second parameter
             filter always third parameter """
         p = Process(target=scim.search_with_get_on_groups(filter))
         p.start()
 
-    @lps_profiling.do_log
+    @do_log
     def __search_with_post_on_group_parallel__(self, runs_for_profiling, filter):
         """ runs_for_profiling always second parameter
             filter always third parameter """
