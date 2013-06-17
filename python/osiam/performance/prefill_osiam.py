@@ -31,41 +31,53 @@ parser.add_argument('--member', help='When enabled it inserts every user in ' +
                     'every group', default=False, type=bool)
 
 
-def build_user(username):
-    return connector.SCIMUser(
-        userName=username,
-        displayName='displayname',
-        nickName='nickname',
-        profileUrl='Profileurl',
-        title='title',
-        userType='usertype',
-        preferredLanguage='preferredlanguage',
-        locale='locale',
-        timezone='timezone',
-        active=True,
-        password='password')
+class PrefillOsiam:
 
+    def __init__(self, scim):
+        self.scim = scim
+        self.member = []
 
-def build_group(display_name, member=None):
-    return connector.SCIMGroup(displayName=display_name, members=member)
+    def build_user(self, username):
+        return connector.SCIMUser(
+            userName=username,
+            displayName='displayname',
+            nickName='nickname',
+            profileUrl='Profileurl',
+            title='title',
+            userType='usertype',
+            preferredLanguage='preferredlanguage',
+            locale='locale',
+            timezone='timezone',
+            active=True,
+            password='password')
 
+    def build_group(self, display_name, member=None):
+        return connector.SCIMGroup(displayName=display_name, members=member)
 
-def create_multi_value_attribute(val):
-    return {'value': val['id']}
+    def create_multi_value_attribute(self, val):
+        return {'value': val['id']}
 
+    def create_user(self, x):
+        user = self.scim.create_user(user=self.build_user('FNORD{}'.format(x)))
+        self.member.append(self.create_multi_value_attribute(user))
 
-def create_user(member, x):
-    user = scim.create_user(user=build_user('FNORD{}'.format(x)))
-    member.append(create_multi_value_attribute(user))
+    def create_group_without_member(self, x):
+        g = connector.SCIMGroup(displayName='group_member{}'.format(x))
+        group = self.scim.create_group(g)
+        self.member.append(self.create_multi_value_attribute(group))
 
+    def create_group(self, x):
+        self.scim.create_group(self.build_group('Prefect{}'.format(x),
+                                                self.member))
 
-def create_group_without_member(member, x):
-    group = scim.create_group(user=build_group('group_member{}'.format(x)))
-    member.append(create_multi_value_attribute(group))
+    def prefill(self, user_amount, group_member, group_amount):
+        for x in range(0, user_amount):
+            Thread(target=self.create_user, args=(x,)).start()
+        for x in range(0, group_member):
+            Thread(target=self.create_group_without_member, args=(x,)).start()
+        for x in range(0, group_amount):
+            Thread(target=self.create_group, args=(x,)).start()
 
-
-def create_group(member, x):
-    scim.create_group(user=build_group('Prefect{}'.format(x), member))
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -77,10 +89,5 @@ if __name__ == '__main__':
     access_token = fakeUser.get_access_token()
     scim = connector.SCIM(authorization_server=args.osiam,
                           access_token=access_token)
-    member = []
-    for x in range(0, args.user_amount):
-        Thread(target=create_user, args=(member, x)).start()
-    for x in range(0, args.group_member):
-        Thread(target=create_group_without_member, args=(member, x)).start()
-    for x in range(0, args.group_amount):
-        Thread(target=create_group, args=(member, x)).start()
+    PrefillOsiam(scim).prefill(args.user_amount, args.group_member,
+                               args.group_amount)

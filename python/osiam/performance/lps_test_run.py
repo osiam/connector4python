@@ -5,6 +5,7 @@ __author__ = 'jtodea, phil'
 import logging
 import argparse
 import lps_test_contract
+import prefill_osiam
 
 logger = logging.getLogger(__name__)
 
@@ -46,18 +47,43 @@ def identify_tests(testcases, serial, parallel):
             'avg': sum(complete_duration) / len(complete_duration)}
 
 
-def execute_sequence(max_serial, max_parallel, test):
-    testcases = {}
-    execfile(test, testcases)
+def write_log_header(testcases):
     logger.addHandler(lps_test_contract.create_filehandler("/tmp/",
                                                            testcases['name']))
     logger.setLevel(logging.INFO)
-    # durchsatz fehlt ..
     logger.info('# Results of {}'.format(testcases["name"]))
     try:
         logger.info('# {}'.format(testcases['description']))
     except Exception:
         pass
+
+
+def insert_data(config):
+    create = config["create"]
+    user_amount = 0
+    group_amount = 0
+    if create.get('User') == 'per_call':
+        user_amount = args.serial * args.parallel
+    if create.get('Group') == 'per_call':
+        group_amount = args.serial * args.parallel
+    global scim
+    prefill_osiam.prefill(user_amount, group_amount, 0)
+
+
+def check_for_pre_conditions(testcases):
+    try:
+        config = testcases["configuration"]
+        insert_data(config)
+    except Exception:
+        pass
+
+
+def execute_sequence(max_serial, max_parallel, test):
+    testcases = {}
+    execfile(test, testcases)
+    write_log_header(testcases)
+    check_for_pre_conditions(testcases)
+    # durchsatz fehlt ..
     logger.info('serial*parallel;min;max;avg')
     print "executing sequence {}".format(test)
     for i in range(max_serial):
