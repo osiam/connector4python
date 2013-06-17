@@ -1,4 +1,6 @@
-__author__ = 'jtodea'
+#! /usr/bin/env python
+
+__author__ = 'jtodea, phil'
 
 import logging
 import lps_profiling
@@ -7,33 +9,18 @@ import lps_test_contract
 
 logger = logging.getLogger(__name__)
 
-
-parser = argparse.ArgumentParser(description='This is a script to run the' +
-                                             'OSIAM lps test suit.')
-
-parser.add_argument("--user_amount", type=int,
-                    help='The amount of user to load into OSIAM.')
-
-parser.add_argument("--group_amount", type=int,
-                    help='The amount of groups to load into OSIAM.')
-
-parser.add_argument('--group-member', help='A number of groups inside a group',
-                    default=0, type=int)
-
-parser.add_argument('--member', help='When enabled it inserts every user in ' +
-                    'every group', default=False, type=bool)
-
+parser = argparse.ArgumentParser(description='This script interpret the test' +
+                                             'case definition and runs all' +
+                                             'defined test cases.')
 parser.add_argument('--server', help='The server host name',
                     default='localhost')
-
 parser.add_argument('--client', help='The client host name.',
                     default='localhost')
-
 parser.add_argument('--serial', help='The number of maximal serial runs.',
                     default=10, type=int)
-
 parser.add_argument('--parallel', help='The number of parallel runs.',
                     default=10, type=int)
+parser.add_argument('--tests', help='The tests to run.', default='testcases/')
 
 
 def start_test(test, serial, parallel):
@@ -74,6 +61,7 @@ def execute_sequence(max_serial, max_parallel, test):
             logger.info("{}x{};{};{};{};".format(serial, parallel,
                                                  result["min"],
                                                  result["max"], result["avg"]))
+
 
 if __name__ == '__main__':
 #    load_testcases('tests.py')
