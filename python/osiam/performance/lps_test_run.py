@@ -19,7 +19,10 @@ parser.add_argument('--serial', help='The number of maximal serial runs.',
                     default=10, type=int)
 parser.add_argument('--parallel', help='The number of parallel runs.',
                     default=10, type=int)
-parser.add_argument('--tests', help='The tests to run.', default='testcases/')
+parser.add_argument("tests", nargs='+', help='Test files to execute.' +
+                                             'If given argument is a ' +
+                                             'directionary it will try to ' +
+                                             'load all python files.')
 
 
 def start_test(test, serial, parallel):
@@ -67,4 +70,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     lps_test_contract.__init__(args.server, args.client,
                                '23f9452e-00a9-4cec-a086-d171374ffb42')
-    execute_sequence(args.serial, args.parallel, 'tests.py')
+    for t in args.tests:
+        execute_sequence(args.serial, args.parallel, t)
