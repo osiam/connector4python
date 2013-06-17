@@ -49,11 +49,16 @@ def identify_tests(testcases, serial, parallel):
 def execute_sequence(max_serial, max_parallel, test):
     testcases = {}
     execfile(test, testcases)
-    logger.addHandler(lps_test_contract.create_filehandler("/tmp/", test))
+    logger.addHandler(lps_test_contract.create_filehandler("/tmp/",
+                                                           testcases['name']))
     logger.setLevel(logging.INFO)
-    #durchsatz fehlt ..
+    # durchsatz fehlt ..
+    logger.info('# Results of {}'.format(testcases["name"]))
+    try:
+        logger.info('# {}'.format(testcases['description']))
+    except Exception:
+        pass
     logger.info('serial*parallel;min;max;avg')
-
     print "executing sequence {}".format(test)
     for i in range(max_serial):
         for j in range(max_parallel):
