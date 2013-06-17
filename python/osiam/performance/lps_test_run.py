@@ -66,8 +66,8 @@ def insert_data(config):
         user_amount = args.serial * args.parallel
     if create.get('Group') == 'per_call':
         group_amount = args.serial * args.parallel
-    global scim
-    prefill_osiam.prefill(user_amount, group_amount, 0)
+    prefill_osiam.PrefillOsiam(lps_test_contract.scim).prefill(
+        user_amount, group_amount, 0)
 
 
 def check_for_pre_conditions(testcases):

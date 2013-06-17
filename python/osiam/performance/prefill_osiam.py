@@ -4,6 +4,7 @@ from osiam import connector
 import logging
 import argparse
 from threading import Thread
+import threading
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -77,6 +78,9 @@ class PrefillOsiam:
             Thread(target=self.create_group_without_member, args=(x,)).start()
         for x in range(0, group_amount):
             Thread(target=self.create_group, args=(x,)).start()
+        for thread in threading.enumerate():
+                if thread is not threading.currentThread():
+                            thread.join()
 
 
 if __name__ == '__main__':
