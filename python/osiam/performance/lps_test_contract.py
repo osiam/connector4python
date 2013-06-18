@@ -139,12 +139,12 @@ class User():
     def search(self, s, p):
         """ Searching on user n times parallel and serial"""
         f = self.__search_with_get_on_user_parallel__
-        return measure_function(f, s, p, self.__build_user__())
+        return measure_function(f, s, p, self.__get_filter__('get'))
 
     def search_post(self, s, p):
         """ Searching on user n times parallel and serial"""
         f = self.__search_with_post_on_user_parallel__
-        return measure_function(f, s, p, self.__build_user__())
+        return measure_function(f, s, p, self.__get_filter__('post'))
 
     def all(self, s, p):
         """ Running all user tests n times parallel and serial"""
@@ -216,6 +216,7 @@ class User():
                                               filter):
         """ runs_for_profiling always second parameter
             filter always third parameter"""
+        print "*** Filter: {} ****".format(filter)
         p = Process(target=scim.search_with_post_on_users(filter))
         p.start()
         procs.append(p)
