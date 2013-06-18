@@ -79,6 +79,7 @@ def measure_function(f, s, p, generate_data, data):
 def default_generate_data(data):
     return data
 
+
 def create_dynamic_user(data):
     return connector.SCIMUser(
         userName='user_name{0}'.format(uuid.uuid4()),
@@ -92,6 +93,11 @@ def create_dynamic_user(data):
         timezone='timezone',
         active=True,
         password='password')
+
+def create_dynamic_group(data):
+        return connector.SCIMGroup(
+            displayName='display_name{0}'.format(uuid.uuid4()))
+
 
 class User():
 
@@ -256,8 +262,8 @@ class Group():
         if id == 'post':
             return '{\'filter\':\'displayName%20pr\', \'count\':\'100\'}'
 
-    def __get_all_group_ids__(self):
-        groupResult = scim.search_with_get_on_groups('')
+    def get_all_group_ids(self, amount):
+        groupResult = scim.search_with_get_on_groups('count={}'.format(amount))
         len = groupResult['totalResults']
         itemsPerPage = groupResult['itemsPerPage']
         if len > itemsPerPage:
@@ -267,69 +273,46 @@ class Group():
 
     def create(self, s, p):
         """ Creating group n times parallel and serial"""
-        for count in range(s):
-            self.__create_group_serial__(s, self.__build_group__())
-
-        for count in range(p):
-            self.__create_group_parallel__(p, self.__build_group__())
-
-        self.__get_all_group_ids__()
+        f = self.__create_group_parallel__
+        return measure_function(f, s, p, create_dynamic_group,
+                                self.__build_group__())
 
     def read(self, s, p):
         """ Reading group n times parallel and serial"""
-        for count in range(s):
-            self.__get_group_serial__(s, self.__build_group__())
-
-        for count in range(p):
-            self.__get_group_parallel__(p, self.__build_group__())
+        f = self.__get_group_parallel__
+        return measure_function(f, s, p, default_generate_data,
+                                self.__build_group__())
 
     def replace(self, s, p):
         """ Replacing group n times parallel and serial"""
-        for count in range(s):
-            self.__replace_group_serial__(s, self.__build_group__())
-
-        for count in range(p):
-            self.__replace_group_parallel__(p, self.__build_group__())
+        f = self.__replace_group_parallel__
+        return measure_function(f, s, p, create_dynamic_group,
+                                self.__build_group__())
 
     def update(self, s, p):
         """ Updating group n times parallel and serial"""
-        for count in range(s):
-            self.__update_group_serial__(s, self.__build_group__())
-
-        for count in range(p):
-            self.__update_group_parallel__(p, self.__build_group__())
+        f = self.__update_group_parallel__
+        return measure_function(f, s, p, create_dynamic_group,
+                                self.__build_group__())
 
     def delete(self, s, p):
         """ Deleting group n times parallel and serial"""
-        for count in range(s):
-            self.__delete_group_serial__(s, self.__build_group__())
-
-        for count in range(p):
-            self.__delete_group_parallel__(
-                p, self.__build_group__(), s + count)
+        f = self.__delete_group_parallel__
+        return measure_function(f, s, p, default_generate_data,
+                                self.__build_group__())
 
     def search(self, s, p):
         """ Searching on group n times parallel and serial"""
-        for count in range(s):
-            self.__search_group_serial__(s)
+        f = self.__search_with_get_on_group_parallel__
+        return measure_function(f, s, p, default_generate_data,
+                                self.__get_filter__('get'))
 
-        for count in range(p):
-            self.__search_group_parallel__(p)
+    def search_post(self, s, p):
+        """ Searching on group n times parallel and serial"""
+        f = self.__search_with_post_on_group_parallel__
+        return measure_function(f, s, p, default_generate_data,
+                                self.__get_filter__('post'))
 
-    def all(self, s, p):
-        """ Running all group tests n times parallel and serial"""
-        self.create(s, p)
-        self.read(s, p)
-        self.replace(s, p)
-        self.update(s, p)
-        self.search(s, p)
-        self.delete(s, p)
-
-    @do_log
-    def __create_group_serial__(self, runs_for_profiling, group):
-        """ runs_for_profiling always second parameter
-            group always third parameter """
-        scim.create_group(group)
 
     @do_log
     def __create_group_parallel__(self, runs_for_profiling, group):
@@ -340,24 +323,12 @@ class Group():
         procs.append(p)
 
     @do_log
-    def __replace_group_serial__(self, runs_for_profiling, group):
-        """ runs_for_profiling always second parameter
-            group always third parameter """
-        scim.replace_group(self.group_ids.pop(), group)
-
-    @do_log
     def __replace_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         p = Process(target=scim.replace_group(self.group_ids.pop(), group))
         p.start()
         procs.append(p)
-
-    @do_log
-    def __update_group_serial__(self, runs_for_profiling, group):
-        """ runs_for_profiling always second parameter
-            group always third parameter """
-        scim.update_group(self.group_ids.pop(), group)
 
     @do_log
     def __update_group_parallel__(self, runs_for_profiling, group):
@@ -368,12 +339,6 @@ class Group():
         procs.append(p)
 
     @do_log
-    def __delete_group_serial__(self, runs_for_profiling, group):
-        """ runs_for_profiling always second parameter
-            group always third parameter """
-        scim.delete_group(self.group_ids.pop())
-
-    @do_log
     def __delete_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
@@ -382,42 +347,12 @@ class Group():
         procs.append(p)
 
     @do_log
-    def __get_group_serial__(self, runs_for_profiling, group):
-        """ runs_for_profiling always second parameter
-            group always third parameter """
-        scim.get_group(self.group_ids.pop())
-
-    @do_log
     def __get_group_parallel__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
         p = Process(target=scim.get_group(self.group_ids.pop()))
         p.start()
         procs.append(p)
-
-    def __search_group_serial__(self, runs_for_profiling):
-        self.__search_with_get_on_group_serial__(
-            runs_for_profiling, self.__get_filter__('get'))
-        self.__search_with_post_on_group_serial__(
-            runs_for_profiling, self.__get_filter__('post'))
-
-    @do_log
-    def __search_with_get_on_group_serial__(self, runs_for_profiling, filter):
-        """ runs_for_profiling always second parameter
-            filter always third parameter """
-        scim.search_with_get_on_groups(filter)
-
-    @do_log
-    def __search_with_post_on_group_serial__(self, runs_for_profiling, filter):
-        """ runs_for_profiling always second parameter
-            filter always third parameter """
-        scim.search_with_post_on_groups(filter)
-
-    def __search_group_parallel__(self, runs_for_profiling):
-        self.__search_with_get_on_group_parallel__(
-            runs_for_profiling, self.__get_filter__('get'))
-        self.__search_with_post_on_group_parallel__(
-            runs_for_profiling, self.__get_filter__('post'))
 
     @do_log
     def __search_with_get_on_group_parallel__(self, runs_for_profiling, filter):

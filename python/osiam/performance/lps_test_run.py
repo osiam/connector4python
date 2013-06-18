@@ -17,9 +17,9 @@ parser.add_argument('--server', help='The server host name',
 parser.add_argument('--client', help='The client host name.',
                     default='localhost')
 parser.add_argument('--serial', help='The number of maximal serial runs.',
-                    default=10, type=int)
+                    default=5, type=int)
 parser.add_argument('--parallel', help='The number of parallel runs.',
-                    default=4, type=int)
+                    default=10, type=int)
 parser.add_argument("tests", nargs='+', help='Test files to execute.' +
                                              'If given argument is a ' +
                                              'directionary it will try to ' +
@@ -57,11 +57,14 @@ def write_log_header(testcases):
 
 
 def calculate_amount():
-    result = 0
-    for i in range(args.serial):
-        result = result + (i + 1) * args.parallel
-
-    return result
+    def calc(m):
+        result = 1
+        for s in xrange(m + 1):
+            result = result + s
+        return result
+    serial = calc(args.serial)
+    parallel = calc(args.parallel)
+    return serial * parallel
 
 
 def insert_data(config):
@@ -82,8 +85,9 @@ def check_for_pre_conditions(testcases):
     config = testcases.get("configuration")
     if config is not None:
         insert_data(config)
-        user.get_all_user_ids(calculate_amount())
-        group.__get_all_group_ids__()
+        amount = calculate_amount()
+        user.get_all_user_ids(amount)
+        group.get_all_group_ids(amount)
 
 
 def execute_sequence(max_serial, max_parallel, test):
