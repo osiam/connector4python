@@ -12,8 +12,10 @@ def do_log(func):
         print ('doLog for {0} with {1}'.format(func.__name__, args[0],))
     return wrapped
 
+
 def calcall(arg):
     return calc(*arg)
+
 
 def calc(func, arg):
     result = func(arg)
@@ -22,8 +24,10 @@ def calc(func, arg):
         func.__name__, arg, result
     )
 
+
 def mul(a):
-    return a*a
+    return a * a
+
 
 def create_pool():
     PROCESSES = 4
@@ -31,16 +35,19 @@ def create_pool():
     pool = multiprocessing.Pool(PROCESSES)
     return pool
 
+
 def run_with_pool(pool):
     TASKS = [(mul, 2)] + [(mul, 4)] + [(mul, 6)] + [(mul, 8)]
 
-    #results = pool.imap(calcall, TASKS)
+    # results = pool.imap(calcall, TASKS)
     results = [pool.apply_async(calc, t) for t in TASKS]
     for i in results:
-        #print ('Result: %s' % i)
+        # print ('Result: %s' % i)
         print ('Result: %s' % i.get())
 
+
 class Test:
+
     def run_without_pool(self):
         q = multiprocessing.Queue()
         test = connector.SCIMUser(

@@ -14,6 +14,7 @@ scim = None
 
 procs = []
 
+
 def __init__(server, client, client_id):
     """ Getting access token and initializes profiling """
     fakeUser = FakeUser('marissa', 'koala', client_id,
@@ -55,7 +56,7 @@ def all(s, p):
     Group().all(s, p)
 
 
-def measure_function(f, s, p, *data):
+def measure_function(f, s, p, generate_data, data):
     """ executes a given function s times serial, p times parallel and
     summarises the duration of all calls """
     complete_duration = []
@@ -64,7 +65,8 @@ def measure_function(f, s, p, *data):
     for serial in range(s):
         for parallel in range(p):
             # convert to milliseconds
-            complete_duration.append(f(p, *data).microseconds / 1000)
+            complete_duration.append(f(p, generate_data(
+                data)).microseconds / 1000)
         for process in procs:
             process.join()
         global procs
@@ -74,7 +76,25 @@ def measure_function(f, s, p, *data):
             'avg': sum(complete_duration) / len(complete_duration)}
 
 
+def default_generate_data(data):
+    return data
+
+def create_dynamic_user(data):
+    return connector.SCIMUser(
+        userName='user_name{0}'.format(uuid.uuid4()),
+        displayName='displayName',
+        nickName='nickname',
+        profileUrl='ProfileUrl',
+        title='title',
+        userType='userType',
+        preferredLanguage='preferredLanguage',
+        locale='locale',
+        timezone='timezone',
+        active=True,
+        password='password')
+
 class User():
+
     """ This class is responsible for all user test cases """
     user_ids = []
 
@@ -114,46 +134,43 @@ class User():
     def create(self, s, p):
         """ Creating user n times parallel and serial"""
         f = self.__create_user_parallel__
-        return measure_function(f, s, p, self.__build_user__())
+        return measure_function(f, s, p, create_dynamic_user, None)
 
     def read(self, s, p):
         """ Reading user n times parallel and serial"""
         f = self.__get_user_parallel__
-        return measure_function(f, s, p, self.__build_user__())
+        return measure_function(f, s, p, default_generate_data,
+                                self.__build_user__())
 
     def replace(self, s, p):
         """ Replacing user n times parallel and serial"""
         f = self.__replace_user_parallel__
-        return measure_function(f, s, p, self.__build_user__())
+        return measure_function(f, s, p, default_generate_data,
+                                self.__build_user__())
 
     def update(self, s, p):
         """ Updating user n times parallel and serial"""
         f = self.__update_user_parallel__
-        return measure_function(f, s, p, self.__build_user__())
+        return measure_function(f, s, p, default_generate_data,
+                                self.__build_user__())
 
     def delete(self, s, p):
         """ Deleting user n times parallel and serial"""
         f = self.__delete_user_parallel__
-        return measure_function(f, s, p, self.__build_user__())
+        return measure_function(f, s, p, default_generate_data,
+                                self.__build_user__())
 
     def search(self, s, p):
         """ Searching on user n times parallel and serial"""
         f = self.__search_with_get_on_user_parallel__
-        return measure_function(f, s, p, self.__get_filter__('get'))
+        return measure_function(f, s, p, default_generate_data,
+                                self.__get_filter__('get'))
 
     def search_post(self, s, p):
         """ Searching on user n times parallel and serial"""
         f = self.__search_with_post_on_user_parallel__
-        return measure_function(f, s, p, self.__get_filter__('post'))
-
-    def all(self, s, p):
-        """ Running all user tests n times parallel and serial"""
-        self.create(s, p)
-        self.read(s, p)
-        self.replace(s, p)
-        self.update(s, p)
-        self.search(s, p)
-        self.delete(s, p)
+        return measure_function(f, s, p, default_generate_data,
+                                self.__get_filter__('post'))
 
     @do_log
     def __create_user_parallel__(self, runs_for_profiling, user):
@@ -223,6 +240,7 @@ class User():
 
 
 class Group():
+
     """ This class is responsible for all group test cases """
     group_ids = []
 
@@ -287,7 +305,8 @@ class Group():
             self.__delete_group_serial__(s, self.__build_group__())
 
         for count in range(p):
-            self.__delete_group_parallel__(p, self.__build_group__(), s+count)
+            self.__delete_group_parallel__(
+                p, self.__build_group__(), s + count)
 
     def search(self, s, p):
         """ Searching on group n times parallel and serial"""
