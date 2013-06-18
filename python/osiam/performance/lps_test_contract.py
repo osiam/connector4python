@@ -3,16 +3,16 @@ __author__ = 'jtodea'
 from osiam import connector
 from obtain_access_token import FakeUser
 from multiprocessing import Process
-import random
 import logging
 from datetime import datetime
 import sys
+import uuid
 
 logger = logging.getLogger(__name__)
 
-
 scim = None
 
+procs = []
 
 def __init__(server, client, client_id):
     """ Getting access token and initializes profiling """
@@ -58,13 +58,19 @@ def all(s, p):
 def measure_function(f, s, p, *data):
     """ executes a given function s times serial, p times parallel and
     summarises the duration of all calls """
-    duration = 0
+    complete_duration = []
     print "executing {} {} times serial and {} times parallel".format(
         f.__name__, s, p)
     for count in range(s):
         # convert to milliseconds
-        duration = duration + f(p, *data).microseconds / 1000
-    return duration
+        complete_duration.append(f(p, *data).microseconds / 1000)
+    for p in procs:
+        p.join()
+    global procs
+    procs = []
+    return {'min': min(complete_duration),
+            'max': max(complete_duration),
+            'avg': sum(complete_duration) / len(complete_duration)}
 
 
 class User():
@@ -74,7 +80,7 @@ class User():
     def __build_user__(self):
         """ Building user object for creation"""
         return connector.SCIMUser(
-            userName='user_name{0}'.format(random.random()),
+            userName='user_name{0}'.format(uuid.uuid4()),
             displayName='displayName',
             nickName='nickname',
             profileUrl='ProfileUrl',
@@ -93,14 +99,16 @@ class User():
         if id == 'post':
             return '{\'filter\':\'userName%20pr\', \'count\':\'100\'}'
 
-    def __get_all_user_ids__(self):
-        userResult = scim.search_with_get_on_users('')
+    def get_all_user_ids(self, amount):
+        print "trying to get all user id."
+        userResult = scim.search_with_get_on_users('count={}'.format(amount))
         len = userResult['totalResults']
         itemsPerPage = userResult['itemsPerPage']
         if len > itemsPerPage:
             len = itemsPerPage
         for count in range(len):
             self.user_ids.append(userResult['Resources'][count]['id'])
+        print "got user ids:\n{}".format(self.user_ids)
 
     def create(self, s, p):
         """ Creating user n times parallel and serial"""
@@ -132,6 +140,11 @@ class User():
         f = self.__search_with_get_on_user_parallel__
         return measure_function(f, s, p, self.__build_user__())
 
+    def search_post(self, s, p):
+        """ Searching on user n times parallel and serial"""
+        f = self.__search_with_post_on_user_parallel__
+        return measure_function(f, s, p, self.__build_user__())
+
     def all(self, s, p):
         """ Running all user tests n times parallel and serial"""
         self.create(s, p)
@@ -147,20 +160,25 @@ class User():
             user always third parameter """
         p = Process(target=scim.create_user(user))
         p.start()
+        procs.append(p)
 
     @do_log
     def __replace_user_parallel__(self, runs_for_profiling, user):
         """ runs_for_profiling always second parameter
             user always third parameter """
-        p = Process(target=scim.replace_user(self.user_ids.pop(), user))
+        p = Process(target=scim.replace_user(self.user_ids.pop(),
+                                             self.__build_user__()))
         p.start()
+        procs.append(p)
 
     @do_log
     def __update_user_parallel__(self, runs_for_profiling, user):
         """ runs_for_profiling always second parameter
             user always third parameter """
-        p = Process(target=scim.update_user(self.user_ids.pop(), user))
+        p = Process(target=scim.update_user(self.user_ids.pop(),
+                                            self.__build_user__()))
         p.start()
+        procs.append(p)
 
     @do_log
     def __delete_user_parallel__(self, runs_for_profiling, user):
@@ -168,6 +186,7 @@ class User():
             user always third parameter """
         p = Process(target=scim.delete_user(self.user_ids.pop()))
         p.start()
+        procs.append(p)
 
     @do_log
     def __get_user_parallel__(self, runs_for_profiling, user):
@@ -175,6 +194,7 @@ class User():
             user always third parameter"""
         p = Process(target=scim.get_user(self.user_ids.pop()))
         p.start()
+        procs.append(p)
 
     def __search_user_parallel__(self, runs_for_profiling):
         self.__search_with_get_on_user_parallel__(runs_for_profiling,
@@ -188,6 +208,7 @@ class User():
             filter always third parameter"""
         p = Process(target=scim.search_with_get_on_users(filter))
         p.start()
+        procs.append(p)
 
     @do_log
     def __search_with_post_on_user_parallel__(self, runs_for_profiling,
@@ -196,6 +217,7 @@ class User():
             filter always third parameter"""
         p = Process(target=scim.search_with_post_on_users(filter))
         p.start()
+        procs.append(p)
 
 
 class Group():
@@ -205,7 +227,7 @@ class Group():
     def __build_group__(self, member='{\'value\':\'UUID\'}'):
         """ Building group object for creation """
         return connector.SCIMGroup(
-            displayName='display_name{0}'.format(random.random()))
+            displayName='display_name{0}'.format(uuid.uuid4()))
 
     def __get_filter__(self, id):
         """ Defining the filter for search accordingly the id"""
@@ -294,6 +316,7 @@ class Group():
             group always third parameter """
         p = Process(target=scim.create_group(group))
         p.start()
+        procs.append(p)
 
     @do_log
     def __replace_group_serial__(self, runs_for_profiling, group):
@@ -307,6 +330,7 @@ class Group():
             group always third parameter """
         p = Process(target=scim.replace_group(self.group_ids.pop(), group))
         p.start()
+        procs.append(p)
 
     @do_log
     def __update_group_serial__(self, runs_for_profiling, group):
@@ -320,6 +344,7 @@ class Group():
             group always third parameter """
         p = Process(target=scim.update_group(self.group_ids.pop(), group))
         p.start()
+        procs.append(p)
 
     @do_log
     def __delete_group_serial__(self, runs_for_profiling, group):
@@ -333,6 +358,7 @@ class Group():
             group always third parameter """
         p = Process(target=scim.delete_group(self.group_ids.pop()))
         p.start()
+        procs.append(p)
 
     @do_log
     def __get_group_serial__(self, runs_for_profiling, group):
@@ -346,6 +372,7 @@ class Group():
             group always third parameter """
         p = Process(target=scim.get_group(self.group_ids.pop()))
         p.start()
+        procs.append(p)
 
     def __search_group_serial__(self, runs_for_profiling):
         self.__search_with_get_on_group_serial__(
@@ -377,6 +404,7 @@ class Group():
             filter always third parameter """
         p = Process(target=scim.search_with_get_on_groups(filter))
         p.start()
+        procs.append(p)
 
     @do_log
     def __search_with_post_on_group_parallel__(self, runs_for_profiling, filter):
@@ -384,3 +412,4 @@ class Group():
             filter always third parameter """
         p = Process(target=scim.search_with_post_on_groups(filter))
         p.start()
+        procs.append(p)

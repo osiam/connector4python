@@ -19,32 +19,36 @@ parser.add_argument('--client', help='The client host name.',
 parser.add_argument('--serial', help='The number of maximal serial runs.',
                     default=10, type=int)
 parser.add_argument('--parallel', help='The number of parallel runs.',
-                    default=10, type=int)
+                    default=4, type=int)
 parser.add_argument("tests", nargs='+', help='Test files to execute.' +
                                              'If given argument is a ' +
                                              'directionary it will try to ' +
                                              'load all python files.')
 
 
-def start_test(test, serial, parallel):
+def create_method(test):
     res = test['resource']
     method_name = test['method']
-    print "running {} of class {}".format(method_name, res)
     # getting class
-    class_ = getattr(lps_test_contract, res)
-    print "got class: {}".format(class_.__name__)
-    # getting method
-    method = getattr(class_(), method_name)
-    return method(serial, parallel)
+    #removed because  User and Group should hold all known User and Groups ...
+    #class_ = getattr(lps_test_contract, res)
+    if res == user.__class__.__name__:
+        return getattr(user, method_name)
+    elif res == group.__class__.__name__:
+        return getattr(group, method_name)
+    raise Exception('res {} is neither {} nor {}'.format(res,
+                    user.__class__, group.__class__))
 
 
 def identify_tests(testcases, serial, parallel):
     complete_duration = []
     print "executing {}".format(testcases)
     for test in testcases['tests']:
-        complete_duration.append(start_test(test, serial, parallel))
-    return {'min': min(complete_duration), 'max': max(complete_duration),
-            'avg': sum(complete_duration) / len(complete_duration)}
+        method = create_method(test)
+        result = method(serial, parallel)
+        result['method'] = method.__name__
+        complete_duration.append(result)
+    return complete_duration
 
 
 def write_log_header(testcases):
@@ -52,30 +56,36 @@ def write_log_header(testcases):
                                                            testcases['name']))
     logger.setLevel(logging.INFO)
     logger.info('# Results of {}'.format(testcases["name"]))
-    try:
-        logger.info('# {}'.format(testcases['description']))
-    except Exception:
-        pass
+    logger.info('# {}'.format(testcases.get('description')))
+
+
+def calculate_amount():
+    result = 0
+    for i in range(args.serial):
+        result = result + (i + 1) * args.parallel
+
+    return result
 
 
 def insert_data(config):
     create = config["create"]
     user_amount = 0
     group_amount = 0
+    amount = calculate_amount()
+
     if create.get('User') == 'per_call':
-        user_amount = args.serial * args.parallel
+        user_amount = amount
     if create.get('Group') == 'per_call':
-        group_amount = args.serial * args.parallel
+        group_amount = amount
     prefill_osiam.PrefillOsiam(lps_test_contract.scim).prefill(
         user_amount, group_amount, 0)
 
 
 def check_for_pre_conditions(testcases):
-    try:
-        config = testcases["configuration"]
-        insert_data(config)
-    except Exception:
-        pass
+    config = testcases["configuration"]
+    insert_data(config)
+    user.get_all_user_ids(calculate_amount())
+    group.__get_all_group_ids__()
 
 
 def execute_sequence(max_serial, max_parallel, test):
@@ -91,15 +101,21 @@ def execute_sequence(max_serial, max_parallel, test):
             serial = i + 1
             parallel = j + 1
             result = identify_tests(testcases, serial, parallel)
-            logger.info("{}x{};{};{};{};".format(serial, parallel,
-                                                 result["min"],
-                                                 result["max"], result["avg"]))
+            print_result(result, serial, parallel)
 
+
+
+def print_result(result, serial, parallel):
+    for r in result:
+        logger.info("{}x{}-{};{};{};{};".format(serial, parallel, r["method"],
+                                                r["min"], r["max"], r["avg"]))
 
 if __name__ == '__main__':
 #    load_testcases('tests.py')
     args = parser.parse_args()
     lps_test_contract.__init__(args.server, args.client,
                                '23f9452e-00a9-4cec-a086-d171374ffb42')
+    user = lps_test_contract.User()
+    group = lps_test_contract.Group()
     for t in args.tests:
         execute_sequence(args.serial, args.parallel, t)
