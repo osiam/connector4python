@@ -61,13 +61,14 @@ def measure_function(f, s, p, *data):
     complete_duration = []
     print "executing {} {} times serial and {} times parallel".format(
         f.__name__, s, p)
-    for count in range(s):
-        # convert to milliseconds
-        complete_duration.append(f(p, *data).microseconds / 1000)
-    for p in procs:
-        p.join()
-    global procs
-    procs = []
+    for serial in range(s):
+        for parallel in range(p):
+            # convert to milliseconds
+            complete_duration.append(f(p, *data).microseconds / 1000)
+        for process in procs:
+            process.join()
+        global procs
+        procs = []
     return {'min': min(complete_duration),
             'max': max(complete_duration),
             'avg': sum(complete_duration) / len(complete_duration)}

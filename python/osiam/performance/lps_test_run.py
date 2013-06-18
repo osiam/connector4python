@@ -29,9 +29,6 @@ parser.add_argument("tests", nargs='+', help='Test files to execute.' +
 def create_method(test):
     res = test['resource']
     method_name = test['method']
-    # getting class
-    #removed because  User and Group should hold all known User and Groups ...
-    #class_ = getattr(lps_test_contract, res)
     if res == user.__class__.__name__:
         return getattr(user, method_name)
     elif res == group.__class__.__name__:
@@ -54,7 +51,7 @@ def identify_tests(testcases, serial, parallel):
 def write_log_header(testcases):
     logger.addHandler(lps_test_contract.create_filehandler("/tmp/",
                                                            testcases['name']))
-    logger.setLevel(logging.INFO)
+#    logger.setLevel(logging.INFO)
     logger.info('# Results of {}'.format(testcases["name"]))
     logger.info('# {}'.format(testcases.get('description')))
 
@@ -82,10 +79,11 @@ def insert_data(config):
 
 
 def check_for_pre_conditions(testcases):
-    config = testcases["configuration"]
-    insert_data(config)
-    user.get_all_user_ids(calculate_amount())
-    group.__get_all_group_ids__()
+    config = testcases.get("configuration")
+    if config is not None:
+        insert_data(config)
+        user.get_all_user_ids(calculate_amount())
+        group.__get_all_group_ids__()
 
 
 def execute_sequence(max_serial, max_parallel, test):
@@ -104,14 +102,12 @@ def execute_sequence(max_serial, max_parallel, test):
             print_result(result, serial, parallel)
 
 
-
 def print_result(result, serial, parallel):
     for r in result:
         logger.info("{}x{}-{};{};{};{};".format(serial, parallel, r["method"],
                                                 r["min"], r["max"], r["avg"]))
 
 if __name__ == '__main__':
-#    load_testcases('tests.py')
     args = parser.parse_args()
     lps_test_contract.__init__(args.server, args.client,
                                '23f9452e-00a9-4cec-a086-d171374ffb42')
