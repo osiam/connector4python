@@ -15,6 +15,7 @@ def doLog(func):
 
 
 class FakeUser():
+
     """ This class will fake the user interaction to get an access_token.
     It needs the username and password for login and the name of client and
     its redirect uri for approval"""
@@ -58,7 +59,7 @@ class FakeUser():
             'user_oauth_approval': 'true',
             'response_type': 'code'}
         s = self.__grant_access__()
-        #s.allows_redirect = False
+        # s.allows_redirect = False
         return s.post("{}/oauth/authorize".format(self.authorization_server),
                       params=p, cookies=s.cookies)
 

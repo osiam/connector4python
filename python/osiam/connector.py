@@ -69,6 +69,7 @@ SCIMUserT = collections.namedtuple('SCIMUser', (
     'groups', 'entitlements', 'roles',
     'x509Certificates', 'any', 'meta', 'externalId'))
 
+
 def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
              nickName=None, profileUrl=None, title=None, userType=None,
              preferredLanguage=None, locale=None, timezone=None, active=None,
@@ -78,9 +79,9 @@ def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
              externalId=None):
         if not schemas:
             schemas = ['urn:scim:schemas:core:1.0']
-        if meta != None:
+        if meta is not None:
             meta = meta.__dict__
-        if name != None:
+        if name is not None:
             name = name.__dict__
         return SCIMUserT(id, schemas, userName, name, displayName, nickName,
                          profileUrl, title, userType, preferredLanguage,
