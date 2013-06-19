@@ -44,7 +44,7 @@ def do_log(func):
         duration = tstop - tstart
         global error_amount, timeout_amount
         ms = duration.microseconds / 1000
-        ## delete does not return json, so it is a response directly
+        # delete does not return json, so it is a response directly
         if result.__class__.__name__ is 'Response':
             if result.status_code is not 200:
                 error_amount = error_amount + 1
