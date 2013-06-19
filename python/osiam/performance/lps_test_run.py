@@ -23,12 +23,12 @@ parser.add_argument('--iterations', help='The number of repeating runs.',
                     default=5, type=int)
 parser.add_argument('-p', '--parallel', help='The number of parallel runs.',
                     default=10, type=int)
+parser.add_argument('-t', '--timeout', help='If this timeout is reached a ' +
+                    'request is considered as unsuccessful.', default=500,
+                    type=int)
 parser.add_argument('-l', '--log-directionary', help='The directionary to ' +
                     'store the log output.', default='/tmp')
-parser.add_argument("tests", nargs='+', help='Test files to execute.' +
-                                             'If given argument is a ' +
-                                             'directionary it will try to ' +
-                                             'load all python files.')
+parser.add_argument("tests", nargs='+', help='Test files to execute.')
 
 
 def create_method(test):
@@ -54,6 +54,7 @@ def identify_tests(testcases, serial, parallel):
 
 
 def write_log_header(testcases):
+    logger.handlers = []
     logger.addHandler(lps_test_contract.create_filehandler(
         args.log_directionary,
         testcases['name']))
@@ -80,12 +81,13 @@ def insert_data(config):
             result = calculate_amount()
         elif obj is not None:
             result = obj
-        logger.info('# This test is based on {} {}'.format(result, key))
         return result
 
     create = config["create"]
     user_amount = get_amount('User')
     group_amount = get_amount('Group')
+    logger.info('# This test is based on: {} users {} groups'.
+                format(user_amount, group_amount))
     prefill_osiam.PrefillOsiam(lps_test_contract.scim).prefill(
         user_amount, group_amount, 0)
 
@@ -117,17 +119,22 @@ def execute_sequence(max_serial, max_parallel, test):
 
 def print_result(result, serial, parallel):
     for r in result:
-        logger.info("{}-{}-{};{};{};{};{};{}".format(serial, parallel,
-                                                     r["method"],
-                                                     r["min"],
-                                                     r["max"],
-                                                     r["avg"],
-                                                     r["timeout"],
-                                                     r["error"]))
+        logger.info("{}x{}-{};{};{};{};{}%;{}%".format(serial, parallel,
+                                                       r["method"],
+                    r["min"],
+                    r["max"],
+                    r["avg"],
+                    r["timeout"],
+                    r["error"]))
+        if r["timeout"] >= 50:
+            logger.info("# {}% of requests reached the timeout if {}ms.".
+                        format(r["timeout"]), args.timeout)
+            exit(1)
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    lps_test_contract.__init__(args.server, args.client, args.client_id)
+    lps_test_contract.__init__(args.server, args.client, args.client_id,
+                               timeout=args.timeout)
     user = lps_test_contract.User()
     group = lps_test_contract.Group()
     for t in args.tests:

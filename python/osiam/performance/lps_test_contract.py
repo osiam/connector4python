@@ -29,10 +29,6 @@ def __init__(server, client, client_id, username='marissa', password='koala',
     global scim, max_response_time
     scim = connector.SCIM('http://{}:8080/osiam-server'.format(server),
                           access_token)
-    logger.addHandler(create_filehandler("/tmp",
-                                         "osiam_performance_test_debug.log"))
-    logger.setLevel(logging.INFO)
-    logger.info('name;iterations;running_time;data_volume_in_bytes;response')
     max_response_time = timeout
 
 
@@ -96,8 +92,8 @@ def measure_function(f, s, p, generate_data, data):
     return {'min': min(complete_duration),
             'max': max(complete_duration),
             'avg': sum(complete_duration) / len(complete_duration),
-            'timeout': "{}%".format(calculate_percent(timeout_amounts)),
-            'error': "{}%".format(calculate_percent(error_amounts))}
+            'timeout': calculate_percent(timeout_amounts),
+            'error': calculate_percent(error_amounts)}
 
 
 def default_generate_data(data):
@@ -305,13 +301,13 @@ class Group():
     def __replace_group__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
-        return scim.replace_group(self.group_ids.pop(group))
+        return scim.replace_group(self.group_ids.pop(), create_dynamic_group())
 
     @do_log
     def __update_group__(self, runs_for_profiling, group):
         """ runs_for_profiling always second parameter
             group always third parameter """
-        return scim.update_group(self.group_ids.pop(group))
+        return scim.update_group(self.group_ids.pop(), create_dynamic_group())
 
     @do_log
     def __delete_group__(self, runs_for_profiling, group):
