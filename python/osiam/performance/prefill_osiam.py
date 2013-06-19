@@ -3,10 +3,9 @@ from obtain_access_token import FakeUser
 from osiam import connector
 import logging
 import argparse
-from threading import Thread
-import threading
+from multiprocessing import Process
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser(description='This is a script to load a' +
@@ -56,7 +55,7 @@ class PrefillOsiam:
         return connector.SCIMGroup(displayName=display_name, members=member)
 
     def create_multi_value_attribute(self, val):
-        return {'value': val['id']}
+        return {'value': val.get('id')}
 
     def create_user(self, x):
         user = self.scim.create_user(user=self.build_user('FNORD{}'.format(x)))
@@ -72,16 +71,21 @@ class PrefillOsiam:
                                                 self.member))
 
     def prefill(self, user_amount, group_member, group_amount):
-        for x in range(0, user_amount):
-            Thread(target=self.create_user, args=(x,)).start()
-        for x in range(0, group_member):
-            Thread(target=self.create_group_without_member, args=(x,)).start()
-        for x in range(0, group_amount):
-            Thread(target=self.create_group, args=(x,)).start()
-        for thread in threading.enumerate():
-                if thread is not threading.currentThread():
-                            thread.join()
+        procs = []
 
+        def start_process(f, x):
+            p = Process(target=f, args=(x,))
+            procs.append(p)
+            p.start()
+
+        for x in range(0, user_amount):
+            start_process(self.create_user, x)
+        for x in range(0, group_member):
+            start_process(self.create_group_without_member, x)
+        for x in range(0, group_amount):
+            start_process(self.create_group, x)
+        for p in procs:
+            p.join()
 
 if __name__ == '__main__':
     args = parser.parse_args()
