@@ -17,6 +17,8 @@ parser.add_argument('--server', help='The server host name',
                     default='localhost')
 parser.add_argument('--client', help='The client host name.',
                     default='localhost')
+parser.add_argument('--client_id', help='The client ID',
+                    default='23f9452e-00a9-4cec-a086-d171374ffb42')
 parser.add_argument('--serial', help='The number of maximal serial runs.',
                     default=5, type=int)
 parser.add_argument('--parallel', help='The number of parallel runs.',
@@ -119,8 +121,7 @@ def print_result(result, serial, parallel):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    lps_test_contract.__init__(args.server, args.client,
-                               '23f9452e-00a9-4cec-a086-d171374ffb42')
+    lps_test_contract.__init__(args.server, args.client, args.client_id)
     user = lps_test_contract.User()
     group = lps_test_contract.Group()
     for t in args.tests:
