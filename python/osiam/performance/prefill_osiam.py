@@ -4,6 +4,7 @@ from osiam import connector
 import logging
 import argparse
 from multiprocessing import Process
+import uuid
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -57,35 +58,49 @@ class PrefillOsiam:
     def create_multi_value_attribute(self, val):
         return {'value': val.get('id')}
 
-    def create_user(self, x):
-        user = self.scim.create_user(user=self.build_user('FNORD{}'.format(x)))
+    def create_user(self):
+        user = self.scim.create_user(user=self.build_user('FNORD{}'.format(
+            uuid.uuid4())))
         self.member.append(self.create_multi_value_attribute(user))
 
-    def create_group_without_member(self, x):
-        g = connector.SCIMGroup(displayName='group_member{}'.format(x))
+    def create_group_without_member(self):
+        g = connector.SCIMGroup(
+            displayName='group_member{}'.format(uuid.uuid4()))
         group = self.scim.create_group(g)
         self.member.append(self.create_multi_value_attribute(group))
 
-    def create_group(self, x):
-        self.scim.create_group(self.build_group('Prefect{}'.format(x),
-                                                self.member))
+    def create_group(self):
+        self.scim.create_group(
+            self.build_group('Prefect{}'.format(uuid.uuid4()),
+                             self.member))
 
     def prefill(self, user_amount, group_member, group_amount):
-        procs = []
+        def start_process_group(amount, function):
+            """Work aroundi: Our database connection is normally
+            configured to allow 10 connections. Therefor we just send <= 10
+            requests parallel."""
+            def start_process(f):
+                p = Process(target=f)
+                procs.append(p)
+                p.start()
 
-        def start_process(f, x):
-            p = Process(target=f, args=(x,))
-            procs.append(p)
-            p.start()
+            while True:
+                procs = []
+                if (amount >= 10):
+                    block = 10
+                else:
+                    block = amount
+                amount = amount - block
+                for x in range(block):
+                    start_process(function)
+                for p in procs:
+                    p.join()
+                if amount <= 0:
+                    break
 
-        for x in range(0, user_amount):
-            start_process(self.create_user, x)
-        for x in range(0, group_member):
-            start_process(self.create_group_without_member, x)
-        for x in range(0, group_amount):
-            start_process(self.create_group, x)
-        for p in procs:
-            p.join()
+        start_process_group(user_amount, self.create_user)
+        start_process_group(group_member, self.create_group_without_member)
+        start_process_group(group_amount, self.create_group)
 
 if __name__ == '__main__':
     args = parser.parse_args()
