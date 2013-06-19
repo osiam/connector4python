@@ -6,6 +6,7 @@ import logging
 import argparse
 import lps_test_contract
 import prefill_osiam
+# from pudb import set_trace; set_trace()
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +97,7 @@ def execute_sequence(max_serial, max_parallel, test):
     write_log_header(testcases)
     check_for_pre_conditions(testcases)
     # durchsatz fehlt ..
-    logger.info('serial*parallel;min;max;avg')
+    logger.info('serial*parallel;min;max;avg;timeout;error')
     print "executing sequence {}".format(test)
     for i in range(max_serial):
         for j in range(max_parallel):
@@ -108,8 +109,13 @@ def execute_sequence(max_serial, max_parallel, test):
 
 def print_result(result, serial, parallel):
     for r in result:
-        logger.info("{}x{}-{};{};{};{};".format(serial, parallel, r["method"],
-                                                r["min"], r["max"], r["avg"]))
+        logger.info("{}-{}-{};{};{};{};{};{}".format(serial, parallel,
+                                                     r["method"],
+                                                     r["min"],
+                                                     r["max"],
+                                                     r["avg"],
+                                                     r["timeout"],
+                                                     r["error"]))
 
 if __name__ == '__main__':
     args = parser.parse_args()
