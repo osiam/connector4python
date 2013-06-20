@@ -6,7 +6,9 @@ import logging
 import argparse
 import lps_test_contract
 import prefill_osiam
+import measuring
 # from pudb import set_trace; set_trace()
+
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +57,7 @@ def identify_tests(testcases, serial, parallel):
 
 def write_log_header(testcases):
     logger.handlers = []
-    logger.addHandler(lps_test_contract.create_filehandler(
+    logger.addHandler(measuring.create_filehandler(
         args.log_directionary,
         testcases['name']))
     logger.info('# Results of {}'.format(testcases["name"]))
