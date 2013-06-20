@@ -7,10 +7,12 @@ from osiam import connector
 import argparse
 import group
 import logging
-import lps_test_contract
 import measuring
 import prefill_osiam
 import user
+import utils
+from multiprocessing import Process
+
 # from pudb import set_trace; set_trace()
 
 
@@ -35,6 +37,8 @@ parser.add_argument('-t', '--timeout', help='If this timeout is reached a ' +
 parser.add_argument('-l', '--log-directionary', help='The directionary to ' +
                     'store the log output.', default='/tmp')
 parser.add_argument("tests", nargs='+', help='Test files to execute.')
+
+scim = None
 
 
 def create_method(test):
@@ -100,8 +104,7 @@ def insert_data(config):
     group_amount = get_amount('Group')
     logger.info('# This test is based on: {} users {} groups'.
                 format(user_amount, group_amount))
-    prefill_osiam.PrefillOsiam(lps_test_contract.scim).prefill(
-        user_amount, group_amount, 0)
+    prefill_osiam.PrefillOsiam(scim).prefill(user_amount, group_amount, 0)
 
 
 def determine_configuration(testcases):
@@ -143,7 +146,7 @@ def print_result(result, serial, parallel):
                     r["error"]))
         if r["timeout"] >= 50:
             logger.info("# {}% of requests reached the timeout of {}ms.".
-                        format(r["timeout"]), args.timeout)
+                        format(r["timeout"], args.timeout))
             exit(1)
 
 
@@ -163,8 +166,23 @@ def init_scim(server, client, client_id, username='marissa', password='koala',
     group.scim = scim
 
 
+def chunks(l, n):
+        """ Yield successive n-sized chunks from l.
+            """
+        for i in xrange(0, len(l), n):
+            yield l[i:i + n]
+
 if __name__ == '__main__':
+    def delete_all(search_function, delete_function):
+        to_delete = list(chunks(utils.get_all_ids(search_function), 10))
+        for l in to_delete:
+            print "********************** {}".format(len(l))
+            for id in l:
+                Process(target=delete_function, args=(id,)).start()
+
     args = parser.parse_args()
     init_scim(args.server, args.client, args.client_id, timeout=args.timeout)
     for t in args.tests:
         execute_sequence(args.iterations, args.parallel, t)
+    delete_all(scim.search_with_get_on_groups, scim.delete_group)
+    delete_all(scim.search_with_get_on_users, scim.delete_user)
