@@ -31,7 +31,7 @@ The first line shows the header:
 
 serial*parallel: describes the method name and how many iteration(serial) and how often parallel the test was executed.
 
-min, max, avg, timeout, error: are described in the [measuring.py](https://github.com/osiam/osiam/tree/master/python#measuring.py) section
+min, max, avg, timeout, error: are described in the [measuring.py](https://github.com/osiam/osiam/tree/master/python#measuringpy) section
 
 The second line shows the output values.
 

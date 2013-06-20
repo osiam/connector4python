@@ -28,3 +28,7 @@ This project gets build with maven, the module structure is
 Bug reporting tool and known issues can be found here:
 
 [OSIAM bugtracker](https://github.com/osiam/osiam/issues)
+
+# Continuos Integration
+
+[![Build Status](https://travis-ci.org/osiam/osiam.png)](https://travis-ci.org/osiam/osiam)
