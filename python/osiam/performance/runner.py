@@ -132,9 +132,11 @@ def execute_sequence(max_serial, max_parallel, test):
             serial = i + 1
             parallel = j + 1
             result = execute_testcase(testcases, serial, parallel)
-            print_result(result, serial, parallel)
+            if print_result(result, serial, parallel) is False:
+                break
     delete_all(scim.search_with_get_on_groups, scim.delete_group)
     delete_all(scim.search_with_get_on_users, scim.delete_user)
+
 
 def print_result(result, serial, parallel):
     for r in result:
@@ -150,7 +152,8 @@ def print_result(result, serial, parallel):
                         format(r["timeout"], args.timeout))
             delete_all(scim.search_with_get_on_groups, scim.delete_group)
             delete_all(scim.search_with_get_on_users, scim.delete_user)
-            exit(1)
+            return False
+    return True
 
 
 def init_scim(server, client, client_id, username='marissa', password='koala',
