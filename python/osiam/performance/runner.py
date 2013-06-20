@@ -133,7 +133,8 @@ def execute_sequence(max_serial, max_parallel, test):
             parallel = j + 1
             result = execute_testcase(testcases, serial, parallel)
             print_result(result, serial, parallel)
-
+    delete_all(scim.search_with_get_on_groups, scim.delete_group)
+    delete_all(scim.search_with_get_on_users, scim.delete_user)
 
 def print_result(result, serial, parallel):
     for r in result:
@@ -194,5 +195,3 @@ if __name__ == '__main__':
     init_scim(args.server, args.client, args.client_id, timeout=args.timeout)
     for t in args.tests:
         execute_sequence(args.iterations, args.parallel, t)
-    delete_all(scim.search_with_get_on_groups, scim.delete_group)
-    delete_all(scim.search_with_get_on_users, scim.delete_user)
