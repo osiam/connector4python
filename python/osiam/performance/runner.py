@@ -68,7 +68,7 @@ def execute_testcase(testcases, serial, parallel):
 def write_log_header(testcases):
     logger.handlers = []
     logger.addHandler(measuring.create_filehandler(
-        args.log_directionary,
+        args.log_directory,
         testcases['name']))
     logger.info('# Results of {}'.format(testcases["name"]))
     logger.info('# {}'.format(testcases.get('description')))
