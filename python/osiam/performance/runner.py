@@ -113,8 +113,8 @@ def determine_configuration(testcases):
     if config is not None:
         insert_data(config)
         amount = calculate_auto_generated_resource_amount()
-        user.get_all_user_ids(amount)
-        group.get_all_group_ids(amount)
+        user.get_all_user_ids(amount * len(testcases))
+        group.get_all_group_ids(amount * len(testcases))
 
 
 def execute_sequence(max_serial, max_parallel, test):
@@ -150,8 +150,6 @@ def print_result(result, serial, parallel):
         if r["timeout"] >= 50:
             logger.info("# {}% of requests reached the timeout of {}ms.".
                         format(r["timeout"], args.timeout))
-            delete_all(scim.search_with_get_on_groups, scim.delete_group)
-            delete_all(scim.search_with_get_on_users, scim.delete_user)
             return False
     return True
 
