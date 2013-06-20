@@ -147,6 +147,8 @@ def print_result(result, serial, parallel):
         if r["timeout"] >= 50:
             logger.info("# {}% of requests reached the timeout of {}ms.".
                         format(r["timeout"], args.timeout))
+            delete_all(scim.search_with_get_on_groups, scim.delete_group)
+            delete_all(scim.search_with_get_on_users, scim.delete_user)
             exit(1)
 
 
@@ -172,13 +174,21 @@ def chunks(l, n):
         for i in xrange(0, len(l), n):
             yield l[i:i + n]
 
+
+def delete_all(search_function, delete_function):
+    all_ids = utils.get_all_ids(search_function)
+    to_delete = list(chunks(all_ids, 10))
+    for l in to_delete:
+        procs = []
+        for id in l:
+            p = Process(target=delete_function, args=(id,))
+            procs.append(p)
+            p.start()
+            print "{} deleted.".format(id)
+        for p in procs:
+            p.join()
+
 if __name__ == '__main__':
-    def delete_all(search_function, delete_function):
-        to_delete = list(chunks(utils.get_all_ids(search_function), 10))
-        for l in to_delete:
-            print "********************** {}".format(len(l))
-            for id in l:
-                Process(target=delete_function, args=(id,)).start()
 
     args = parser.parse_args()
     init_scim(args.server, args.client, args.client_id, timeout=args.timeout)
