@@ -35,15 +35,8 @@ def get_all_user_ids(amount):
     """
     Is used to get an amount of User and store into the user_ids list.
     """
-    print "trying to get all user id."
-    userResult = scim.search_with_get_on_users('count={}'.format(amount))
-    len = userResult['totalResults']
-    itemsPerPage = userResult['itemsPerPage']
-    if len > itemsPerPage:
-        len = itemsPerPage
-    for count in range(len):
-        user_ids.append(userResult['Resources'][count]['id'])
-    print "got user ids:\n{}".format(user_ids)
+    global user_ids
+    user_ids = utils.get_ids(scim.search_with_get_on_users, amount)
 
 
 def create(s, p):

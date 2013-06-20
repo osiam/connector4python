@@ -22,13 +22,8 @@ def create_dynamic_group(data=None):
 
 
 def get_all_group_ids(amount):
-    groupResult = scim.search_with_get_on_groups('count={}'.format(amount))
-    len = groupResult['totalResults']
-    itemsPerPage = groupResult['itemsPerPage']
-    if len > itemsPerPage:
-        len = itemsPerPage
-    for count in range(len):
-        group_ids.append(groupResult['Resources'][count]['id'])
+    global group_ids
+    group_ids = utils.get_ids(scim.search_with_get_on_groups, amount)
 
 
 def create(s, p):

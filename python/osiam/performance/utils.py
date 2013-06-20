@@ -11,11 +11,6 @@ def get_all_ids(f):
     total_results = f('count=1')['totalResults']
     return get_ids(f, total_results)
 
-
-def get_all_group_ids(scim):
-    return get_all_ids(scim.search_with_get_on_groups)
-
-
 def get_filter(method):
     """ Defining the filter for search accordingly the method (post | get)"""
     if method == 'get':
