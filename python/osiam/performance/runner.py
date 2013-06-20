@@ -142,7 +142,7 @@ def print_result(result, serial, parallel):
                     r["timeout"],
                     r["error"]))
         if r["timeout"] >= 50:
-            logger.info("# {}% of requests reached the timeout if {}ms.".
+            logger.info("# {}% of requests reached the timeout of {}ms.".
                         format(r["timeout"]), args.timeout)
             exit(1)
 

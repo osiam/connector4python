@@ -1,9 +1,12 @@
+""" This module wraps scim functionality for measurements."""
 from osiam import connector
 import measuring
 import uuid
 import utils
 
 scim = None
+# Contains user found by User.get_all_user_ids
+user_ids = []
 
 
 def create_dynamic_user(data=None):
@@ -26,11 +29,6 @@ def create_dynamic_user(data=None):
         timezone='timezone',
         active=True,
         password='password')
-
-
-""" This class wraps scim functionality for measurements."""
-# Contains user found by User.get_all_user_ids
-user_ids = []
 
 
 def get_all_user_ids(amount):
@@ -105,9 +103,9 @@ def search_post(s, p):
 @measuring.measure
 def __create_user__(runs_for_profiling, user):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        user must be the third parameter due to the log functionality,
+        user must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.create_user(user)
 
@@ -115,9 +113,9 @@ def __create_user__(runs_for_profiling, user):
 @measuring.measure
 def __replace_user__(runs_for_profiling, user):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        user must be the third parameter due to the log functionality,
+        user must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.replace_user(user_ids.pop(), create_dynamic_user())
 
@@ -125,9 +123,9 @@ def __replace_user__(runs_for_profiling, user):
 @measuring.measure
 def __update_user__(runs_for_profiling, user):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        user must be the third parameter due to the log functionality,
+        user must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.update_user(user_ids.pop(), create_dynamic_user())
 
@@ -135,9 +133,9 @@ def __update_user__(runs_for_profiling, user):
 @measuring.measure
 def __delete_user__(runs_for_profiling, user):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        user must be the third parameter due to the log functionality,
+        user must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.delete_user(user_ids.pop())
 
@@ -145,9 +143,9 @@ def __delete_user__(runs_for_profiling, user):
 @measuring.measure
 def __get_user__(runs_for_profiling, user):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        user must be the third parameter due to the log functionality,
+        user must be the second parameter due to the log functionality,
     it will also be used to determine the send data"""
     return scim.get_user(user_ids.pop())
 
@@ -155,9 +153,9 @@ def __get_user__(runs_for_profiling, user):
 @measuring.measure
 def __search_with_get_on_user__(runs_for_profiling, filter):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        filter must be the third parameter due to the log functionality,
+        filter must be the second parameter due to the log functionality,
     it will also be used to determine the send data"""
     return scim.search_with_get_on_users(filter)
 
@@ -165,9 +163,9 @@ def __search_with_get_on_user__(runs_for_profiling, filter):
 @measuring.measure
 def __search_with_post_on_user__(runs_for_profiling, filter):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        filter must be the third parameter due to the log functionality,
+        filter must be the second parameter due to the log functionality,
     it will also be used to determine the send data"""
     print "*** Filter: {} ****".format(filter)
     return scim.search_with_post_on_users(filter)

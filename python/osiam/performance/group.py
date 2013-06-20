@@ -1,3 +1,4 @@
+""" This module is responsible for all group test cases """
 from osiam import connector
 import measuring
 import utils
@@ -5,6 +6,7 @@ import uuid
 
 
 scim = None
+group_ids = []
 
 
 def create_dynamic_group(data=None):
@@ -17,10 +19,6 @@ def create_dynamic_group(data=None):
     mandatory but unused"""
     return connector.SCIMGroup(
         displayName='display_name{0}'.format(uuid.uuid4()))
-
-
-""" This class is responsible for all group test cases """
-group_ids = []
 
 
 def get_all_group_ids(amount):
@@ -89,9 +87,9 @@ def search_post(s, p):
 @measuring.measure
 def __create_group__(runs_for_profiling, group):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        group must be the third parameter due to the log functionality,
+        group must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.create_group(group)
 
@@ -99,9 +97,9 @@ def __create_group__(runs_for_profiling, group):
 @measuring.measure
 def __replace_group__(runs_for_profiling, group):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        group must be the third parameter due to the log functionality,
+        group must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.replace_group(group_ids.pop(), create_dynamic_group())
 
@@ -109,9 +107,9 @@ def __replace_group__(runs_for_profiling, group):
 @measuring.measure
 def __update_group__(runs_for_profiling, group):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        group must be the third parameter due to the log functionality,
+        group must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.update_group(group_ids.pop(), create_dynamic_group())
 
@@ -119,9 +117,9 @@ def __update_group__(runs_for_profiling, group):
 @measuring.measure
 def __delete_group__(runs_for_profiling, group):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        group must be the third parameter due to the log functionality,
+        group must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.delete_group(group_ids.pop())
 
@@ -129,9 +127,9 @@ def __delete_group__(runs_for_profiling, group):
 @measuring.measure
 def __get_group__(runs_for_profiling, group):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        group must be the third parameter due to the log functionality,
+        group must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.get_group(group_ids.pop())
 
@@ -139,9 +137,9 @@ def __get_group__(runs_for_profiling, group):
 @measuring.measure
 def __search_with_get_on_group__(runs_for_profiling, filter):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        filter must be the third parameter due to the log functionality,
+        filter must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.search_with_get_on_groups(filter)
 
@@ -149,8 +147,8 @@ def __search_with_get_on_group__(runs_for_profiling, filter):
 @measuring.measure
 def __search_with_post_on_group__(runs_for_profiling, filter):
     """ runs_for_profiling is used to determine the amount of
-        parallel calls to generate useful logs and it must be the second
+        parallel calls to generate useful logs and it must be the first
     parameter.
-        filter must be the third parameter due to the log functionality,
+        filter must be the second parameter due to the log functionality,
     it will also be used to determine the send data """
     return scim.search_with_post_on_groups(filter)
