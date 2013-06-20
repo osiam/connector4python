@@ -46,14 +46,12 @@ def measure(func):
             error_amount = error_amount + 1
         if ms >= max_response_time:
             timeout_amount = timeout_amount + 1
-        logger.info('{0};{1};{2};{3};{4}'.format(func.__name__, args[1],
+        logger.info('{0};{1};{2};{3};{4}'.format(func.__name__, args[0],
                                                  duration,
-                                                 sys.getsizeof(args[2]),
+                                                 sys.getsizeof(args[1]),
                                                  result))
         complete_duration.append(ms)
 
-        return {'duration': duration, 'result': result,
-                'size_of_input': sys.getsizeof(args[2])}
     return wrapped
 
 
@@ -69,7 +67,7 @@ def create_filehandler(log_file_path, script_name):
 
 def exec_function(f, s, p, generate_data, data):
     """ executes a given function f, with the generated data of generate_data,
-    s times serial, p times parallel and summarises the duration of all calls.
+    s iterations, p times parallel and summarises the duration of all calls.
 
     The measurement is done by measure."""
 
@@ -89,7 +87,7 @@ def exec_function(f, s, p, generate_data, data):
     complete_duration = []
     error_amounts = []
     timeout_amounts = []
-    for serial in range(s):
+    for iteration in range(s):
         #error_ and timeout_amount are restricted to one iteration of a test.
         error_amount = 0
         timeout_amount = 0

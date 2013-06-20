@@ -2,11 +2,15 @@
 
 __author__ = 'jtodea, phil'
 
-import logging
+from obtain_access_token import FakeUser
+from osiam import connector
 import argparse
+import group
+import logging
 import lps_test_contract
-import prefill_osiam
 import measuring
+import prefill_osiam
+import user
 # from pudb import set_trace; set_trace()
 
 
@@ -34,17 +38,19 @@ parser.add_argument("tests", nargs='+', help='Test files to execute.')
 
 
 def create_method(test):
+    """ creates a method based on the test configuration.
+    Either User or Group."""
     res = test['resource']
     method_name = test['method']
-    if res == user.__class__.__name__:
+    if res == "User":
         return getattr(user, method_name)
-    elif res == group.__class__.__name__:
+    elif res == "Group":
         return getattr(group, method_name)
-    raise Exception('res {} is neither {} nor {}'.format(res,
-                    user.__class__, group.__class__))
+    raise Exception('res {} is neither User nor Group'.format(res))
 
 
-def identify_tests(testcases, serial, parallel):
+def execute_testcase(testcases, serial, parallel):
+    """ Executes the defined testscases of a test sequence."""
     complete_duration = []
     print "executing {}".format(testcases)
     for test in testcases['tests']:
@@ -64,7 +70,9 @@ def write_log_header(testcases):
     logger.info('# {}'.format(testcases.get('description')))
 
 
-def calculate_amount():
+def calculate_auto_generated_resource_amount():
+    """Calculates the amount of auto generated resources. Auto generated
+    resources are defined in the configuration part by per_call"""
     def calc(m):
         result = 1
         for s in xrange(m + 1):
@@ -76,11 +84,13 @@ def calculate_amount():
 
 
 def insert_data(config):
+    """ Loads the configuration block and insert the needed user, groups
+    into OSIAM"""
     def get_amount(key):
         result = 0
         obj = create.get(key)
         if obj == 'per_call':
-            result = calculate_amount()
+            result = calculate_auto_generated_resource_amount()
         elif obj is not None:
             result = obj
         return result
@@ -94,20 +104,23 @@ def insert_data(config):
         user_amount, group_amount, 0)
 
 
-def check_for_pre_conditions(testcases):
+def determine_configuration(testcases):
+    """ Loads the configuration block, inserts_data and get needed ids """
     config = testcases.get("configuration")
     if config is not None:
         insert_data(config)
-        amount = calculate_amount()
+        amount = calculate_auto_generated_resource_amount()
         user.get_all_user_ids(amount)
         group.get_all_group_ids(amount)
 
 
 def execute_sequence(max_serial, max_parallel, test):
+    """ Identify the testcases of a sequence, executes them and prints the
+    log files. """
     testcases = {}
     execfile(test, testcases)
     write_log_header(testcases)
-    check_for_pre_conditions(testcases)
+    determine_configuration(testcases)
     # durchsatz fehlt ..
     logger.info('serial*parallel;min;max;avg;timeout;error')
     print "executing sequence {}".format(test)
@@ -115,7 +128,7 @@ def execute_sequence(max_serial, max_parallel, test):
         for j in range(max_parallel):
             serial = i + 1
             parallel = j + 1
-            result = identify_tests(testcases, serial, parallel)
+            result = execute_testcase(testcases, serial, parallel)
             print_result(result, serial, parallel)
 
 
@@ -133,11 +146,25 @@ def print_result(result, serial, parallel):
                         format(r["timeout"]), args.timeout)
             exit(1)
 
+
+def init_scim(server, client, client_id, username='marissa', password='koala',
+              timeout=500):
+    """ Getting access token and initializes profiling """
+    fakeUser = FakeUser(username, password, client_id,
+                        'http://' + client + ':5000/oauth2',
+                        'http://' + server + ':8080/osiam-server')
+
+    access_token = fakeUser.get_access_token()
+    global scim, max_response_time
+    scim = connector.SCIM('http://{}:8080/osiam-server'.format(server),
+                          access_token)
+    measuring.max_response_time = timeout
+    user.scim = scim
+    group.scim = scim
+
+
 if __name__ == '__main__':
     args = parser.parse_args()
-    lps_test_contract.__init__(args.server, args.client, args.client_id,
-                               timeout=args.timeout)
-    user = lps_test_contract.User()
-    group = lps_test_contract.Group()
+    init_scim(args.server, args.client, args.client_id, timeout=args.timeout)
     for t in args.tests:
         execute_sequence(args.iterations, args.parallel, t)
