@@ -60,7 +60,7 @@ def execute_testcase(testcases, serial, parallel):
     for test in testcases['tests']:
         method = create_method(test)
         result = method(serial, parallel)
-        result['method'] = method.__name__
+        result['method'] = test['resource'] + "." + method.__name__
         complete_duration.append(result)
     return complete_duration
 
