@@ -95,7 +95,7 @@ def build_user():
         firstName = request.form.get('firstname')
 
     return connector.SCIMUser(
-        #   schemas = request.form.get('schema'),
+        externalId=request.form.get('external_id'),
         userName=request.form.get('user_name'),
         name = connector.SCIMName(familyName=lastName,
                                   givenName=firstName),
