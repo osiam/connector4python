@@ -53,7 +53,7 @@ def create_method(test):
     raise Exception('res {} is neither User nor Group'.format(res))
 
 
-def execute_testcase(testcases, serial, parallel):
+def execute_case(testcases, serial, parallel):
     """ Executes the defined testscases of a test sequence."""
     complete_duration = []
     print "executing {}".format(testcases)
@@ -131,7 +131,7 @@ def execute_sequence(max_serial, max_parallel, test):
         for j in range(max_parallel):
             serial = i + 1
             parallel = j + 1
-            result = execute_testcase(testcases, serial, parallel)
+            result = execute_case(testcases, serial, parallel)
             if print_result(result, serial, parallel) is False:
                 break
     delete_all(scim.search_with_get_on_groups, scim.delete_group)
