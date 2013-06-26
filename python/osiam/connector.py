@@ -83,6 +83,8 @@ def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
             meta = meta.__dict__
         if name is not None:
             name = name.__dict__
+        if not externalId:
+            externalId=None
         return SCIMUserT(id, schemas, userName, name, displayName, nickName,
                          profileUrl, title, userType, preferredLanguage,
                          locale, timezone, active, password, emails,
