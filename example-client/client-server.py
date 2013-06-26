@@ -46,7 +46,7 @@ def auth_code_to_access_token(code):
         'grant_type': 'authorization_code',
         'redirect_uri': redirect_uri
     }
-    r = requests.post('{}/fb/oauth/access_token'.format(authZServer),
+    r = requests.post('{}/oauth/token'.format(authZServer),
                       auth=HTTPBasicAuth(client, client_secret),
                       params=param)
     global access_token, response, scim
