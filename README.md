@@ -9,12 +9,9 @@ See osiam-server/README.md for instructions on how to build, configure and use o
 This project gets build with maven, the module structure is
 
 * osiam-server -- is the main project. It is a SCIM based, web identity data store.
-* scim-schema -- is a scim api for building other java projects.
 * python-connector -- is a request based osiam connector for python.
 * example-client -- is a python 2.7, flask, python-connector based example
   client for OSIAM.
-* scripts -- contains a couple of scripts which we use ...
-* documents -- contains documents, mostly in LaTeX
 
 # Requirements
 
