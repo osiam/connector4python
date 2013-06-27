@@ -35,7 +35,7 @@ parser.add_argument('-t', '--timeout', help='If this timeout is reached a ' +
                     'request is considered as unsuccessful.', default=500,
                     type=int)
 parser.add_argument('-l', '--log-directory', help='The directory to ' +
-                    'store the log output.', default='/tmp')
+                    'storage the log output.', default='/tmp')
 parser.add_argument("tests", nargs='+', help='Test files to execute.')
 
 scim = None

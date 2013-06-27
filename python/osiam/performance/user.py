@@ -33,7 +33,7 @@ def create_dynamic_user(data=None):
 
 def get_all_user_ids(amount):
     """
-    Is used to get an amount of User and store into the user_ids list.
+    Is used to get an amount of User and storage into the user_ids list.
     """
     global user_ids
     user_ids = utils.get_ids(scim.search_with_get_on_users, amount)

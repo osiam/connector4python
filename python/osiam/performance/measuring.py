@@ -24,7 +24,7 @@ def measure(func):
     """ This function is a decorator method to measure the time a method
     needed.
 
-    It will store the duration in complete_duration, set the error_amount + 1
+    It will storage the duration in complete_duration, set the error_amount + 1
     if an error occurs and will set the timeout_amount if the method needed
     more time then set in max_response_time.
 
