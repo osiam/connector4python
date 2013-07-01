@@ -25,7 +25,7 @@ parser.add_argument('-o', '--osiam', help='The uri to OSIAM.',
 parser.add_argument('-p', '--password', help='The password of the user.',
                     default='koala')
 parser.add_argument('-c', '--client', help='The name of the client.',
-                    default='23f9452e-00a9-4cec-a086-d171374ffb42')
+                    default='example-client')
 parser.add_argument('--group-member', help='A number of groups inside a group',
                     default=0, type=int)
 parser.add_argument('--member', help='When enabled it inserts every user in ' +
@@ -39,6 +39,8 @@ class PrefillOsiam:
         self.member = []
 
     def build_user(self, username):
+        email = [{'value': username + "@xxx.xxx",
+                  'primary': True}]
         return connector.SCIMUser(
             userName=username,
             displayName='displayname',
@@ -50,7 +52,8 @@ class PrefillOsiam:
             locale='locale',
             timezone='timezone',
             active=True,
-            password='password')
+            password='password',
+            emails=email)
 
     def build_group(self, display_name, member=None):
         return connector.SCIMGroup(displayName=display_name, members=member)
