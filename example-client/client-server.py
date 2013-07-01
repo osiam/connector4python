@@ -22,7 +22,7 @@ parser.add_argument('-r', '--redirect', help='A OSIAM known redirect uri.',
 parser.add_argument('-o', '--osiam', help='The uri to OSIAM.',
                     default='http://localhost:8080/osiam-server')
 parser.add_argument('-c', '--client', help='The name of the client.',
-                    default='23f9452e-00a9-4cec-a086-d171374ffb42')
+                    default='example-client')
 parser.add_argument('-s', '--client-secret', help='The name of the client.',
                     default='secret')
 
@@ -85,20 +85,20 @@ def build_user():
     lastName = None
     firstName = None
 
-    if request.form.get('meta') !=None:
+    if request.form.get('meta') is not None:
         userMeta = connector.Meta(attributes=request.form.get('meta').split())
 
-    if request.form.get('lastname') !=None:
+    if request.form.get('lastname') is not None:
         lastName = request.form.get('lastname')
 
-    if request.form.get('firstname') !=None:
+    if request.form.get('firstname') is not None:
         firstName = request.form.get('firstname')
 
     return connector.SCIMUser(
         externalId=request.form.get('external_id'),
         userName=request.form.get('user_name'),
-        name = connector.SCIMName(familyName=lastName,
-                                  givenName=firstName),
+        name=connector.SCIMName(familyName=lastName,
+                                givenName=firstName),
         displayName=request.form.get('displayname'),
         nickName=request.form.get('nickname'),
         profileUrl=request.form.get('Profileurl'),
@@ -180,7 +180,7 @@ def build_group():
             members.append(d)
 
     groupMeta = None
-    if request.form.get('meta') !=None:
+    if request.form.get('meta') is not None:
         groupMeta = connector.Meta(attributes=request.form.get('meta').split())
 
     return connector.SCIMGroup(displayName=request.form.get('displayname'),
@@ -298,32 +298,42 @@ def search_root():
     elif request.form.get('method') == 'post':
         return call_search_on_osiam_server(scim.search_with_post_on_root)
 
+
 def build_client():
     return connector.Client(
-        accessTokenValiditySeconds=request.form.get('accessTokenValiditySeconds'),
-        refreshTokenValiditySeconds=request.form.get('refreshTokenValiditySeconds'),
+        id=request.form.get('client_id'),
+        accessTokenValiditySeconds=request.form.get(
+            'accessTokenValiditySeconds'),
+        refreshTokenValiditySeconds=request.form.get(
+            'refreshTokenValiditySeconds'),
         redirect_uri=request.form.get('redirect_uri'),
         scope=request.form.get('scope').split())
+
 
 @app.route('/get/Client')
 def redirect_get_client():
     return render_template('get_client.html')
 
+
 @app.route('/get/Client', methods=['POST'])
 def get_client():
     return call_scim_set_response(scim.get_client, request.form.get('uuid'))
+
 
 @app.route('/create/Client')
 def redirect_create_client():
     return render_template('create_client.html')
 
+
 @app.route('/create/Client', methods=['POST'])
 def create_client():
     return call_scim_set_response(scim.create_client, build_client())
 
+
 @app.route('/delete/Client')
 def redirect_delete_client():
     return render_template('delete_client.html')
+
 
 @app.route('/delete/Client', methods=['POST'])
 def delete_client():

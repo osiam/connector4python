@@ -84,7 +84,7 @@ def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
         if name is not None:
             name = name.__dict__
         if not externalId:
-            externalId=None
+            externalId = None
         return SCIMUserT(id, schemas, userName, name, displayName, nickName,
                          profileUrl, title, userType, preferredLanguage,
                          locale, timezone, active, password, emails,
@@ -108,25 +108,32 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
               meta=None, schemas=None):
     if not schemas:
         schemas = ['urn:scim:schemas:core:1.0']
-    if meta != None:
+    if meta is not None:
         meta = meta.__dict__
     return SCIMGroupT(displayName, members, externalId, id, meta, schemas)
 
 
-ClientT = collections.namedtuple('Client', ('accessTokenValiditySeconds',
-    'refreshTokenValiditySeconds', 'redirect_uri', 'scope'))
+ClientT = collections.namedtuple('Client', ('id', 'accessTokenValiditySeconds',
+                                            'refreshTokenValiditySeconds',
+                                            'redirect_uri', 'scope'))
 
-def Client(accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
-           redirect_uri=None, scope=None):
-    return ClientT(accessTokenValiditySeconds, refreshTokenValiditySeconds,
-                  redirect_uri, scope)
+
+def Client(
+    id=None, accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
+        redirect_uri=None, scope=None):
+    return ClientT(id, accessTokenValiditySeconds, refreshTokenValiditySeconds,
+                   redirect_uri, scope)
 
 MetaT = collections.namedtuple('Meta', ('created', 'lastModified', 'location',
-                                        'version', 'attributes', 'resourceType'))
+                                        'version', 'attributes',
+                                        'resourceType'))
+
 
 def Meta(created=None, lastModified=None, location=None,
-                    version=None, attributes=None, resourceType=None):
-    return MetaT(created, lastModified, location, version, attributes, resourceType)
+         version=None, attributes=None, resourceType=None):
+    return MetaT(created, lastModified, location, version, attributes,
+                 resourceType)
+
 
 class SCIM:
 
@@ -263,7 +270,8 @@ class SCIM:
     @doLog
     def create_client(self, client):
         r = requests.post('{0}/Client'.format(
-            self.authorization_server), headers=self.headers, data=json.dumps(client.__dict__))
+            self.authorization_server), headers=self.headers,
+            data=json.dumps(client.__dict__))
         return json.loads(r.text)
 
     @doLog

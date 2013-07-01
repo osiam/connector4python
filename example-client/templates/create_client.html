@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 <form method="post">
+    <p><label>Client ID:<br><input id="client_id" name="client_id" type="text" value=""></label></p>
     <p><label>Access Token Validity in Seconds:<br><input id="accessTokenValiditySeconds" name="accessTokenValiditySeconds" type="text" value="1337"></label></p>
     <p><label>Refresh Token Validity in Seconds:<input id="refreshTokenValiditySeconds" name="refreshTokenValiditySeconds" type="text" value="1337"></label></p>
     <p><label>Redirect URI:<input id="redirect_uri" name="redirect_uri" type="text" value="http://localhost:5000/stuff"></label></p>
