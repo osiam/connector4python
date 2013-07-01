@@ -26,7 +26,7 @@ parser.add_argument('--server', help='The server host name',
 parser.add_argument('--client', help='The client host name.',
                     default='localhost')
 parser.add_argument('--client_id', help='The client ID',
-                    default='23f9452e-00a9-4cec-a086-d171374ffb42')
+                    default='example-client')
 parser.add_argument('--iterations', help='The number of repeating runs.',
                     default=5, type=int)
 parser.add_argument('-p', '--parallel', help='The number of parallel runs.',
