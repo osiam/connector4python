@@ -317,7 +317,7 @@ def redirect_get_client():
 
 @app.route('/get/Client', methods=['POST'])
 def get_client():
-    return call_scim_set_response(scim.get_client, request.form.get('uuid'))
+    return call_scim_set_response(scim.get_client, request.form.get('client_id'))
 
 
 @app.route('/create/Client')
@@ -337,7 +337,7 @@ def redirect_delete_client():
 
 @app.route('/delete/Client', methods=['POST'])
 def delete_client():
-    return call_scim_set_response(scim.delete_client, request.form.get('uuid'))
+    return call_scim_set_response(scim.delete_client, request.form.get('client_id'))
 
 
 if __name__ == '__main__':

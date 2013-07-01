@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 <form method="post">
-    <p><label>uuid for read:<br><input id="uuid" name="uuid" type="text"></label></p>
+    <p><label>Client ID for read:<br><input id="client_id" name="client_id" type="text"></label></p>
     <input type="submit" formaction="/get/Client" value="Get Client"/>
 </form>
 {% endblock %}

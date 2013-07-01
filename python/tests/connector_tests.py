@@ -13,7 +13,7 @@ class SCIMTestCase(unittest.TestCase):
         'http://localhost:8080/osiam-server', "token")
     user = connector.SCIMUser(userName='userName')
     group = connector.SCIMGroup(displayName='displayName')
-    client = connector.Client()
+    client = connector.Client(id='exampleClient')
 
     def __mock_call__(self, methodToMock, result, func, *funcArgs):
         with patch.object(requests, methodToMock) as mock_method:
@@ -95,8 +95,9 @@ class SCIMTestCase(unittest.TestCase):
         self.__mock_call__('delete', self.client, self.scim.delete_client, 'id')
 
     def test_contains_a_client(self):
-        attribute = connector.Client(1337, 1337, 'http://blaaa', ['GET','POST', 'DELETE', 'PATCH', 'PUT'])
+        attribute = connector.Client('exampleClient', 1337, 1337, 'http://blaaa', ['GET','POST', 'DELETE', 'PATCH', 'PUT'])
         assert attribute is not None
+        self.assertEquals('exampleClient', attribute.id)
         self.assertEquals(1337, attribute.accessTokenValiditySeconds)
         self.assertEquals(1337, attribute.refreshTokenValiditySeconds)
         self.assertEquals('http://blaaa', attribute.redirect_uri)
