@@ -1,5 +1,5 @@
-name = 'search_Group'
-description = 'The results of this test will show how long the system needed to search an Group via get.'
-configuration = {'create': {'Group': 1}}
+name = 'search_group'
+description = 'The results of this test will show how long the system needed to search an group via get.'
+configuration = {'create': {'group': 1}}
 
-tests = [{'resource': 'Group', 'method': 'search'}]
+tests = [{'resource': 'group', 'method': 'search'}]
