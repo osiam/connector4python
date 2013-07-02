@@ -17,6 +17,7 @@ from multiprocessing import Process
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 parser = argparse.ArgumentParser(description='This script interpret the test' +
                                              'case definition and runs all' +
