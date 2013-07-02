@@ -306,7 +306,7 @@ def build_client():
             'accessTokenValiditySeconds'),
         refreshTokenValiditySeconds=request.form.get(
             'refreshTokenValiditySeconds'),
-        redirect_uri=request.form.get('redirect_uri'),
+        redirectUri=request.form.get('redirect_uri'),
         scope=request.form.get('scope').split())
 
 
