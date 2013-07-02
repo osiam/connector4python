@@ -42,7 +42,7 @@ def measure(func):
             if result.status_code is not 200:
                 error_amount = error_amount + 1
         # when it is not a response, check if there is error keyword
-        elif result.get('error') is not None:
+        elif result.get('error_code') is not None:
             error_amount = error_amount + 1
         if ms >= max_response_time:
             timeout_amount = timeout_amount + 1

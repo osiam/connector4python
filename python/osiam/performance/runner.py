@@ -12,11 +12,11 @@ import prefill_osiam
 import user
 import utils
 from multiprocessing import Process
-
 # from pudb import set_trace; set_trace()
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 parser = argparse.ArgumentParser(description='This script interpret the test' +
                                              'case definition and runs all' +
@@ -46,11 +46,8 @@ def create_method(test):
     Either User or Group."""
     res = test['resource']
     method_name = test['method']
-    if res == "User":
-        return getattr(user, method_name)
-    elif res == "Group":
-        return getattr(group, method_name)
-    raise Exception('res {} is neither User nor Group'.format(res))
+    module = __import__(res)
+    return getattr(module, method_name)
 
 
 def execute_case(testcases, serial, parallel):
@@ -100,8 +97,8 @@ def insert_data(config):
         return result
 
     create = config["create"]
-    user_amount = get_amount('User')
-    group_amount = get_amount('Group')
+    user_amount = get_amount('user')
+    group_amount = get_amount('group')
     logger.info('# This test is based on: {} users {} groups'.
                 format(user_amount, group_amount))
     prefill_osiam.PrefillOsiam(scim).prefill(user_amount, group_amount, 0)

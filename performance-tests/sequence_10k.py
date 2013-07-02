@@ -1,9 +1,9 @@
 name = 'sequence_10k'
 description = 'The results of this test will show how long the system needed to reach the abort criteria.'
-configuration = {'create': {'User': 10000, 'Group': 1000}}
+configuration = {'create': {'user': 10000, 'group': 1000}}
 
-tests = [{'resource': 'User', 'method': 'search'},
-         {'resource': 'User', 'method': 'update'},
-         {'resource': 'User', 'method': 'replace'},
-         {'resource': 'User', 'method': 'delete'},
-         {'resource': 'Group', 'method': 'search'}]
+tests = [{'resource': 'user', 'method': 'search'},
+         {'resource': 'user', 'method': 'update'},
+         {'resource': 'user', 'method': 'replace'},
+         {'resource': 'user', 'method': 'delete'},
+         {'resource': 'group', 'method': 'search'}]

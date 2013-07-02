@@ -1,5 +1,5 @@
-name = 'delete_Group'
-description = 'The results of this test will show how long the system needed to delete Group.'
-configuration = {'create': {'Group': 'per_call'}}
+name = 'delete_group'
+description = 'The results of this test will show how long the system needed to delete group.'
+configuration = {'create': {'group': 'per_call'}}
 
-tests = [{'resource': 'Group', 'method': 'delete'}]
+tests = [{'resource': 'group', 'method': 'delete'}]
