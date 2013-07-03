@@ -100,7 +100,7 @@ class SCIMTestCase(unittest.TestCase):
         self.assertEquals('exampleClient', attribute.id)
         self.assertEquals(1337, attribute.accessTokenValiditySeconds)
         self.assertEquals(1337, attribute.refreshTokenValiditySeconds)
-        self.assertEquals('http://blaaa', attribute.redirect_uri)
+        self.assertEquals('http://blaaa', attribute.redirectUri)
         self.assertEquals(['GET','POST', 'DELETE', 'PATCH', 'PUT'], attribute.scope)
 
     def test_contains_a_SCIMMultiValuedAttribute(self):
