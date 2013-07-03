@@ -48,7 +48,7 @@ def auth_code_to_access_token(code):
     }
     r = requests.post('{}/oauth/token'.format(authZServer),
                       auth=HTTPBasicAuth(client, client_secret),
-                      params=param)
+                      params=param, verify=False)
     global access_token, response, scim
     print 'response: ' + r.content
     access_token = json.loads(r.content).get('access_token')
