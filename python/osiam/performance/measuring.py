@@ -48,7 +48,7 @@ def measure(func):
             timeout_amount = timeout_amount + 1
         logger.info('{0};{1};{2};{3};{4}'.format(func.__name__, args[0],
                                                  duration,
-                                                 sys.getsizeof(args[1]),
+                                                 sys.getsizeof(args[0]),
                                                  result))
         complete_duration.append(ms)
 
@@ -83,19 +83,19 @@ def exec_function(f, s, p, generate_data, data):
         return int(float(sum(e)) / float(len(complete_duration)) * 100)
 
     global complete_duration, error_amount, procs, timeout_amount
-    #Reset the lists
+    # Reset the lists
     complete_duration = []
     error_amounts = []
     timeout_amounts = []
     for iteration in range(s):
-        #error_ and timeout_amount are restricted to one iteration of a test.
+        # error_ and timeout_amount are restricted to one iteration of a test.
         error_amount = 0
         timeout_amount = 0
-        #start the processes
+        # start the processes
         for parallel in range(p):
-            start_parallel_process(f(p, generate_data(data)))
-        #join all processes to prevent that a measurement of an unfinished
-        #process run into an other iteration
+            start_parallel_process(f(generate_data(data)))
+        # join all processes to prevent that a measurement of an unfinished
+        # process run into an other iteration
         for process in procs:
             process.join()
         error_amounts.append(error_amount)

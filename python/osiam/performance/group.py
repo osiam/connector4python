@@ -80,7 +80,7 @@ def search_post(s, p):
 
 
 @measuring.measure
-def __create_group__(runs_for_profiling, group):
+def __create_group__(group):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -90,7 +90,7 @@ def __create_group__(runs_for_profiling, group):
 
 
 @measuring.measure
-def __replace_group__(runs_for_profiling, group):
+def __replace_group__(group):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -100,7 +100,7 @@ def __replace_group__(runs_for_profiling, group):
 
 
 @measuring.measure
-def __update_group__(runs_for_profiling, group):
+def __update_group__(group):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -110,7 +110,7 @@ def __update_group__(runs_for_profiling, group):
 
 
 @measuring.measure
-def __delete_group__(runs_for_profiling, group):
+def __delete_group__(group):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -120,7 +120,7 @@ def __delete_group__(runs_for_profiling, group):
 
 
 @measuring.measure
-def __get_group__(runs_for_profiling, group):
+def __get_group__(group):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -130,7 +130,7 @@ def __get_group__(runs_for_profiling, group):
 
 
 @measuring.measure
-def __search_with_get_on_group__(runs_for_profiling, filter):
+def __search_with_get_on_group__(filter):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -140,7 +140,7 @@ def __search_with_get_on_group__(runs_for_profiling, filter):
 
 
 @measuring.measure
-def __search_with_post_on_group__(runs_for_profiling, filter):
+def __search_with_post_on_group__(filter):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.

@@ -94,7 +94,7 @@ def search_post(s, p):
 
 
 @measuring.measure
-def __create_user__(runs_for_profiling, user):
+def __create_user__(user):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -104,7 +104,7 @@ def __create_user__(runs_for_profiling, user):
 
 
 @measuring.measure
-def __replace_user__(runs_for_profiling, user):
+def __replace_user__(user):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -114,7 +114,7 @@ def __replace_user__(runs_for_profiling, user):
 
 
 @measuring.measure
-def __update_user__(runs_for_profiling, user):
+def __update_user__(user):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -124,7 +124,7 @@ def __update_user__(runs_for_profiling, user):
 
 
 @measuring.measure
-def __delete_user__(runs_for_profiling, user):
+def __delete_user__(user):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -134,7 +134,7 @@ def __delete_user__(runs_for_profiling, user):
 
 
 @measuring.measure
-def __get_user__(runs_for_profiling, user):
+def __get_user__(user):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -144,7 +144,7 @@ def __get_user__(runs_for_profiling, user):
 
 
 @measuring.measure
-def __search_with_get_on_user__(runs_for_profiling, filter):
+def __search_with_get_on_user__(filter):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
@@ -154,7 +154,7 @@ def __search_with_get_on_user__(runs_for_profiling, filter):
 
 
 @measuring.measure
-def __search_with_post_on_user__(runs_for_profiling, filter):
+def __search_with_post_on_user__(filter):
     """ runs_for_profiling is used to determine the amount of
         parallel calls to generate useful logs and it must be the first
     parameter.
