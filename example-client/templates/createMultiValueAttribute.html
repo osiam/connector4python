@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block body %}
+<form method="post">
+	<p>
+			<label id="multiValue">Values:<br>
+                		<input type="text" id="input1" name="input1" onkeydown="addInput(this)">
+			</label>
+        
+	</p>
+
+	<input type="submit" value="Add Values"/>
+</form>
+<script type="text/javascript">
+	idCounter = 2;
+
+        function addInput(elem){
+                elem.onkeydown= "";
+
+                var newInput = document.createElement("input");
+                
+		newInput.setAttribute("type", "text");
+                newInput.setAttribute("onkeydown", "addInput(this)");
+		newInput.setAttribute("id", "input" + idCounter);
+		newInput.setAttribute("name", "input" + idCounter);
+ 
+		idCounter++;
+	
+                document.getElementById("multiValue").appendChild(newInput);
+	}
+
+</script>
+{% endblock %}
+
