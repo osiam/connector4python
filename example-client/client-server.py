@@ -9,6 +9,7 @@ import json
 import logging
 import requests
 import urllib
+import copy
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -38,6 +39,19 @@ response = None
 uuids = []
 mode = 'user'
 scim = None
+
+multiValues = {}
+
+def init_multiValues():
+    multiValues['emails'] = []
+    multiValues['phoneNumbers'] = []
+    multiValues['ims'] = []
+    multiValues['photos'] = []
+    multiValues['addresses'] = []
+    multiValues['groups'] = []
+    multiValues['entitlements'] = []
+    multiValues['roles'] = []
+    multiValues['x509Certificates'] = []
 
 
 def auth_code_to_access_token(code):
@@ -75,6 +89,40 @@ def oauth2_response():
         return request.args
 
 
+@app.route('/oauth2-client/createMultiValueAttribute')
+def redirect_create_multi_value_attributei():
+    return render_template('createMultiValueAttribute.html')
+
+
+@app.route('/oauth2-client/createMultiValueAttribute', methods=['POST', 'GET'])
+def build_multiValue_list():
+    values = []
+    idCounter = 0
+    ready = True
+
+    while ready:
+        idCounter += 1
+        content = '{\'value\':\''
+
+        tempValue = request.form.get('input%s' % (idCounter))
+
+        content += str(tempValue)
+        content += '\',\'operation\':\''
+	content += request.args['used_for']
+	content +='\'}'
+
+        d = ast.literal_eval(content)
+
+        if tempValue is None:
+            ready = False
+        elif tempValue != '':
+            values.append(d)
+
+    multiValues[request.args['used_for']] = values
+
+    return render_template('createMultiValueAttribute.html')
+
+
 @app.route('/create/User')
 def redirect_create_user():
     return render_template('create_user.html')
@@ -84,6 +132,9 @@ def build_user():
     userMeta = None
     lastName = None
     firstName = None
+
+    tempMultiSelectValues = copy.deepcopy(multiValues)
+    init_multiValues()
 
     if request.form.get('meta') is not None:
         userMeta = connector.Meta(attributes=request.form.get('meta').split())
@@ -109,7 +160,18 @@ def build_user():
         timezone=request.form.get('timezone'),
         active=True,
         password=request.form.get('password'),
-        meta=userMeta)
+        meta=userMeta,
+    
+        emails = tempMultiSelectValues['emails'],
+        phoneNumbers = tempMultiSelectValues['phoneNumbers'],
+        ims = tempMultiSelectValues['ims'],
+        photos = tempMultiSelectValues['photos'],
+        addresses = tempMultiSelectValues['addresses'],
+        groups = tempMultiSelectValues['groups'],
+        entitlements = tempMultiSelectValues['entitlements'],
+        roles = tempMultiSelectValues['roles'],
+        x509Certificates = tempMultiSelectValues['x509Certificates']
+	)
 
 
 def call_scim_set_response(func, *args):
@@ -341,6 +403,7 @@ def delete_client():
 
 
 if __name__ == '__main__':
+    init_multiValues()
     args = parser.parse_args()
     client = args.client
     client_secret = args.client_secret
