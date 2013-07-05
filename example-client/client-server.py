@@ -108,8 +108,8 @@ def build_multiValue_list():
 
         content += str(tempValue)
         content += '\',\'operation\':\''
-	content += request.args['used_for']
-	content +='\'}'
+        content += request.args['used_for']
+        content +='\'}'
 
         d = ast.literal_eval(content)
 
