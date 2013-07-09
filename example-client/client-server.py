@@ -107,9 +107,9 @@ def build_multiValue_list():
         idCounter += 1
 
  #       if ( request.args['used_for'] == 'emails' ) :
-            params['value'] = str(request.form.get('input%s-1' % (idCounter)))
-            params['type'] = str(request.form.get('input%s-2' % (idCounter)))
-            params['primary'] = str(request.form.get('radio%s-2' % (idCounter)))
+        params['value'] = str(request.form.get('input%s-1' % (idCounter)))
+        params['type'] = str(request.form.get('input%s-2' % (idCounter)))
+        params['primary'] = str(request.form.get('radio%s-2' % (idCounter)))
 #        elif ( re )
 
 
