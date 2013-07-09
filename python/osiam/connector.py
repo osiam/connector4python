@@ -279,3 +279,10 @@ class SCIM:
     def delete_client(self, id):
         return requests.delete('{0}/Client/{1}'.format(
             self.authorization_server, id), headers=self.headers)
+
+    @doLog
+    def update_client(self, client, id):
+        r = requests.put('{0}/Client/{1}'.format(
+            self.authorization_server, id), headers=self.headers,
+                         data=json.dumps(client.__dict__))
+        return json.loads(r.content)

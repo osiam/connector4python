@@ -94,6 +94,9 @@ class SCIMTestCase(unittest.TestCase):
     def test_delete_client(self):
         self.__mock_call__('delete', self.client, self.scim.delete_client, 'id')
 
+    def test_update_client(self):
+        self.__mock_call__('put', self.client, self.scim.update_client, self.client, 'id')
+
     def test_contains_a_client(self):
         attribute = connector.Client('exampleClient', 1337, 1337, 'http://blaaa', ['GET','POST', 'DELETE', 'PATCH', 'PUT'],
                                      implicit='true', validityInSeconds=1337)
