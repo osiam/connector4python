@@ -141,7 +141,7 @@ class SCIM:
         self.headers = {'Authorization': "Bearer {0}".format(access_token),
                         'content-type': 'application/json'}
         s = requests.session()
-        s.config['keep_alive'] = False
+        s.keep_alive = False
 
     def __json_dict_to_object__(self, user):
         return user
