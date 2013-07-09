@@ -1,33 +1,111 @@
 {% extends "layout.html" %}
 {% block body %}
 <form method="post">
-	<p>
-			<label id="multiValue">Values:<br>
-                		<input type="text" id="input1" name="input1" onkeydown="addInput(this)">
-			</label>
-        
-	</p>
-
-	<input type="submit" value="Add Values"/>
+	<p></br>
+	<div class="seite" id="multiValue">
+		<div id="tableHead">
+			<div></div>
+			{% for item in items %}
+				<div>{{ item[0] }}</div>
+			{% endfor %}
+		</div>
+	</div>
+</p>
+<input type="submit" value="Add {{main}}s"/>
 </form>
 <script type="text/javascript">
-	idCounter = 2;
+	var idCounter = 1;
+	var primary = "{{main}}"
+	function addInput(elem){
+		if(elem)
+			elem.onkeydown=""
 
-        function addInput(elem){
-                elem.onkeydown= "";
+		var newRow = document.createElement("div");
+		var counterCell = document.createElement("div");
+		var inputCounter = 1;
+		var radioCounter = 1;
 
-                var newInput = document.createElement("input");
-                
-		newInput.setAttribute("type", "text");
-                newInput.setAttribute("onkeydown", "addInput(this)");
-		newInput.setAttribute("id", "input" + idCounter);
-		newInput.setAttribute("name", "input" + idCounter);
- 
-		idCounter++;
+		counterCell.innerHTML = idCounter + ".";  
+		newRow.setAttribute("class", "tableContent");
+		newRow.appendChild(counterCell);
+			
+
+		{% set idCounter = 1 %}
+		{% for item in items %}
+			var cell{{idCounter}} = document.createElement("div");
+			{% if item[1][0][1] %}
+				var item{{idCounter}} = document.createElement("select");
+				item{{idCounter}}.setAttribute("name", "input" + idCounter + "-" + inputCounter);
+				{% set selectCounter = 1 %}
+				{% for tempSelect in item[1] %}
+					var select{{selectCounter}} = document.createElement("option");
+					select{{selectCounter}}.setAttribute("value", "{{tempSelect}}");
+					select{{selectCounter}}.innerHTML = "{{tempSelect}}";
 	
-                document.getElementById("multiValue").appendChild(newInput);
-	}
+					item{{idCounter}}.appendChild(select{{selectCounter}})
+					{% set selectCounter = selectCounter + 1 %}
+				{% endfor %}
+				inputCounter++;
 
+				cell{{idCounter}}.appendChild(item{{idCounter}});	
+			{% else %}
+				var item{{idCounter}} = document.createElement("input");
+				item{{idCounter}}.setAttribute("type", "{{item[1]}}")
+				if("{{item[1]}}" == "radio"){
+					item{{idCounter}}.setAttribute("value", idCounter);
+					item{{idCounter}}.setAttribute("name", "radio" + radioCounter);
+					radioCounter++;
+				}else{
+					if("{{item[0]}}" == "{{main}}")
+						item{{idCounter}}.setAttribute("onkeydown", "addInput(this)");
+                        	        item{{idCounter}}.setAttribute("name", "input" + idCounter + "-" + inputCounter);
+					inputCounter++;
+				}
+			{% endif %}				
+			cell{{idCounter}}.appendChild(item{{idCounter}});
+			newRow.appendChild(cell{{idCounter}});
+		{% set idCounter = idCounter + 1 %}
+		{% endfor %}
+		
+		idCounter++;
+		document.getElementById("multiValue").appendChild(newRow);
+	}
+	
+	addInput();
 </script>
+
+
+<style language="css">
+
+div.seite {
+        display: table;
+        height: 100%;
+}
+
+div.seite > div {
+        display: table-row;
+}
+
+#tableHead > div {
+        display: table-cell;
+        font-weight:bold;
+	text-align:center;
+}
+ 
+.tableContent > div {
+        display: table-cell;
+	text-align: center;
+}
+
+.tableContent div input {
+	display: inline-block;
+}
+
+.tableContent > div > input[type=text] {
+        width:50px;
+}
+
+</style>
+
 {% endblock %}
 

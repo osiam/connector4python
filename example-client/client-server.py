@@ -91,7 +91,9 @@ def oauth2_response():
 
 @app.route('/oauth2-client/createMultiValueAttribute')
 def redirect_create_multi_value_attributei():
-    return render_template('createMultiValueAttribute.html')
+    listElements = [('Primary', 'radio'), ('E-Mail', 'email'), ('Type', ["work", "home", "other"])]
+    return render_template('createMultiValueAttribute.html',
+        used_for=request.args['used_for'], items=listElements, main='E-Mail')
 
 
 @app.route('/oauth2-client/createMultiValueAttribute', methods=['POST', 'GET'])
@@ -99,28 +101,40 @@ def build_multiValue_list():
     values = []
     idCounter = 0
     ready = True
+    params = {}
 
     while ready:
         idCounter += 1
+
+ #       if ( request.args['used_for'] == 'emails' ) :
+            params['value'] = str(request.form.get('input%s-1' % (idCounter)))
+            params['type'] = str(request.form.get('input%s-2' % (idCounter)))
+            params['primary'] = str(request.form.get('radio%s-2' % (idCounter)))
+#        elif ( re )
+
+
         content = '{\'value\':\''
+        tempMainValue = request.form.get('input%s-1' % (idCounter))
+        content += str(tempMainValue)
 
-        tempValue = request.form.get('input%s' % (idCounter))
+        content += '\',\'type\':\''
+        tempValue = request.form.get('input%s-2' % (idCounter))
+        content += str(tempValue);
 
-        content += str(tempValue)
-        content += '\',\'operation\':\''
-        content += request.args['used_for']
         content +='\'}'
 
         d = ast.literal_eval(content)
 
-        if tempValue is None:
+        if tempMainValue is None:
             ready = False
-        elif tempValue != '':
+        elif tempMainValue != '':
             values.append(d)
 
     multiValues[request.args['used_for']] = values
 
-    return render_template('createMultiValueAttribute.html')
+    listElements = [('Primary', 'radio'), ('E-Mail', 'email'), ('Type', 'input')]
+    return render_template('createMultiValueAttribute.html',
+        used_for=request.args['used_for'], items=listElements, main='E-Mail')
 
 
 @app.route('/create/User')
