@@ -369,7 +369,9 @@ def build_client():
         refreshTokenValiditySeconds=request.form.get(
             'refreshTokenValiditySeconds'),
         redirectUri=request.form.get('redirect_uri'),
-        scope=request.form.get('scope').split())
+        scope=request.form.get('scope').split(),
+        validityInSeconds=request.form.get('validityInSeconds'),
+        implicit=request.form.get('implicit'))
 
 
 @app.route('/get/Client')

@@ -95,13 +95,16 @@ class SCIMTestCase(unittest.TestCase):
         self.__mock_call__('delete', self.client, self.scim.delete_client, 'id')
 
     def test_contains_a_client(self):
-        attribute = connector.Client('exampleClient', 1337, 1337, 'http://blaaa', ['GET','POST', 'DELETE', 'PATCH', 'PUT'])
+        attribute = connector.Client('exampleClient', 1337, 1337, 'http://blaaa', ['GET','POST', 'DELETE', 'PATCH', 'PUT'],
+                                     implicit='true', validityInSeconds=1337)
         assert attribute is not None
         self.assertEquals('exampleClient', attribute.id)
         self.assertEquals(1337, attribute.accessTokenValiditySeconds)
         self.assertEquals(1337, attribute.refreshTokenValiditySeconds)
         self.assertEquals('http://blaaa', attribute.redirectUri)
         self.assertEquals(['GET','POST', 'DELETE', 'PATCH', 'PUT'], attribute.scope)
+        self.assertEquals('true', attribute.implicit)
+        self.assertEquals(1337, attribute.validityInSeconds)
 
     def test_contains_a_SCIMMultiValuedAttribute(self):
         attribute = connector.SCIMMultiValuedAttribute(

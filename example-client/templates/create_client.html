@@ -6,6 +6,8 @@
     <p><label>Refresh Token Validity in Seconds:<input id="refreshTokenValiditySeconds" name="refreshTokenValiditySeconds" type="text" value="1337"></label></p>
     <p><label>Redirect URI:<input id="redirect_uri" name="redirect_uri" type="text" value="http://localhost:5000/stuff"></label></p>
     <p><label>Scope:<input id="scope" name="scope" type="text" value="POST PUT GET DELETE PATCH"></label></p>
+    <p><label>Implicit Approval:<input id="implicit" name="implicit" type="text" value="false"></label></p>
+    <p><label>Approval Validity in Seconds:<input id="validityInSeconds" name="validityInSeconds" type="text" value="1337"></label></p>
     <input type="submit" formaction="/create/Client" value="Add Client"/>
 </form>
 {% endblock %}
