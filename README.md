@@ -1,31 +1,25 @@
-#osiam
+#OSIAM Connector for Python
 
-OSIAM - The Open Source Identity and Access Management
+This project contains the OSIAM Connector for Python and some auxiliary modules that depend on the connector.
 
-See osiam-server/README.md for instructions on how to build, configure and use osiam-server.
+For more information on OSIAM have a look into the [OSIAM server repository's README.md](https://github.com/osiam/server/README.md) or visit OSIAM's homepage at [www.osiam.org](https://www.osiam.org).
 
-#project structure
+#Project structure
 
 This project gets build with maven, the module structure is
 
-* osiam-server -- is the main project. It is a SCIM based, web identity data store.
-* python-connector -- is a request based osiam connector for python.
-* example-client -- is a python 2.7, flask, python-connector based example
-  client for OSIAM.
+* python -- is the main project, the request based OSIAM connector for Python itself.
+* example-client -- an example web application (Python 2.7, flask) using the API of the connector.
+* performance-tests -- our framework for running stresstests agains OSIAM, it also makes use of the connector.
 
 # Requirements
 
-* PostgreSQL 
-* Java 1.7
-* Tomcat (or Jetty, ...)
-* maven
+* Python 2.7
+* An up and running OSIAM instance
+* ...
 
-# Bugtracker
+# Issue tracker for the connector
 
-Bug reporting tool and known issues can be found here:
+Bug reporting tracker and known issues can be found here:
 
-[OSIAM bugtracker](https://github.com/osiam/osiam/issues)
-
-# Continuos Integration
-
-[![Build Status](https://travis-ci.org/osiam/osiam.png)](https://travis-ci.org/osiam/osiam)
+[OSIAM Connector for Python bugtracker](https://github.com/osiam/connector4python/issues)

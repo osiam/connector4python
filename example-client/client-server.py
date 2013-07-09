@@ -91,9 +91,7 @@ def oauth2_response():
 
 @app.route('/oauth2-client/createMultiValueAttribute')
 def redirect_create_multi_value_attributei():
-    listElements = [('Primary', 'radio'), ('E-Mail', 'email'), ('Type', ["work", "home", "other"])]
-    return render_template('createMultiValueAttribute.html',
-        used_for=request.args['used_for'], items=listElements, main='E-Mail')
+    return render_multiValue_template(request.args['used_for'])
 
 
 @app.route('/oauth2-client/createMultiValueAttribute', methods=['POST', 'GET'])
@@ -105,36 +103,56 @@ def build_multiValue_list():
 
     while ready:
         idCounter += 1
+	mainValue = ''
 
- #       if ( request.args['used_for'] == 'emails' ) :
-        params['value'] = str(request.form.get('input%s-1' % (idCounter)))
-        params['type'] = str(request.form.get('input%s-2' % (idCounter)))
-        params['primary'] = str(request.form.get('radio%s-2' % (idCounter)))
-#        elif ( re )
+        if ( request.args['used_for'] == 'emails' ) :
+            mainValue = 'value'
+            params['value'] = request.form.get('input%s-1' % (idCounter))
+            params['type'] = request.form.get('input%s-2' % (idCounter))
+	    if ( str(request.form.get('radio1')) == str(idCounter)  ):
+                params['primary'] = "true"
+   	else :
+	    mainValue = 'value'
+	    params['value'] = request.form.get('input%s-1' % (idCounter))
 
 
-        content = '{\'value\':\''
-        tempMainValue = request.form.get('input%s-1' % (idCounter))
-        content += str(tempMainValue)
+	content = '{'
 
-        content += '\',\'type\':\''
-        tempValue = request.form.get('input%s-2' % (idCounter))
-        content += str(tempValue);
-
-        content +='\'}'
+	for k in params.keys():
+	    content += '\''
+	    content += k
+	    content += '\':\''
+	    content += str(params[k])
+	    content += '\','
+	
+	content = content[:-1]
+	content += '}'
 
         d = ast.literal_eval(content)
 
-        if tempMainValue is None:
+        if params[mainValue] is None:
             ready = False
-        elif tempMainValue != '':
+        elif params[mainValue] != '':
             values.append(d)
+	params = {}
 
     multiValues[request.args['used_for']] = values
 
-    listElements = [('Primary', 'radio'), ('E-Mail', 'email'), ('Type', 'input')]
+    return render_multiValue_template(request.args['used_for'])
+
+def render_multiValue_template(used_for):
+    main = ""
+    listElements = []
+
+    if(used_for == 'emails'):
+	main = 'E-Mail'
+        listElements = [('Primary', 'radio'), ('E-Mail', 'email'), ('Type', ["work", "home", "other"])]
+    else:
+	main = 'Value'
+	listElements = [('Value', 'input')]    
+
     return render_template('createMultiValueAttribute.html',
-        used_for=request.args['used_for'], items=listElements, main='E-Mail')
+        items=listElements, main=main)
 
 
 @app.route('/create/User')
