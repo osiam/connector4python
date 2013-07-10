@@ -115,13 +115,14 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
 
 ClientT = collections.namedtuple('Client', ('id', 'accessTokenValiditySeconds',
                                             'refreshTokenValiditySeconds',
-                                            'redirectUri', 'scope', 'validityInSeconds', 'implicit'))
+                                            'redirectUri', 'scope', 'validityInSeconds',
+                                            'implicit', 'grants'))
 
 
 def Client(id=None, accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
-        redirectUri=None, scope=None, validityInSeconds=None, implicit=None):
+        redirectUri=None, scope=None, validityInSeconds=None, implicit=None, grants=None):
     return ClientT(id, accessTokenValiditySeconds, refreshTokenValiditySeconds,
-                   redirectUri, scope, validityInSeconds, implicit)
+                   redirectUri, scope, validityInSeconds, implicit, grants)
 
 MetaT = collections.namedtuple('Meta', ('created', 'lastModified', 'location',
                                         'version', 'attributes',

@@ -403,7 +403,8 @@ def build_client():
         redirectUri=request.form.get('redirect_uri'),
         scope=request.form.get('scope').split(),
         validityInSeconds=request.form.get('validityInSeconds'),
-        implicit=request.form.get('implicit'))
+        implicit=request.form.get('implicit'),
+        grants=request.form.get('grants').split())
 
 
 @app.route('/get/Client')
