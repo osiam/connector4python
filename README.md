@@ -1,6 +1,6 @@
 #OSIAM Connector for Python
 
-This project contains the OSIAM Connector for Python and some auxiliary modules that depend on the connector. For more information and documentation visit the [repo's Wiki](https://github.com/osiam/connector4python/wiki).
+This repository contains the OSIAM Connector for Python and some auxiliary modules that depend on the connector. For more information and documentation visit the [repo's Wiki](https://github.com/osiam/connector4python/wiki).
 
 For more information on OSIAM have a look into the [OSIAM server repository's README.md](https://github.com/osiam/server/README.md) or visit OSIAM's homepage at [www.osiam.org](https://www.osiam.org).
 
