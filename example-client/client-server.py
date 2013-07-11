@@ -443,7 +443,7 @@ def redirect_update_client():
 
 @app.route('/update/Client', methods=['POST'])
 def update_client():
-    return call_scim_set_response(scim.update_client, build_client(), request.form.get('client_id'))
+    return call_scim_set_response(scim.update_client, build_client(), request.form.get('uuid'))
 
 
 if __name__ == '__main__':
