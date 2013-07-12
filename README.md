@@ -6,7 +6,7 @@ For more information on OSIAM have a look into the [OSIAM server repository's RE
 
 #Project structure
 
-This project gets build with maven, the module structure is
+The module structure is
 
 * python -- is the main project, the request based OSIAM connector for Python itself -> [Wiki](https://github.com/osiam/connector4python/wiki#osiam-connector-for-python)
 * example-client -- an example web application (Python 2.7, flask) using the API of the connector -> [Wiki](https://github.com/osiam/connector4python/wiki#sample-client-for-osiam)
