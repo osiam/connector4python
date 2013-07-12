@@ -84,20 +84,3 @@ The group.py wraps the scim group functionality for measurements.
 The utils.py defines some methods to get user and group amount in the database do be able to cleanup
 
 and a method to get a valid filter for search operations.
-
-
-# OSIAM python connector
-
-The python connector enables easy access to OSIAM backend
-
-## Install
-The way to install python-connector is
-```sh
-python setup.py install
-```
-
-## Help
-for help try
-```sh
-python setup.py --help
-```
