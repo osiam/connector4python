@@ -27,6 +27,8 @@ parser.add_argument('--client', help='The client host name.',
                     default='localhost')
 parser.add_argument('--client_id', help='The client ID',
                     default='example-client')
+parser.add_argument('--client_secret', help='The client secret',
+                    default='secret')
 parser.add_argument('--iterations', help='The number of repeating runs.',
                     default=5, type=int)
 parser.add_argument('-p', '--parallel', help='The number of parallel runs.',
@@ -151,12 +153,12 @@ def print_result(result, serial, parallel):
     return True
 
 
-def init_scim(server, client, client_id, username='marissa', password='koala',
+def init_scim(server, client, client_id, client_secret, username='marissa', password='koala',
               timeout=500):
     """ Getting access token and initializes profiling """
     fakeUser = FakeUser(username, password, client_id,
-                        'http://' + client + ':5000/oauth2',
-                        'http://' + server + ':8080/osiam-server')
+                        'http://' + server + ':8080/osiam-server',
+                        client_secret)
 
     access_token = fakeUser.get_access_token()
     global scim, max_response_time
@@ -190,6 +192,7 @@ def delete_all(search_function, delete_function):
 if __name__ == '__main__':
 
     args = parser.parse_args()
-    init_scim(args.server, args.client, args.client_id, timeout=args.timeout)
+    init_scim(args.server, args.client, args.client_id, args.client_secret,
+              timeout=args.timeout)
     for t in args.tests:
         execute_sequence(args.iterations, args.parallel, t)
