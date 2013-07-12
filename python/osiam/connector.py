@@ -115,13 +115,14 @@ def SCIMGroup(displayName=None, members=None, externalId=None, id=None,
 
 ClientT = collections.namedtuple('Client', ('id', 'accessTokenValiditySeconds',
                                             'refreshTokenValiditySeconds',
-                                            'redirectUri', 'scope', 'validityInSeconds', 'implicit'))
+                                            'redirectUri', 'scope', 'validityInSeconds',
+                                            'implicit', 'grants'))
 
 
 def Client(id=None, accessTokenValiditySeconds=None, refreshTokenValiditySeconds=None,
-        redirectUri=None, scope=None, validityInSeconds=None, implicit=None):
+        redirectUri=None, scope=None, validityInSeconds=None, implicit=None, grants=None):
     return ClientT(id, accessTokenValiditySeconds, refreshTokenValiditySeconds,
-                   redirectUri, scope, validityInSeconds, implicit)
+                   redirectUri, scope, validityInSeconds, implicit, grants)
 
 MetaT = collections.namedtuple('Meta', ('created', 'lastModified', 'location',
                                         'version', 'attributes',
@@ -279,3 +280,10 @@ class SCIM:
     def delete_client(self, id):
         return requests.delete('{0}/Client/{1}'.format(
             self.authorization_server, id), headers=self.headers)
+
+    @doLog
+    def update_client(self, client, id):
+        r = requests.put('{0}/Client/{1}'.format(
+            self.authorization_server, id), headers=self.headers,
+                         data=json.dumps(client.__dict__))
+        return json.loads(r.content)
