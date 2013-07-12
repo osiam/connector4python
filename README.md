@@ -9,8 +9,8 @@ For more information on OSIAM have a look into the [OSIAM server repository's RE
 The module structure is
 
 * python 
-** osiam -- is the main project, the request based OSIAM connector for Python itself -> [Wiki](https://github.com/osiam/connector4python/wiki#osiam-connector-for-python)
-*** performance -- our framework for running stresstests agains OSIAM, it also makes use of the connector -> [Wiki](https://github.com/osiam/connector4python/wiki#performance-test-framework-and-tests-for-osiam)
+    * osiam -- is the main project, the request based OSIAM connector for Python itself -> [Wiki](https://github.com/osiam/connector4python/wiki#osiam-connector-for-python)
+        * performance -- our framework for running stresstests agains OSIAM, it also makes use of the connector -> [Wiki](https://github.com/osiam/connector4python/wiki#performance-test-framework-and-tests-for-osiam)
 * example-client -- an example web application (Python 2.7, flask) using the API of the connector -> [Wiki](https://github.com/osiam/connector4python/wiki#sample-client-for-osiam)
 * performance-tests -- are the test cases written in a small self defined DSL which are executed by the performance framework -> [Wiki](https://github.com/osiam/connector4python/wiki#performance-test-framework-and-tests-for-osiam)
 
