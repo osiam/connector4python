@@ -24,7 +24,7 @@ parser.add_argument('-o', '--osiam', help='The uri to OSIAM.',
                     default='http://localhost:8080/osiam-server')
 parser.add_argument('-c', '--client', help='The name of the client.',
                     default='example-client')
-parser.add_argument('-s', '--client-secret', help='The name of the client.',
+parser.add_argument('-s', '--client-secret', help='The secret of the client.',
                     default='secret')
 
 
