@@ -56,3 +56,4 @@ dist/
 *.pdf
 nosetests.xml
 osiam.wiki/
+build-log.xml

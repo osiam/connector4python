@@ -160,7 +160,7 @@ class SCIM:
 
     @doLog
     def get_user(self, uuid):
-        r = requests.get('{0}/User/{1}'.format(
+        r = requests.get('{0}/Users/{1}'.format(
             self.authorization_server, uuid), headers=self.headers)
         r_text = r.text
         o = json.loads(r_text)
@@ -169,13 +169,13 @@ class SCIM:
     @doLog
     def create_user(self, user):
         data = json.dumps(user.__dict__)
-        r = requests.post('{0}/User'.format(self.authorization_server),
+        r = requests.post('{0}/Users'.format(self.authorization_server),
                           headers=self.headers,
                           data=data)
         return self.__json_dict_to_object__(json.loads(r.text))
 
     def __single_user_data_operation__(self, func, id, user):
-        return self.__single_data_operation__(func, id, user, "User")
+        return self.__single_data_operation__(func, id, user, "Users")
 
     @doLog
     def replace_user(self, id, user):
@@ -190,25 +190,25 @@ class SCIM:
 
     @doLog
     def delete_user(self, id):
-        return requests.delete('{0}/User/{1}'.
+        return requests.delete('{0}/Users/{1}'.
                                format(self.authorization_server, id),
                                headers=self.headers)
 
     @doLog
     def get_group(self, uuid):
-        r = requests.get('{0}/Group/{1}'.format(
+        r = requests.get('{0}/Groups/{1}'.format(
             self.authorization_server, uuid), headers=self.headers)
         return self.__json_dict_to_object__(json.loads(r.text))
 
     @doLog
     def create_group(self, group):
-        r = requests.post('{0}/Group'.format(self.authorization_server),
+        r = requests.post('{0}/Groups'.format(self.authorization_server),
                           headers=self.headers,
                           data=json.dumps(group.__dict__))
         return self.__json_dict_to_object__(json.loads(r.text))
 
     def __single_group_data_operation__(self, func, id, user):
-        return self.__single_data_operation__(func, id, user, "Group")
+        return self.__single_data_operation__(func, id, user, "Groups")
 
     @doLog
     def replace_group(self, id, group):
@@ -224,30 +224,30 @@ class SCIM:
 
     @doLog
     def delete_group(self, id):
-        return requests.delete('{0}/Group/{1}'.format(
+        return requests.delete('{0}/Groups/{1}'.format(
             self.authorization_server, id), headers=self.headers)
 
     @doLog
     def search_with_get_on_users(self, params):
-        r = requests.get('{0}/User/?{1}'.format(
+        r = requests.get('{0}/Users/?{1}'.format(
             self.authorization_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_users(self, data):
-        r = requests.post('{0}/User/.search'.format(
+        r = requests.post('{0}/Users/.search'.format(
             self.authorization_server), headers=self.headers, params=data)
         return json.loads(r.text)
 
     @doLog
     def search_with_get_on_groups(self, params):
-        r = requests.get('{0}/Group/?{1}'.format(
+        r = requests.get('{0}/Groups/?{1}'.format(
             self.authorization_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_groups(self, data):
-        r = requests.post('{0}/Group/.search'.format(
+        r = requests.post('{0}/Groups/.search'.format(
             self.authorization_server), headers=self.headers, params=data)
         return json.loads(r.text)
 
