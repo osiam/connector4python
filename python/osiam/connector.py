@@ -67,7 +67,7 @@ SCIMUserT = collections.namedtuple('SCIMUser', (
     'active', 'password', 'emails', 'phoneNumbers',
     'ims', 'photos', 'addresses',
     'groups', 'entitlements', 'roles',
-    'x509Certificates', 'any', 'meta', 'externalId'))
+    'x509Certificates', 'meta', 'externalId'))
 
 
 def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
@@ -75,7 +75,7 @@ def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
              preferredLanguage=None, locale=None, timezone=None, active=None,
              password=None, emails=None, phoneNumbers=None, ims=None,
              photos=None, addresses=None, groups=None, entitlements=None,
-             roles=None, x509Certificates=None, any=None, meta=None,
+             roles=None, x509Certificates=None, meta=None,
              externalId=None):
         if not schemas:
             schemas = ['urn:scim:schemas:core:1.0']
@@ -89,7 +89,7 @@ def SCIMUser(id=None, schemas=None, userName=None, name=None, displayName=None,
                          profileUrl, title, userType, preferredLanguage,
                          locale, timezone, active, password, emails,
                          phoneNumbers, ims, photos, addresses, groups,
-                         entitlements, roles, x509Certificates, any, meta,
+                         entitlements, roles, x509Certificates, meta,
                          externalId)
 
 SCIMErrorT = collections.namedtuple('SCIMError', ('error_code', 'description'))
