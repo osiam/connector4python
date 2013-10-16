@@ -19,8 +19,6 @@ The module structure is
 * Python 2.7
 * An up and running OSIAM instance
 
-# Issue tracker for the connector
+# Issue tracker for the Connector
 
-Bug reporting tracker and known issues can be found here:
-
-[OSIAM Connector for Python bugtracker](https://github.com/osiam/connector4python/issues)
+Issues, bugs and feature requests can be brought to us using [OSIAM's issue tracker](https://jira.osiam.org/browse/BT).
