@@ -20,8 +20,10 @@ parser = argparse.ArgumentParser(description='This is an example client to' +
                                  'all means, not suited for production.')
 parser.add_argument('-r', '--redirect', help='A OSIAM known redirect uri.',
                     default='http://localhost:5000/oauth2')
-parser.add_argument('-o', '--osiam', help='The uri to OSIAM.',
-                    default='http://localhost:8080/osiam-server')
+parser.add_argument('-a', '--authz', help='The uri to OSIAM auth server.',
+                    default='http://localhost:8080/osiam-auth-server')
+parser.add_argument('-re', '--resource', help='The uri to OSIAM resource server.',
+                    default='http://localhost:8080/osiam-resource-server')
 parser.add_argument('-c', '--client', help='The name of the client.',
                     default='example-client')
 parser.add_argument('-s', '--client-secret', help='The secret of the client.',
@@ -67,7 +69,7 @@ def auth_code_to_access_token(code):
     print 'response: ' + r.content
     access_token = json.loads(r.content).get('access_token')
     response = r.content
-    scim = connector.SCIM(authZServer, access_token)
+    scim = connector.SCIM(resourceServer, access_token)
     return redirect('/')
 
 
@@ -451,7 +453,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     client = args.client
     client_secret = args.client_secret
-    authZServer = args.osiam
+    authZServer = args.authz
+    resourceServer = args.resource
     redirect_uri = args.redirect
     params = {'response_type': 'code', 'state': 'state',
               'client_id': client,

@@ -137,8 +137,8 @@ def Meta(created=None, lastModified=None, location=None,
 
 class SCIM:
 
-    def __init__(self, authorization_server, access_token):
-        self.authorization_server = authorization_server
+    def __init__(self, resource_server, access_token):
+        self.resource_server = resource_server
         self.headers = {'Authorization': "Bearer {0}".format(access_token),
                         'content-type': 'application/json'}
         s = requests.session()
@@ -155,13 +155,13 @@ class SCIM:
 
     def __single_data_operation__(self, func, id, data, type):
         data = json.dumps(data.__dict__)
-        return func('{0}/{1}/{2}'.format(self.authorization_server, type, id),
+        return func('{0}/{1}/{2}'.format(self.resource_server, type, id),
                     headers=self.headers, data=data)
 
     @doLog
     def get_user(self, uuid):
         r = requests.get('{0}/Users/{1}'.format(
-            self.authorization_server, uuid), headers=self.headers)
+            self.resource_server, uuid), headers=self.headers)
         r_text = r.text
         o = json.loads(r_text)
         return self.__json_dict_to_object__(o)
@@ -169,7 +169,7 @@ class SCIM:
     @doLog
     def create_user(self, user):
         data = json.dumps(user.__dict__)
-        r = requests.post('{0}/Users'.format(self.authorization_server),
+        r = requests.post('{0}/Users'.format(self.resource_server),
                           headers=self.headers,
                           data=data)
         return self.__json_dict_to_object__(json.loads(r.text))
@@ -191,18 +191,18 @@ class SCIM:
     @doLog
     def delete_user(self, id):
         return requests.delete('{0}/Users/{1}'.
-                               format(self.authorization_server, id),
+                               format(self.resource_server, id),
                                headers=self.headers)
 
     @doLog
     def get_group(self, uuid):
         r = requests.get('{0}/Groups/{1}'.format(
-            self.authorization_server, uuid), headers=self.headers)
+            self.resource_server, uuid), headers=self.headers)
         return self.__json_dict_to_object__(json.loads(r.text))
 
     @doLog
     def create_group(self, group):
-        r = requests.post('{0}/Groups'.format(self.authorization_server),
+        r = requests.post('{0}/Groups'.format(self.resource_server),
                           headers=self.headers,
                           data=json.dumps(group.__dict__))
         return self.__json_dict_to_object__(json.loads(r.text))
@@ -225,65 +225,65 @@ class SCIM:
     @doLog
     def delete_group(self, id):
         return requests.delete('{0}/Groups/{1}'.format(
-            self.authorization_server, id), headers=self.headers)
+            self.resource_server, id), headers=self.headers)
 
     @doLog
     def search_with_get_on_users(self, params):
         r = requests.get('{0}/Users/?{1}'.format(
-            self.authorization_server, params), headers=self.headers)
+            self.resource_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_users(self, data):
         r = requests.post('{0}/Users/.search'.format(
-            self.authorization_server), headers=self.headers, params=data)
+            self.resource_server), headers=self.headers, params=data)
         return json.loads(r.text)
 
     @doLog
     def search_with_get_on_groups(self, params):
         r = requests.get('{0}/Groups/?{1}'.format(
-            self.authorization_server, params), headers=self.headers)
+            self.resource_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_groups(self, data):
         r = requests.post('{0}/Groups/.search'.format(
-            self.authorization_server), headers=self.headers, params=data)
+            self.resource_server), headers=self.headers, params=data)
         return json.loads(r.text)
 
     @doLog
     def search_with_get_on_root(self, params):
         r = requests.get('{0}/?{1}'.format(
-            self.authorization_server, params), headers=self.headers)
+            self.resource_server, params), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def search_with_post_on_root(self, data):
         r = requests.post('{0}/.search'.format(
-            self.authorization_server), headers=self.headers, params=data)
+            self.resource_server), headers=self.headers, params=data)
         return json.loads(r.text)
 
     @doLog
     def get_client(self, id):
         r = requests.get('{0}/Client/{1}'.format(
-            self.authorization_server, id), headers=self.headers)
+            self.resource_server, id), headers=self.headers)
         return json.loads(r.text)
 
     @doLog
     def create_client(self, client):
         r = requests.post('{0}/Client'.format(
-            self.authorization_server), headers=self.headers,
+            self.resource_server), headers=self.headers,
             data=json.dumps(client.__dict__))
         return json.loads(r.text)
 
     @doLog
     def delete_client(self, id):
         return requests.delete('{0}/Client/{1}'.format(
-            self.authorization_server, id), headers=self.headers)
+            self.resource_server, id), headers=self.headers)
 
     @doLog
     def update_client(self, client, id):
         r = requests.put('{0}/Client/{1}'.format(
-            self.authorization_server, id), headers=self.headers,
+            self.resource_server, id), headers=self.headers,
                          data=json.dumps(client.__dict__))
         return json.loads(r.content)
