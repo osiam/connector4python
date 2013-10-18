@@ -12,7 +12,6 @@ import prefill_osiam
 import user
 import utils
 from multiprocessing import Process
-# from pudb import set_trace; set_trace()
 
 
 logger = logging.getLogger(__name__)
@@ -153,16 +152,16 @@ def print_result(result, serial, parallel):
     return True
 
 
-def init_scim(server, client, client_id, client_secret, username='marissa', password='koala',
+def init_scim(server, client_id, client_secret, username='marissa', password='koala',
               timeout=500):
     """ Getting access token and initializes profiling """
     fakeUser = FakeUser(username, password, client_id,
-                        'http://' + server + ':8080/osiam-server',
+                        'http://' + server + ':8080/osiam-auth-server',
                         client_secret)
 
     access_token = fakeUser.get_access_token()
     global scim, max_response_time
-    scim = connector.SCIM('http://{}:8080/osiam-server'.format(server),
+    scim = connector.SCIM('http://{}:8080/osiam-resource-server'.format(server),
                           access_token)
     measuring.max_response_time = timeout
     user.scim = scim
@@ -192,7 +191,7 @@ def delete_all(search_function, delete_function):
 if __name__ == '__main__':
 
     args = parser.parse_args()
-    init_scim(args.server, args.client, args.client_id, args.client_secret,
+    init_scim(args.server, args.client_id, args.client_secret,
               timeout=args.timeout)
     for t in args.tests:
         execute_sequence(args.iterations, args.parallel, t)

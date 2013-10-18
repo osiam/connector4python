@@ -44,5 +44,5 @@ class FakeUser():
 
 if __name__ == '__main__':
     a = FakeUser('marissa', 'koala', 'example-client',
-                 'http://localhost:8080/osiam-server', 'secret')
+                 'http://localhost:8080/osiam-auth-server', 'secret')
     print 'Access Token: {}'.format(a.get_access_token())
