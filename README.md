@@ -2,8 +2,6 @@
 
 This repository contains the OSIAM Connector for Python and some auxiliary modules that depend on the connector. For more information and documentation visit the [repo's Wiki](https://github.com/osiam/connector4python/wiki).
 
-For more information on OSIAM have a look into the [OSIAM server repository's README.md](https://github.com/osiam/server/README.md) or visit OSIAM's homepage at [www.osiam.org](https://www.osiam.org).
-
 #Project structure
 
 The module structure is
@@ -18,7 +16,3 @@ The module structure is
 
 * Python 2.7
 * An up and running OSIAM instance
-
-# Issue tracker for the Connector
-
-Issues, bugs and feature requests can be brought to us using [OSIAM's issue tracker](https://jira.osiam.org/browse/BT).
